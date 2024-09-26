@@ -1,0 +1,72 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+    </div>
+    <div class="item-subtitle">
+      <h4 class="item-type">{{itemType}}</h4>
+    </div>
+  </header>
+
+  {{!-- Navigation --}}
+  <nav class="sheet-navigation tabs" data-group="primary">
+    <a class="item active" data-tab="description">{{ localize "HTBAH.Description" }}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    <div class="sidebar">
+      {{!-- Consumable Details Card --}}
+      <div class="sidebar-card">
+        <h3>Consumable Details</h3>
+        <div class="quantity-field">
+          <label for="item-quantity">Quantity:</label>
+          <input id="item-quantity" name="system.quantity" type="number" value="{{system.quantity}}" min="1" />
+        </div>
+        {{!-- Roll Fields --}}
+        <div class="roll-fields">
+          <label for="roll-dice-num">Number of Dice:</label>
+          <input id="roll-dice-num" name="system.roll.diceNum" type="number" value="{{system.roll.diceNum}}" min="1" />
+          
+          <label for="roll-dice-size">Dice Size:</label>
+          <select id="roll-dice-size" name="system.roll.diceSize">
+            {{#select system.roll.diceSize}}
+              <option value="d4">d4</option>
+              <option value="d6">d6</option>
+              <option value="d8">d8</option>
+              <option value="d10">d10</option>
+              <option value="d12">d12</option>
+              <option value="d20">d20</option>
+              <option value="d100">d100</option>
+            {{/select}}
+          </select>
+          
+          <label for="roll-dice-bonus">Bonus:</label>
+          <input id="roll-dice-bonus" name="system.roll.diceBonus" type="text" value="{{system.roll.diceBonus}}" placeholder="+0" />
+        </div>
+        <div class="formula-field">
+          <label for="item-formula">Formula:</label>
+          <input id="item-formula" name="system.formula" type="text" value="{{system.formula}}" disabled />
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="tab description" data-group="primary" data-tab="description">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+      <div class="tab details" data-group="primary" data-tab="details">
+        <div class="form-group">
+          <label>Consumable Type:</label>
+          <input type="text" name="system.type" value="{{system.type}}" placeholder="Potion, Scroll, etc." />
+        </div>
+        <div class="form-group">
+          <label>Duration:</label>
+          <input type="text" name="system.duration" value="{{system.duration}}" placeholder="Duration of effect" />
+        </div>
+      </div>
+    </div>
+  </section>
+</form>

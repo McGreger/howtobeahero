@@ -1,0 +1,58 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+    </div>
+    <div class="item-subtitle">
+      <h4 class="item-type">{{itemType}}</h4>
+    </div>
+  </header>
+
+  {{!-- Navigation --}}
+  <nav class="sheet-navigation tabs" data-group="primary">
+    <a class="item active" data-tab="description">{{ localize "HTBAH.Description" }}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    <div class="sidebar">
+      {{!-- Armor Details Card --}}
+      <div class="sidebar-card">
+        <h3>Armor Details</h3>
+        <div class="armor-field">
+          <label for="item-armor">Armor Value:</label>
+          <input id="item-armor" name="system.armor" type="number" value="{{item.system.armor}}" placeholder="Enter armor value" />
+        </div>
+        <div class="quantity-field">
+          <label for="item-quantity">Quantity:</label>
+          <input id="item-quantity" name="system.quantity" type="number" value="{{item.system.quantity}}" min="1" />
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="tab description" data-group="primary" data-tab="description">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+      <div class="tab details" data-group="primary" data-tab="details">
+        <div class="form-group">
+          <label>Armor Type:</label>
+          <select name="system.armorType">
+            {{#select item.system.armorType}}
+              <option value="light">Light</option>
+              <option value="medium">Medium</option>
+              <option value="heavy">Heavy</option>
+              <option value="shield">Shield</option>
+            {{/select}}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Material:</label>
+          <input type="text" name="system.material" value="{{item.system.material}}" placeholder="Armor material" />
+        </div>
+      </div>
+    </div>
+  </section>
+</form>

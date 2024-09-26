@@ -1,0 +1,31 @@
+<section class="content">
+    <section class="header">
+        <div class="top">
+            <img src="{{ img }}" alt="{{ name }}">
+            <div class="name name-stacked">
+                <span class="title">{{ name }}</span>
+                <span class="subtitle">Character</span>
+            </div>
+        </div>
+    </section>
+    <section class="description">{{{ description }}}</section>
+    <ul class="pills">
+        <li class="pill pill-sm">
+            <span class="label">Health: {{ health.value }} / {{ health.max }}</span>
+        </li>
+        <li class="pill pill-sm">
+            <span class="label">Armor: {{ baseattributes.armor.value }}</span>
+        </li>
+    </ul>
+    <ul class="pills">
+        <li class="pill pill-sm">
+            <span class="label">Knowledge: {{ baseattributes.talents.knowledge.value }}</span>
+        </li>
+        <li class="pill pill-sm">
+            <span class="label">Action: {{ baseattributes.talents.action.value }}</span>
+        </li>
+        <li class="pill pill-sm">
+            <span class="label">Social: {{ baseattributes.talents.social.value }}</span>
+        </li>
+    </ul>
+</section>

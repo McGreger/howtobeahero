@@ -1,0 +1,124 @@
+<htbah-inventory class="tab inventory tab-inventory" data-group="primary" data-tab="inventory">
+    <div class="inventory-element">
+        {{!-- Searching, Filtering, Sorting, & Grouping --}}
+        <item-list-controls for="inventory" label="{{ localize "HTBAH.InventorySearch" }}" sort="toggle" group
+                            group-label="{{ localize "HTBAH.FilterGroupCategory" }}" collection="items">
+            <datalist>
+                <option value="equipped">{{ localize "HTBAH.Equipped" }}</option>
+            </datalist>
+        </item-list-controls>
+            
+        {{!-- Inventory List --}}
+        <section class="items-list inventory-list" data-item-list="inventory">
+
+            {{!-- Sections / Categories --}}
+            {{#each sections}}
+            <div class="items-section card" {{{ HTBAH-dataset dataset }}}>
+
+                {{!-- Section Header --}}
+                <div class="items-header header">
+                    <div class="item-header item-name">{{ localize label }}</div>
+                    <div class="item-header item-quantity">{{ localize "HTBAH.Quantity" }}</div>
+                    <div class="item-header item-uses">{{ localize "HTBAH.Uses" }}</div>
+                    <div class="item-header item-controls"></div>
+                </div>
+
+                {{!-- Section Contents --}}
+                <ol class="item-list unlist">
+                    {{#each items}}
+                    <li class="item" data-item-id="{{_id}}" data-entry-id="{{_id}}"
+                        data-item-name="{{name}}" data-item-sort="{{sort}}" data-ungrouped="all"
+                        data-grouped="{{type}}">
+
+                        {{!-- Item Name --}}
+                        <div class="item-name item-action item-tooltip {{ @root.rollableClass }}" role="button"
+                            data-action="rollItem" data-item-id="{{_id}}" aria-label="{{name}}">
+                            <img class="item-image gold-icon" src="{{img}}" alt="{{name}}">
+                            <div class="name name-stacked">
+                                <span class="title">{{name}}</span>
+                                {{#if ctx.subtitle}}
+                                <span class="subtitle">{{{ctx.subtitle}}}</span>
+                                {{/if}}
+                            </div>
+                        </div>
+
+                        {{!-- Item Quantity --}}
+                        <div class="item-detail item-quantity">
+                            {{#if @root.owner}}
+                            <a class="adjustment-button" data-action="decrease" data-property="system.quantity">
+                                <i class="fas fa-minus"></i>
+                            </a>
+                            {{/if}}
+                            <input type="text" value="{{system.quantity}}" placeholder="0" data-dtype="Number"
+                                data-name="system.quantity" inputmode="numeric" pattern="[0-9+=\-]*" min="0">
+                            {{#if @root.owner}}
+                            <a class="adjustment-button" data-action="increase" data-property="system.quantity">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                            {{/if}}
+                        </div>
+
+                        {{!-- Item Uses --}}
+                        <div class="item-detail item-uses">
+                            {{#if ctx.hasUses}}
+                            <input type="text" value="{{system.uses.value}}" min="0" max="{{system.uses.max}}"
+                                placeholder="0" data-dtype="Number" inputmode="numeric" pattern="[0-9+=\-]*"
+                                data-name="system.uses.value">
+                            / {{system.uses.max}}
+                            {{else}}
+                            <span class="no-uses">-</span>
+                            {{/if}}
+                        </div>
+
+                        {{!-- Item Controls --}}
+                        <div class="item-detail item-controls">
+                            {{!-- 
+                            {{#if ctx.canToggle}}
+                            <a class="item-control item-action {{ctx.toggleClass}}" data-action="equip"
+                            data-tooltip="{{ctx.toggleTitle}}">
+                                <i class="fas fa-shield-alt"></i>
+                            </a>
+                            {{/if}}
+                            --}}
+                            {{!-- Equipping --}}
+                            
+                            {{#if @root.editable}}
+                            {{!-- Editing --}}
+                            <a class="item-control item-edit" data-action="edit" data-tooltip="HTBAH.ItemEdit"
+                            aria-label="{{ localize "HTBAH.ItemEdit" }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            {{!-- Deleting --}}
+                            <a class="item-control item-delete" data-action="delete" data-tooltip="HTBAH.ItemDelete"
+                            aria-label="{{ localize "HTBAH.ItemDelete" }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            {{else}}
+                            {{#with ctx.equip}}
+                            {{#if applicable}}
+                            <a class="item-control item-action {{ cls }}" data-action="equip" data-tooltip="{{ title }}"
+                            aria-label="{{ localize title }}" aria-disabled="{{ this.disabled }}">
+                                <i class="fas fa-shield-halved"></i>
+                            </a>
+                            {{/if}}
+                            {{/with}}
+                            {{/if}}
+
+                            {{!-- Context Menu --}}
+                            <a class="item-control interface-only" data-context-menu
+                            aria-label="{{ localize "HTBAH.AdditionalControls" }}">
+                                <i class="fas fa-ellipsis-vertical"></i>
+                            </a>
+                        </div>
+
+                    </li>
+                    {{/each}}
+                </ol>
+
+            </div>
+            {{/each}}
+
+        </section>
+    </div>
+</htbah-inventory>

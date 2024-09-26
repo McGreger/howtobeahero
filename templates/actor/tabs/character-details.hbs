@@ -1,0 +1,61 @@
+{{#*inline "item-list"}}
+    <li class="item flexrow" data-item-id="{{_id}}">
+        <a class="item-name {{ @root.rollableClass }} item-roll" data-action="rollItem" data-item-id="{{_id}}">
+            <h3>{{name}}</h3>
+        </a>
+        <div class="item-value">{{system.value}}</div>
+        <div class="item-calculated-value">{{system.calculatedValue}}</div>
+        {{#if @root.editable}}
+        <div class="item-controls">
+            <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+        </div>
+        {{/if}}
+    </li>
+{{/inline}}
+
+{{#*inline "talent-category"}}
+    <filigree-box class="talents header" filigree-type="typeTalentsHeader">
+        <div class="header-content">
+            <h3>
+            {{#each talentRows}}
+                <a class="label {{ @root.rollableClass }} talent-check" data-action="roll" data-talent="{{ long }}">
+                    {{label}}    
+                </a> 
+            {{/each}}
+            </h3>
+            <div class="eureka-column">
+                {{#each talentRows}}
+                    <input type="number" name="system.baseattributes.talents.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
+                {{/each}}
+            </div>
+            <div class="talent-values">
+            {{#each talentRows}}
+                <span>{{ value }}</span> 
+            {{/each}}
+            </div>
+            <div class="empty-column"></div>
+        </div>
+    </filigree-box>
+    <filigree-box class="talents" filigree-type="typeTalents">
+        <ol class="items-list talent-list">
+            {{#each items}}
+                {{> item-list}}
+            {{/each}}
+        </ol>
+    </filigree-box>
+{{/inline}}
+
+<div class="tab details tab-details" data-group="primary" data-tab="details">
+    <div class="talents-container">
+        <div class="left">
+            {{> talent-category title="Knowledge" talentRows=talentRows.knowledge items=knowledge}}
+        </div>
+        <div class="center">
+            {{> talent-category title="Action" talentRows=talentRows.action items=action}}
+        </div>
+        <div class="right">
+            {{> talent-category title="Social" talentRows=talentRows.social items=social}}
+        </div>
+    </div>
+</div>

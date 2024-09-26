@@ -1,0 +1,62 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+    </div>
+    <div class="item-subtitle">
+      <h4 class="item-type">{{itemType}}</h4>
+    </div>
+  </header>
+
+  {{!-- Navigation --}}
+  <nav class="sheet-navigation tabs" data-group="primary">
+    <a class="item active" data-tab="description">{{ localize "HTBAH.Description" }}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    <div class="sidebar">
+      {{!-- Value and Calculated Value Card --}}
+      <div class="sidebar-card">
+        <h3>Item Details</h3>
+        <div class="value-field">
+          <label for="item-value">Value:</label>
+          <input id="item-value" name="system.value" type="number" value="{{item.system.value}}" placeholder="Enter value" />
+        </div>
+        <div class="calculated-value-field">
+          <label for="item-calculated-value">Calculated Value:</label>
+          <span id="item-calculated-value">{{item.system.calculatedValue}}</span>
+        </div>
+        {{!-- Add Roll Fields --}}
+        <div class="roll-fields">
+          <label for="roll-dice-num">Number of Dice:</label>
+          <input id="roll-dice-num" name="system.roll.diceNum" type="number" value="{{item.system.roll.diceNum}}" min="1" />
+          
+          <label for="roll-dice-size">Dice Size:</label>
+          <select id="roll-dice-size" name="system.roll.diceSize">
+            {{#select item.system.roll.diceSize}}
+              <option value="d4">d4</option>
+              <option value="d6">d6</option>
+              <option value="d8">d8</option>
+              <option value="d10">d10</option>
+              <option value="d12">d12</option>
+              <option value="d20">d20</option>
+              <option value="d100">d100</option>
+            {{/select}}
+          </select>
+          
+          <label for="roll-dice-bonus">Bonus:</label>
+          <input id="roll-dice-bonus" name="system.roll.diceBonus" type="text" value="{{item.system.roll.diceBonus}}" placeholder="+0" />
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="tab description" data-group="primary" data-tab="description">
+        {{editor name="item.system.description" target="system.description" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+  </section>
+</form>
