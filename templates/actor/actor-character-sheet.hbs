@@ -248,29 +248,27 @@
       {{!-- Tabbed Content --}}
       <section class="tab-body">
 
-
-
-      {{!-- Talent Scores 
-      <section class="talent-scores optional-talent-{{ talentRows.optional }}">
-        <div class="rows">
-            <div class="bottom">
-              <div class="talents-container">
-                    {{#each talentRows.bottom}}
-                        {{> talent-score flipped=false }}
-                    {{/each}}
-              </div>
-            </div>
+      {{!-- Character Details --}}
+        {{!-- Details Tab --}}
+        <div class="tab details" data-group="primary" data-tab="details">
+          {{> "htbah.character-details" }}
         </div>
-      </section>
-      --}}
-        {{!-- Character Details --}}
-        {{> "htbah.character-details" }}
-        {{!-- Inventory --}}
-        {{> "htbah.character-inventory" }}
-        {{!-- Inventory --}}
-        {{> "htbah.character-effects" }}
-        {{!-- Biography --}}
-        {{~> "htbah.character-biography" ~}}
+
+        {{!-- Inventory Tab --}}
+        <div class="tab inventory" data-group="primary" data-tab="inventory">
+          {{> "htbah.character-inventory" }}
+        </div>
+
+        {{!-- Effects Tab --}}
+        <div class="tab effects" data-group="primary" data-tab="effects">
+          {{> "htbah.character-effects" }}
+        </div>
+
+        {{!-- Biography Tab --}}
+        <div class="tab biography" data-group="primary" data-tab="biography">
+          {{~> "htbah.character-biography" ~}}
+        </div>
+
       </section>
     </div>
     

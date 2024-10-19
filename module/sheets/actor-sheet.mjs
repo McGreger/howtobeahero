@@ -6,56 +6,51 @@ import { formatNumber, simplifyBonus, staticID } from "../helpers/utils.mjs";
  * @extends {Tabs}
  */
 class TabsHtbah extends Tabs {
-  constructor(options) {
+  constructor(options={}) {
     super(options);
-    this._active = options.initial || "details";
-    this.options = options;
   }
 
   /** @override */
   bind(html) {
-    if (!this._nav) {
-      this._nav = html.closest(".app")?.querySelector(this.options.navSelector);
-      this._nav?.addEventListener("click", this._onClickNav.bind(this));
-    }
-    if (!this._nav) return;
-    if (!this.options.contentSelector) this._content = null;
-    else if (html.matches(this.options.contentSelector)) this._content = html;
-    else this._content = html.querySelector(this.options.contentSelector);
+    super.bind(html);
     
-    // Ensure activation happens even if _active is already set
-    this.activate(this._active);
+    // If the nav element wasn't found in the usual place, look for it in the closest ".app" ancestor
+    if (!this._nav) {
+      this._nav = html.closest(".app")?.querySelector(this._navSelector);
+      if (this._nav) {
+        this._nav.addEventListener("click", this._onClickNav.bind(this));
+      }
+    }
+    // Find the content element
+    this._content = html.querySelector(this._contentSelector) || html.closest(".app")?.querySelector(this._contentSelector);
+    // Activate the initial tab
+    this.activate(this.active);
   }
 
   /** @override */
-  activate(tabName) {
+  activate(tabName, {triggerCallback=false}={}) {
     if (!this._nav) return false;
     
-    // Remove active class from all tab navigation items and content
-    this._nav.querySelectorAll(`.item[data-tab]`).forEach(t => t.classList.remove("active"));
+    const result = super.activate(tabName, {triggerCallback});
+
+    // Add 'active' class to the selected tab content
     if (this._content) {
-      this._content.querySelectorAll(`.tab[data-tab]`).forEach(t => t.classList.remove("active"));
+      const tabs = this._content.querySelectorAll(`.tab[data-tab]`);
+      tabs.forEach(t => {
+        t.classList.toggle("active", t.dataset.tab === tabName);
+      });
+    } else {
+      console.warn("TabsHtbah: Content element not found");
     }
-    
-    // Add active class to the selected tab navigation item and content
-    const selectedNavItem = this._nav.querySelector(`.item[data-tab="${tabName}"]`);
-    const tabContent = this._content?.querySelector(`.tab[data-tab="${tabName}"]`);
-    
-    if (selectedNavItem) selectedNavItem.classList.add("active");
-    if (tabContent) tabContent.classList.add("active");
 
-    // Update the active tab
-    this._active = tabName;
+    // Update the form's class if we're in a sheet application
+    const form = this._nav.closest("form");
+    if (form) {
+      form.className = form.className.replace(/tab-\w+/g, "");
+      form.classList.add(`tab-${this.active}`);
+    }
 
-    return true;
-  }
-
-  get active() {
-    return this._active;
-  }
-
-  set active(value) {
-    this._active = value;
+    return result;
   }
 }
 
@@ -79,8 +74,9 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
       tabs: [
         {
           navSelector: '.tabs',
-          contentSelector: '.tab-body',
-          initial: 'details',
+          contentSelector: '.sheet-body .tab-body',
+          initial: 'details', 
+          group: "primary"
         },
       ],
       dragDrop: [
@@ -93,7 +89,7 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
       resizable: true
     });
   }
-
+  
   /**
    * Available sheet modes.
    * @enum {number}
@@ -136,27 +132,18 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
   /* -------------------------------------------- */
 
   _createTabHandlers() {
-    const tabs = this.options.tabs.map(t => {
+    return this.options.tabs.map(t => {
       const tabOptions = foundry.utils.mergeObject({
         navSelector: ".tabs",
         contentSelector: ".tab-body",
         initial: "details",
+        group: "primary",
         callback: this._onChangeTab.bind(this)
       }, t);
       return new TabsHtbah(tabOptions);
     });
-    
-    this._tabs = tabs;
-  
-    // Ensure all tabs are properly initialized
-    tabs.forEach(tab => {
-      if (tab._nav && tab._content) {
-        tab.activate(tab.active);
-      }
-    });
-  
-    return tabs;
   }
+
   /* -------------------------------------------- */
 
   /** @inheritDoc */
@@ -206,8 +193,8 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
       item.dataset.group = "primary";
       item.dataset.tab = tab;
       item.dataset.tooltip = game.i18n.localize(label);
-      if ( icon ) item.innerHTML = `<i class="${icon}"></i>`;
-      else if ( svg ) item.innerHTML = `<htbah-icon src="systems/how-to-be-a-hero/ui/icons/svg/${svg}.svg"></htbah-icon>`;
+      if (icon) item.innerHTML = `<i class="${icon}"></i>`;
+      else if (svg) item.innerHTML = `<htbah-icon src="systems/how-to-be-a-hero/ui/icons/svg/${svg}.svg"></htbah-icon>`;
       item.setAttribute("aria-label", game.i18n.localize(label));
       return item;
     }));
@@ -218,17 +205,56 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 
   /* -------------------------------------------- */
 
-  /** @inheritDoc*/
-  async _render(force=false, options={}) {
-    super._render(force, options);
-    if ( !this.rendered ) return;
+  /** @inheritDoc */
+  async _render(force = false, options = {}) {
+    // Store the current active tab before rendering
+    const currentActiveTab = this._activeTab || 'details';
+
+    await super._render(force, options);
+    
+    if (!this.rendered) return;
+
     const context = options.renderContext ?? options.action;
     const data = options.renderData ?? options.data;
     const isUpdate = (context === "update") || (context === "updateActor");
     const hp = foundry.utils.getProperty(data ?? {}, "system.attributes.hp.value");
-    //if ( isUpdate && (hp === 0) ) this._toggleDeathTray(true);
+
+    // Restore the active tab after rendering
+    if (currentActiveTab) {
+      this._tabs.forEach(t => {
+        if (t instanceof TabsHtbah) {
+          t.active = currentActiveTab;
+        }
+      });
+
+      // Ensure the correct tab content is displayed
+      this._activateTab(currentActiveTab);
+    }
   }
- 
+  
+  /* -------------------------------------------- */
+
+  /**
+   * Activate a specific tab
+   * @param {string} tabName - The name of the tab to activate
+   * @private
+   */
+  _activateTab(tabName) {
+    const content = this.element[0].querySelector('.sheet-body .tab-body');
+    if (content) {
+      content.querySelectorAll('.tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === tabName);
+      });
+    }
+
+    // Update the form's class
+    this.element[0].className = this.element[0].className.replace(/tab-\w+/g, "");
+    this.element[0].classList.add(`tab-${tabName}`);
+
+    // Ensure _activeTab is updated
+    this._activeTab = tabName;
+  }
+
   /* -------------------------------------------- */
 
   /**
@@ -253,6 +279,8 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 async getData(options) {
   try {
     const context = await super.getData(options);
+    //context.activeTab = this._activeTab;
+  
     this._prepareBasicContext(context, options);
     this._preparePortraitData(context);
     this._prepareHealthData(context);
@@ -948,6 +976,11 @@ _onUseFavorite(event) {
     
     // Initialize tabs
     this._tabs = this._createTabHandlers();
+    // Activate the initial tab
+    this._tabs.forEach(tabSet => {
+      tabSet.activate(tabSet.active);
+      this._onChangeTab(null, tabSet, tabSet.active);
+    });
   }
 
   /**
@@ -1046,15 +1079,13 @@ _onUseFavorite(event) {
   /** @inheritDoc */
   _onChangeTab(event, tabs, active) {
     super._onChangeTab(event, tabs, active);
-    
-    // Update the form's class
-    this.form.className = this.form.className.replace(/tab-\w+/g, "");
-    this.form.classList.add(`tab-${active}`);
-    
+    this._activeTab = active;
+    this._activateTab(active);
+  
     // Update the active tab for all TabsHtbah instances
     this._tabs.forEach(tab => {
       if (tab instanceof TabsHtbah) {
-        tab.active = active;  // Now using the setter
+        tab.active = active;
       }
     });
 

@@ -1716,9 +1716,10 @@ a {
 /*  Character Sidebar and Main divider       */
 /* ----------------------------------------- */
 
-.how-to-be-a-hero.sheet.actor.character .tab-details .tab-body {
-  padding-top: 56px;
+.how-to-be-a-hero.sheet.actor.character.tab-details .sheet-body .tab-body {
+  
 }
+
 .how-to-be-a-hero.sheet.actor.character .sheet-body {
   border-radius: 5px;
   position: relative;
@@ -2342,7 +2343,10 @@ a {
 }
 
 .how-to-be-a-hero .tab.details .talents.header {
-  bottom: 15px;
+}
+
+.how-to-be-a-hero .tab.details .talents-container.talents {
+  margin-top: 10px;
 }
 
 .how-to-be-a-hero .tab.details filigree-box > .header-content {
@@ -2496,6 +2500,36 @@ a {
 
 .how-to-be-a-hero .tab.details .items-list .item-delete:hover {
   color: var(--htbah-color-red);
+}
+
+/* New flexbox additions */
+.how-to-be-a-hero .tab.details .talent-category {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.how-to-be-a-hero .tab.details .talent-category .talents.header {
+  margin-bottom: 10px;
+}
+
+.how-to-be-a-hero .tab.details .talent-category .header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.how-to-be-a-hero .tab.details .talent-category .header-content h3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.how-to-be-a-hero .tab.details .talent-category .header-content .eureka-column,
+.how-to-be-a-hero .tab.details .talent-category .header-content .talent-values {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Inventory Tab Styles */
