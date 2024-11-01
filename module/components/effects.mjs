@@ -3,81 +3,50 @@ import { HowToBeAHeroActiveEffect } from '../documents/active-effect.mjs';
 import { staticID } from "../helpers/utils.mjs";
 import ContextMenu from "../helpers/context-menu.mjs";
 
-/**
- * Custom element that handles displaying active effects lists.
- */
 export default class EffectsElement extends HTMLElement {
   connectedCallback() {
     this.#app = ui.windows[this.closest(".app")?.dataset.appid];
 
-    for ( const control of this.querySelectorAll("[data-action]") ) {
+    this.setupEventListeners();
+    this.setupContextMenu();
+  }
+
+  setupEventListeners() {
+    this.querySelectorAll("[data-action]").forEach(control => {
       control.addEventListener("click", event => {
         this._onAction(event.currentTarget, event.currentTarget.dataset.action);
       });
-    }
+    });
 
-    for ( const source of this.querySelectorAll(".effect-source a") ) {
+    this.querySelectorAll(".effect-source a").forEach(source => {
       source.addEventListener("click", this._onClickEffectSource.bind(this));
-    }
+    });
 
-    for ( const control of this.querySelectorAll("[data-context-menu]") ) {
-      control.addEventListener("click", event => {
-        event.preventDefault();
-        event.stopPropagation();
-        const { clientX, clientY } = event;
-        event.currentTarget.closest("[data-effect-id]").dispatchEvent(new PointerEvent("contextmenu", {
-          view: window, bubbles: true, cancelable: true, clientX, clientY
-        }));
-      });
-    }
-
-    const MenuCls = ContextMenu;
-    new MenuCls(this, "[data-effect-id]", [], {onOpen: element => {
-      const effect = this.getEffect(element.dataset);
-      if ( !effect ) return;
-      ui.context.menuItems = this._getContextOptions(effect);
-      Hooks.call("HTBAH.getActiveEffectContextOptions", effect, ui.context.menuItems);
-    }});
+    this.querySelectorAll("[data-context-menu]").forEach(control => {
+      control.addEventListener("click", this._onContextMenuClick.bind(this));
+    });
   }
 
-  /* -------------------------------------------- */
-  /*  Properties                                  */
-  /* -------------------------------------------- */
+  setupContextMenu() {
+    new ContextMenu(this, "[data-effect-id]", [], {
+      onOpen: element => {
+        const effect = this.getEffect(element.dataset);
+        if (!effect) return;
+        ui.context.menuItems = this._getContextOptions(effect);
+        Hooks.call("HTBAH.getActiveEffectContextOptions", effect, ui.context.menuItems);
+      }
+    });
+  }
 
-  /**
-   * Reference to the application that contains this component.
-   * @type {Application}
-   */
   #app;
 
-  /**
-   * Reference to the application that contains this component.
-   * @type {Application}
-   * @protected
-   */
   get _app() { return this.#app; }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Document whose effects are represented.
-   * @type {HowToBeAHeroActor|Item}
-   */
   get document() {
     return this._app.document;
   }
 
-  /* -------------------------------------------- */
-  /*  Data Preparation                            */
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare the data structure for Active Effects which are currently applied to an Actor or Item.
-   * @param {ActiveEffect[]} effects  The array of Active Effect instances for which to prepare sheet data.
-   * @returns {object}                  Data for rendering.
-   */
   static prepareCategories(effects) {
-    // Define effect header categories
     const categories = {
       temporary: {
         type: "temporary",
@@ -93,40 +62,19 @@ export default class EffectsElement extends HTMLElement {
         type: "inactive",
         label: game.i18n.localize("HTBAH.EffectInactive"),
         effects: []
-      },
-      suppressed: {
-        type: "suppressed",
-        label: game.i18n.localize("HTBAH.EffectUnavailable"),
-        effects: [],
-        disabled: true,
-        info: [game.i18n.localize("HTBAH.EffectUnavailableInfo")]
       }
     };
 
-    // Iterate over active effects, classifying them into categories
-    for ( const e of effects ) {
-      if ( (e.parent.system?.identified === false) && !game.user.isGM ) continue;
-      if ( e.isSuppressed ) categories.suppressed.effects.push(e);
-      else if ( e.disabled ) categories.inactive.effects.push(e);
-      else if ( e.isTemporary ) categories.temporary.effects.push(e);
+    for (const e of effects) {
+      if (e.disabled) categories.inactive.effects.push(e);
+      else if (e.isTemporary) categories.temporary.effects.push(e);
       else categories.passive.effects.push(e);
     }
-    categories.suppressed.hidden = !categories.suppressed.effects.length;
+
     return categories;
   }
 
-  /* -------------------------------------------- */
-  /*  Event Handlers                              */
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare an array of context menu options which are available for owned ActiveEffect documents.
-   * @param {ActiveEffect} effect  The ActiveEffect for which the context menu is activated.
-   * @returns {ContextMenuEntry[]}   An array of context menu options offered for the ActiveEffect.
-   * @protected
-   */
   _getContextOptions(effect) {
-    const isConcentrationEffect = (this.document instanceof HowToBeAHeroActor) && this._app._concentration?.effects.has(effect);
     const options = [
       {
         name: "HTBAH.ContextMenuActionEdit",
@@ -143,67 +91,52 @@ export default class EffectsElement extends HTMLElement {
       {
         name: "HTBAH.ContextMenuActionDelete",
         icon: "<i class='fas fa-trash fa-fw'></i>",
-        condition: () => effect.isOwner && !isConcentrationEffect,
+        condition: () => effect.isOwner,
         callback: li => this._onAction(li[0], "delete")
       },
       {
         name: effect.disabled ? "HTBAH.ContextMenuActionEnable" : "HTBAH.ContextMenuActionDisable",
         icon: effect.disabled ? "<i class='fas fa-check fa-fw'></i>" : "<i class='fas fa-times fa-fw'></i>",
-        group: "state",
-        condition: () => effect.isOwner && !isConcentrationEffect,
+        condition: () => effect.isOwner,
         callback: li => this._onAction(li[0], "toggle")
-      },
-      {
-        name: "HTBAH.ConcentrationBreak",
-        icon: '<htbah-icon src="systems/how-to-be-a-hero/icons/svg/break-concentration.svg"></htbah-icon>',
-        condition: () => isConcentrationEffect,
-        callback: () => this.document.endConcentration(effect),
-        group: "state"
       }
     ];
 
-    // Toggle Favorite State
-    if ( (this.document instanceof HowToBeAHeroActor) && ("favorites" in this.document.system) ) {
+    if ((this.document instanceof HowToBeAHeroActor) && ("favorites" in this.document.system)) {
       const uuid = effect.getRelativeUUID(this.document);
       const isFavorited = this.document.system.hasFavorite(uuid);
       options.push({
         name: isFavorited ? "HTBAH.FavoriteRemove" : "HTBAH.Favorite",
         icon: "<i class='fas fa-star fa-fw'></i>",
         condition: () => effect.isOwner,
-        callback: li => this._onAction(li[0], isFavorited ? "unfavorite" : "favorite"),
-        group: "state"
+        callback: li => this._onAction(li[0], isFavorited ? "unfavorite" : "favorite")
       });
     }
 
     return options;
   }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Handle effects actions.
-   * @param {Element} target  Button or context menu entry that triggered this action.
-   * @param {string} action   Action being triggered.
-   * @returns {Promise}
-   * @protected
-   */
   async _onAction(target, action) {
     const event = new CustomEvent("effect", {
       bubbles: true,
       cancelable: true,
       detail: action
     });
-    if ( target.dispatchEvent(event) === false ) return;
+    if (target.dispatchEvent(event) === false) return;
 
-    if ( action === "toggleCondition" ) {
-      return this._onToggleCondition(target.closest("[data-condition-id]")?.dataset.conditionId);
+    if (action === "toggleCondition") {
+      const conditionId = target.closest("[data-condition-id]")?.dataset.conditionId;
+      if (conditionId) {
+        return game.howtobeahero.managers.conditions.toggleCondition(this.document, conditionId);
+      }
+      return;
     }
 
     const dataset = target.closest("[data-effect-id]")?.dataset;
     const effect = this.getEffect(dataset);
-    if ( (action !== "create") && !effect ) return;
+    if ((action !== "create") && !effect) return;
 
-    switch ( action ) {
+    switch (action) {
       case "create":
         return this._onCreate(target);
       case "delete":
@@ -221,31 +154,6 @@ export default class EffectsElement extends HTMLElement {
     }
   }
 
-  /* -------------------------------------------- */
-
- /**
-   * Handle toggling a condition.
-   * @param {string} conditionId  The condition identifier.
-   * @returns {Promise}
-   * @protected
-   */
-  async _onToggleCondition(conditionId) {
-    const existing = this.document.effects.find(e => e.flags.htbah?.conditionId === conditionId);
-    if (existing) return existing.delete();
-    const effect = game.howtobeahero.managers.conditions.getConditionData(conditionId);
-    return HowToBeAHeroActiveEffect.create({
-      ...effect,
-      flags: { htbah: { isCondition: true, conditionId } }
-    }, { parent: this.document });
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Create a new effect.
-   * @param {HTMLElement} target  Button that triggered this action.
-   * @returns {Promise<HowToBeAHeroActiveEffect>}
-   */
   async _onCreate(target) {
     const isActor = this.document instanceof HowToBeAHeroActor;
     const li = target.closest("li");
@@ -259,37 +167,29 @@ export default class EffectsElement extends HTMLElement {
       disabled: li.dataset.effectType === "inactive"
     }]);
   }
-  /* -------------------------------------------- */
 
-  /**
-   * Handle clicking an effect's source.
-   * @param {PointerEvent} event  The triggering event.
-   * @protected
-   */
   async _onClickEffectSource(event) {
     const { uuid } = event.currentTarget.dataset;
     const doc = await fromUuid(uuid);
-    if ( !doc ) return;
-    if ( !doc.testUserPermission(game.user, "LIMITED") ) {
+    if (!doc) return;
+    if (!doc.testUserPermission(game.user, "LIMITED")) {
       ui.notifications.warn("HTBAH.DocumentViewWarn", { localize: true });
       return;
     }
     doc.sheet.render(true);
   }
 
-  /* -------------------------------------------- */
-  /*  Helpers                                     */
-  /* -------------------------------------------- */
+  _onContextMenuClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const { clientX, clientY } = event;
+    event.currentTarget.closest("[data-effect-id]").dispatchEvent(new PointerEvent("contextmenu", {
+      view: window, bubbles: true, cancelable: true, clientX, clientY
+    }));
+  }
 
-  /**
-   * Fetch an effect from this document, or any embedded items if this document is an HowToBeAHeroActor.
-   * @param {object} data
-   * @param {string} data.effectId    ID of the effect to fetch.
-   * @param {string} [data.parentId]  ID of the parent item containing the effect.
-   * @returns {HowToBeAHeroActiveEffect}
-   */
   getEffect({ effectId, parentId }={}) {
-    if ( !parentId ) return this.document.effects.get(effectId);
+    if (!parentId) return this.document.effects.get(effectId);
     return this.document.items.get(parentId).effects.get(effectId);
   }
 }

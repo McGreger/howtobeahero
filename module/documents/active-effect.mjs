@@ -18,7 +18,7 @@ export class HowToBeAHeroActiveEffect extends foundry.documents.BaseActiveEffect
     if (this.isCondition && this.parent?.effects) {
       const existing = this.parent.effects.find(e => e.flags?.htbah?.conditionId === this.flags?.htbah?.conditionId);
       if (existing) {
-        ui.notifications.warn(`${this.name} condition is already applied to ${this.parent.name}.`);
+        console.warn(`${this.name} condition is already applied to ${this.parent.name}. Preventing creation of duplicate.`);
         return false;
       }
     }

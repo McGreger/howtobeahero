@@ -3237,6 +3237,7 @@ a {
 .how-to-be-a-hero .tab.effects .conditions-list .condition.active {
   color: var(--color-text-dark-primary);
   --icon-fill: var(--color-text-dark-primary);
+  background-color: rgba(0, 255, 0, 0.2);
 }
 
 .how-to-be-a-hero .tab.effects .conditions-list .condition:hover {

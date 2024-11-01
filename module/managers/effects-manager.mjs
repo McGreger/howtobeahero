@@ -42,8 +42,6 @@ export class effectsManager {
         return effect.delete();
       case 'toggle':
         return effect.update({ disabled: !effect.disabled });
-      case 'toggleCondition':
-        return this.conditionManager.toggleCondition(owner, li.dataset.conditionId);
     }
   }
 

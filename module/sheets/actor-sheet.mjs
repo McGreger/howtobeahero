@@ -89,7 +89,7 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
       resizable: true
     });
   }
-  
+
   /**
    * Available sheet modes.
    * @enum {number}
@@ -411,7 +411,7 @@ async _prepareEffects(context) {
       id: c.id,
       name: c.name,
       icon: c.icon,
-      isActive: game.howtobeahero.managers.conditions.isConditionActive(this.actor, c.id)
+      disabled: !game.howtobeahero.managers.conditions.isConditionActive(this.actor, c.id)
     }));
   } else {
     console.warn('HowToBeAHero | ConditionManager not available. Skipping condition preparation.');
@@ -943,13 +943,20 @@ _onUseFavorite(event) {
       li.slideUp(200, () => this.render(false));
     });
     
-    // Active Effect management
+    // Add this new listener for condition toggling
+    html.find('.conditions-list .condition').on('click', this._onToggleCondition.bind(this));
+  
+    // Modify effect-control handler to not handle conditions
+    /*
     html.find(".effect-control").click(ev => {
-      const row = ev.currentTarget.closest("li");
-      const effectId = row.dataset.effectId;
+      if (ev.currentTarget.dataset.action === 'toggleCondition') {
+        const row = ev.currentTarget.closest("li");
+        const effectId = row.dataset.effectId;
+        return;
+      }
       game.htbah.effectsManager.onManageActiveEffect(ev, this.actor);
     });
-
+    */
     // Rollable abilities.
     html.on('click', '.rollable', this._onRoll.bind(this));
 
@@ -1164,6 +1171,24 @@ _onUseFavorite(event) {
     if ( value === n ) value--;
     else value = n;
     return this.actor.update({ [prop]: value });
+  }
+
+  /* -------------------------------------------- */
+
+  async _onToggleCondition(event) {
+    event.preventDefault();
+    const conditionId = event.currentTarget.dataset.conditionId;
+    if (game.howtobeahero?.managers?.conditions) {
+      try {
+        await game.howtobeahero.managers.conditions.toggleCondition(this.actor, conditionId);
+      } catch (error) {
+        console.error(`Error toggling condition ${conditionId}:`, error);
+      } finally {
+        this.render();
+      }
+    } else {
+      console.warn('HowToBeAHero | ConditionManager not available. Cannot toggle condition.');
+    }
   }
 
   /* -------------------------------------------- */
