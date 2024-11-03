@@ -64,6 +64,7 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
     const { width, height } = game.user.getFlag("how-to-be-a-hero", `sheetPrefs.${key}`) ?? {};
     if ( width && !("width" in options) ) options.width = width;
     if ( height && !("height" in options) ) options.height = height;
+  
     super(object, options);
   }
 
@@ -411,7 +412,7 @@ async _prepareEffects(context) {
       id: c.id,
       name: c.name,
       icon: c.icon,
-      disabled: !game.howtobeahero.managers.conditions.isConditionActive(this.actor, c.id)
+      disabled: !game.howtobeahero.managers.conditions.isConditionActive(this.actor, c)
     }));
   } else {
     console.warn('HowToBeAHero | ConditionManager not available. Skipping condition preparation.');
@@ -883,7 +884,6 @@ _onUseFavorite(event) {
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
-    
 
     html.find(".pips[data-prop]").on("click", this._onTogglePip.bind(this));
     html.find("[data-action]").on("click", this._onAction.bind(this));
@@ -944,8 +944,17 @@ _onUseFavorite(event) {
     });
     
     // Add this new listener for condition toggling
-    html.find('.conditions-list .condition').on('click', this._onToggleCondition.bind(this));
-  
+    /*
+    html.find('.conditions-list .condition').on('click', async (event) => {
+      event.preventDefault();
+      const conditionId = event.currentTarget.dataset.conditionId;
+      if (game.howtobeahero?.managers?.conditions) {
+        await game.howtobeahero.managers.conditions.toggleCondition(this.actor, conditionId);
+      } else {
+        console.warn('HowToBeAHero | ConditionManager not available.');
+      }
+    });
+    */
     // Modify effect-control handler to not handle conditions
     /*
     html.find(".effect-control").click(ev => {
@@ -1171,24 +1180,6 @@ _onUseFavorite(event) {
     if ( value === n ) value--;
     else value = n;
     return this.actor.update({ [prop]: value });
-  }
-
-  /* -------------------------------------------- */
-
-  async _onToggleCondition(event) {
-    event.preventDefault();
-    const conditionId = event.currentTarget.dataset.conditionId;
-    if (game.howtobeahero?.managers?.conditions) {
-      try {
-        await game.howtobeahero.managers.conditions.toggleCondition(this.actor, conditionId);
-      } catch (error) {
-        console.error(`Error toggling condition ${conditionId}:`, error);
-      } finally {
-        this.render();
-      }
-    } else {
-      console.warn('HowToBeAHero | ConditionManager not available. Cannot toggle condition.');
-    }
   }
 
   /* -------------------------------------------- */
