@@ -58,6 +58,13 @@ export class conditionManager {
     return effectData;
   }
 
+
+  isConditionActive(actor, condition) {
+    return actor.effects.some(e => 
+      (e.flags?.htbah?.isCondition && e.flags.htbah.conditionId === condition.id) ||
+      (e.statuses instanceof Set && e.statuses.has(condition.statuses[0]))
+    );
+  }
   
   async addCondition(actor, condition) {
     try {
@@ -110,13 +117,6 @@ export class conditionManager {
     }
   }
 
-  isConditionActive(actor, condition) {
-    return actor.effects.some(e => 
-      (e.flags?.htbah?.isCondition && e.flags.htbah.conditionId === condition.id) ||
-      (e.statuses instanceof Set && e.statuses.has(condition.statuses[0]))
-    );
-  }
-
   async removeCondition(actor, condition) {
     try {
       // Find ALL matching effects
@@ -146,6 +146,16 @@ export class conditionManager {
 
   async toggleCondition(actor, condition) {
     try {
+      // If condition is a string, get the condition data
+      if (typeof condition === 'string') {
+        const conditionData = this.getConditionData(condition);
+        if (!conditionData) {
+          console.error(`No condition data found for condition ID: ${condition}`);
+          return;
+        }
+        condition = conditionData;
+      }
+  
       // Get all existing effects for this condition
       const existingEffects = actor.effects.filter(e => 
         (e.flags?.htbah?.isCondition && e.flags.htbah.conditionId === condition.id) ||
@@ -163,12 +173,12 @@ export class conditionManager {
       const isActive = this.isConditionActive(actor, condition);
       
       if (isActive) {
-        await this.removeCondition(actor, condition.id);
+        await this.removeCondition(actor, condition);
       } else {
-        await this.addCondition(actor, condition.id);
+        await this.addCondition(actor, condition);
       }
     } catch (error) {
-      console.error(`Error toggling condition ${condition.id}:`, error);
+      console.error(`Error toggling condition ${condition?.id || condition}:`, error);
     }
   }
 }

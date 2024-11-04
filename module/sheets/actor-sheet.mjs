@@ -290,9 +290,11 @@ async getData(options) {
     // Items, Effects and Conditions
     await this._prepareItemsAndEffects(context);
     
-    // Favorites
-    context.favorites = await this._prepareFavorites();
-    context.favorites.sort((a, b) => a.sort - b.sort);
+    // Favorites - only prepare for character type actors
+    if (this.actor.type === "character") {
+      context.favorites = await this._prepareFavorites();
+      context.favorites.sort((a, b) => a.sort - b.sort);
+    }
 
     return context;
   } catch (error) {
