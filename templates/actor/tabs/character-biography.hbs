@@ -1,0 +1,47 @@
+{{#*inline "textbox"}}
+    <div class="textbox-half">
+        <h3 class="icon">
+            {{#if icon}}<i class="{{ icon }}"></i>
+            {{~else if svg}}<htbah-icon src="systems/how-to-be-a-hero/ui/icons/svg/{{svg}}.svg"></htbah-icon>{{/if}}
+            <span class="roboto-upper">{{ localize label }}</span>
+        </h3>
+        {{#if @root.editable}}
+        <textarea class="untext" name="{{ name }}">{{ value }}</textarea>
+        {{else}}
+        <p>{{ HTBAH-textFormat value }}</p>
+        {{/if}}
+    </div>
+{{/inline}}
+
+<div class="biography">
+
+    {{!-- Characteristics --}}
+    <div class="top">
+        <ul class="unlist characteristics">
+            {{#each characteristics}}
+            <li>
+                <label>
+                    <span class="roboto-upper label">{{ localize label }}</span>
+                    {{#if @root.editable}}
+                    <input type="text" name="{{ name }}" value="{{ value }}">
+                    {{else}}
+                    <span class="value">{{ value }}</span>
+                    {{/if}}
+                </label>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    {{!-- Biography --}}
+    <div class="bottom">
+        <h3 class="icon">
+            <i class="fas fa-feather"></i>
+            <htbah-icon src="systems/how-to-be-a-hero/ui/icons/svg/ink-pot.svg"></htbah-icon>
+            <span class="roboto-upper">{{ localize "HTBAH.Biography" }}</span>
+        </h3>
+        {{ editor biographyHTML target="system.details.biography.value" button=false editable=@root.editable
+                  engine="prosemirror" collaborate=false }}
+    </div>
+
+</div>

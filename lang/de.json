@@ -1,0 +1,99 @@
+{
+  "HOW_TO_BE_A_HERO": {
+    "Attributes": {
+      "Armor": "Rüstung",
+      "HitPointsCurrent": "Aktuelle Lebenspunkte",
+      "HitPointsMaximum": "Maximale Lebenspunkte",
+      "HitPointsTemp": "Temporäre Lebenspunkte",
+      "HitPointsTempMax": "Temporäre maximale Lebenspunkte",
+      "Inspiration": "Inspiration",
+      "Eureka": "Geistesblitz"
+    },
+    "Details": {
+      "Background": "Hintergrund",
+      "Alignment": "Ausrichtung",
+      "Appearance": "Erscheinungsbild",
+      "Wealth": "Reichtum",
+      "Age": "Alter"
+    },
+    "Talents": {
+      "Knowledge": { "long": "Wissen", "abbr": "wis" },
+      "Action": { "long": "Handeln", "abbr": "han" },
+      "Social": { "long": "Soziales", "abbr": "soz" }
+    },
+    "Item":{
+      "Quantity": "Anzahl",
+      "Description": "Beschreibung",
+      "Formula": "Formel"
+    },
+    "SheetLabels": {
+      "Actor": "HowToBeAHero Actor Sheet",
+      "Item": "HowToBeAHero Item Sheet"
+    },
+    "Effect": {
+      "Source": "Quelle",
+      "Toggle": "Umschaltbarer Effekt",
+      "Temporary": "Temporäre Effekt",
+      "Passive": "Passiver Effekte",
+      "Inactive": "Inaktive Effecte"
+    }
+  },
+  "ACTOR.TypeCharacter": "Spielercharakter",
+  "ACTOR.TypeCharacterPl": "Spielercharaktere",
+  "ACTOR.TypeNpc": "Nicht-Spieler-Charakter",
+  "ACTOR.TypeNpcPl": "Nicht-Spieler-Charaktere",
+  "ACTOR.TypeGroup": "Gruppe",
+  
+  "TYPES.Actor.character": "Spielercharakter",
+  "TYPES.Actor.characterPl": "Spielercharaktere",
+  "TYPES.Actor.npc": "Nicht-Spieler-Charakter",
+  "TYPES.Actor.npcPl": "Nicht-Spieler-Charaktere",
+  "TYPES.Actor.group": "Gruppe",
+  "TYPES.Actor.groupPl": "Gruppen",
+  
+  "TYPES.Item.Item": "Gegenstand",
+  "TYPES.Item.ItemPl": "Gegenstände",
+  "TYPES.Item.consumable": "Verbrauchsgegenstand",
+  "TYPES.Item.consumablePl": "Verbrauchsgegenstände",
+  "TYPES.Item.tool": "Werkzeug",
+  "TYPES.Item.toolPl": "Werkzeuge",
+  "TYPES.Item.weapon": "Waffe",
+  "TYPES.Item.weaponPl": "Waffen",
+  "TYPES.Item.armor": "Rüstung",
+  "TYPES.Item.armorP1": "Rüstungen",
+  "TYPES.Item.knowledge": "Wissen",
+  "TYPES.Item.action": "Aktion",
+  "TYPES.Item.social": "Soziales",
+  
+  "HTBAH.title": "Wie man ein Held ist",
+  "HTBAH.Talent": "Talent",
+  "HTBAH.Talents": "Talente",
+  
+  "HTBAH.TalentKnowledge": "Wissen",
+  "HTBAH.TalentKnowledgeLong": "wissen",
+  "HTBAH.TalentKnowledgeAbbr": "wis",
+  "HTBAH.TalentAction": "Handeln",
+  "HTBAH.TalentActionLong": "handeln",
+  "HTBAH.TalentActionAbbr": "han",
+  "HTBAH.TalentSocial": "Soziales",
+  "HTBAH.TalentSocialLong": "soziales",
+  "HTBAH.TalentSocialAbbr": "soz",
+  
+  "HTBAH.TalentSpentPoints": "Verbraucht",
+  "HTBAH.TalentCalculatedPoint": "Berechnet",
+  
+  "HTBAH.SavePromptTitle": "{talent} Wurf",
+  
+  "HTBAH.InspirationValue": "Inspiration {inspirationValue}",
+
+  "TYPES": {
+    "Actor": {
+      "character": "Charakter",
+      "npc": "NPC"
+    },
+    "Item": {
+      "item": "Gegenstand",
+      "weapon": "Waffe"
+    }
+  }
+}

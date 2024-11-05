@@ -1,0 +1,93 @@
+<div class="tab flexrow" data-group="primary" data-tab="description">
+
+            {{!--
+{{#if editingDescriptionTarget}}
+    {{editor enriched.editing target=editingDescriptionTarget button=false editable=editable
+             engine="prosemirror" collaborate=true}}
+{{else}}
+            --}}
+    <div class="item-properties">
+        <div class="form-group">
+            <label>{{ localize "HTBAH.TalentSpentPoints" }}</label>
+            {{!--
+            {{numberInput system.quantity name="system.quantity"}}
+            --}}
+        </div>
+
+        <div class="form-group">
+            <label>{{ localize "HTBAH.TalentCalculatedPoint" }}</label>
+            {{!--
+            {{numberInput system.weight name="system.weight"}}
+            --}}
+        </div>
+        {{!--
+        {{editor system.description target="system.description" rollData=rollData button=true owner=owner
+        editable=editable}}
+
+        <div class="tab attributes" data-group="primary" data-tab="attributes">
+        <div class="resource">
+            <label class="resource-label">Roll Formula:</label>
+            <span>{{system.formula}}</span>
+            <div class="grid grid-4col">
+            <div class="grid-span-1">
+                <label class="resource-label">Number of Dice</label>
+                <input type="text" name="system.roll.diceNum" value="{{system.roll.diceNum}}" data-dtype="Number" />
+            </div>
+            <div class="grid-span-1">
+                <label class="resource-label">Die Size</label>
+                <input type="text" name="system.roll.diceSize" value="{{system.roll.diceSize}}" data-dtype="String" />
+            </div>
+            <div class="grid-span-2">
+                <label class="resource-label">Roll Modifier</label>
+                <input type="text" name="system.roll.diceBonus" value="{{system.roll.diceBonus}}" data-dtype="String" />
+            </div>
+            </div>
+
+        </div>
+        
+        --}}
+        {{!-- Not necessary for the implementation for now
+        {{#if (or labels.toHit labels.derivedDamage)}}
+        <h4 class="properties-header">{{localize "DND5E.Attack"}}/{{localize "DND5E.Damage"}}</h4>
+        <ol class="properties-list" {{~#if concealDetails}} inert{{/if}}>
+            {{#if labels.save}}
+            <li>
+                {{labels.save}}
+            </li>
+            {{/if}}
+
+            {{#if labels.toHit}}
+            <li>
+                {{labels.toHit}} {{localize "DND5E.ToHit"}}
+            </li>
+            {{/if}}
+
+            {{#each labels.derivedDamage}}
+            <li>
+                {{label}}
+            </li>
+            {{/each}}
+        </ol>
+        {{/if}}
+        --}}
+
+    </div>
+
+    {{!-- Not necessary for the implementation for now
+    <div class="item-description">
+    {{#if (user.isGM)}}
+        {{#if (or editable system.description.value)}}
+            {{#if editable}}
+            <h3 class="description-header">
+                <i class="accordion-indicator fa-solid fa-chevron-down"></i>
+                {{localize "DND5E.Description"}}
+                <a class="description-edit" data-target="system.description.value">
+                    <i class="fa-solid fa-edit"></i>
+                </a>
+            </h3>
+            {{/if}}
+            {{editor enriched.description target="system.description.value" editable=false engine="prosemirror"}}
+        {{/if}}
+    {{/if}}
+    --}}
+</div>

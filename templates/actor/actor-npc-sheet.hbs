@@ -1,0 +1,186 @@
+{{!-- Components --}}
+{{#*inline "pip"}}
+<button type="button" class="{{ classes }}" data-n="{{ n }}" data-tooltip="{{ tooltip }}" aria-label="{{ label }}"
+  aria-pressed="{{ filled }}"></button>
+{{/inline}}
+{{!--
+{{#*inline "talent-score"}}
+    <div class="talent-score {{#if flipped}}flipped{{/if}}" data-ability="{{ key }}">
+        <a class="label {{ @root.rollableClass }} talent-check">{{ abbr }}</a>
+        <div class="mod">
+            <span class="sign">
+            {{ value }}
+            </span>
+        </div>
+    </div>
+{{/inline}}
+--}}
+<form class="interactable {{actor.type}} flexcol" autocomplete="off"> {{!-- {{actor.type}} --}}
+
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+    {{!-- Name & Class --}}
+    <div class="left optional-ability-{{ abilityRows.optional }}">
+
+      {{!-- Name --}}
+      {{#if editable}}
+      <input type="text" name="name" class="document-name uninput" value="{{ actor.name }}">
+      {{else}}
+      <div class="document-name">{{ actor.name }}</div>
+      {{/if}}
+
+      {{!-- Class --}}
+      <div class="class roboto-upper">{{ labels.class }}</div>
+    </div>
+
+  </header>
+
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Main Content --}}
+    <div class="main-content">
+      {{!-- Sidebar --}}
+      <div class="sidebar">
+
+        {{!-- Character Card --}}
+        <div class="card">
+          {{!-- Collapser 
+          <button type="button" class="collapser card-tab vertical unbutton interface-only" {{#if sidebarCollapsed}}
+            data-tooltip="JOURNAL.ViewExpand" aria-label="{{ localize " JOURNAL.ViewExpand" }}" {{else}}
+            data-tooltip="JOURNAL.ViewCollapse" aria-label="{{ localize " JOURNAL.ViewCollapse" }}" {{/if}}>
+            <i class="fas fa-caret-{{#if sidebarCollapsed}}right{{else}}left{{/if}}"></i>
+          </button>
+          --}}
+          {{!-- Portrait --}}
+          <div class="portrait {{#if portrait.token}}token{{/if}}">
+            {{!--
+            {{#if editable}}
+            <label class="slide-toggle roboto-upper">
+              <input type="checkbox" name="flags.htbah.showTokenPortrait" {{ checked portrait.token }}>
+              {{#if portrait.token}}
+              <i class="fas fa-toggle-on"></i>
+              {{ localize "DOCUMENT.Token" }}
+              {{else}}
+              <i class="fas fa-toggle-off"></i>
+              {{ localize "HTBAH.Portrait" }}
+              {{/if}}
+            </label>
+            {{/if}}
+            --}}
+            <img src="{{ portrait.src }}" alt="{{ actor.name }}" {{#if (and editable
+              portrait.path)}}data-edit="{{ portrait.path }}" {{/if}}>
+          </div>
+          <div class="stats">
+
+            {{!-- AC & Exhaustion --}}
+            <div class="top">
+                {{!-- AC --}}
+                <div class="ac" aria-label="{{ localize "HTBAH.ArmorClass" }}">
+                    {{!--
+                    {{#if editable}}
+                    <a class="config-button" data-action="armor" data-tooltip="HTBAH.ArmorConfig"
+                      aria-label="{{ localize "HTBAH.ArmorConfig" }}">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    {{else}}
+                    --}}
+                    <div data-attribution="attributes.armor" data-attribution-caption="HTBAH.ArmorClass"
+                        data-tooltip-direction="DOWN">
+                        <input type="text" name="system.baseattributes.armor.value" data-dtype="Number" placeholder="0"
+                        value="{{ system.baseattributes.armor.value }}">
+                    </div>
+                </div>
+                {{!-- Inspiration & Button --}}
+                <div class="right">
+                {{!-- Value of the Inspiration --}}
+                <div class="inspirationValue" aria-label="{{ localize "HTBAH.InspirationValue" }}">
+                        <input type="text" name="system.baseattributes.inspiration.value" data-dtype="Number" placeholder="0"
+                        value="{{ system.baseattributes.inspiration.value }}"></div>
+
+                  {{!-- Inspiration --}}
+                  <button type="button" class="inspiration unbutton" data-action="toggleInspiration" aria-label="{{ localize "
+                    HTBAH.Inspiration" }}" data-tooltip="HTBAH.Inspiration"
+                    aria-pressed="{{ system.baseattributes.inspiration.status }}"></button>
+
+                </div>
+            </div>
+            {{!-- Hit Points --}}
+            <div class="meter-group">
+              <div class="label roboto-condensed-upper">
+                <span>{{ localize "HTBAH.HitPoints" }}</span>
+                {{!--
+                {{#if editable}}
+                <a class="config-button" data-action="hitPoints" data-tooltip="HTBAH.HitPointsConfig"
+                  aria-label="{{ localize " HTBAH.HitPointsConfig" }}">
+                  <i class="fas fa-cog"></i>
+                </a>
+                {{/if}}
+                --}}
+              </div>
+                {{#with system.baseattributes.health}}
+                <div class="meter sectioned hit-points">
+                  <div class="progress hit-points
+                              {{~#if (gt tempmax 0)}} temp-positive
+                              {{~else if (lt tempmax 0)}} temp-negative{{/if}}" role="meter" aria-valuemin="0"
+                    aria-valuenow="{{ value }}" aria-valuemax="{{ max }}" style="--bar-percentage: {{ ../healthPercentage }}%">
+                    <div class="label">
+                      <span class="value">{{ value }}</span>
+                      <span class="separator">&sol;</span>
+                      <span class="max">{{ max }}</span>
+                      {{#if tempmax}}
+                      <span class="bonus">{{numberFormat tempmax signDisplay="always"}}</span>
+                      {{/if}}
+                    </div>
+                    <input type="text" name="system.baseattributes.health.value" data-dtype="Number" placeholder="0"
+                      value="{{ value }}" hidden>
+                  </div>
+                  <div class="tmp">
+                    <input type="text" name="system.baseattributes.health.temp" data-dtype="Number" placeholder="{{ localize "HTBAH.TMP" }}"
+                      value="{{ temp }}">
+                  </div>
+                </div>
+                {{/with}}
+            </div>
+          </div>
+
+        </div>
+       
+      </div>
+      {{!-- Tabbed Content --}}
+      <section class="tab-body">
+
+      {{!-- Character Details --}}
+        {{!-- Details Tab --}}
+        <div class="tab details" data-group="primary" data-tab="details">
+          {{> "htbah.character-details" }}
+        </div>
+
+        {{!-- Inventory Tab --}}
+        <div class="tab inventory" data-group="primary" data-tab="inventory">
+          {{> "htbah.character-inventory" }}
+        </div>
+
+        {{!-- Effects Tab --}}
+        <div class="tab effects" data-group="primary" data-tab="effects">
+          {{> "htbah.character-effects" }}
+        </div>
+
+        {{!-- Biography Tab --}}
+        <div class="tab biography" data-group="primary" data-tab="biography">
+          {{~> "htbah.character-biography" ~}}
+        </div>
+
+      </section>
+    </div>
+    
+      {{!-- Child Creation --}}
+      <button type="button" class="create-child gold-button" aria-label="{{ " SIDEBAR.Create"
+        type=(localize "DOCUMENT.Item" ) }}">
+        <i class="fas fa-plus"></i>
+      </button>
+  </section>
+</form>
+
+{{log system}}
