@@ -1,5 +1,5 @@
 
-
+// Not yet used in the system!
 export class effectsManager {
     constructor(conditionManager = null) {
       this.conditionManager = conditionManager;
