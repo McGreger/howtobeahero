@@ -1274,7 +1274,7 @@ _onUseFavorite(event) {
     let types = {
       inventory: ["item", "consumable", "weapon", "tool", "armor"],
       details: ["knowledge", "action", "social"],
-      effects: ["effect"],
+      effects: [], // Currently no effects are added through this
       biography: [] // Assuming no item types are created from the biography tab
     }[activeTab] ?? [];
 

@@ -2324,6 +2324,23 @@ a {
   display: none;
 }
 
+
+/* ----------------------------------------- */
+/*  Create child                             */
+/* ----------------------------------------- */
+
+.how-to-be-a-hero.sheet.actor.character .create-child {
+  display: none;
+  position: absolute;
+  inset: auto 1rem 1rem auto;
+}
+
+/* Show create-child button based on the active tab class on the parent div */
+.how-to-be-a-hero.sheet.actor.character.tab-details .create-child,
+.how-to-be-a-hero.sheet.actor.character.tab-inventory .create-child {
+  display: block;
+}
+
 /* Details Tab Styles */
 .how-to-be-a-hero .tab.details {
   /* ----------------------------------------- */
