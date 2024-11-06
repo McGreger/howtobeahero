@@ -1,16 +1,18 @@
 {
   "id": "how-to-be-a-hero",
   "title": "How to be a Hero",
-  "description": "The How to be a Hero system for FoundryVTT!",
+  "description": "The How to be a Hero system for FoundryVTT! (Beta)",
+  "version": "0.1.0",
   "authors": [
     {
-      "name": "GrafSchwarz"
+      "name": "GrafSchwarz",
+      "discord": "GrafSchwarz"
     }
   ],
-  "url": "Replace this with a link to your public repository",
+  "url": "https://github.com/GrafSchwarz/howtobeahero",
   "license": "LICENSE.txt",
   "readme": "README.md",
-  "bugs": "Replace this with a link to file issues or tickets",
+  "bugs": "https://github.com/GrafSchwarz/howtobeahero/issues",
   "changelog": "CHANGELOG.md",
   "media": [
     {
@@ -19,13 +21,23 @@
       "thumbnail": "systems/how-to-be-a-hero/assets/anvil-impact.png"
     }
   ],
-  "version": "2.0.0",
   "compatibility": {
     "minimum": 11,
-    "verified": "11.315"
+    "verified": "11.315",
+    "maximum": "11"
   },
-  "esmodules": ["module/how-to-be-a-hero.mjs"],
-  "styles": ["css/how-to-be-a-hero.css"],
+  "esmodules": [
+    "module/howtobeahero.mjs",
+    "module/components/_module.mjs"
+  ],
+  "styles": [
+    "css/howtobeahero.css",
+    "css/components/actor.css",
+    "css/components/effects.css",
+    "css/components/inventory.css",
+    "css/components/item.css",
+    "css/components/roll.css"
+  ],
   "languages": [
     {
       "lang": "en",
@@ -38,14 +50,40 @@
       "path": "lang/de.json"
     }
   ],
-  "packs": [],
-  "packFolders": [],
-  "socket": false,
-  "manifest": "Replace this with a link to the /latest release system.json so people can receive updates after they've installed the system",
-  "download": "This must link to a .zip file of the current version",
+  "packs": [
+    {
+      "name": "conditions",
+      "label": "Conditions",
+      "path": "packs/conditions.db",
+      "type": "Item",
+      "system": "how-to-be-a-hero"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "How to be a Hero",
+      "packs": ["conditions"]
+    }
+  ],
+  "socket": true,
+  "manifest": "https://raw.githubusercontent.com/GrafSchwarz/howtobeahero/bugfix/system-beta-release/system.json",
+  "download": "https://github.com/GrafSchwarz/howtobeahero/archive/refs/tags/v0.1.0-beta.zip",
   "background": "systems/how-to-be-a-hero/assets/anvil-impact.png",
   "gridDistance": 5,
   "gridUnits": "ft",
   "primaryTokenAttribute": "health",
-  "secondaryTokenAttribute": "power"
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "html", "json", "mjs"],
+      "paths": [
+        "lang",
+        "templates",
+        "module/components",
+        "module/documents",
+        "module/helpers",
+        "module/managers",
+        "module/sheets"
+      ]
+    }
+  }
 }
