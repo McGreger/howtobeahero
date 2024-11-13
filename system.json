@@ -66,7 +66,7 @@
     }
   ],
   "socket": true,
-  "manifest": "https://raw.githubusercontent.com/GrafSchwarz/howtobeahero/main/system.json",
+  "manifest": "https://raw.githubusercontent.com/GrafSchwarz/howtobeahero/refs/heads/main/system.json",
   "download": "https://github.com/GrafSchwarz/howtobeahero/archive/refs/heads/main.zip",
   "background": "systems/how-to-be-a-hero/assets/anvil-impact.png",
   "gridDistance": 5,
