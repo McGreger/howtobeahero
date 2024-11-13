@@ -27,11 +27,11 @@
     "maximum": "11"
   },
   "esmodules": [
-    "module/howtobeahero.mjs",
+    "module/how-to-be-a-hero.mjs",
     "module/components/_module.mjs"
   ],
   "styles": [
-    "css/howtobeahero.css",
+    "css/how-to-be-a-hero.css",
     "css/components/actor.css",
     "css/components/effects.css",
     "css/components/inventory.css",
