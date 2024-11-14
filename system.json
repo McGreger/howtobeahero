@@ -31,12 +31,7 @@
     "module/components/_module.mjs"
   ],
   "styles": [
-    "css/how-to-be-a-hero.css",
-    "css/components/actor.css",
-    "css/components/effects.css",
-    "css/components/inventory.css",
-    "css/components/item.css",
-    "css/components/roll.css"
+    "css/how-to-be-a-hero.css"
   ],
   "languages": [
     {
