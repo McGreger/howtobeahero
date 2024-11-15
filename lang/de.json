@@ -11,89 +11,146 @@
     },
     "Details": {
       "Background": "Hintergrund",
-      "Alignment": "Ausrichtung",
+      "Alignment": "Ausrichtung", 
       "Appearance": "Erscheinungsbild",
       "Wealth": "Reichtum",
       "Age": "Alter"
     },
     "Talents": {
-      "Knowledge": { "long": "Wissen", "abbr": "wis" },
-      "Action": { "long": "Handeln", "abbr": "han" },
-      "Social": { "long": "Soziales", "abbr": "soz" }
+      "Knowledge": { "long": "Wissen", "abbr": "wis", "eureka": "Wissens-Geistesblitz" },
+      "Action": { "long": "Handeln", "abbr": "han", "eureka": "Handlungs-Geistesblitz" },
+      "Social": { "long": "Soziales", "abbr": "soz", "eureka": "Sozial-Geistesblitz" }
     },
-    "Item":{
+    "Item": {
       "Quantity": "Anzahl",
       "Description": "Beschreibung",
       "Formula": "Formel"
     },
     "SheetLabels": {
-      "Actor": "HowToBeAHero Actor Sheet",
-      "Item": "HowToBeAHero Item Sheet"
+      "Actor": "HowToBeAHero Charakterbogen",
+      "Item": "HowToBeAHero Gegenstandsbogen"
     },
     "Effect": {
       "Source": "Quelle",
       "Toggle": "Umschaltbarer Effekt",
-      "Temporary": "Temporäre Effekt",
-      "Passive": "Passiver Effekte",
-      "Inactive": "Inaktive Effecte"
+      "Temporary": "Temporäre Effekte",
+      "Passive": "Passive Effekte",
+      "Inactive": "Inaktive Effekte"
     }
   },
-  "ACTOR.TypeCharacter": "Spielercharakter",
-  "ACTOR.TypeCharacterPl": "Spielercharaktere",
-  "ACTOR.TypeNpc": "Nicht-Spieler-Charakter",
-  "ACTOR.TypeNpcPl": "Nicht-Spieler-Charaktere",
-  "ACTOR.TypeGroup": "Gruppe",
-  
-  "TYPES.Actor.character": "Spielercharakter",
-  "TYPES.Actor.characterPl": "Spielercharaktere",
-  "TYPES.Actor.npc": "Nicht-Spieler-Charakter",
-  "TYPES.Actor.npcPl": "Nicht-Spieler-Charaktere",
-  "TYPES.Actor.group": "Gruppe",
-  "TYPES.Actor.groupPl": "Gruppen",
-  
-  "TYPES.Item.Item": "Gegenstand",
-  "TYPES.Item.ItemPl": "Gegenstände",
-  "TYPES.Item.consumable": "Verbrauchsgegenstand",
-  "TYPES.Item.consumablePl": "Verbrauchsgegenstände",
-  "TYPES.Item.tool": "Werkzeug",
-  "TYPES.Item.toolPl": "Werkzeuge",
-  "TYPES.Item.weapon": "Waffe",
-  "TYPES.Item.weaponPl": "Waffen",
-  "TYPES.Item.armor": "Rüstung",
-  "TYPES.Item.armorP1": "Rüstungen",
-  "TYPES.Item.knowledge": "Wissen",
-  "TYPES.Item.action": "Aktion",
-  "TYPES.Item.social": "Soziales",
-  
-  "HTBAH.title": "Wie man ein Held ist",
-  "HTBAH.Talent": "Talent",
-  "HTBAH.Talents": "Talente",
-  
-  "HTBAH.TalentKnowledge": "Wissen",
-  "HTBAH.TalentKnowledgeLong": "wissen",
-  "HTBAH.TalentKnowledgeAbbr": "wis",
-  "HTBAH.TalentAction": "Handeln",
-  "HTBAH.TalentActionLong": "handeln",
-  "HTBAH.TalentActionAbbr": "han",
-  "HTBAH.TalentSocial": "Soziales",
-  "HTBAH.TalentSocialLong": "soziales",
-  "HTBAH.TalentSocialAbbr": "soz",
-  
-  "HTBAH.TalentSpentPoints": "Verbraucht",
-  "HTBAH.TalentCalculatedPoint": "Berechnet",
-  
-  "HTBAH.SavePromptTitle": "{talent} Wurf",
-  
-  "HTBAH.InspirationValue": "Inspiration {inspirationValue}",
 
+  "HTBAH.Names": "Namen",
+  
+  "HTBAH.Item": "Gegenstand",
+  "HTBAH.ItemPl": "Gegenstände",
+  "HTBAH.consumable": "Verbrauchsgegenstand",
+  "HTBAH.consumablePl": "Verbrauchsgegenstände",
+  "HTBAH.tool": "Werkzeug",
+  "HTBAH.toolPl": "Werkzeuge",
+  "HTBAH.weapon": "Waffe",
+  "HTBAH.weaponPl": "Waffen",
+  "HTBAH.armor": "Rüstung",
+  "HTBAH.armorPl": "Rüstungen",
+  "HTBAH.knowledge": "Wissen",
+  "HTBAH.action": "Handeln",
+  "HTBAH.social": "Soziales",
+
+  "HTBAH.Favorite": "Favorit",
+  "HTBAH.FavoriteDrop": "Favorit ablegen",
+  "HTBAH.FavoriteRemove": "Favorit entfernen",
+  "HTBAH.Favorites": "Favoriten",
+
+  "HTBAH.Effect": "Effekt",
+  "HTBAH.Effects": "Effekte",
+  "HTBAH.EffectsApplyTokens": "Auf ausgewählte Token anwenden",
+  "HTBAH.EffectApplyWarningOwnership": "Effekte können nicht auf Token angewendet werden, deren Besitzer Sie nicht sind.",
+  "HTBAH.EffectsSearch": "Effekte durchsuchen",
+
+  "HTBAH.EffectCreate": "Effekt erstellen",
+  "HTBAH.EffectToggle": "Effekt umschalten",
+  "HTBAH.EffectEdit": "Effekt bearbeiten",
+  "HTBAH.EffectEnable": "Effekt aktivieren",
+  "HTBAH.EffectDelete": "Effekt löschen",
+  "HTBAH.EffectDisable": "Effekt deaktivieren",
+  "HTBAH.EffectTemporary": "Temporäre Effekte",
+  "HTBAH.EffectPassive": "Passive Effekte",
+  "HTBAH.EffectInactive": "Inaktive Effekte",
+  "HTBAH.EffectNew": "Neuer Effekt",
+  "HTBAH.EffectUnavailable": "Nicht verfügbare Effekte",
+  "HTBAH.EffectUnavailableInfo": "Quellgegenstand muss ausgerüstet oder eingestimmt sein, um diese zu aktivieren",
+
+  "EFFECT.HTBAH": {
+    "StatusBleeding": "Blutend",
+    "StatusBurrowing": "Grabend",
+    "StatusConcentrating": "Konzentrierend",
+    "StatusCursed": "Verflucht",
+    "StatusDead": "Tot",
+    "StatusDodging": "Ausweichend",
+    "StatusEncumbered": "Belastet",
+    "StatusEthereal": "Ätherisch",
+    "StatusExceedingCarryingCapacity": "Tragekapazität überschritten",
+    "StatusFlying": "Fliegend",
+    "StatusHeavilyEncumbered": "Schwer belastet",
+    "StatusHiding": "Versteckt",
+    "StatusHovering": "Schwebend",
+    "StatusMarked": "Markiert",
+    "StatusSilenced": "Zum Schweigen gebracht",
+    "StatusSleeping": "Schlafend",
+    "StatusStable": "Stabil",
+    "StatusSurprised": "Überrascht",
+    "StatusTransformed": "Verwandelt",
+    "StatusAsleep": "Eingeschlafen",
+    "StatusStunned": "Betäubt",
+    "StatusProne": "Liegend",
+    "StatusRestrained": "Gefesselt",
+    "StatusParalyzed": "Gelähmt",
+    "StatusDeaf": "Taub",
+    "StatusBlind": "Blind",
+    "StatusFrightened": "Verängstigt",
+    "StatusCorroding": "Korrodierend",
+    "StatusShocked": "Geschockt",
+    "StatusFrozen": "Gefroren",
+    "StatusBurning": "Brennend",
+    "StatusDiseased": "Erkrankt",
+    "StatusPoisoned": "Vergiftet",
+    "StatusWeakened": "Geschwächt",
+    "StatusEmpowered": "Verstärkt",
+    "StatusDegenerating": "Degenerierend",
+    "StatusRegenerating": "Regenerierend",
+    "StatusInvisible": "Unsichtbar",
+    "StatusTargeted": "Anvisiert",
+    "StatusBlessed": "Gesegnet",
+    "StatusHolyShield": "Heiliger Schild",
+    "StatusMagicShield": "Magischer Schild",
+    "StatusIceShield": "Eisschild",
+    "StatusFireShield": "Feuerschild"
+  },
+
+  "HTBAH.ConBlinded": "Geblendet",
+  "HTBAH.ConCharmed": "Bezaubert",
+  "HTBAH.ConDeafened": "Taub",
+  "HTBAH.ConDiseased": "Erkrankt",
+  "HTBAH.ConExhaustion": "Erschöpfung",
+  "HTBAH.ConFrightened": "Verängstigt",
+  "HTBAH.ConGrappled": "Gepackt",
+  "HTBAH.ConImm": "Zustandsimmunitäten",
+  "HTBAH.ConIncapacitated": "Kampfunfähig",
+  "HTBAH.ConInvisible": "Unsichtbar",
+  "HTBAH.ConParalyzed": "Gelähmt",
+  "HTBAH.ConPetrified": "Versteinert",
+  "HTBAH.ConPoisoned": "Vergiftet",
+  "HTBAH.ConProne": "Liegend",
+  "HTBAH.ConRestrained": "Gefesselt",
+  "HTBAH.ConStunned": "Betäubt",
+  
   "TYPES": {
     "Actor": {
-      "character": "Charakter",
+      "character": "Character",
       "npc": "NPC"
     },
     "Item": {
-      "item": "Gegenstand",
-      "weapon": "Waffe"
+      "item": "Item",
+      "weapon": "Weapon"
     }
   }
 }
