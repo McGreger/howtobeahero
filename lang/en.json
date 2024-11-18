@@ -39,21 +39,30 @@
     }
   },
 
-  "ACTOR.TypeCharacter": "Player Character",
-  "ACTOR.TypeCharacterPl": "Player Characters",
-  "ACTOR.TypeNpc": "Non-Player Character",
-  "ACTOR.TypeNpcPl": "Non-Player Characters",
-  "ACTOR.TypeGroup": "Group",
-  
-  "TYPES.Actor.character": "Player Character",
-  "TYPES.Actor.characterPl": "Player Characters",
-  "TYPES.Actor.npc": "Non-Player Character",
-  "TYPES.Actor.npcPl": "Non-Player Characters",
-  "TYPES.Actor.group": "Group",
-  "TYPES.Actor.groupPl": "Groups",
-
   "HTBAH.Names": "Names",
+
+  "HTBAH.HitPoints": "Hitpoints",
+
+  "HTBAH.Inventory": "Inventory",  
+
+  "HTBAH.InventorySearch": "Search...",
+  "HTBAH.FilterClear": "Clear Filter",
+  "HTBAH.FilterGroupCategory": "Group by",
+  "HTBAH.SortManually": "Sort manually",
+  "HTBAH.SortAuto": "A-Z",
   
+  "HTBAH.Quantity": "Quantity",
+  "HTBAH.Uses": "Uses",
+
+  "HTBAH.ContextMenuActionEdit": "Edit",
+  "HTBAH.ContextMenuActionDuplicate": "Duplicate",
+  "HTBAH.ContextMenuActionDelete": "Delete",
+
+  "HTBAH.ItemEdit": "Edit",
+  "HTBAH.ItemDelete": "Delete",
+
+  "HTBAH.Description": "Description",
+
   "HTBAH.Item": "Item",
   "HTBAH.ItemPl": "Items",
   "HTBAH.consumable": "Consumable",
@@ -67,8 +76,7 @@
   "HTBAH.knowledge": "Knowledge",
   "HTBAH.action": "Action",
   "HTBAH.social": "Social",
-  
-  "HTBAH.title": "How to be a Hero",
+
   "HTBAH.Talent": "Talent",
   "HTBAH.Talents": "Talents",
   
@@ -90,6 +98,7 @@
   
   "HTBAH.SavePromptTitle": "{talent} Throw",
   
+  "HTBAH.Inspiration": "Inspiration",
   "HTBAH.InspirationValue": "Inspiration {inspirationValue}",
 
   "HTBAH.Favorite": "Favorite",
@@ -97,6 +106,9 @@
   "HTBAH.FavoriteRemove": "Remove Favorite",
   "HTBAH.Favorites": "Favorites",
 
+  "HTBAH.Details": "Details",  
+
+  "HTBAH.Conditions": "Conditions",
   
   "HTBAH.Effect": "Effect",
   "HTBAH.Effects": "Effects",
@@ -172,6 +184,7 @@
   "HTBAH.ConFrightened": "Frightened",
   "HTBAH.ConGrappled": "Grappled",
   "HTBAH.ConImm": "Condition Immunities",
+  "HTBAH.ConUnconscious": "Unconscious",
   "HTBAH.ConIncapacitated": "Incapacitated",
   "HTBAH.ConInvisible": "Invisible",
   "HTBAH.ConParalyzed": "Paralyzed",
@@ -180,6 +193,8 @@
   "HTBAH.ConProne": "Prone",
   "HTBAH.ConRestrained": "Restrained",
   "HTBAH.ConStunned": "Stunned",
+
+  "HTBAH.Biography": "Biography",
     
   "TYPES": {
     "Actor": {
@@ -187,8 +202,15 @@
       "npc": "NPC"
     },
     "Item": {
+      "knowledge": "Knowledge",
+      "social": "Social",
+      "action": "Action",
+      "tool": "Tool",
+      "weapon": "Weapon",
+      "consumable": "Consumable",
       "item": "Item",
-      "weapon": "Weapon"
+      "armor": "Armor",
+      "base": "Base"
     }
   }
 }
