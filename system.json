@@ -45,21 +45,6 @@
       "path": "lang/de.json"
     }
   ],
-  "packs": [
-    {
-      "name": "conditions",
-      "label": "Conditions",
-      "path": "packs/conditions.db",
-      "type": "Item",
-      "system": "how-to-be-a-hero"
-    }
-  ],
-  "packFolders": [
-    {
-      "name": "How to be a Hero",
-      "packs": ["conditions"]
-    }
-  ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/GrafSchwarz/howtobeahero/refs/heads/main/system.json",
   "download": "https://github.com/GrafSchwarz/howtobeahero/archive/refs/heads/main.zip",
