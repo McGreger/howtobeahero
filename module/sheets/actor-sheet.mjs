@@ -919,6 +919,7 @@ _onUseFavorite(event) {
     }
 
     html.find('[data-action="incrementBonus"], [data-action="decrementBonus"]').click(this._onItemBonusClick.bind(this));
+    html.find('.bonus-input-group input[name="system.roll.diceBonus"]').change(this._onBonusInputChange.bind(this));
 
     html.find(".tab.details .item-action").on("click", this._onItemAction.bind(this));
 
@@ -1036,6 +1037,16 @@ _onUseFavorite(event) {
     const delta = event.currentTarget.dataset.action === "incrementBonus" ? 1 : -1;
     
     await item.sheet._onAdjustBonus(delta, event);
+  }
+
+  async _onBonusInputChange(event) {
+    const itemId = event.currentTarget.closest('[data-item-id]').dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    const newBonus = Number(event.target.value);
+    
+    if (!isNaN(newBonus)) {
+      await item.update({"system.roll.diceBonus": newBonus});
+    }
   }
   
   /**

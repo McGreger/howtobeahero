@@ -109,7 +109,7 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
   async _onAdjustBonus(delta, event) {
     event.preventDefault();
     const currentBonus = Number(this.item.system.roll.diceBonus) || 0;
-    const newBonus = Math.max(0, currentBonus + delta);
+    const newBonus = currentBonus + delta;
     await this.item.update({"system.roll.diceBonus": newBonus});
   }
 
