@@ -9,9 +9,4 @@ export default class HowToBeAHeroAction extends HowToBeAHeroSkill {
     
     return schema
   }
-  
-  /*
-  prepareDerivedData() {
-  }
-  */
 }

@@ -22,7 +22,16 @@ export class HowToBeAHeroItem extends Item {
   /**
    * Getter for calculatedValue
    * Getter for totalValue
+   * Getter for formula
    * @type {number}
+   */
+  get formula() {
+    const roll = this.system.roll;
+    if (!roll) return '';
+    const bonusStr = roll.diceBonus > 0 ? `+${roll.diceBonus}` : roll.diceBonus === 0 ? '' : roll.diceBonus;
+    return `${roll.diceNum}${roll.diceSize}${bonusStr}`;
+  }
+
   get calculatedValue() {
     if (this.system.value >= 80) return this.system.value;
     if (!this.actor) return this.system.value;
@@ -32,11 +41,10 @@ export class HowToBeAHeroItem extends Item {
   }
 
   get totalValue() {
-    const bonus = this.system?.roll?.diceBonus ? Number(this.system.roll.diceBonus) : 0;
-    const inspiration = this.actor?.system?.baseattributes?.inspiration?.value || 0;
+    const bonus = Number(this.system?.roll?.diceBonus ?? 0);
+    const inspiration = this.actor?.system?.baseattributes?.inspiration?.value ?? 0;
     return this.calculatedValue + bonus + inspiration;
    }
-   */
   /**
    * @override
    * Augment the item source data with additional dynamic data that isn't 
@@ -144,7 +152,7 @@ export class HowToBeAHeroItem extends Item {
    * @protected
    */
   _prepareKnowledge() {
-
+    this._prepareSharedSkillValues();
   }
   
   /* -------------------------------------------- */
@@ -154,7 +162,7 @@ export class HowToBeAHeroItem extends Item {
    * @protected
    */
   _prepareAction() {
-
+    this._prepareSharedSkillValues();
   }
   
   /* -------------------------------------------- */
@@ -164,9 +172,18 @@ export class HowToBeAHeroItem extends Item {
    * @protected
    */
   _prepareSocial() {
-
+    this._prepareSharedSkillValues();
   }
-  
+  /**
+   * Prepare shared data for an skill-type item.
+   * @protected
+   */
+
+  _prepareSharedSkillValues() {
+    this.system.calculatedValue = this.calculatedValue;
+    this.system.totalValue = this.totalValue;
+    this.system.formula = this.formula;
+  }
 
   /* -------------------------------------------- */
   

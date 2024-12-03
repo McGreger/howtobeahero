@@ -9,9 +9,5 @@ export default class HowToBeAHeroKnowledge extends HowToBeAHeroSkill {
     
     return schema
   }
-
-  /*
-  prepareDerivedData() {
-  }
-  */
+  
 }
