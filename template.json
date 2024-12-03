@@ -47,82 +47,86 @@
         "wealth": 0,
         "age": 0
       }
-    }
-  },
-  "character": {
-    "templates": ["base"],
-    "eureka": {
-      "value": 0,
-      "min": 0
     },
-    "favorites": {
-      "type": "",
-      "id": "",
-      "sort": 0
+    "character": {
+      "templates": ["base"],
+      "eureka": {
+        "value": 0,
+        "min": 0
+      },
+      "favorites": {
+        "type": "",
+        "id": "",
+        "sort": 0
+      }
+    },
+    "npc": {
+      "templates": ["base"]
     }
-
-  },
-  "npc": {
-    "templates": ["base"]
   },
   "Item": {
     "types": ["item", "consumable", "weapon", "armor", "tool", "knowledge", "action", "social"],
     "templates": {
       "base": {
         "description": ""
+      },
+      "physical": {
+        "quantity": 1,
+        "formula": ""
+      },
+      "skill": {
+        "type": "",
+        "value": 0,
+        "calculatedValue": 0,
+        "totalValue": 0,
+        "roll": {
+          "diceNum": 1,
+          "diceSize": "d100",
+          "diceBonus": 0
+        },
+        "formula": ""
       }
+    },
+    "item": {
+      "templates": ["base", "physical"],
+      "type": ""
+    },
+    "consumable": {
+      "templates": ["base", "physical"],
+      "type": "",
+      "duration": ""
+    },
+    "weapon": {
+      "templates": ["base", "physical"],
+      "weaponType": "",
+      "range": "",
+      "equipped": false
+    },
+    "armor": {
+      "templates": ["base"],
+      "quantity": 1,
+      "armorType": "",
+      "armor": 0,
+      "material": "",
+      "equipped": false
+    },
+    "tool": {
+      "templates": ["base", "physical"],
+      "type": "",
+      "uses": {
+        "value": 1,
+        "min": 0,
+        "max": 1
+      }
+    },
+    "knowledge": {
+      "templates": ["base", "skill"]
+    },
+    "action": {
+      "templates": ["base", "skill"]
+    },
+    "social": {
+      "templates": ["base", "skill"]
     }
-  },
-  "item": {
-    "templates": ["base"],
-    "quantity": 1,
-    "formula": "",
-    "type": ""
-  },
-  "consumable": {
-    "templates": ["base"],
-    "quantity": 1,
-    "formula": "",
-    "type": "",
-    "duration": ""
-  },
-  "weapon": {
-    "templates": ["base"],
-    "quantity": 1,
-    "formula": "",
-    "weaponType": "",
-    "range": "",
-    "equipped": false
-  },
-  "armor": {
-    "templates": ["base"],
-    "quantity": 1,
-    "armorType": "",
-    "armor": 0,
-    "material": "",
-    "equipped": false
-  },
-  "tool": {
-    "templates": ["base"],
-    "quantity": 1,
-    "formula": "",
-    "type": "",
-    "uses": {
-      "value": 1,
-      "min": 0,
-      "max": 1
-    }
-  },
-  "knowledge": {
-    "templates": ["base"],
-    "formula": ""
-  },
-  "action": {
-    "templates": ["base"],
-    "formula": ""
-  },
-  "social": {
-    "templates": ["base"],
-    "formula": ""
   }
 }
