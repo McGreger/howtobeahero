@@ -2429,6 +2429,7 @@ a {
   padding: 0.75rem 1rem 0.375rem;
 }
 
+/* Details Tab Styles */
 .how-to-be-a-hero .tab.details .items-list .item {
   display: flex;
   justify-content: space-between;
@@ -2443,6 +2444,7 @@ a {
   text-decoration: none;
   cursor: pointer;
   transition: color 0.3s ease;
+  min-width: 0;
 }
 
 .how-to-be-a-hero .tab.details .items-list .item-name:hover {
@@ -2452,28 +2454,30 @@ a {
 .how-to-be-a-hero .tab.details .items-list .item-name h3 {
   margin: 0;
   white-space: nowrap;
-  overflow-x: hidden;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: var(--htbah-font-roboto-slab);
   font-size: var(--font-size-18);
   font-weight: bold;
   color: var(--htbah-color-beige);
 }
 
-.how-to-be-a-hero .tab.details .items-list .item-value,
+.how-to-be-a-hero .tab.details .items-list .item-bonus,
 .how-to-be-a-hero .tab.details .items-list .item-calculated-value,
-.how-to-be-a-hero .tab.details .items-list .item-bonus {
-  flex: 0 0 18%;
+.how-to-be-a-hero .tab.details .items-list .item-total {
+  flex: 0 0 15%;
   text-align: center;
   font-family: var(--htbah-font-roboto);
   font-size: var(--font-size-18);
   color: var(--htbah-color-beige);
-  padding: 4px 6px;
 }
 
 .how-to-be-a-hero .tab.details .items-list .item-controls {
-  flex: 0 0 10%;
+  flex: 0 0 0%;
   display: flex;
   justify-content: flex-end;
+  gap: 4px;
+  margin-left: auto;
 }
 
 .how-to-be-a-hero .tab.details .items-list .item-control {
@@ -2494,6 +2498,7 @@ a {
 .how-to-be-a-hero .tab.details .items-list .item-delete:hover {
   color: var(--htbah-color-red);
 }
+
 /* New flexbox additions */
 .how-to-be-a-hero .tab.details .talent-category {
   display: flex;
@@ -2528,13 +2533,13 @@ a {
 .bonus-input-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   justify-content: center;
   position: relative;
+  width: fit-content;
 }
 
 .bonus-input-group input {
-  width: 40px;
+  width: 35px;
   text-align: center;
   font-family: var(--htbah-font-roboto);
   font-weight: bold;
@@ -2542,6 +2547,7 @@ a {
   border: var(--htbah-border-gold);
   border-radius: 4px;
   padding: 2px;
+  /*padding-right: 8px;  Make room for the icons */
   color: var(--color-text-dark-primary);
 }
 
@@ -2553,8 +2559,18 @@ a {
 .bonus-input-group i {
   cursor: pointer;
   color: var(--htbah-color-tan);
-  font-size: var(--font-size-16);
+  font-size: var(--font-size-12);
   transition: color 0.2s ease, transform 0.2s ease;
+  position: absolute;
+  right: -8px;
+}
+
+.bonus-input-group .fa-circle-plus {
+  top: -2px;
+}
+
+.bonus-input-group .fa-circle-minus {
+  bottom: 0px;
 }
 
 .bonus-input-group i:hover {
@@ -2569,6 +2585,7 @@ a {
 .fa-circle-minus:hover {
   color: #e76f51;
 }
+
 /* Inventory Tab Styles */
 .how-to-be-a-hero .tab.inventory {
   /* Specific styles for the inventory tab */

@@ -1031,24 +1031,41 @@ _onUseFavorite(event) {
     return await Item.create(itemData, { parent: this.actor });
   }
 
+  /**
+   * Clamps a bonus value between -99 and 99
+   * @param {number} value - The value to clamp
+   * @returns {number} The clamped value
+   * @private
+   */
+  _clampBonus(value) {
+    return Math.min(Math.max(value, -99), 99);
+  }
+
   async _onItemBonusClick(event) {
     const itemId = event.currentTarget.closest('[data-item-id]').dataset.itemId;
     const item = this.actor.items.get(itemId);
     const delta = event.currentTarget.dataset.action === "incrementBonus" ? 1 : -1;
+    const currentBonus = Number(item.system.roll.diceBonus) || 0;
+    const newBonus = this._clampBonus(currentBonus + delta);
     
-    await item.sheet._onAdjustBonus(delta, event);
+    if (newBonus !== currentBonus) {
+      await item.update({"system.roll.diceBonus": newBonus});
+    }
   }
 
   async _onBonusInputChange(event) {
     const itemId = event.currentTarget.closest('[data-item-id]').dataset.itemId;
     const item = this.actor.items.get(itemId);
-    const newBonus = Number(event.target.value);
+    const newBonus = this._clampBonus(Number(event.target.value));
     
     if (!isNaN(newBonus)) {
       await item.update({"system.roll.diceBonus": newBonus});
+      
+      // Update the input value to show the clamped value
+      event.target.value = newBonus;
     }
   }
-  
+
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
