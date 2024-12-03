@@ -13,11 +13,11 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
     
     // Add eureka to each talent in baseattributes
     schema.baseattributes.fields.talents.fields.knowledge.fields.eureka = 
-      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.KnowledgeEureka"});
+      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Knowledge.eureka"});
     schema.baseattributes.fields.talents.fields.action.fields.eureka = 
-      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.ActionEureka"});
+      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Action.eureka"});
     schema.baseattributes.fields.talents.fields.social.fields.eureka = 
-      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.SocialEureka"});
+      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Social.eureka"});
       
     schema.favorites = new fields.ArrayField(new fields.SchemaField({
       type: new fields.StringField({ required: true, blank: false }),

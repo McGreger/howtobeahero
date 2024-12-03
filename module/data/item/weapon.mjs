@@ -21,7 +21,7 @@ export default class HowToBeAHeroWeapon extends HowToBeAHeroItemBase {
     schema.roll = new fields.SchemaField({
       diceNum: new fields.NumberField({ ...requiredInteger, initial: 1, min: 1 }),
       diceSize: new fields.StringField({ initial: "d10" }),
-      diceBonus: new fields.StringField({ initial: "+0" }) // Example "+@str.mod+ceil(@lvl / 2)"
+      diceBonus: new fields.NumberField({ initial: 0 }) // Example "+@str.mod+ceil(@lvl / 2)"
     })
 
     return schema;

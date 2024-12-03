@@ -21,8 +21,8 @@ export class HowToBeAHeroItem extends Item {
   
   /**
    * Getter for calculatedValue
+   * Getter for totalValue
    * @type {number}
-   */
   get calculatedValue() {
     if (this.system.value >= 80) return this.system.value;
     if (!this.actor) return this.system.value;
@@ -31,6 +31,12 @@ export class HowToBeAHeroItem extends Item {
     return Math.min(80, talentValue + this.system.value);
   }
 
+  get totalValue() {
+    const bonus = this.system?.roll?.diceBonus ? Number(this.system.roll.diceBonus) : 0;
+    const inspiration = this.actor?.system?.baseattributes?.inspiration?.value || 0;
+    return this.calculatedValue + bonus + inspiration;
+   }
+   */
   /**
    * @override
    * Augment the item source data with additional dynamic data that isn't 
@@ -45,7 +51,8 @@ export class HowToBeAHeroItem extends Item {
     this.labels = {}
     
     // Calculate and set the calculatedValue
-    this.system.calculatedValue = this.calculatedValue;
+    //this.system.calculatedValue = this.calculatedValue;
+    //this.system.totalValue = this.totalValue;
 
     // Specialized preparation per Item type
     switch ( this.type ) {

@@ -918,6 +918,8 @@ _onUseFavorite(event) {
       html.find(".create-child").on("click", this._onCreateChild.bind(this));
     }
 
+    html.find('[data-action="incrementBonus"], [data-action="decrementBonus"]').click(this._onItemBonusClick.bind(this));
+
     html.find(".tab.details .item-action").on("click", this._onItemAction.bind(this));
 
     // Add listener for eureka input changes
@@ -1028,6 +1030,14 @@ _onUseFavorite(event) {
     return await Item.create(itemData, { parent: this.actor });
   }
 
+  async _onItemBonusClick(event) {
+    const itemId = event.currentTarget.closest('[data-item-id]').dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    const delta = event.currentTarget.dataset.action === "incrementBonus" ? 1 : -1;
+    
+    await item.sheet._onAdjustBonus(delta, event);
+  }
+  
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event

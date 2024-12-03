@@ -1275,7 +1275,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   --htbah-sheet-header-right-width: 280px;
   --htbah-sheet-sidebar-width: 230px;
   background: transparent;
-  min-width: 1050px;
+  min-width: 1200px;
   min-height: 700px;
   box-shadow: none;
   /* ---------------------------------- */
@@ -2359,13 +2359,6 @@ a {
   flex: 1;
 }
 
-.how-to-be-a-hero .tab.details .talents.header {
-}
-
-.how-to-be-a-hero .tab.details .talents-container.talents {
-  margin-top: 10px;
-}
-
 .how-to-be-a-hero .tab.details filigree-box > .header-content {
   display: flex;
   justify-content: space-between;
@@ -2376,7 +2369,7 @@ a {
 }
 
 .how-to-be-a-hero .tab.details filigree-box > .header-content > h3 {
-  flex: 0 0 60%;
+  flex: 0 0 55%;
   margin: 5px 0;
   display: flex;
   flex-direction: column;
@@ -2393,50 +2386,32 @@ a {
   line-height: 1;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column {
-  flex: 0 0 20%;
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column,
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .talent-values,
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .bonus-column {
+  flex: 0 0 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column input {
-  width: 35px;
-  height: 35px;
-  text-align: center;
-  background: transparent url(../ui/golden-badge.webp) no-repeat center / contain;
-  color: var(--color-text-light-0);
-  font-size: var(--font-size-18);
-  font-family: var(--htbah-font-roboto);
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .bonus-column {
+  color: var(--htbah-color-gold);
   font-weight: bold;
-  border: none;
-  padding: 0;
-  margin: 2px 0;
-  filter: drop-shadow(0 0 6px var(--color-shadow-dark));
-  -webkit-appearance: none;
-  -moz-appearance: textfield;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column input::-webkit-outer-spin-button,
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.how-to-be-a-hero .tab.details .talents-container.talents {
+  margin-top: 10px;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column input:focus {
-  outline: none;
-  box-shadow: 0 0 5px var(--color-shadow-primary);
-}
-
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .talent-values {
-  flex: 0 0 20%;
+.how-to-be-a-hero .tab.details .talent-category {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 10px;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .empty-column {
-  flex: 0 0 10%;
+.how-to-be-a-hero .tab.details .talent-category .talents.header {
+  margin-bottom: 10px;
 }
 
 .how-to-be-a-hero .tab.details .items-list .talent-list {
@@ -2464,7 +2439,7 @@ a {
 }
 
 .how-to-be-a-hero .tab.details .items-list .item-name {
-  flex: 0 0 60%;
+  flex: 0 0 55%;
   text-decoration: none;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -2485,8 +2460,9 @@ a {
 }
 
 .how-to-be-a-hero .tab.details .items-list .item-value,
-.how-to-be-a-hero .tab.details .items-list .item-calculated-value {
-  flex: 0 0 20%;
+.how-to-be-a-hero .tab.details .items-list .item-calculated-value,
+.how-to-be-a-hero .tab.details .items-list .item-bonus {
+  flex: 0 0 18%;
   text-align: center;
   font-family: var(--htbah-font-roboto);
   font-size: var(--font-size-18);
@@ -2518,7 +2494,6 @@ a {
 .how-to-be-a-hero .tab.details .items-list .item-delete:hover {
   color: var(--htbah-color-red);
 }
-
 /* New flexbox additions */
 .how-to-be-a-hero .tab.details .talent-category {
   display: flex;
@@ -2549,6 +2524,51 @@ a {
   align-items: center;
 }
 
+/* Bonus Input Group */
+.bonus-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  position: relative;
+}
+
+.bonus-input-group input {
+  width: 40px;
+  text-align: center;
+  font-family: var(--htbah-font-roboto);
+  font-weight: bold;
+  font-size: var(--font-size-13);
+  border: var(--htbah-border-gold);
+  border-radius: 4px;
+  padding: 2px;
+  color: var(--color-text-dark-primary);
+}
+
+.bonus-input-group input:focus {
+  box-shadow: 0 0 6px var(--htbah-color-gold);
+  outline: none;
+}
+
+.bonus-input-group i {
+  cursor: pointer;
+  color: var(--htbah-color-tan);
+  font-size: var(--font-size-16);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.bonus-input-group i:hover {
+  color: var(--htbah-color-gold);
+  transform: scale(1.1);
+}
+
+.fa-circle-plus:hover {
+  color: #2a9d8f;
+}
+
+.fa-circle-minus:hover {
+  color: #e76f51;
+}
 /* Inventory Tab Styles */
 .how-to-be-a-hero .tab.inventory {
   /* Specific styles for the inventory tab */
