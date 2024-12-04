@@ -41,9 +41,7 @@ export class D100Roll extends Roll {
 
   async toMessage(messageData={}, options={}) {
     if (!this._evaluated) await this.evaluate({async: true});
-
     messageData.flavor = messageData.flavor || this.options.flavor;
-
     return super.toMessage(messageData, options);
   }
 }

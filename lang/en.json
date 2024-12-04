@@ -17,9 +17,9 @@
       "Age": "Age"
     },
     "Talents": {
-      "Knowledge": { "long": "Knowledge", "abbr": "kno", "eureka": "Knowledge Eureka" },
-      "Action": { "long": "Action", "abbr": "act", "eureka": "Action Eureka" },
-      "Social": { "long": "Social", "abbr": "soc", "eureka": "Social Eureka" }
+      "Knowledge": { "label": "Knowledge", "long": "knowledge", "abbr": "kno", "bonus": "Knowledge-Bonus", "eureka": "Knowledge-Eureka", "total": "Knowledge-Total" },
+      "Action": { "label": "Action", "long": "action", "abbr": "act", "bonus": "Action-Bonus", "eureka": "Action-Eureka", "total": "Action-Total" },
+      "Social": { "label": "Social", "long": "social", "abbr": "soc", "bonus": "Social-Bonus", "eureka": "Social-Eureka", "total": "Social-Total" }
     },
     "Item":{
       "Quantity": "Quantity",
@@ -79,6 +79,8 @@
 
   "HTBAH.Talent": "Talent",
   "HTBAH.Talents": "Talents",
+  
+  "HTBAH.TalentCheckPromptTitle": "General roll",
   
   "HTBAH.TalentKnowledge": "Knowledge",
   "HTBAH.TalentKnowledgeLong": "knowledge",

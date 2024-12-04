@@ -35,7 +35,8 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
       const context = await super.getData();
       const item = context.item;
 
-      context.item.system.calculatedValue = item.calculatedValue;
+      //context.item.system.calculatedValue = item.calculatedValue;
+      //context.item.system.totalValue = item.totalValue;
 
       this._prepareBaseItemData(context, item);
       this._prepareGameConfig(context);
@@ -84,6 +85,10 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
+    // Add bonus handlers for skills
+    html.find('[data-action="incrementBonus"]').click(this._onAdjustBonus.bind(this, 1));
+    html.find('[data-action="decrementBonus"]').click(this._onAdjustBonus.bind(this, -1));
+
     // Active Effect management
     html.on('click', '.effect-control', this._onEffectControl.bind(this));
     
@@ -98,6 +103,14 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
       const calculatedValueInput = html.find('input[name="system.calculatedValue"]');
       calculatedValueInput.val(this.item.calculatedValue);
     });
+  }
+
+
+  async _onAdjustBonus(delta, event) {
+    event.preventDefault();
+    const currentBonus = Number(this.item.system.roll.diceBonus) || 0;
+    const newBonus = currentBonus + delta;
+    await this.item.update({"system.roll.diceBonus": newBonus});
   }
 
   /**
