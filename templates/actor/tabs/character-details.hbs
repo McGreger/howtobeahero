@@ -6,8 +6,10 @@
         <div class="item-bonus">
             <div class="bonus-input-group"> 
                 <input type="number" name="system.roll.diceBonus" value="{{system.roll.diceBonus}}" min="-99" max="99">
+                {{#if @root.editable}}
                 <i class="fa-solid fa-circle-plus" data-action="incrementBonus" data-item-id="{{_id}}"></i>
                 <i class="fa-solid fa-circle-minus" data-action="decrementBonus" data-item-id="{{_id}}"></i>
+                {{/if}}
             </div>
         </div>
         <div class="item-calculated-value">{{system.calculatedValue}}</div>
@@ -32,19 +34,26 @@
                     </a> 
                 {{/each}}
                 </h3>
-                <div class="eureka-column flex1">
-                    {{#each talentRows}}
-                        <input type="number" name="system.baseattributes.talents.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
-                    {{/each}}
+                <div class="bonus-column flex1">
+                    <div class="bonus">
+                        {{#each talentRows}}
+                            <input type="number" name="system.baseattributes.talents.{{key}}.bonus" value="{{bonus}}" data-dtype="Number">
+                        {{/each}}
+                    </div>
                 </div>
                 <div class="talent-values flex1">
                     {{#each talentRows}}
                         <span>{{ value }}</span> 
                     {{/each}}
+                    <div class="eureka">
+                        {{#each talentRows}}
+                            <input type="number" name="system.baseattributes.talents.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
+                        {{/each}}
+                    </div>
                 </div>
-                <div class="bonus-column flex1">
+                <div class="total-column flex1">
                     {{#each talentRows}}
-                        <span>{{ bonus }}</span> 
+                        <span>{{ totalValue }}</span> 
                     {{/each}}
                 </div>
             </div>

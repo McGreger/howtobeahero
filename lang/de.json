@@ -17,9 +17,9 @@
       "Age": "Alter"
     },
     "Talents": {
-      "Knowledge": { "long": "Wissen", "abbr": "wis", "bonus": "Wissen-Bonus", "eureka": "Wissen-Geistesblitz" },
-      "Action": { "long": "Handeln", "abbr": "han", "bonus": "Handeln-Bonus", "eureka": "Handeln-Geistesblitz" },
-      "Social": { "long": "Soziales", "abbr": "soz", "bonus": "Sozial-Bonus", "eureka": "Sozial-Geistesblitz" }
+      "Knowledge": { "long": "Wissen", "abbr": "wis", "bonus": "Wissen-Bonus", "eureka": "Wissen-Geistesblitz", "total": "Knowledge-Gesamt"  },
+      "Action": { "long": "Handeln", "abbr": "han", "bonus": "Handeln-Bonus", "eureka": "Handeln-Geistesblitz", "total": "Handeln-Gesamt"  },
+      "Social": { "long": "Soziales", "abbr": "soz", "bonus": "Sozial-Bonus", "eureka": "Sozial-Geistesblitz", "total": "Sozial-Gesamt"  }
     },
     "Item": {
       "Quantity": "Anzahl",

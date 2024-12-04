@@ -1065,7 +1065,7 @@ _onUseFavorite(event) {
       event.target.value = newBonus;
     }
   }
-
+  
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event

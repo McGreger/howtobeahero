@@ -1,28 +1,56 @@
 import { d100Roll } from "../dice/dice.mjs";
 
-/**
- * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
- * @extends {Actor}
- */
-export class HowToBeAHeroActor extends Actor {
-  prepareData() {
-    super.prepareData();
-    const actorData = this;
-    const systemData = actorData.system;
-    const flags = actorData.flags.howtobeahero || {};
 
-    this._prepareCharacterData(actorData);
-    this._prepareNpcData(actorData);
+export class HowToBeAHeroActor extends Actor {
+  /**
+ * Getter for talent total values
+ */
+  get talentTotalValues() {
+    const result = {};
+    for (const [key, talent] of Object.entries(this.system.baseattributes.talents)) {
+      result[key] = (talent.value || 0) + 
+                    (talent.bonus || 0) + 
+                    (this.system.baseattributes.inspiration.status ? this.system.baseattributes.inspiration.value : 0);
+    }
+    return result;
   }
 
-  _prepareCharacterData(actorData) {
-    if (actorData.type !== 'character') return;
+  /**
+   * Prepare base data before other preparations
+   */
+  prepareData() {
+    super.prepareData();
+    const systemData = this.system;
+    const flags = this.flags.howtobeahero || {};
+
+    this._prepareCharacterData();
+    this._prepareNpcData();
+
+    this._prepareSharedValues();
+  }
+
+  _prepareCharacterData() {
+    if (this.type !== 'character') return;
     // Character-specific preparations...
   }
 
-  _prepareNpcData(actorData) {
-    if (actorData.type !== 'npc') return;
+  _prepareNpcData() {
+    if (this.type !== 'npc') return;
     // NPC-specific preparations...
+  }
+
+  /**
+   * Calculate and update shared values for all talents
+   * @private
+   */
+  _prepareSharedValues() {
+    if (!this.system?.baseattributes?.talents) return;
+    
+    const totalValues = this.talentTotalValues;
+    // Update the system data with the new values
+    for (const [key, talent] of Object.entries(this.system.baseattributes.talents)) {
+      this.system.baseattributes.talents[key].totalValue = totalValues[key];
+    }
   }
 
   getRollData() {
@@ -50,7 +78,7 @@ export class HowToBeAHeroActor extends Actor {
   async rollTalent(talentId, options={}) {
     const label = CONFIG.HTBAH.talents[talentId]?.label ?? "";
     const data = this.getRollData();
-    const targetValue = this.system.baseattributes.talents[talentId]?.value ?? 0;
+    const targetValue = this.talentTotalValues[talentId];
     const inspired = this.system.baseattributes.inspiration.status;
     const flavor = game.i18n.format("HTBAH.TalentCheckPromptTitle", {talent: label});
 
@@ -127,19 +155,3 @@ Hooks.on("deleteItem", (item, options, userId) => {
     item.parent._onItemUpdate(item, change, { htbah: { oldValue } }, userId);
   }
 });
-/*
-
-// Add hooks to handle item changes
-Hooks.on("createItem", (item, options, userId) => {
-  if (item.parent instanceof HowToBeAHeroActor) {
-    item.parent.updateAttributesFromItem(item, "add");
-  }
-});
-
-Hooks.on("updateItem", (item, changes, options, userId) => {
-  if (item.parent instanceof HowToBeAHeroActor && changes.system?.value !== undefined) {
-    item.parent.updateAttributesFromItem(item, "update");
-  }
-});
-
-*/
