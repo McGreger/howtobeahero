@@ -76,11 +76,13 @@ export class HowToBeAHeroActor extends Actor {
   }
 
   async rollTalent(talentId, options={}) {
-    const label = CONFIG.HTBAH.talents[talentId]?.label ?? "";
+    const label = game.i18n.localize(CONFIG.HTBAH.talents[talentId]?.label) ?? "";
     const data = this.getRollData();
     const targetValue = this.talentTotalValues[talentId];
+    const baseValue = this.system.baseattributes.talents[talentId]?.value ?? 0;
+    const bonusValue = this.system.baseattributes.talents[talentId]?.bonus ?? 0;
     const inspired = this.system.baseattributes.inspiration.status;
-    const flavor = game.i18n.format("HTBAH.TalentCheckPromptTitle", {talent: label});
+    const flavor = game.i18n.localize("HTBAH.TalentCheckPromptTitle");
 
     const rollData = {
       formula: "1d100",
@@ -88,9 +90,11 @@ export class HowToBeAHeroActor extends Actor {
         actor: data,
         item: null
       },
-      title: `${flavor}: ${this.name}`,
+      title: `${flavor}: ${label}`,
       flavor,
       targetValue,
+      baseValue,
+      bonusValue,
       inspired,
       messageData: {
         speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),

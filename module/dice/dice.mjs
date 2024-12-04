@@ -8,6 +8,8 @@ export async function d100Roll({
   critical = 1,
   fumble = 100,
   targetValue,
+  baseValue,
+  bonusValue,
   inspired,
   chatMessage = true,
   messageData = {},
@@ -15,7 +17,7 @@ export async function d100Roll({
   ...options
 } = {}) {
   const roll = new CONFIG.Dice.D100Roll(formula, data, {
-    flavor: flavor || options.title,
+    flavor: options.title,
     critical,
     fumble,
     targetValue,
@@ -25,7 +27,7 @@ export async function d100Roll({
   await roll.evaluate({async: true});
 
   const inspirationBonus = inspired ? data.actor.baseattributes.inspiration.value : 0;
-  const totalTargetValue = targetValue + inspirationBonus;
+  const totalTargetValue = targetValue;
 
   const criticalThreshold = Math.floor(totalTargetValue * 0.1);
   const fumbleThreshold = Math.ceil(100 - (100 - totalTargetValue) * 0.1);
@@ -40,7 +42,8 @@ export async function d100Roll({
     const rollDetails = `
       <div class="roll-details">
         <p>Roll: ${total}</p>
-        <p>Target: ${totalTargetValue} (Base: ${targetValue}, Inspiration: +${inspirationBonus})</p>
+        <p>Target: ${totalTargetValue}</p> 
+        <p>(Base: ${baseValue}, Bonus: ${bonusValue}, Inspiration: +${inspirationBonus})</p>
         <p>Critical Success: ≤ ${criticalThreshold}</p>
         <p>Critical Failure: ≥ ${fumbleThreshold}</p>
       </div>

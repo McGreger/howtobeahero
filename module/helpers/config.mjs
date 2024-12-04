@@ -7,23 +7,23 @@ export const HOW_TO_BE_A_HERO = {};
  */
 HOW_TO_BE_A_HERO.talents = {
   knowledge: {
-    label: 'HTBAH.TalentKnowledge',
-    long: 'HTBAH.TalentKnowledgeLong',
-    abbreviation: 'HTBAH.TalentKnowledgeAbbr',
-    eureka: 'HTBAH.TalentKnowledgeEureka'
+    label: 'HOW_TO_BE_A_HERO.Talents.Knowledge.label',
+    long: 'HOW_TO_BE_A_HERO.Talents.Knowledge.long',
+    abbreviation: 'HOW_TO_BE_A_HERO.Talents.Knowledge.abbr',
+    eureka: 'HOW_TO_BE_A_HERO.Talents.Knowledge.eureka'
   },
   action: {
-    label: 'HTBAH.TalentAction',
-    long: 'HTBAH.TalentActionLong',
-    abbreviation: 'HTBAH.TalentActionAbbr',
-    eureka: 'HTBAH.TalentActionEureka'
+    label: 'HOW_TO_BE_A_HERO.Talents.Action.label',
+    long: 'HOW_TO_BE_A_HERO.Talents.Action.long',
+    abbreviation: 'HOW_TO_BE_A_HERO.Talents.Action.abbr',
+    eureka: 'HOW_TO_BE_A_HERO.Talents.Action.eureka'
   },
   social: {
-    label: 'HTBAH.TalentSocial',
-    long: 'HTBAH.TalentSocialLong',
-    abbreviation: 'HTBAH.TalentSocialAbbr',
-    eureka: 'HTBAH.TalentSocialEureka'
-  },
+    label: 'HOW_TO_BE_A_HERO.Talents.Social.label',
+    long: 'HOW_TO_BE_A_HERO.Talents.Social.long',
+    abbreviation: 'HOW_TO_BE_A_HERO.Talents.Social.abbr',
+    eureka: 'HOW_TO_BE_A_HERO.Talents.Social.eureka'
+  }
 };
 preLocalize("talents", { keys: ["label", "long", "abbreviation", "eureka"] });
 

@@ -209,7 +209,9 @@ async roll() {
     });
   } else {
     const rollData = this.getRollData();
-    const targetValue = rollData.item.calculatedValue;
+    const targetValue = rollData.item.totalValue;
+    const baseValue = rollData.item.calculatedValue;
+    const bonusValue = rollData.item.roll.diceBonus;
     const inspired = rollData.actor.baseattributes.inspiration.status;
     const flavor = game.i18n.format("HTBAH.ItemRollPrompt", {itemName: item.name});
 
@@ -219,6 +221,8 @@ async roll() {
       title: `${flavor}: ${actor.name}`,
       flavor,
       targetValue,
+      baseValue,
+      bonusValue,
       inspired,
       messageData: {
         speaker: speaker,
