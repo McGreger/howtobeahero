@@ -2,7 +2,7 @@
   "id": "how-to-be-a-hero",
   "title": "How to be a Hero",
   "description": "The How to be a Hero system for FoundryVTT! (Beta)",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
     {
       "name": "GrafSchwarz",
@@ -48,7 +48,7 @@
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/GrafSchwarz/howtobeahero/refs/heads/main/system.json",
   "download": "https://github.com/GrafSchwarz/howtobeahero/archive/refs/heads/main.zip",
-  "background": "systems/how-to-be-a-hero/assets/anvil-impact.png",
+  "background": "systems/how-to-be-a-hero/assets/htbah.webp",
   "gridDistance": 5,
   "gridUnits": "ft",
   "primaryTokenAttribute": "health",
