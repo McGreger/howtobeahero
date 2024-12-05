@@ -798,8 +798,10 @@ _onUseFavorite(event) {
    * @returns {Promise<object>}
    * @protected
    */
-  async _prepareFavorites() {
-    return this.actor.system.favorites.reduce(async (arr, f) => {
+  async _prepareFavorites() {  // Get the base actor if this is a token actor
+    const baseActor = this.actor.isToken ? game.actors.get(this.actor.id.split('.')[0]) : this.actor;
+    
+    return baseActor.system.favorites.reduce(async (arr, f) => {
       const { id, type, sort } = f;
       const favorite = fromUuidSync(id, { relative: this.actor });
       if ( !favorite && ((type === "item") || (type === "effect")) ) return arr;
