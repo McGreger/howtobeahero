@@ -48,7 +48,9 @@
 
     <div class="main-content">
       <div class="tab description" data-group="primary" data-tab="description">
-        {{editor name="item.system.description" target="system.description" button=true owner=owner editable=editable}}
+        <div class="editor">
+          <editor-content name="system.description">{{item.system.description}}</editor-content>
+        </div>
       </div>
     </div>
   </section>
