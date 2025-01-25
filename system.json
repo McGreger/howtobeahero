@@ -2,7 +2,7 @@
   "id": "how-to-be-a-hero",
   "title": "How to be a Hero",
   "description": "The How to be a Hero system for FoundryVTT! (Beta)",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "authors": [
     {
       "name": "GrafSchwarz",
@@ -23,8 +23,8 @@
   ],
   "compatibility": {
     "minimum": 11,
-    "verified": "11.315",
-    "maximum": "11"
+    "verified": "12.331",
+    "maximum": "12"
   },
   "esmodules": [
     "module/how-to-be-a-hero.mjs",
