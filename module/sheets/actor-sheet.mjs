@@ -659,6 +659,7 @@ _onDragStart(event) {
   if (item) {
     const dragData = {
       type: "Item",
+      uuid: item.uuid,
       data: item.toObject(),
       htbah: { action: "favorite", type: "item", id: item.id }
     };

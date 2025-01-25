@@ -41,9 +41,76 @@ Hooks.once('init', function () {
     HowToBeAHeroActor,
     HowToBeAHeroItem,
     HowToBeAHeroActiveEffect,
-    //rollItemMacro,
+    rollItemMacro: async (itemUuid) => {
+      const item = await fromUuid(itemUuid);
+      if (!item) {
+        return ui.notifications.warn(game.i18n.localize("HTBAH.MacroItemNotFound"));
+      }
+      return item.roll();
+    },
+    rollActionMacro: async (itemUuid) => {
+      const item = await fromUuid(itemUuid);
+      if (!item || item.type !== 'action') {
+        return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
+      }
+      return item.roll();
+    },
+    rollSocialMacro: async (itemUuid) => {
+      const item = await fromUuid(itemUuid);
+      if (!item || item.type !== 'social') {
+        return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
+      }
+      return item.roll();
+    },
+    rollKnowledgeMacro: async (itemUuid) => {
+      const item = await fromUuid(itemUuid);
+      if (!item || item.type !== 'knowledge') {
+        return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
+      }
+      return item.roll();
+    }
   };
-  
+  /*
+  game.howtobeahero = {
+    ...game.howtobeahero,
+    rollItemMacro: (itemId) => {
+      const actors = game.actors;
+      let item;
+      for (let actor of actors) {
+        item = actor.items.get(itemId);
+        if (item) break;
+      }
+      if (item) return item.roll();
+    },
+    rollActionMacro: (itemId) => {
+      const actors = game.actors;
+      let item;
+      for (let actor of actors) {
+        item = actor.items.get(itemId);
+        if (item && item.type === 'action') break;
+      }
+      if (item) return item.roll();
+    },
+    rollSocialMacro: (itemId) => {
+      const actors = game.actors;
+      let item;
+      for (let actor of actors) {
+        item = actor.items.get(itemId);
+        if (item && item.type === 'social') break;
+      }
+      if (item) return item.roll();
+    },
+    rollKnowledgeMacro: (itemId) => {
+      const actors = game.actors;
+      let item;
+      for (let actor of actors) {
+        item = actor.items.get(itemId);
+        if (item && item.type === 'knowledge') break;
+      }
+      if (item) return item.roll();
+    }
+  };
+  */
   //Add managers  
   game.howtobeahero.managers = {
     effects: new effectsManager(),
@@ -54,6 +121,7 @@ Hooks.once('init', function () {
 
   // Add custom constants for configuration.
   CONFIG.HTBAH = HOW_TO_BE_A_HERO;
+  
   /**
    * Set an initiative formula for the system
    * @type {String}
@@ -65,9 +133,6 @@ Hooks.once('init', function () {
 
   // Define custom Document and DataModel classes
   CONFIG.Actor.documentClass = HowToBeAHeroActor;
-  // Note that you don't need to declare a DataModel
-  // for the base actor/item classes - they are included
-  // with the Character/NPC as part of super.defineSchema()
   CONFIG.Actor.dataModels = {
     character: models.HowToBeAHeroCharacter,
     npc: models.HowToBeAHeroNPC
@@ -83,6 +148,7 @@ Hooks.once('init', function () {
     action: models.HowToBeAHeroAction,
     social: models.HowToBeAHeroSocial,
   }
+  
   // Verify that all data models are defined
   for (let [key, model] of Object.entries(CONFIG.Actor.dataModels)) {
     if (!model) console.error(`Actor data model for "${key}" is not defined.`);
@@ -90,15 +156,10 @@ Hooks.once('init', function () {
   for (let [key, model] of Object.entries(CONFIG.Item.dataModels)) {
     if (!model) console.error(`Item data model for "${key}" is not defined.`);
   }
-  //CONFIG.ActiveEffect.documentClass = HowToBeAHeroActiveEffect;
-  //CONFIG.ActiveEffect.dataModels = { 
-  //  activeeffect: models.HowToBeAHeroActiveEffectData
-  //};
+
   console.log("Actor data models:", CONFIG.Actor.dataModels);
   console.log("Item data models:", CONFIG.Item.dataModels);
-  //console.log("ActiveEffect data models:", CONFIG.ActiveEffect.dataModels);
-  //Dice class and functions added to CONFIG
-  //CONFIG.Dice.DamageRoll = DamageRoll;
+
   CONFIG.Dice.D100Roll = D100Roll;
   
   // Register Roll Extensions
@@ -110,11 +171,6 @@ Hooks.once('init', function () {
 
   // Activate tooltip listeners
   Tooltips.activateListeners();
-  
-  // Active Effects are never copied to the Actor,
-  // but will still apply to the Actor from within the Item
-  // if the transfer property on the Active Effect is true.
-  //CONFIG.ActiveEffect.legacyTransferral = false;
 
   // Register sheet application classes
   Actors.unregisterSheet('core', ActorSheet);
@@ -133,8 +189,7 @@ Hooks.once('init', function () {
   registerHandlebarsHelpers();
 });
 
-// If you need to add Handlebars helpers, here is a useful example:
-
+// Handlebars helpers
 Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
 });
@@ -148,8 +203,16 @@ Handlebars.registerHelper('HTBAH-dataset', function(dataset) {
 /* -------------------------------------------- */
 
 Hooks.once('ready', function () {
-  // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
-  Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
+
+  // Register hotbar drop hook and PREVENT default handling
+  Hooks.on('hotbarDrop', async (bar, data, slot) => {
+    // Explicitly return false if it's an item to prevent default handling
+    if (data.type === 'Item') {
+      return await createItemMacro(data, slot);
+    }  
+  });
+  
+  // Register item update hook
   Hooks.on("updateItem", (item, changes, options, userId) => {
     if (item instanceof CONFIG.Item.dataModels.armor && "system.equipped" in changes) {
       if (item.parent instanceof CONFIG.Actor.dataModels.character) {
@@ -159,72 +222,138 @@ Hooks.once('ready', function () {
   });
   
   game.howtobeahero.managers.conditions.registerAllConditions();
-  
 });
 
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */
 /* -------------------------------------------- */
-
 /**
  * Create a Macro from an Item drop.
- * Get an existing item macro if one exists, otherwise create a new one.
  * @param {Object} data     The dropped data
  * @param {number} slot     The hotbar slot to use
- * @returns {Promise}
+ * @returns {Promise<boolean>}
  */
 async function createItemMacro(data, slot) {
-  // First, determine if this is a valid owned item.
-  if (data.type !== 'Item') return;
-  if (!data.uuid.includes('Actor.') && !data.uuid.includes('Token.')) {
-    return ui.notifications.warn(
-      'You can only create macro buttons for owned Items'
-    );
-  }
-  // If it is, retrieve it based on the uuid.
-  const item = await Item.fromDropData(data);
+  if (data.type !== 'Item') return true;
+  event.preventDefault(); // Prevent default handling
+  
+  const item = await fromUuid(data.uuid);
+  if (!item) return false;
 
-  // Create the macro command using the uuid.
-  const command = `game.howtobeahero.rollItemMacro("${data.uuid}");`;
-  let macro = game.macros.find(
-    (m) => m.name === item.name && m.command === command
-  );
+  let command;
+  switch (item.type) {
+    case 'action':
+      command = `game.howtobeahero.rollActionMacro("${data.uuid}");`;
+      break;
+    case 'social':
+      command = `game.howtobeahero.rollSocialMacro("${data.uuid}");`;
+      break;
+    case 'knowledge':
+      command = `game.howtobeahero.rollKnowledgeMacro("${data.uuid}");`;
+      break;
+    default:
+      command = `game.howtobeahero.rollItemMacro("${data.uuid}");`;
+  }
+
+  let macro = game.macros.find(m => (m.name === item.name) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
       name: item.name,
       type: 'script',
       img: item.img,
       command: command,
-      flags: { 'how-to-be-a-hero.itemMacro': true },
+      flags: { 
+        'how-to-be-a-hero': {
+          itemMacro: true,
+          itemType: item.type,
+          itemId: data.uuid
+        }
+      }
     });
   }
-  game.user.assignHotbarMacro(macro, slot);
+  
+  if (macro) {
+    await game.user.assignHotbarMacro(macro, slot);
+  }
+  
   return false;
 }
 
 /**
- * Create a Macro from an Item drop.
- * Get an existing item macro if one exists, otherwise create a new one.
+ * Execute a macro from an Item.
  * @param {string} itemUuid
  */
-function rollItemMacro(itemUuid) {
-  // Reconstruct the drop data so that we can load the item.
-  const dropData = {
-    type: 'Item',
-    uuid: itemUuid,
-  };
-  // Load the item from the uuid.
-  Item.fromDropData(dropData).then((item) => {
-    // Determine if the item loaded and if it's an owned item.
-    if (!item || !item.parent) {
-      const itemName = item?.name ?? itemUuid;
-      return ui.notifications.warn(
-        `Could not find item ${itemName}. You may need to delete and recreate this macro.`
-      );
-    }
+async function rollItemMacro(itemUuid) {
+  const item = await fromUuid(itemUuid);
+  if (!item) {
+    return ui.notifications.warn(game.i18n.localize("HTBAH.MacroItemNotFound"));
+  }
 
-    // Trigger the item roll
-    item.roll();
-  });
+  if (!item.parent) {
+    const actor = _getMacroSpeaker();
+    if (!actor) return ui.notifications.warn(game.i18n.localize("HTBAH.MacroNoActor"));
+    
+    // Create temporary item
+    const tempItem = await actor.createEmbeddedDocuments("Item", [{
+      ...item.toObject(),
+      _id: null
+    }]);
+    
+    if (tempItem.length > 0) {
+      await tempItem[0].roll();
+      await actor.deleteEmbeddedDocuments("Item", [tempItem[0].id]);
+    }
+    return;
+  }
+
+  return item.roll();
 }
 
+/**
+ * Execute a macro for an action item.
+ * @param {string} itemUuid
+ */
+async function rollActionMacro(itemUuid) {
+  const item = await fromUuidSync(itemUuid);
+  if (!item || item.type !== 'action') {
+    return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
+  }
+  return item.roll();
+}
+
+/**
+ * Execute a macro for a social item.
+ * @param {string} itemUuid
+ */
+async function rollSocialMacro(itemUuid) {
+  const item = await fromUuidSync(itemUuid);
+  if (!item || item.type !== 'social') {
+    return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
+  }
+  return item.roll();
+}
+
+/**
+ * Execute a macro for a knowledge item.
+ * @param {string} itemUuid
+ */
+async function rollKnowledgeMacro(itemUuid) {
+  const item = await fromUuidSync(itemUuid);
+  if (!item || item.type !== 'knowledge') {
+    return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
+  }
+  return item.roll();
+}
+
+/**
+ * Get the actor for macro execution context
+ * @returns {Actor|null}
+ * @private
+ */
+function _getMacroSpeaker() {
+  const speaker = ChatMessage.getSpeaker();
+  let actor;
+  if (speaker.token) actor = game.actors.tokens[speaker.token];
+  if (!actor) actor = game.actors.get(speaker.actor);
+  return actor;
+}
