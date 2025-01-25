@@ -1015,25 +1015,23 @@ _onUseFavorite(event) {
   async _onItemCreate(event) {
     event.preventDefault();
     const header = event.currentTarget;
-    // Get the type of item to create.
     const type = header.dataset.type;
-    // Grab any data associated with this control.
-    const data = duplicate(header.dataset);
-    // Initialize a default name.
-    const name = `New ${type.capitalize()}`;
-    // Prepare the item object.
+    
+    // Prepare the item data
     const itemData = {
-      name: name,
+      name: game.i18n.format("HTBAH.ItemNew", {type: game.i18n.localize(`ITEM.Type${type.capitalize()}`)}),
       type: type,
-      system: data,
+      img: Item.DEFAULT_ICON
     };
-    // Remove the type from the dataset since it's in the itemData.type prop.
-    delete itemData.system['type'];
-
-    // Finally, create the item!
-    return await Item.create(itemData, { parent: this.actor });
+  
+    // Create the item with default data structure
+    const item = await Item.create(itemData, {parent: this.actor});
+    
+    // Open the item sheet
+    item.sheet.render(true);
+    
+    return item;
   }
-
   /**
    * Clamps a bonus value between -99 and 99
    * @param {number} value - The value to clamp

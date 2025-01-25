@@ -10,7 +10,7 @@ export class D100Roll extends Roll {
   }
 
   get validD100Roll() {
-    return (this.terms[0] instanceof Die) && (this.terms[0].faces === 100);
+    return (this.terms[0] instanceof foundry.dice.terms.Die) && (this.terms[0].faces === 100);
   }
 
   get isCritical() {
@@ -40,7 +40,7 @@ export class D100Roll extends Roll {
   }
 
   async toMessage(messageData={}, options={}) {
-    if (!this._evaluated) await this.evaluate({async: true});
+    if (!this._evaluated) await this.evaluate();
     messageData.flavor = messageData.flavor || this.options.flavor;
     return super.toMessage(messageData, options);
   }

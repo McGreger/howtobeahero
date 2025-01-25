@@ -40,12 +40,7 @@
         <div class="form-group">
           <label>Armor Type:</label>
           <select name="system.armorType">
-            {{#select item.system.armorType}}
-              <option value="light">Light</option>
-              <option value="medium">Medium</option>
-              <option value="heavy">Heavy</option>
-              <option value="shield">Shield</option>
-            {{/select}}
+            {{selectOptions armorTypes selected=item.system.armorType}}
           </select>
         </div>
         <div class="form-group">

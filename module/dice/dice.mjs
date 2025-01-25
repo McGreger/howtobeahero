@@ -24,7 +24,7 @@ export async function d100Roll({
     inspired
   });
 
-  await roll.evaluate({async: true});
+  await roll.evaluate();
 
   const inspirationBonus = inspired ? data.actor.baseattributes.inspiration.value : 0;
   const totalTargetValue = targetValue;
