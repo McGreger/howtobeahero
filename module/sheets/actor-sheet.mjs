@@ -1032,7 +1032,6 @@ _onUseFavorite(event) {
     
     return item;
   }
-
   /**
    * Clamps a bonus value between -99 and 99
    * @param {number} value - The value to clamp
