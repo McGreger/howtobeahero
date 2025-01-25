@@ -204,13 +204,12 @@ Handlebars.registerHelper('HTBAH-dataset', function(dataset) {
 
 Hooks.once('ready', function () {
 
-  // Register hotbar drop hook and PREVENT default handling
-  Hooks.on('hotbarDrop', async (bar, data, slot) => {
-    // Explicitly return false if it's an item to prevent default handling
+  Hooks.on('hotbarDrop', (bar, data, slot) => {
     if (data.type === 'Item') {
-      return await createItemMacro(data, slot);
-    }  
-  });
+      createItemMacro(data, slot);
+      return false;
+    }
+  }, { priority: -1 }); // Lower priority to run first
   
   // Register item update hook
   Hooks.on("updateItem", (item, changes, options, userId) => {
