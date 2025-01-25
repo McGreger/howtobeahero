@@ -41,7 +41,24 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
       this._prepareBaseItemData(context, item);
       this._prepareGameConfig(context);
       this._prepareAdditionalData(context, item);
+      // Add dice type options for selects
+      context.diceTypes = {
+        "d4": "d4",
+        "d6": "d6",
+        "d8": "d8", 
+        "d10": "d10",
+        "d12": "d12",
+        "d20": "d20",
+        "d100": "d100"
+      };
 
+      // Add armor type options
+      context.armorTypes = {
+        "light": "Light",
+        "medium": "Medium", 
+        "heavy": "Heavy",
+        "shield": "Shield"
+      };
       // Prepares active effects but is not used for items at the moment!!!
       //context.effects = game.howtobeahero.managers.effects.prepareActiveEffectCategories(this.item.effects);
 

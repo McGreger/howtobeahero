@@ -34,19 +34,6 @@
           <label for="roll-dice-num">Number of Dice:</label>
           <input id="roll-dice-num" name="system.roll.diceNum" type="number" value="{{item.system.roll.diceNum}}" min="1" />
           
-          <label for="roll-dice-size">Dice Size:</label>
-          <select id="roll-dice-size" name="system.roll.diceSize">
-            {{#select item.system.roll.diceSize}}
-              <option value="d4">d4</option>
-              <option value="d6">d6</option>
-              <option value="d8">d8</option>
-              <option value="d10">d10</option>
-              <option value="d12">d12</option>
-              <option value="d20">d20</option>
-              <option value="d100">d100</option>
-            {{/select}}
-          </select>
-          
           <div class="bonus-controls">
             <label>Bonus:</label>
             <div class="bonus-input-group">

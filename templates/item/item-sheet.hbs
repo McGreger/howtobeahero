@@ -36,15 +36,7 @@
           
           <label for="roll-dice-size">Dice Size:</label>
           <select id="roll-dice-size" name="system.roll.diceSize">
-            {{#select item.system.roll.diceSize}}
-              <option value="d4">d4</option>
-              <option value="d6">d6</option>
-              <option value="d8">d8</option>
-              <option value="d10">d10</option>
-              <option value="d12">d12</option>
-              <option value="d20">d20</option>
-              <option value="d100">d100</option>
-            {{/select}}
+            {{selectOptions diceTypes selected=item.system.roll.diceSize}}
           </select>
           
           <label for="roll-dice-bonus">Bonus:</label>
