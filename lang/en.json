@@ -39,6 +39,12 @@
     }
   },
 
+  "HTBAH.SkillDrop": "Drop Skill",
+  "HTBAH.WeaponDrop": "Drop Weapon",
+  "HTBAH.Skill": "Skill",
+  "HTBAH.Weapon": "Weapon",
+  "HTBAH.Initiative": "Initiative",
+
   "HTBAH.Names": "Names",
 
   "HTBAH.HitPoints": "Hitpoints",

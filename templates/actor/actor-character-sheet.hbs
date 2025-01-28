@@ -33,25 +33,26 @@
       <div class="center-box">
         {{!-- Initiative Column --}}
         <div class="header-stat-column">
-          <div class="stat-header">Initiative</div>
+          <div class="stat-header">{{ localize "HTBAH.Initiative" }}</div>
           <div class="stat-content">
-            <!-- Content for Initiative -->
+            <i class="fas fa-dice-d20"></i>
           </div>
         </div>
 
         {{!-- Skill Column --}}
         <div class="header-stat-column">
-          <div class="stat-header">Skill</div>
-          <div class="stat-content">
-            <!-- Content for Skill -->
-          </div>
+          <div class="stat-header">{{ localize "HTBAH.Skill" }}</div>
+            <div class="stat-content">
+              {{!-- Drop Indicator --}}
+              <li class="drop roboto-upper">{{ localize "HTBAH.SkillDrop" }}</li>
+            </div>
         </div>
 
         {{!-- Weapon Column --}}
         <div class="header-stat-column">
-          <div class="stat-header">Weapon</div>
+          <div class="stat-header">{{ localize "HTBAH.Weapon" }}</div>
           <div class="stat-content">
-            <!-- Content for Weapon -->
+              <li class="drop roboto-upper">{{ localize "HTBAH.WeaponDrop" }}</li>
           </div>
         </div>
       </div>

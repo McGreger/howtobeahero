@@ -1478,6 +1478,37 @@ item-list-controls search .filter-control[data-action="sort"] {
   justify-content: center;
 }
 
+/* Drop Area Styling */
+.how-to-be-a-hero.sheet.actor.character .sheet-header .header-stat-column .stat-content .drop {
+  border: 2px dashed var(--htbah-color-gold);
+  border-radius: 4px;
+  padding: 0.625rem 0.5rem;
+  font-size: var(--font-size-13);
+  opacity: 0.5;
+  justify-content: center;
+  border-bottom-color: currentcolor;
+  color: var(--htbah-color-gold);
+  margin-bottom: 0.5rem;
+  width: 90%;
+  text-align: center;
+  list-style: none;
+}
+
+/* D20 Icon Styling */
+.how-to-be-a-hero.sheet.actor.character .sheet-header .header-stat-column .stat-content .fa-dice-d20 {
+  font-size: 2rem;
+  color: var(--htbah-color-groove);
+  text-shadow: 0 0 8px var(--htbah-shadow-45);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.how-to-be-a-hero.sheet.actor.character .sheet-header .header-stat-column .stat-content .fa-dice-d20:hover {
+  color: var(--htbah-color-gold);
+  transform: scale(1.1);
+  text-shadow: 0 0 12px var(--htbah-color-gold);
+}
+
 /* Right Column */
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-right {
   flex: 1;
@@ -1501,6 +1532,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   border: 1px solid var(--htbah-color-gold);
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
+
 /* ----------------------------------------- */
 /*  Inspiration Button & Value               */
 /* ----------------------------------------- */

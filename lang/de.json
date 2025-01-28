@@ -39,6 +39,12 @@
     }
   },
 
+  "HTBAH.SkillDrop": "Fähigkeit ablegen",
+  "HTBAH.WeaponDrop": "Waffe ablegen",
+  "HTBAH.Skill": "Fähigkeit",
+  "HTBAH.Weapon": "Waffe",
+  "HTBAH.Initiative": "Initiative",
+
   "HTBAH.HitPoints": "Lebenspunkte",
 
   "HTBAH.Inventory": "Inventar",  
