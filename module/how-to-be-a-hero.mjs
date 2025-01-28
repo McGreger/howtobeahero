@@ -104,7 +104,7 @@ Hooks.once('init', function () {
     },
     npc: {
       prototypeToken: {
-        actorLink: false,
+        actorLink: true,
         disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
         displayName: CONST.TOKEN_DISPLAY_MODES.HOVER,
         displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER
