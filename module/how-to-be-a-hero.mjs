@@ -82,7 +82,7 @@ Hooks.once('init', function () {
   CONFIG.HTBAH = HOW_TO_BE_A_HERO;
 
   // Set default token configuration for different actor types
-  CONFIG.Actor.defaultTypes = ["character", "npc"];
+  CONFIG.Actor.defaultTypes = ["character", "NPC"];
   CONFIG.Actor.prototypeToken = {
     actorLink: false,  // Default for new actors
     displayName: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
@@ -102,7 +102,7 @@ Hooks.once('init', function () {
         displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER
       }
     },
-    npc: {
+    NPC: {
       prototypeToken: {
         actorLink: false,
         disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
