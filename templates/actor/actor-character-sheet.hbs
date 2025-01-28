@@ -120,28 +120,28 @@
                 --}}
               </div>
                 {{#with system.baseattributes.health}}
-                <div class="meter sectioned hit-points">
-                  <div class="progress hit-points
-                              {{~#if (gt tempmax 0)}} temp-positive
-                              {{~else if (lt tempmax 0)}} temp-negative{{/if}}" role="meter" aria-valuemin="0"
-                    aria-valuenow="{{ value }}" aria-valuemax="{{ max }}" style="--bar-percentage: {{ ../healthPercentage }}%">
-                    <div class="label">
-                      <span class="value">{{ value }}</span>
-                      <span class="separator">&sol;</span>
-                      <span class="max">{{ max }}</span>
-                      {{#if tempmax}}
-                      <span class="bonus">{{numberFormat tempmax signDisplay="always"}}</span>
-                      {{/if}}
-                    </div>
-                    <input type="text" name="system.baseattributes.health.value" data-dtype="Number" placeholder="0"
-                      value="{{ value }}" hidden>
-                  </div>
-                  <div class="tmp">
-                    <input type="text" name="system.baseattributes.health.temp" data-dtype="Number" placeholder="{{ localize "HTBAH.TMP" }}"
-                      value="{{ temp }}">
+              <div class="meter sectioned hit-points">
+                <div class="progress hit-points
+                            {{~#if (gt tempmax 0)}} temp-positive
+                            {{~else if (lt tempmax 0)}} temp-negative{{/if}}" role="meter" aria-valuemin="0"
+                  aria-valuenow="{{ value }}" aria-valuemax="{{ max }}" style="--bar-percentage: {{ ../healthPercentage }}%">
+                  <div class="label">
+                    <input type="text" name="system.baseattributes.health.value" class="uninput value" 
+                          data-dtype="Number" value="{{ value }}" placeholder="0">
+                    <span class="separator">&sol;</span>
+                    <input type="text" name="system.baseattributes.health.max" class="uninput max" 
+                          data-dtype="Number" value="{{ max }}" placeholder="0">
+                    {{#if tempmax}}
+                    <span class="bonus">{{numberFormat tempmax signDisplay="always"}}</span>
+                    {{/if}}
                   </div>
                 </div>
-                {{/with}}
+                <div class="tmp">
+                  <input type="text" name="system.baseattributes.health.temp" data-dtype="Number" 
+                        placeholder="{{ localize "HTBAH.TMP" }}" value="{{ temp }}">
+                </div>
+              </div>
+              {{/with}}
             </div>
           </div>
 

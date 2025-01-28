@@ -397,6 +397,7 @@ async _prepareItemsAndEffects(context) {
     await this._prepareCharacterData(context);
     await this._prepareItems(context);
   } else if (actorData.type === 'npc') {
+    await this._prepareNPCData(context);
     await this._prepareItems(context);
   }
   
@@ -474,6 +475,50 @@ async _prepareEffects(context) {
        v.label = game.i18n.localize(CONFIG.HTBAH.talents[k].label) ?? k;
      }
   }
+  
+  /**
+   * Organize and classify Items for Character sheets.
+   *
+   * @param {Object} actorData The actor to prepare.
+   *
+   * @return {undefined}
+   */
+  _prepareNPCData(context) {
+    //super._prepareCharacterData();
+    //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
+      //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
+    //}
+    // Handle talent scores
+    // Talent Scores
+    context.talentRows = Object.entries(context.system.baseattributes.talents).reduce((obj, [k, talent]) => {
+      talent.key = k;
+      talent.abbr = game.i18n.localize(CONFIG.HTBAH.talents[k]?.abbreviation) ?? "";
+      talent.long = game.i18n.localize(CONFIG.HTBAH.talents[k]?.long) ?? "";
+      //talent.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
+      //talent.mod = Math.abs(ability.mod);
+      talent.baseValue = context.system.baseattributes.talents[k]?.value ?? 0;
+      switch (k) {
+        case 'knowledge':
+            obj.knowledge.push(talent);
+            break;
+        case 'action':
+            obj.action.push(talent);
+            break;
+        case 'social':
+            obj.social.push(talent);
+            break;
+        default:
+            // Handle talents that do not fit into any category if necessary
+            break;
+      }
+      return obj;
+    }, { knowledge: [], action: [], social: []  });
+    context.talentRows.optional = Object.keys(CONFIG.HTBAH.talents).length - 6;
+    for (let [k, v] of Object.entries(context.system.baseattributes.talents)) {
+       v.label = game.i18n.localize(CONFIG.HTBAH.talents[k].label) ?? k;
+     }
+  }
+
   /**
    * Organize and classify Items for Character sheets.
    *
@@ -916,8 +961,8 @@ _onUseFavorite(event) {
     */
 
     if ( this.isEditable ) {
-      html.find(".meter > .hit-points").on("click", event => this._toggleEditHP(event, true));
-      html.find(".meter > .hit-points > input").on("blur", event => this._toggleEditHP(event, false));
+      //html.find(".meter > .hit-points").on("click", event => this._toggleEditHP(event, true));
+      //html.find(".meter > .hit-points > input").on("blur", event => this._toggleEditHP(event, false));
       html.find(".create-child").on("click", this._onCreateChild.bind(this));
     }
 
@@ -1231,6 +1276,7 @@ _onUseFavorite(event) {
    * @param {boolean} edit        Whether to toggle to the edit state.
    * @protected
    */
+  /*
   _toggleEditHP(event, edit) {
     const target = event.currentTarget.closest(".hit-points");
     const label = target.querySelector(":scope > .label");
@@ -1239,7 +1285,7 @@ _onUseFavorite(event) {
     input.hidden = !edit;
     if ( edit ) input.focus();
   }
-
+  */
   /**
    * Handle the user toggling the sidebar collapsed state.
    * @protected

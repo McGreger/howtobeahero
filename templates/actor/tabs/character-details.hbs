@@ -45,11 +45,13 @@
                     {{#each talentRows}}
                         <span>{{ value }}</span> 
                     {{/each}}
+                    {{#if (eq actor.type "character")}}
                     <div class="eureka">
                         {{#each talentRows}}
                             <input type="number" name="system.baseattributes.talents.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
                         {{/each}}
                     </div>
+                    {{/if}}
                 </div>
                 <div class="total-column flex1">
                     {{#each talentRows}}

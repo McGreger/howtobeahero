@@ -1978,6 +1978,7 @@ a {
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter-group > .label > .config-button {
   color: var(--htbah-color-gold);
 }
+
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.hit-points {
   height: 32px;
   font-size: var(--font-size-16);
