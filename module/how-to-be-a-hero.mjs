@@ -70,47 +70,6 @@ Hooks.once('init', function () {
       return item.roll();
     }
   };
-  /*
-  game.howtobeahero = {
-    ...game.howtobeahero,
-    rollItemMacro: (itemId) => {
-      const actors = game.actors;
-      let item;
-      for (let actor of actors) {
-        item = actor.items.get(itemId);
-        if (item) break;
-      }
-      if (item) return item.roll();
-    },
-    rollActionMacro: (itemId) => {
-      const actors = game.actors;
-      let item;
-      for (let actor of actors) {
-        item = actor.items.get(itemId);
-        if (item && item.type === 'action') break;
-      }
-      if (item) return item.roll();
-    },
-    rollSocialMacro: (itemId) => {
-      const actors = game.actors;
-      let item;
-      for (let actor of actors) {
-        item = actor.items.get(itemId);
-        if (item && item.type === 'social') break;
-      }
-      if (item) return item.roll();
-    },
-    rollKnowledgeMacro: (itemId) => {
-      const actors = game.actors;
-      let item;
-      for (let actor of actors) {
-        item = actor.items.get(itemId);
-        if (item && item.type === 'knowledge') break;
-      }
-      if (item) return item.roll();
-    }
-  };
-  */
   //Add managers  
   game.howtobeahero.managers = {
     effects: new effectsManager(),
@@ -121,7 +80,37 @@ Hooks.once('init', function () {
 
   // Add custom constants for configuration.
   CONFIG.HTBAH = HOW_TO_BE_A_HERO;
-  
+
+  // Set default token configuration for different actor types
+  CONFIG.Actor.defaultTypes = ["character", "npc"];
+  CONFIG.Actor.prototypeToken = {
+    actorLink: false,  // Default for new actors
+    displayName: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
+    displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
+    disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
+    bar1: { attribute: "health" },
+    bar2: { attribute: "" }
+  };
+
+  // Set type-specific prototype token settings
+  CONFIG.Actor.typeDefaults = {
+    character: {
+      prototypeToken: {
+        actorLink: true,
+        disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
+        displayName: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
+        displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER
+      }
+    },
+    npc: {
+      prototypeToken: {
+        actorLink: true,
+        disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
+        displayName: CONST.TOKEN_DISPLAY_MODES.HOVER,
+        displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER
+      }
+    }
+  };
   /**
    * Set an initiative formula for the system
    * @type {String}
@@ -219,7 +208,20 @@ Hooks.once('ready', function () {
       }
     }
   });
-  
+
+  Hooks.on("preCreateActor", (actor, data, options, userId) => {
+  // Get the type-specific prototype token settings
+  const typeDefaults = CONFIG.Actor.typeDefaults[actor.type]?.prototypeToken;
+  if (typeDefaults) {
+    // Apply the type-specific token settings
+    actor.updateSource({
+      prototypeToken: foundry.utils.mergeObject(
+        foundry.utils.deepClone(CONFIG.Actor.prototypeToken),
+        typeDefaults
+      )
+    });
+  }
+});
   game.howtobeahero.managers.conditions.registerAllConditions();
 });
 
