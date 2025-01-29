@@ -208,20 +208,7 @@ Hooks.once('ready', function () {
       }
     }
   });
-
-  Hooks.on("preCreateActor", (actor, data, options, userId) => {
-  // Get the type-specific prototype token settings
-  const typeDefaults = CONFIG.Actor.typeDefaults[actor.type]?.prototypeToken;
-  if (typeDefaults) {
-    // Apply the type-specific token settings
-    actor.updateSource({
-      prototypeToken: foundry.utils.mergeObject(
-        foundry.utils.deepClone(CONFIG.Actor.prototypeToken),
-        typeDefaults
-      )
-    });
-  }
-});
+  
   game.howtobeahero.managers.conditions.registerAllConditions();
 });
 
@@ -315,7 +302,7 @@ async function rollItemMacro(itemUuid) {
  * @param {string} itemUuid
  */
 async function rollActionMacro(itemUuid) {
-  const item = await fromUuidSync(itemUuid);
+  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
   if (!item || item.type !== 'action') {
     return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
   }
@@ -327,7 +314,7 @@ async function rollActionMacro(itemUuid) {
  * @param {string} itemUuid
  */
 async function rollSocialMacro(itemUuid) {
-  const item = await fromUuidSync(itemUuid);
+  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
   if (!item || item.type !== 'social') {
     return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
   }
@@ -339,7 +326,7 @@ async function rollSocialMacro(itemUuid) {
  * @param {string} itemUuid
  */
 async function rollKnowledgeMacro(itemUuid) {
-  const item = await fromUuidSync(itemUuid);
+  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
   if (!item || item.type !== 'knowledge') {
     return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
   }

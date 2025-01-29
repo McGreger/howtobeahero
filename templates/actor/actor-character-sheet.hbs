@@ -39,22 +39,40 @@
           </div>
         </div>
 
-        {{!-- Skill Column --}}
-        <div class="header-stat-column">
-          <div class="stat-header">{{ localize "HTBAH.Skill" }}</div>
-            <div class="stat-content">
-              {{!-- Drop Indicator --}}
-              <li class="drop roboto-upper">{{ localize "HTBAH.SkillDrop" }}</li>
+       <div class="header-stat-column" data-slot="skill">
+        <div class="stat-header">{{ localize "HTBAH.Skill" }}</div>
+        <div class="stat-content">
+          {{#if headerItems.skill}}
+            <div class="header-item">
+              <img src="{{headerItems.skill.img}}" alt="{{headerItems.skill.name}}" title="{{headerItems.skill.name}}">
+              <span class="item-name">{{headerItems.skill.name}}</span>
+              {{#if editable}}
+              <a class="item-remove" data-tooltip="{{ localize "HTBAH.Remove" }}"><i class="fas fa-times"></i></a>
+              {{/if}}
             </div>
+          {{else}}
+            <li class="drop roboto-upper">{{ localize "HTBAH.SkillDrop" }}</li>
+          {{/if}}
         </div>
+      </div>
 
-        {{!-- Weapon Column --}}
-        <div class="header-stat-column">
-          <div class="stat-header">{{ localize "HTBAH.Weapon" }}</div>
-          <div class="stat-content">
-              <li class="drop roboto-upper">{{ localize "HTBAH.WeaponDrop" }}</li>
-          </div>
+      {{!-- Replace the existing weapon column content with: --}}
+      <div class="header-stat-column" data-slot="weapon">
+        <div class="stat-header">{{ localize "HTBAH.Weapon" }}</div>
+        <div class="stat-content">
+          {{#if headerItems.weapon}}
+            <div class="header-item">
+              <img src="{{headerItems.weapon.img}}" alt="{{headerItems.weapon.name}}" title="{{headerItems.weapon.name}}">
+              <span class="item-name">{{headerItems.weapon.name}}</span>
+              {{#if editable}}
+              <a class="item-remove" data-tooltip="HTBAH.Remove"><i class="fas fa-times"></i></a>
+              {{/if}}
+            </div>
+          {{else}}
+            <li class="drop roboto-upper">{{ localize "HTBAH.WeaponDrop" }}</li>
+          {{/if}}
         </div>
+      </div>
       </div>
     </div>
 
@@ -139,38 +157,56 @@
             <div class="meter-group">
               <div class="label roboto-condensed-upper">
                 <span>{{ localize "HTBAH.HitPoints" }}</span>
-                {{!--
+              </div>
                 {{#if editable}}
-                <a class="config-button" data-action="hitPoints" data-tooltip="HTBAH.HitPointsConfig"
-                  aria-label="{{ localize " HTBAH.HitPointsConfig" }}">
-                  <i class="fas fa-cog"></i>
-                </a>
+                  {{#with system.baseattributes.health}}
+                    <div class="meter sectioned hit-points">
+                      <div class="progress hit-points
+                                  {{~#if (gt tempmax 0)}} temp-positive
+                                  {{~else if (lt tempmax 0)}} temp-negative{{/if}}" role="meter" aria-valuemin="0"
+                        aria-valuenow="{{ value }}" aria-valuemax="{{ max }}" style="--bar-percentage: {{ ../healthPercentage }}%">
+                        <div class="label">
+                          <input type="text" name="system.baseattributes.health.value" class="uninput value" 
+                                data-dtype="Number" value="{{ value }}" placeholder="0">
+                          <span class="separator">&sol;</span>
+                          <input type="text" name="system.baseattributes.health.max" class="uninput max" 
+                                data-dtype="Number" value="{{ max }}" placeholder="0">
+                          {{#if tempmax}}
+                          <span class="bonus">{{numberFormat tempmax signDisplay="always"}}</span>
+                          {{/if}}
+                        </div>
+                      </div>
+                      <div class="tmp">
+                        <input type="text" name="system.baseattributes.health.temp" data-dtype="Number" 
+                              placeholder="{{ localize "HTBAH.TMP" }}" value="{{ temp }}">
+                      </div>
+                    </div>
+                  {{/with}}
+                  {{else}}
+                  {{#with system.baseattributes.health}}
+                    <div class="meter sectioned hit-points">
+                      <div class="progress hit-points
+                                  {{~#if (gt tempmax 0)}} temp-positive
+                                  {{~else if (lt tempmax 0)}} temp-negative{{/if}}" role="meter" aria-valuemin="0"
+                        aria-valuenow="{{ value }}" aria-valuemax="{{ max }}" style="--bar-percentage: {{ ../healthPercentage }}%">
+                        <div class="label">
+                          <span class="value">{{ value }}</span>
+                          <span class="separator">&sol;</span>
+                          <span class="max">{{ max }}</span>
+                          {{#if tempmax}}
+                          <span class="bonus">{{numberFormat tempmax signDisplay="always"}}</span>
+                          {{/if}}
+                        </div>
+                        <input type="text" name="system.baseattributes.health.value" data-dtype="Number" placeholder="0"
+                          value="{{ value }}" hidden>
+                      </div>
+                      <div class="tmp">
+                        <input type="text" name="system.baseattributes.health.temp" data-dtype="Number" placeholder="{{ localize "HTBAH.TMP" }}"
+                          value="{{ temp }}">
+                      </div>
+                    </div>
+                  {{/with}}
                 {{/if}}
-                --}}
-              </div>
-                {{#with system.baseattributes.health}}
-              <div class="meter sectioned hit-points">
-                <div class="progress hit-points
-                            {{~#if (gt tempmax 0)}} temp-positive
-                            {{~else if (lt tempmax 0)}} temp-negative{{/if}}" role="meter" aria-valuemin="0"
-                  aria-valuenow="{{ value }}" aria-valuemax="{{ max }}" style="--bar-percentage: {{ ../healthPercentage }}%">
-                  <div class="label">
-                    <input type="text" name="system.baseattributes.health.value" class="uninput value" 
-                          data-dtype="Number" value="{{ value }}" placeholder="0">
-                    <span class="separator">&sol;</span>
-                    <input type="text" name="system.baseattributes.health.max" class="uninput max" 
-                          data-dtype="Number" value="{{ max }}" placeholder="0">
-                    {{#if tempmax}}
-                    <span class="bonus">{{numberFormat tempmax signDisplay="always"}}</span>
-                    {{/if}}
-                  </div>
-                </div>
-                <div class="tmp">
-                  <input type="text" name="system.baseattributes.health.temp" data-dtype="Number" 
-                        placeholder="{{ localize "HTBAH.TMP" }}" value="{{ temp }}">
-                </div>
-              </div>
-              {{/with}}
             </div>
           </div>
 

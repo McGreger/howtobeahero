@@ -1,4 +1,5 @@
 import { HowToBeAHeroActor } from '../documents/actor.mjs';
+import { HowToBeAHeroDragDropHandler } from '../helpers/drag-drop-handler.mjs';
 import { formatNumber, simplifyBonus, staticID } from "../helpers/utils.mjs";
 
 /**
@@ -66,6 +67,7 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
     if ( height && !("height" in options) ) options.height = height;
   
     super(object, options);
+    this.dragDropHandler = new HowToBeAHeroDragDropHandler(this);
   }
 
   /** @override */
@@ -287,6 +289,9 @@ async getData(options) {
     this._prepareHealthData(context);
     this._prepareActorData(context);
 
+    // Add header items to the context
+    context.headerItems = await this._prepareHeaderItems();
+
     // Items, Effects and Conditions
     await this._prepareItemsAndEffects(context);
     
@@ -384,6 +389,48 @@ _prepareActorData(context) {
   context.flags = actorData.flags;
   context.rollData = actor.getRollData();
   // Add any other actor-specific properties here
+}
+
+/**
+ * Get the current header items for the character
+ * @returns {Promise<Object>}
+ * @protected
+ */
+async _prepareHeaderItems() {
+  const headerItems = {
+    skill: null,
+    weapon: null
+  };
+
+  // Get the stored header item IDs from flags
+  const skillId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+  const weaponId = this.actor.getFlag("how-to-be-a-hero", "headerWeapon");
+
+  if (skillId) {
+    const item = this.actor.items.get(skillId);
+    if (item) {
+      headerItems.skill = {
+        id: item.id,
+        name: item.name,
+        img: item.img,
+        type: item.type
+      };
+    }
+  }
+
+  if (weaponId) {
+    const item = this.actor.items.get(weaponId);
+    if (item) {
+      headerItems.weapon = {
+        id: item.id,
+        name: item.name,
+        img: item.img,
+        type: item.type
+      };
+    }
+  }
+
+  return headerItems;
 }
 
 /**
@@ -684,61 +731,19 @@ async _prepareEffects(context) {
   }
 
 /* -------------------------------------------- */
-/*  Favorites                                   */
-/* -------------------------------------------- */
-
-_onDragOver(event) {
-  event.preventDefault();
-  event.dataTransfer.dropEffect = 'move';
-}
-/* -------------------------------------------- */
-
-/** @inheritDoc */
-_onDragStart(event) {
-  requestAnimationFrame(() => game.tooltip.deactivate());
-  game.tooltip.deactivate();
-
-  const li = event.currentTarget;
-  const item = this.actor.items.get(li.dataset.itemId);
-  
-  if (item) {
-    const dragData = {
-      type: "Item",
-      uuid: item.uuid,
-      data: item.toObject(),
-      htbah: { action: "favorite", type: "item", id: item.id }
-    };
-    event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
-  } else {
-    return super._onDragStart(event);
-  }
-}
-
+/*  Drop handling                               */
 /* -------------------------------------------- */
 
 /** @inheritDoc */
 async _onDrop(event) {
   event.preventDefault();
-  
-  if (!event.target.closest(".favorites")) return super._onDrop(event);
-  
-  let data;
-  try {
-    data = JSON.parse(event.dataTransfer.getData("text/plain"));
-  } catch(e) {
-    console.error("Failed to parse drag data:", e);
-    return;
-  }
-  
-  const { action, type, id } = data.htbah ?? {};
-  if (action === "favorite" && type === "item") return this._onDropFavorite(event, { type, id });
-  
   return super._onDrop(event);
 }
 
 /* -------------------------------------------- */
 
 /** @inheritDoc */
+/*
 async _onDropItem(event, data) {
   if ( !event.target.closest(".favorites") ) return super._onDropItem(event, data);
   const item = await Item.implementation.fromDropData(data);
@@ -746,16 +751,91 @@ async _onDropItem(event, data) {
   const uuid = item.getRelativeUUID(this.actor);
   return this._onDropFavorite(event, { type: "item", id: uuid });
 }
-
+*/
 /* -------------------------------------------- */
 
 /** @inheritDoc */
+/*
 async _onDropActiveEffect(event, data) {
   if ( !event.target.closest(".favorites") ) return super._onDropActiveEffect(event, data);
   const effect = await ActiveEffect.implementation.fromDropData(data);
   if ( effect.target !== this.actor ) return super._onDropActiveEffect(event, data);
   const uuid = effect.getRelativeUUID(this.actor);
   return this._onDropFavorite(event, { type: "effect", id: uuid });
+}
+*/
+
+/**
+ * Handle dropping an item in a header slot
+ * @param {DragEvent} event - The drop event
+ * @param {string} dropZone - The drop zone identifier ("skill" or "weapon")
+ * @returns {Promise<void>}
+ * @private
+ */
+async _onHeaderDrop(event, dropZone) {
+  event.preventDefault();
+  
+  let data;
+  try {
+    data = JSON.parse(event.dataTransfer.getData("text/plain"));
+  } catch(e) {
+    return false;
+  }
+
+  // Validate the drop
+  if (data.type !== "Item") return false;
+
+  const item = await Item.implementation.fromDropData(data);
+  if (!item) return false;
+
+  // Validate item type based on drop zone
+  if (dropZone === "skill" && !["knowledge", "social", "action"].includes(item.type)) {
+    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlySkillsAllowed"));
+    return false;
+  }
+  
+  if (dropZone === "weapon" && item.type !== "weapon") {
+    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyWeaponsAllowed"));
+    return false;
+  }
+
+  // If item is from a different actor, create a copy
+  /*
+  if (item.parent !== this.actor) {
+    const itemData = item.toObject();
+    const newItem = await this.actor.createEmbeddedDocuments("Item", [itemData]);
+    if (newItem.length > 0) {
+      await this._setHeaderItem(dropZone, newItem[0].id);
+    }
+    return;
+  }
+  */
+
+  // If item is already owned, just set it as the header item
+  await this._setHeaderItem(dropZone, item.id);
+}
+
+/**
+ * Set an item as a header item
+ * @param {string} slot - The header slot ("skill" or "weapon")
+ * @param {string} itemId - The item ID
+ * @returns {Promise<Actor>}
+ * @private
+ */
+async _setHeaderItem(slot, itemId) {
+  const flagKey = slot === "skill" ? "headerSkill" : "headerWeapon";
+  return this.actor.setFlag("how-to-be-a-hero", flagKey, itemId);
+}
+
+/**
+ * Remove an item from a header slot
+ * @param {string} slot - The header slot ("skill" or "weapon")
+ * @returns {Promise<Actor>}
+ * @private
+ */
+async _removeHeaderItem(slot) {
+  const flagKey = slot === "skill" ? "headerSkill" : "headerWeapon";
+  return this.actor.unsetFlag("how-to-be-a-hero", flagKey);
 }
 
 /* -------------------------------------------- */
@@ -802,26 +882,37 @@ _onRemoveFavorite(event) {
  * @returns {Promise<ActorHTBAH>|void}
  * @protected
  */
-_onSortFavorites(event, srcId) {
+async _onSortFavorites(event, srcId) {
   const dropTarget = event.target.closest("[data-favorite-id]");
-  if ( !dropTarget ) return;
-  let source;
-  let target;
+  if (!dropTarget) return;
   const targetId = dropTarget.dataset.favoriteId;
-  if ( srcId === targetId ) return;
-  const siblings = this.actor.system.favorites.filter(f => {
-    if ( f.id === targetId ) target = f;
-    else if ( f.id === srcId ) source = f;
-    return f.id !== srcId;
-  });
+  if (srcId === targetId) return;
+
+  // Wait for all favorites to be resolved
+  const favorites = await Promise.all(this.actor.system.favorites.map(async f => {
+    if (f.id === targetId || f.id === srcId) {
+      const resolved = await fromUuid(f.id);  // Changed from fromUuidSync
+      return { ...f, resolved };
+    }
+    return f;
+  }));
+
+  const source = favorites.find(f => f.id === srcId);
+  const target = favorites.find(f => f.id === targetId);
+  const siblings = favorites.filter(f => f.id !== srcId);
+
   const updates = SortingHelpers.performIntegerSort(source, { target, siblings });
-  const favorites = this.actor.system.favorites.reduce((map, f) => map.set(f.id, { ...f }), new Map());
-  for ( const { target, update } of updates ) {
-    const favorite = favorites.get(target.id);
+  const favoritesMap = favorites.reduce((map, f) => map.set(f.id, { ...f }), new Map());
+  
+  for (const { target, update } of updates) {
+    const favorite = favoritesMap.get(target.id);
     foundry.utils.mergeObject(favorite, update);
   }
-  return this.actor.update({ "system.favorites": Array.from(favorites.values()) });
+
+  return this.actor.update({ "system.favorites": Array.from(favoritesMap.values()) });
 }
+
+
 
 /* -------------------------------------------- */
 
@@ -831,11 +922,11 @@ _onSortFavorites(event, srcId) {
  * @returns {Promise|void}
  * @protected
  */
-_onUseFavorite(event) {
+async _onUseFavorite(event) {
   const { favoriteId } = event.currentTarget.closest("[data-favorite-id]").dataset;
-  const favorite = fromUuidSync(favoriteId, { relative: this.actor });
-  if ( favorite instanceof HowToBeAHeroItemBase ) return favorite.use({}, { event });
-  if ( favorite instanceof ActiveEffect ) return favorite.update({ disabled: !favorite.disabled });
+  const favorite = await fromUuid(favoriteId, { relative: this.actor });  // Changed from fromUuidSync
+  if (favorite instanceof HowToBeAHeroItemBase) return favorite.use({}, { event });
+  if (favorite instanceof ActiveEffect) return favorite.update({ disabled: !favorite.disabled });
 }
   /* -------------------------------------------- */
 
@@ -844,47 +935,45 @@ _onUseFavorite(event) {
    * @returns {Promise<object>}
    * @protected
    */
-  async _prepareFavorites() {  // Get the base actor if this is a token actor
-    const baseActor = this.actor.isToken ? game.actors.get(this.actor.id.split('.')[0]) : this.actor;
-    
-    return baseActor.system.favorites.reduce(async (arr, f) => {
+  async _prepareFavorites() {
+    const favoritePromises = this.actor.system.favorites.map(async f => {
       const { id, type, sort } = f;
-      const favorite = fromUuidSync(id, { relative: this.actor });
-      if ( !favorite && ((type === "item") || (type === "effect")) ) return arr;
-      arr = await arr;
+      const favorite = await fromUuid(id);
+      if (!favorite && ((type === "item") || (type === "effect"))) return null;
   
       let data;
-      if ( type === "item" ) data = await favorite.system.getFavoriteData();
-      else if ( type === "effect" ) data = await favorite.getFavoriteData();
+      if (type === "item") data = await favorite.system.getFavoriteData();
+      else if (type === "effect") data = await favorite.getFavoriteData();
       else data = await this._getFavoriteData(type, id);
-      if ( !data ) return arr;
+      if (!data) return null;
   
       const { img, title, subtitle, value, uses, quantity, modifier, passive, save, range, reference, toggle, suppressed, level } = data;
   
       const css = [];
-      if ( uses ) css.push("uses");
-      else if ( modifier !== undefined ) css.push("modifier");
-      else if ( save?.dc ) css.push("save");
-      else if ( value !== undefined ) css.push("value");
+      if (uses) css.push("uses");
+      else if (modifier !== undefined) css.push("modifier");
+      else if (save?.dc) css.push("save");
+      else if (value !== undefined) css.push("value");
   
-      if ( toggle === false ) css.push("disabled");
-      if ( uses?.max > 100 ) css.push("uses-sm");
-      if ( modifier !== undefined ) {
+      if (toggle === false) css.push("disabled");
+      if (uses?.max > 100) css.push("uses-sm");
+      if (modifier !== undefined) {
         const value = Number(modifier.replace?.(/\s+/g, "") ?? modifier);
-        if ( !isNaN(value) ) modifier = { abs: Math.abs(value), sign: value < 0 ? "-" : "+" };
+        if (!isNaN(value)) modifier = { abs: Math.abs(value), sign: value < 0 ? "-" : "+" };
       }
   
       const rollableClass = [];
-      if ( this.isEditable && (type !== "slots") ) rollableClass.push("rollable");
-      if ( type === "skill" ) rollableClass.push("skill-name");
-      else if ( type === "tool" ) rollableClass.push("tool-name");
+      if (this.isEditable && (type !== "slots")) rollableClass.push("rollable");
+      if (type === "skill") rollableClass.push("skill-name");
+      else if (type === "tool") rollableClass.push("tool-name");
   
-      if ( suppressed ) subtitle = game.i18n.localize("DND5E.Suppressed");
-      arr.push({
+      if (suppressed) subtitle = game.i18n.localize("DND5E.Suppressed");
+      
+      return {
         id, img, type, title, value, uses, sort, save, modifier, passive, range, reference, suppressed, level,
         itemId: type === "item" ? favorite.id : null,
         effectId: type === "effect" ? favorite.id : null,
-        parentId: (type === "effect") && (favorite.parent !== favorite.target) ? favorite.parent.id: null,
+        parentId: (type === "effect") && (favorite.parent !== favorite.target) ? favorite.parent.id : null,
         preparationMode: type === "slots" ? id === "pact" ? "pact" : "prepared" : null,
         key: (type === "skill") || (type === "tool") ? id : null,
         toggle: toggle === undefined ? null : { applicable: true, value: toggle },
@@ -893,9 +982,12 @@ _onUseFavorite(event) {
         css: css.filterJoin(" "),
         bareName: type === "slots",
         subtitle: Array.isArray(subtitle) ? subtitle.filterJoin(" &bull; ") : subtitle
-      });
-      return arr;
-    }, []);
+      };
+    });
+  
+    // Wait for all promises to resolve and filter out null values
+    const resolvedFavorites = (await Promise.all(favoritePromises)).filter(f => f !== null);
+    return resolvedFavorites;
   }
 
   /**
@@ -928,13 +1020,11 @@ _onUseFavorite(event) {
 
     return properties;
   }
-
   /* -------------------------------------------- */
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
-
     html.find(".pips[data-prop]").on("click", this._onTogglePip.bind(this));
     html.find("[data-action]").on("click", this._onAction.bind(this));
     html.find("[data-item-id][data-action]").on("click", this._onItemAction.bind(this));
@@ -960,11 +1050,18 @@ _onUseFavorite(event) {
     });
     */
 
-    if ( this.isEditable ) {
+    html.find(".create-child").on("click", this._onCreateChild.bind(this));
+    
+    // Only bind HP editing in non-edit mode
+    if (!(this._mode === this.constructor.MODES.EDIT)) {
+      html.find(".meter.sectioned.hit-points").on("click", event => this._toggleEditHP(event, true));
+      html.find(".meter.sectioned.hit-points input[hidden]").on("blur", event => this._toggleEditHP(event, false));
+    }
+    // Only bind HP editing in non-edit mode
+    //if (!this._mode === this.constructor.MODES.EDIT) {
       //html.find(".meter > .hit-points").on("click", event => this._toggleEditHP(event, true));
       //html.find(".meter > .hit-points > input").on("blur", event => this._toggleEditHP(event, false));
-      html.find(".create-child").on("click", this._onCreateChild.bind(this));
-    }
+    //}
 
     html.find('[data-action="incrementBonus"], [data-action="decrementBonus"]').click(this._onItemBonusClick.bind(this));
     html.find('.bonus-input-group input[name="system.roll.diceBonus"]').change(this._onBonusInputChange.bind(this));
@@ -1022,22 +1119,21 @@ _onUseFavorite(event) {
     // Rollable abilities.
     html.on('click', '.rollable', this._onRoll.bind(this));
 
-    // Drag events for macros.
-    if (this.actor.isOwner) {
-      const dragHandler = ev => this._onDragStart(ev);
-    
-      // Set up drag for items
-      html.find('li.item').each((i, li) => {
-        if (li.classList.contains('inventory-header')) return;
-        li.setAttribute('draggable', true);
-        li.addEventListener('dragstart', dragHandler, false);
+   // Update drag event listeners
+   if (this.actor.isOwner) {
+    html.find('li.item').each((i, li) => {
+      if (li.classList.contains('inventory-header')) return;
+      li.setAttribute('draggable', true);
+      li.addEventListener('dragstart', this.dragDropHandler.onDragStart.bind(this.dragDropHandler), false);
       });
     }
-    // Add drop event listener to favorites area
-    const favoritesArea = html.find('.favorites');
-    if (favoritesArea.length) {
-      favoritesArea[0].addEventListener('dragover', this._onDragOver.bind(this));
-    }
+
+    // Update drop zones
+    const dropZones = html.find('.favorites, .header-stat-column');
+    dropZones.each((i, zone) => {
+      zone.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
+      zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
+    });
     
     html.find('.deletion-control[data-action="removeFavorite"]').on('click', this._onRemoveFavorite.bind(this));
 
@@ -1270,22 +1366,53 @@ _onUseFavorite(event) {
 
   /* -------------------------------------------- */
 
-  /**
-   * Toggle editing hit points.
-   * @param {PointerEvent} event  The triggering event.
-   * @param {boolean} edit        Whether to toggle to the edit state.
-   * @protected
-   */
-  /*
-  _toggleEditHP(event, edit) {
-    const target = event.currentTarget.closest(".hit-points");
-    const label = target.querySelector(":scope > .label");
-    const input = target.querySelector(":scope > input");
-    label.hidden = edit;
-    input.hidden = !edit;
-    if ( edit ) input.focus();
+/**
+ * Toggle editing hit points.
+ * @param {PointerEvent} event  The triggering event.
+ * @protected
+ */
+_toggleEditHP(event, edit) {
+  // If in editable mode, we don't need to toggle anything
+  if (this._mode === this.constructor.MODES.EDIT) return;
+
+  const hitPointsSection = event.currentTarget;
+  if (!hitPointsSection) return;
+
+  // Get the first child which should be the progress div
+  const progress = hitPointsSection.children[0];
+  if (!progress) return;
+
+  const label = progress.querySelector(".label");
+  const input = progress.querySelector("input[hidden]");
+  
+  if (!label || !input) return;
+
+  // Toggle visibility for non-editable mode
+  if (edit) {
+    label.hidden = true;
+    input.hidden = false;
+    input.focus();
+  } else {
+    label.hidden = false;
+    input.hidden = true;
+    
+    // Update the displayed value in the label if it changed
+    const valueElement = label.querySelector('.value');
+    if (valueElement) {
+      valueElement.textContent = input.value;
+
+      // Update actor if value changed
+      const currentValue = Number(input.value);
+      const oldValue = this.actor.system.baseattributes.health.value;
+      if (currentValue !== oldValue) {
+        this.actor.update({
+          "system.baseattributes.health.value": currentValue
+        });
+      }
+    }
   }
-  */
+}
+  
   /**
    * Handle the user toggling the sidebar collapsed state.
    * @protected
