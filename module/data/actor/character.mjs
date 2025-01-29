@@ -42,27 +42,29 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
   }
 
   prepareDerivedData() {
+    console.log("prepareDerivedData called");
     super.prepareDerivedData();
     this._updateArmorValue();
   }
 
-  /* -------------------------------------------- */
-
   _updateArmorValue() {
     const equippedArmor = this.parent.items.filter(item => 
       item.type === "armor" && item.system.equipped);
-    
     const totalArmorValue = equippedArmor.reduce((sum, armor) => 
       sum + (armor.system.armor || 0), 0);
-
     this.parent.system.baseattributes.armor.value = totalArmorValue;
   }
 
-  /* -------------------------------------------- */
-
   addFavorite(favorite) {
+    console.log("addFavorite called with:", favorite);
+    
     const fullUUID = this._getFullUUID(favorite.id);
-    if (this.hasFavorite(fullUUID)) return;
+    console.log("Generated fullUUID:", fullUUID);
+    
+    if (this.hasFavorite(fullUUID)) {
+      console.log("Item is already a favorite:", fullUUID);
+      return;
+    }
 
     const favorites = this.favorites.concat([{
       type: favorite.type,
@@ -70,23 +72,50 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
       sort: (this.favorites[this.favorites.length - 1]?.sort ?? 0) + CONST.SORT_INTEGER_DENSITY
     }]);
 
+    console.log("New favorites array:", favorites);
+    console.log("Item collection within addFavourite function:", this.parent.collections)
     return this.parent.update({ "system.favorites": favorites });
   }
 
   removeFavorite(favoriteId) {
+    console.log("removeFavorite called with:", favoriteId);
+    
     const fullUUID = this._getFullUUID(favoriteId);
+    console.log("Generated fullUUID for removal:", fullUUID);
+    
     const favorites = this.favorites.filter(f => f.id !== fullUUID);
+    console.log("Favorites after removal:", favorites);
+    
     return this.parent.update({ "system.favorites": favorites });
   }
 
   hasFavorite(favoriteId) {
+    console.log("hasFavorite called with:", favoriteId);
+    
     const fullUUID = this._getFullUUID(favoriteId);
-    return this.favorites.some(f => f.id === fullUUID);
+    console.log("Generated fullUUID for check:", fullUUID);
+    
+    const exists = this.favorites.some(f => f.id === fullUUID);
+    console.log("Favorite exists:", exists);
+    
+    return exists;
   }
 
   _getFullUUID(id) {
-    if (id.startsWith("Actor.")) return id;
-    return `Actor.${this.parent.id}.Item.${id.replace(".Item.", "")}`;
+    console.log("_getFullUUID called with:", id);
+    
+    // If it's already a full UUID, return as is
+    if (id.includes(".")) {
+      console.log("ID is already a full UUID, returning as is");
+      return id;
+    }
+    
+    // Get the base actor if this is a token actor
+    const baseActor = this.parent.isToken ? this.parent.actor : this.parent;
+    
+    // Construct the UUID using just the Actor and Item
+    const fullUUID = `Actor.${baseActor.id}.Item.${id}`;
+    console.log("Generated full UUID:", fullUUID);
+    return fullUUID;
   }
-
 }

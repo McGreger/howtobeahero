@@ -281,6 +281,7 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 /** @override */
 async getData(options) {
   try {
+    console.log("getData collection:", this.actor.collections);
     const context = await super.getData(options);
     //context.activeTab = this._activeTab;
   
@@ -735,10 +736,12 @@ async _prepareEffects(context) {
 /* -------------------------------------------- */
 
 /** @inheritDoc */
+/*
 async _onDrop(event) {
   event.preventDefault();
   return super._onDrop(event);
 }
+*/
 
 /* -------------------------------------------- */
 
@@ -847,16 +850,29 @@ async _removeHeaderItem(slot) {
  * @returns {Promise<ActorHTBAH>|void}
  * @protected
  */
-_onDropFavorite(event, favorite) {
-  if (this.actor.system.hasFavorite(favorite.id)) return this._onSortFavorites(event, favorite.id);
-  
-  const item = this.actor.items.get(favorite.id);
-  if (item) {
-    return this.actor.system.addFavorite({
-      type: "item",
-      id: item.uuid
-    });
+async _onDropFavorite(event, favorite) {
+  console.log("_onDropFavorite called with:", favorite);
+
+  // Check if it's already a favorite
+  if (this.actor.system.hasFavorite(favorite.id)) {
+    console.log("Item is already a favorite, handling sort");
+    return this._onSortFavorites(event, favorite.id);
   }
+
+  // Get the item from the actor's inventory
+  const item = this.actor.items.get(favorite.id);
+  console.log("_onDropFavorite set item:", item);
+
+  if (!item) {
+    console.error("Item not found in actor inventory");
+    return false;
+  }
+
+  // Add as favorite using just the item ID
+  return this.actor.system.addFavorite({
+    type: "item",
+    id: favorite.id // Use the simple ID
+  });
 }
 
 /* -------------------------------------------- */
