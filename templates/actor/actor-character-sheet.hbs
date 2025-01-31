@@ -41,9 +41,9 @@
 
         <div class="header-stat-column" data-slot="skill">
           <div class="stat-header">{{ localize "HTBAH.Skill" }}</div>
-          <div class="stat-content" data-action="removeHeaderItem">
+          <div class="stat-content">
             {{#if headerItems.skill}}
-              <div class="header-item">
+              <div class="header-item"data-item-id="{{headerItems.skill._id}}">
                 <img src="{{headerItems.skill.img}}" alt="{{headerItems.skill.name}}" title="{{headerItems.skill.name}}">
                 <span class="item-name">{{headerItems.skill.name}}</span>
                 {{#if editable}}
@@ -61,9 +61,9 @@
         {{!-- Replace the existing weapon column content with: --}}
         <div class="header-stat-column" data-slot="weapon">
           <div class="stat-header">{{ localize "HTBAH.Weapon" }}</div>
-          <div class="stat-content" data-action="removeHeaderItem">
+          <div class="stat-content">
             {{#if headerItems.weapon}}
-              <div class="header-item">
+              <div class="header-item" data-item-id="{{headerItems.weapon._id}}">
                 <img src="{{headerItems.weapon.img}}" alt="{{headerItems.weapon.name}}" title="{{headerItems.weapon.name}}">
                 <span class="item-name">{{headerItems.weapon.name}}</span>
                 {{#if editable}}

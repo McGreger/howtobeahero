@@ -1487,6 +1487,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   color: var(--htbah-color-gold);
   margin-bottom: 0.5rem;
   width: 90%;
+  top: 4px;
   text-align: center;
   list-style: none;
   transition: all 0.2s ease;
@@ -1515,8 +1516,8 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-stat-column .header-item img {
-  width: 24px;
-  height: 24px;
+  width: 64px;
+  height: 64px;
   margin-right: 8px;
   border: none;
   border-radius: 2px;
@@ -1535,10 +1536,13 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-stat-column .header-item .item-remove {
+  position: relative;
+  right: 7px;
   color: var(--htbah-color-gold);
   opacity: 0.5;
   cursor: pointer;
   transition: all 0.2s ease;
+  padding: 2px;
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-stat-column .header-item .item-remove:hover {
@@ -2259,7 +2263,7 @@ a {
 }
 
 /* ----------------------------------------- */
-/*  Favourites                               */
+/*  Favorites                               */
 /* ----------------------------------------- */
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites {
