@@ -980,6 +980,25 @@ async _onUseFavorite(event) {
       this._activateEditModeListeners(html);
     }
 
+    // Header roll handlers
+    html.find('.header-item').on('click', ev => {
+      // Don't trigger on remove button clicks
+      if (ev.target.closest('.item-remove')) return;
+      
+      const item = ev.currentTarget;
+      const action = item.dataset.action;
+      
+      switch(action) {
+        case 'rollSkill':
+          return this._onRollHeaderSkill(ev);
+        case 'rollWeapon':
+          return this._onRollHeaderWeapon(ev);
+      }
+    });
+
+    // Initiative roll handler
+    html.find('.header-stat-column .fa-dice-d20').parent().on('click', this._onRollInitiative.bind(this));
+
     // Initialize tabs
     this._tabs = this._createTabHandlers();
     this._tabs.forEach(tabSet => {
@@ -1044,6 +1063,32 @@ async _onUseFavorite(event) {
     });
   }
 
+  async _onRollInitiative(event) {
+    event.preventDefault();
+    return this.actor.rollInitiative({createCombatants: true});
+  }
+  
+  async _onRollHeaderSkill(event) {
+    event.preventDefault();
+    const skillId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+    if (!skillId) return;
+    
+    const item = this.actor.items.get(skillId);
+    if (!item) return;
+    
+    return item.roll();
+  }
+  
+  async _onRollHeaderWeapon(event) {
+    event.preventDefault();
+    const weaponId = this.actor.getFlag("how-to-be-a-hero", "headerWeapon");
+    if (!weaponId) return;
+    
+    const item = this.actor.items.get(weaponId);
+    if (!item) return;
+    
+    return item.roll();
+  }
   /* -------------------------------------------- */
 
   /**
