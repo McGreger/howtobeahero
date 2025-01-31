@@ -7,44 +7,26 @@ import { formatNumber, simplifyBonus, staticID } from "../helpers/utils.mjs";
  * @extends {Tabs}
  */
 class TabsHtbah extends Tabs {
-  constructor(options={}) {
-    super(options);
-  }
-
   /** @override */
   bind(html) {
     super.bind(html);
-    
-    // If the nav element wasn't found in the usual place, look for it in the closest ".app" ancestor
-    if (!this._nav) {
-      this._nav = html.closest(".app")?.querySelector(this._navSelector);
-      if (this._nav) {
-        this._nav.addEventListener("click", this._onClickNav.bind(this));
-      }
-    }
-    // Find the content element
+    this._nav = this._nav || html.closest(".app")?.querySelector(this._navSelector);
+    if (this._nav) this._nav.addEventListener("click", this._onClickNav.bind(this));
     this._content = html.querySelector(this._contentSelector) || html.closest(".app")?.querySelector(this._contentSelector);
-    // Activate the initial tab
     this.activate(this.active);
   }
 
   /** @override */
   activate(tabName, {triggerCallback=false}={}) {
     if (!this._nav) return false;
-    
     const result = super.activate(tabName, {triggerCallback});
-
-    // Add 'active' class to the selected tab content
+    
     if (this._content) {
-      const tabs = this._content.querySelectorAll(`.tab[data-tab]`);
-      tabs.forEach(t => {
+      this._content.querySelectorAll(`.tab[data-tab]`).forEach(t => {
         t.classList.toggle("active", t.dataset.tab === tabName);
       });
-    } else {
-      console.warn("TabsHtbah: Content element not found");
     }
 
-    // Update the form's class if we're in a sheet application
     const form = this._nav.closest("form");
     if (form) {
       form.className = form.className.replace(/tab-\w+/g, "");
@@ -63,25 +45,21 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
   constructor(object, options={}) {
     const key = `character${object.limited ? ":limited" : ""}`;
     const { width, height } = game.user.getFlag("how-to-be-a-hero", `sheetPrefs.${key}`) ?? {};
-    if ( width && !("width" in options) ) options.width = width;
-    if ( height && !("height" in options) ) options.height = height;
-  
+    if (width) options.width = width;
+    if (height) options.height = height;
     super(object, options);
     this.dragDropHandler = new HowToBeAHeroDragDropHandler(this);
   }
 
-  /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['how-to-be-a-hero', 'sheet', 'actor', 'character'],
-      tabs: [
-        {
-          navSelector: '.tabs',
-          contentSelector: '.sheet-body .tab-body',
-          initial: 'details', 
-          group: "primary"
-        },
-      ],
+      tabs: [{
+        navSelector: '.tabs',
+        contentSelector: '.sheet-body .tab-body',
+        initial: 'details',
+        group: "primary"
+      }],
       dragDrop: [
         {dragSelector: ".item-list .item", dropSelector: ".favorites"},
         {dragSelector: ".favorites [data-favorite-id]", dropSelector: ".favorites"}
@@ -93,26 +71,8 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
     });
   }
 
-  /**
-   * Available sheet modes.
-   * @enum {number}
-   */
-  static MODES = {
-    PLAY: 1,
-    EDIT: 2
-  };
-  /**
-   * @typedef {object} SheetTabDescriptor
-   * @property {string} tab     The tab key.
-   * @property {string} label   The tab label's localization key.
-   * @property {string} [icon]  A font-awesome icon.
-   * @property {string} [svg]   An SVG icon.
-   */
-
-  /**
-   * Sheet tabs.
-   * @type {SheetTabDescriptor[]}
-   */
+  static MODES = { PLAY: 1, EDIT: 2 };
+  
   static TABS = [
     { tab: "details", label: "HTBAH.Details", icon: "fas fa-cog" },
     { tab: "inventory", label: "HTBAH.Inventory", svg: "backpack" },
@@ -120,31 +80,20 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
     { tab: "biography", label: "HTBAH.Biography", icon: "fas fa-feather" }
   ];
 
-  /**
-   * The mode the sheet is currently in.
-   * @type {ActorSheet.MODES}
-   * @protected
-   */
   _mode = this.constructor.MODES.PLAY;
 
-  /** @override */
   get template() {
     return `systems/how-to-be-a-hero/templates/actor/actor-${this.actor.type}-sheet.hbs`;
   }
-  
-  /* -------------------------------------------- */
 
   _createTabHandlers() {
-    return this.options.tabs.map(t => {
-      const tabOptions = foundry.utils.mergeObject({
-        navSelector: ".tabs",
-        contentSelector: ".tab-body",
-        initial: "details",
-        group: "primary",
-        callback: this._onChangeTab.bind(this)
-      }, t);
-      return new TabsHtbah(tabOptions);
-    });
+    return this.options.tabs.map(t => new TabsHtbah(foundry.utils.mergeObject({
+      navSelector: ".tabs",
+      contentSelector: ".tab-body",
+      initial: "details",
+      group: "primary",
+      callback: this._onChangeTab.bind(this)
+    }, t)));
   }
 
   /* -------------------------------------------- */
@@ -280,33 +229,23 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 
 /** @override */
 async getData(options) {
-  try {
-    console.log("getData collection:", this.actor.collections);
-    const context = await super.getData(options);
-    //context.activeTab = this._activeTab;
+  const context = await super.getData(options);
   
-    this._prepareBasicContext(context, options);
-    this._preparePortraitData(context);
-    this._prepareHealthData(context);
-    this._prepareActorData(context);
+  await Promise.all([
+    this._prepareBasicContext(context, options),
+    this._preparePortraitData(context),
+    this._prepareHealthData(context),
+    this._prepareActorData(context),
+    this._prepareHeaderItems().then(items => context.headerItems = items),
+    this._prepareItemsAndEffects(context)
+  ]);
 
-    // Add header items to the context
-    context.headerItems = await this._prepareHeaderItems();
-
-    // Items, Effects and Conditions
-    await this._prepareItemsAndEffects(context);
-    
-    // Favorites - only prepare for character type actors
-    if (this.actor.type === "character") {
-      context.favorites = await this._prepareFavorites();
-      context.favorites.sort((a, b) => a.sort - b.sort);
-    }
-
-    return context;
-  } catch (error) {
-    console.error('Error in getData:', error);
-    throw error;
+  if (this.actor.type === "character") {
+    context.favorites = await this._prepareFavorites();
+    context.favorites.sort((a, b) => a.sort - b.sort);
   }
+
+  return context;
 }
 
 /**
@@ -1024,162 +963,81 @@ async _onUseFavorite(event) {
 
     return properties;
   }
+
+  /* -------------------------------------------- */
+  /* activateListener                             */
   /* -------------------------------------------- */
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
-    html.find(".pips[data-prop]").on("click", this._onTogglePip.bind(this));
-    html.find("[data-action]").on("click", this._onAction.bind(this));
-    html.find("[data-item-id][data-action]").on("click", this._onItemAction.bind(this));
-    html.find(".rollable:is(.talent-check)").on("click", this._onRollTalent.bind(this));
-    html.find('.item-roll').click(this._onItemRoll.bind(this));
-    //html.find("proficiency-cycle").on("change", this._onChangeInput.bind(this));
-    //html.find(".sidebar .collapser").on("click", this._onToggleSidebar.bind(this));
-    this.form.querySelectorAll(".item-tooltip").forEach(this._applyItemTooltips.bind(this));
-    this.form.querySelectorAll("[data-reference-tooltip]").forEach(this._applyReferenceTooltips.bind(this));
     
-    // Prevent default middle-click scrolling when locking a tooltip.
-    this.form.addEventListener("pointerdown", event => {
-      if ( (event.button === 1) && document.getElementById("tooltip")?.classList.contains("active") ) {
-        event.preventDefault();
-      }
-    });
-
-    // Apply special context menus for items outside inventory elements
-    /*
-    const featuresElement = html[0].querySelector(`[data-tab="features"] ${this.options.elements.inventory}`);
-    if ( featuresElement ) new ContextMenu5e(html, ".pills-lg [data-item-id]", [], {
-      onOpen: (...args) => featuresElement._onOpenContextMenu(...args)
-    });
-    */
-
-    html.find(".create-child").on("click", this._onCreateChild.bind(this));
+    // Common listeners
+    this._activateCommonListeners(html);
     
-    // Only bind HP editing in non-edit mode
-    if (!(this._mode === this.constructor.MODES.EDIT)) {
-      html.find(".meter.sectioned.hit-points").on("click", event => this._toggleEditHP(event, true));
-      html.find(".meter.sectioned.hit-points input[hidden]").on("blur", event => this._toggleEditHP(event, false));
-    }
-    // Only bind HP editing in non-edit mode
-    //if (!this._mode === this.constructor.MODES.EDIT) {
-      //html.find(".meter > .hit-points").on("click", event => this._toggleEditHP(event, true));
-      //html.find(".meter > .hit-points > input").on("blur", event => this._toggleEditHP(event, false));
-    //}
-
-    html.find('[data-action="incrementBonus"], [data-action="decrementBonus"]').click(this._onItemBonusClick.bind(this));
-    html.find('.bonus-input-group input[name="system.roll.diceBonus"]').change(this._onBonusInputChange.bind(this));
-
-    html.find(".tab.details .item-action").on("click", this._onItemAction.bind(this));
-
-    // Add listener for eureka input changes
-    html.find('.eureka-column input').on('change', this._onChangeEureka.bind(this));
-    
-    // Render the item sheet for viewing/editing prior to the editable check.
-    html.on('click', '.item-edit', (ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.sheet.render(true);
-    });
-
-    // -------------------------------------------------------------
-    // Everything below here is only needed if the sheet is editable
-    if (!this.isEditable) return;
-
-    // Add Inventory Item
-    //html.on('click', '.item-create', this._onItemCreate.bind(this));
-
-    // Delete Inventory Item
-    html.on('click', '.item-delete', (ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.delete();
-      li.slideUp(200, () => this.render(false));
-    });
-    
-    // Add this new listener for condition toggling
-    /*
-    html.find('.conditions-list .condition').on('click', async (event) => {
-      event.preventDefault();
-      const conditionId = event.currentTarget.dataset.conditionId;
-      if (game.howtobeahero?.managers?.conditions) {
-        await game.howtobeahero.managers.conditions.toggleCondition(this.actor, conditionId);
-      } else {
-        console.warn('HowToBeAHero | ConditionManager not available.');
-      }
-    });
-    */
-    // Modify effect-control handler to not handle conditions
-    /*
-    html.find(".effect-control").click(ev => {
-      if (ev.currentTarget.dataset.action === 'toggleCondition') {
-        const row = ev.currentTarget.closest("li");
-        const effectId = row.dataset.effectId;
-        return;
-      }
-      game.htbah.effectsManager.onManageActiveEffect(ev, this.actor);
-    });
-    */
-    // Rollable abilities.
-    html.on('click', '.rollable', this._onRoll.bind(this));
-
-   // Update drag event listeners
-   if (this.actor.isOwner) {
-    html.find('li.item').each((i, li) => {
-      if (li.classList.contains('inventory-header')) return;
-      li.setAttribute('draggable', true);
-      li.addEventListener('dragstart', this.dragDropHandler.onDragStart.bind(this.dragDropHandler), false);
-      });
+    // Edit mode only listeners
+    if (this.isEditable) {
+      this._activateEditModeListeners(html);
     }
 
-    // Update drop zones
-    const dropZones = html.find('.favorites, .header-stat-column');
-    dropZones.each((i, zone) => {
-      zone.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
-      zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
-    });
-    
-    html.find('.deletion-control[data-action="removeFavorite"]').on('click', this._onRemoveFavorite.bind(this));
-
-    //tab-logic
-    
     // Initialize tabs
     this._tabs = this._createTabHandlers();
-    // Activate the initial tab
     this._tabs.forEach(tabSet => {
       tabSet.activate(tabSet.active);
       this._onChangeTab(null, tabSet, tabSet.active);
     });
   }
 
-  /**
-   * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
-   * @param {Event} event   The originating click event
-   * @private
-   */
-  /*
-  async _onItemCreate(event) {
-    event.preventDefault();
-    const header = event.currentTarget;
-    const type = header.dataset.type;
-    
-    // Prepare the item data
-    const itemData = {
-      name: game.i18n.format("HTBAH.ItemNew", {type: game.i18n.localize(`ITEM.Type${type.capitalize()}`)}),
-      type: type,
-      img: Item.DEFAULT_ICON
+  _activateCommonListeners(html) {
+    const commonSelectors = {
+      ".pips[data-prop]": this._onTogglePip,
+      "[data-action]": this._onAction,
+      "[data-action]": this._onItemAction,
+      ".rollable:is(.talent-check)": this._onRollTalent,
+      ".item-roll": this._onItemRoll,
+      ".create-child": this._onCreateChild
     };
-  
-    // Create the item with default data structure
-    const item = await Item.create(itemData, {parent: this.actor});
+
+    Object.entries(commonSelectors).forEach(([selector, handler]) => {
+      html.find(selector).on("click", handler.bind(this));
+    });
     
-    // Open the item sheet
-    item.sheet.render(true);
-    
-    return item;
+    // Apply tooltips
+    this._initializeTooltips();
   }
 
-  */
+  _activateEditModeListeners(html) {
+    // Add drag and drop functionality
+    if (this.actor.isOwner) {
+      this._initializeDragDrop(html);
+    }
+
+    // Item management
+    //html.find("[data-item-id][data-action]").on("click", this._onItemAction.bind(this));
+    html.find('.deletion-control[data-action="removeFavorite"]').on('click', this._onRemoveFavorite.bind(this));
+  }
+
+  _initializeTooltips() {
+    this.form.querySelectorAll(".item-tooltip").forEach(this._applyItemTooltips.bind(this));
+    this.form.querySelectorAll("[data-reference-tooltip]").forEach(this._applyReferenceTooltips.bind(this));
+  }
+
+  _initializeDragDrop(html) {
+    html.find('li.item').each((i, li) => {
+      if (!li.classList.contains('inventory-header')) {
+        li.setAttribute('draggable', true);
+        li.addEventListener('dragstart', this.dragDropHandler.onDragStart.bind(this.dragDropHandler), false);
+      }
+    });
+
+    html.find('.favorites, .header-stat-column').each((i, zone) => {
+      zone.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
+      zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
+    });
+  }
+
+  /* -------------------------------------------- */
+
   /**
    * Clamps a bonus value between -99 and 99
    * @param {number} value - The value to clamp
