@@ -1012,9 +1012,17 @@ async _onUseFavorite(event) {
       this._initializeDragDrop(html);
     }
 
-    // Item management
-    //html.find("[data-item-id][data-action]").on("click", this._onItemAction.bind(this));
+    // Favorites and header item management
     html.find('.deletion-control[data-action="removeFavorite"]').on('click', this._onRemoveFavorite.bind(this));
+    html.find('.item-remove[data-action="removeSkill"]').click(event => {
+      event.preventDefault();
+      this._removeHeaderItem("skill");
+    });
+    
+    html.find('.item-remove[data-action="removeWeapon"]').click(event => {
+      event.preventDefault();
+      this._removeHeaderItem("weapon");
+    });
   }
 
   _initializeTooltips() {

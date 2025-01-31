@@ -75,16 +75,40 @@ export class HowToBeAHeroDragDropHandler {
     
       const actionConfig = this._getDragActionType(event.target);
     
-      if (actionConfig.action === "favorite") {
-        // Only allow drops from this actor's inventory
-        const itemId = data.uuid.split('.').pop();
-        const item = this.actor.items.get(itemId);
-        if (!item) return false;
+      switch(actionConfig.action) {
+        case "favorite":
+          // Handle favorite drops
+          const itemId = data.uuid.split('.').pop();
+          const item = this.actor.items.get(itemId);
+          if (!item) return false;
     
-        return this.sheet._onDropFavorite(event, {
-          type: "item",
-          id: itemId
-        });
+          return this.sheet._onDropFavorite(event, {
+            type: "item",
+            id: itemId
+          });
+    
+        case "headerSlot":
+          // Handle header slot drops
+          if (data.type !== "Item") return false;
+          const droppedItem = await Item.implementation.fromDropData(data);
+          if (!droppedItem) return false;
+    
+          // Validate item type based on slot
+          if (actionConfig.type === "skill" && !["knowledge", "social", "action"].includes(droppedItem.type)) {
+            ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlySkillsAllowed"));
+            return false;
+          }
+          
+          if (actionConfig.type === "weapon" && droppedItem.type !== "weapon") {
+            ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyWeaponsAllowed"));
+            return false;
+          }
+    
+          // Update the header slot
+          return this.sheet._setHeaderItem(actionConfig.type, droppedItem.id);
+    
+        default:
+          return false;
       }
     }
   }

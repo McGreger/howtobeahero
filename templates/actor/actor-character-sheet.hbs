@@ -39,40 +39,44 @@
           </div>
         </div>
 
-       <div class="header-stat-column" data-slot="skill">
-        <div class="stat-header">{{ localize "HTBAH.Skill" }}</div>
-        <div class="stat-content">
-          {{#if headerItems.skill}}
-            <div class="header-item">
-              <img src="{{headerItems.skill.img}}" alt="{{headerItems.skill.name}}" title="{{headerItems.skill.name}}">
-              <span class="item-name">{{headerItems.skill.name}}</span>
-              {{#if editable}}
-              <a class="item-remove" data-tooltip="{{ localize "HTBAH.Remove" }}"><i class="fas fa-times"></i></a>
-              {{/if}}
-            </div>
-          {{else}}
-            <li class="drop roboto-upper">{{ localize "HTBAH.SkillDrop" }}</li>
-          {{/if}}
+        <div class="header-stat-column" data-slot="skill">
+          <div class="stat-header">{{ localize "HTBAH.Skill" }}</div>
+          <div class="stat-content" data-action="removeHeaderItem">
+            {{#if headerItems.skill}}
+              <div class="header-item">
+                <img src="{{headerItems.skill.img}}" alt="{{headerItems.skill.name}}" title="{{headerItems.skill.name}}">
+                <span class="item-name">{{headerItems.skill.name}}</span>
+                {{#if editable}}
+                <a class="item-remove" data-action="removeSkill" data-tooltip="{{ localize "HTBAH.Remove" }}">
+                  <i class="fas fa-times"></i>
+                </a>
+                {{/if}}
+              </div>
+            {{else}}
+              <li class="drop roboto-upper">{{ localize "HTBAH.SkillDrop" }}</li>
+            {{/if}}
+          </div>
         </div>
-      </div>
 
-      {{!-- Replace the existing weapon column content with: --}}
-      <div class="header-stat-column" data-slot="weapon">
-        <div class="stat-header">{{ localize "HTBAH.Weapon" }}</div>
-        <div class="stat-content">
-          {{#if headerItems.weapon}}
-            <div class="header-item">
-              <img src="{{headerItems.weapon.img}}" alt="{{headerItems.weapon.name}}" title="{{headerItems.weapon.name}}">
-              <span class="item-name">{{headerItems.weapon.name}}</span>
-              {{#if editable}}
-              <a class="item-remove" data-tooltip="HTBAH.Remove"><i class="fas fa-times"></i></a>
-              {{/if}}
-            </div>
-          {{else}}
-            <li class="drop roboto-upper">{{ localize "HTBAH.WeaponDrop" }}</li>
-          {{/if}}
+        {{!-- Replace the existing weapon column content with: --}}
+        <div class="header-stat-column" data-slot="weapon">
+          <div class="stat-header">{{ localize "HTBAH.Weapon" }}</div>
+          <div class="stat-content" data-action="removeHeaderItem">
+            {{#if headerItems.weapon}}
+              <div class="header-item">
+                <img src="{{headerItems.weapon.img}}" alt="{{headerItems.weapon.name}}" title="{{headerItems.weapon.name}}">
+                <span class="item-name">{{headerItems.weapon.name}}</span>
+                {{#if editable}}
+                <a class="item-remove" data-action="removeWeapon" data-tooltip="{{ localize "HTBAH.Remove" }}">
+                  <i class="fas fa-times"></i>
+                </a>
+                {{/if}}
+              </div>
+            {{else}}
+              <li class="drop roboto-upper">{{ localize "HTBAH.WeaponDrop" }}</li>
+            {{/if}}
+          </div>
         </div>
-      </div>
       </div>
     </div>
 
