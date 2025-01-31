@@ -57,59 +57,34 @@ export class HowToBeAHeroDragDropHandler {
         event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
       }
     }
-  
+    
     /**
      * Handle drop event
      * @param {DragEvent} event - The drag event
      */
-    /**
- * Handle drop event
- * @param {DragEvent} event - The drag event
- */
-async onDrop(event) {
-  console.log("Drop event triggered");
-  event.preventDefault();
-  
-  let data;
-  try {
-    data = JSON.parse(event.dataTransfer.getData("text/plain"));
-  } catch(e) {
-    console.error("Failed to parse drag data:", e);
-    return;
-  }
-
-  // Determine action type based on where it was dropped
-  const actionConfig = this._getDragActionType(event.target);
-
-  // For favorites, ensure we're using the original item ID from this actor
-  if (actionConfig.action === "favorite") {
-    // Only allow drops if the item is from this actor
-    if (!data.uuid?.includes(this.actor.uuid)) {
-      ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyCurrentActorItems"));
-      return false;
+    async onDrop(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      let data;
+      try {
+        data = JSON.parse(event.dataTransfer.getData("text/plain"));
+      } catch(e) {
+        return false;
+      }
+    
+      const actionConfig = this._getDragActionType(event.target);
+    
+      if (actionConfig.action === "favorite") {
+        // Only allow drops from this actor's inventory
+        const itemId = data.uuid.split('.').pop();
+        const item = this.actor.items.get(itemId);
+        if (!item) return false;
+    
+        return this.sheet._onDropFavorite(event, {
+          type: "item",
+          id: itemId
+        });
+      }
     }
-
-    // Extract the original item ID from the UUID
-    const originalItemId = data.uuid.split('.').pop();
-    console.log(this.actor.items)
-    // Verify the item exists in the actor's inventory
-    const item = this.actor.items.get(originalItemId);
-    if (!item) {
-      console.error("Item not found in actor inventory");
-      return false;
-    }
-
-    return this.sheet._onDropFavorite(event, { 
-      type: "item", 
-      id: originalItemId // Use the original ID
-    });
-  }
-
-  // Handle other drop types
-  if (actionConfig.action === "headerSlot") {
-    return this.sheet._onHeaderDrop(event, actionConfig.type);
-  }
-  
-  return this.sheet._onDrop(event, data);
-}
   }

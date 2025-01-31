@@ -282,15 +282,26 @@ async function rollItemMacro(itemUuid) {
     if (!actor) return ui.notifications.warn(game.i18n.localize("HTBAH.MacroNoActor"));
     
     // Create temporary item
-    const tempItem = await actor.createEmbeddedDocuments("Item", [{
-      ...item.toObject(),
-      _id: null
-    }]);
-    
-    if (tempItem.length > 0) {
-      await tempItem[0].roll();
-      await actor.deleteEmbeddedDocuments("Item", [tempItem[0].id]);
+    /*
+    let tempItem;
+    try {
+      tempItem = await actor.createEmbeddedDocuments("Item", [{
+        ...item.toObject(),
+        _id: null
+      }]);
+      
+      if (tempItem.length > 0) {
+        await tempItem[0].roll();
+      }
+    } catch (error) {
+      console.error("Error rolling macro item:", error);
+    } finally {
+      // Always clean up the temporary item
+      if (tempItem?.[0]?.id) {
+        await actor.deleteEmbeddedDocuments("Item", [tempItem[0].id]);
+      }
     }
+    */
     return;
   }
 

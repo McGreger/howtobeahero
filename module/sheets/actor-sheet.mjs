@@ -734,39 +734,15 @@ async _prepareEffects(context) {
 /* -------------------------------------------- */
 /*  Drop handling                               */
 /* -------------------------------------------- */
-
-/** @inheritDoc */
-/*
-async _onDrop(event) {
+/** @override */
+_onDropItem(event, data) {
+  if (!event.target.closest(".favorites")) return super._onDropItem(event, data);
+  
+  // For favorites, just store the reference
   event.preventDefault();
-  return super._onDrop(event);
+  const itemId = data.uuid.split('.').pop();
+  return this._onDropFavorite(event, { type: "item", id: itemId });
 }
-*/
-
-/* -------------------------------------------- */
-
-/** @inheritDoc */
-/*
-async _onDropItem(event, data) {
-  if ( !event.target.closest(".favorites") ) return super._onDropItem(event, data);
-  const item = await Item.implementation.fromDropData(data);
-  if ( item?.parent !== this.actor ) return super._onDropItem(event, data);
-  const uuid = item.getRelativeUUID(this.actor);
-  return this._onDropFavorite(event, { type: "item", id: uuid });
-}
-*/
-/* -------------------------------------------- */
-
-/** @inheritDoc */
-/*
-async _onDropActiveEffect(event, data) {
-  if ( !event.target.closest(".favorites") ) return super._onDropActiveEffect(event, data);
-  const effect = await ActiveEffect.implementation.fromDropData(data);
-  if ( effect.target !== this.actor ) return super._onDropActiveEffect(event, data);
-  const uuid = effect.getRelativeUUID(this.actor);
-  return this._onDropFavorite(event, { type: "effect", id: uuid });
-}
-*/
 
 /**
  * Handle dropping an item in a header slot
@@ -801,20 +777,6 @@ async _onHeaderDrop(event, dropZone) {
     ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyWeaponsAllowed"));
     return false;
   }
-
-  // If item is from a different actor, create a copy
-  /*
-  if (item.parent !== this.actor) {
-    const itemData = item.toObject();
-    const newItem = await this.actor.createEmbeddedDocuments("Item", [itemData]);
-    if (newItem.length > 0) {
-      await this._setHeaderItem(dropZone, newItem[0].id);
-    }
-    return;
-  }
-  */
-
-  // If item is already owned, just set it as the header item
   await this._setHeaderItem(dropZone, item.id);
 }
 
@@ -851,27 +813,18 @@ async _removeHeaderItem(slot) {
  * @protected
  */
 async _onDropFavorite(event, favorite) {
-  console.log("_onDropFavorite called with:", favorite);
+  event.preventDefault();
+  event.stopPropagation();
 
   // Check if it's already a favorite
   if (this.actor.system.hasFavorite(favorite.id)) {
-    console.log("Item is already a favorite, handling sort");
     return this._onSortFavorites(event, favorite.id);
-  }
-
-  // Get the item from the actor's inventory
-  const item = this.actor.items.get(favorite.id);
-  console.log("_onDropFavorite set item:", item);
-
-  if (!item) {
-    console.error("Item not found in actor inventory");
-    return false;
   }
 
   // Add as favorite using just the item ID
   return this.actor.system.addFavorite({
     type: "item",
-    id: favorite.id // Use the simple ID
+    id: `Actor.${this.actor.id}.Item.${favorite.id}` // Use full UUID format
   });
 }
 
@@ -928,8 +881,6 @@ async _onSortFavorites(event, srcId) {
   return this.actor.update({ "system.favorites": Array.from(favoritesMap.values()) });
 }
 
-
-
 /* -------------------------------------------- */
 
 /**
@@ -944,6 +895,43 @@ async _onUseFavorite(event) {
   if (favorite instanceof HowToBeAHeroItemBase) return favorite.use({}, { event });
   if (favorite instanceof ActiveEffect) return favorite.update({ disabled: !favorite.disabled });
 }
+  /* -------------------------------------------- */
+
+  /**
+   * Get favorite data for a specific type and ID
+   * @param {string} type - The type of favorite
+   * @param {string} id - The ID of the favorite
+   * @returns {Promise<Object|null>} The favorite data
+   * @private
+   */
+  async _getFavoriteData(type, id) {
+    // Handle different types of favorites
+    switch(type) {
+      case 'effect':
+        const effect = await fromUuid(id);
+        if (!effect) return null;
+        return {
+          img: effect.icon,
+          title: effect.label,
+          subtitle: effect.description,
+          toggle: !effect.disabled
+        };
+        
+      default:
+        const item = await fromUuid(id);
+        if (!item) return null;
+        return {
+          img: item.img,
+          title: item.name,
+          subtitle: this._getItemSubtitle(item),
+          value: item.system.value,
+          uses: item.system.uses,
+          quantity: item.system.quantity,
+          toggle: item.system.equipped !== undefined ? item.system.equipped : undefined
+        };
+    }
+  }
+
   /* -------------------------------------------- */
 
   /**
@@ -1099,7 +1087,7 @@ async _onUseFavorite(event) {
     if (!this.isEditable) return;
 
     // Add Inventory Item
-    html.on('click', '.item-create', this._onItemCreate.bind(this));
+    //html.on('click', '.item-create', this._onItemCreate.bind(this));
 
     // Delete Inventory Item
     html.on('click', '.item-delete', (ev) => {
@@ -1169,6 +1157,7 @@ async _onUseFavorite(event) {
    * @param {Event} event   The originating click event
    * @private
    */
+  /*
   async _onItemCreate(event) {
     event.preventDefault();
     const header = event.currentTarget;
@@ -1189,6 +1178,8 @@ async _onUseFavorite(event) {
     
     return item;
   }
+
+  */
   /**
    * Clamps a bonus value between -99 and 99
    * @param {number} value - The value to clamp
