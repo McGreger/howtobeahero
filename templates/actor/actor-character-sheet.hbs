@@ -45,7 +45,6 @@
             {{#if headerItems.skill}}
               <div class="header-item rollable" data-item-id="{{headerItems.skill._id}}" data-action="rollSkill">
                 <img src="{{headerItems.skill.img}}" alt="{{headerItems.skill.name}}" title="{{headerItems.skill.name}}">
-                <span class="item-name">{{headerItems.skill.name}}</span>
                 {{#if editable}}
                 <a class="item-remove" data-action="removeSkill" data-tooltip="{{ localize "HTBAH.Remove" }}">
                   <i class="fas fa-times"></i>
@@ -65,7 +64,6 @@
             {{#if headerItems.weapon}}
               <div class="header-item rollable" data-item-id="{{headerItems.weapon._id}}" data-action="rollWeapon">
                 <img src="{{headerItems.weapon.img}}" alt="{{headerItems.weapon.name}}" title="{{headerItems.weapon.name}}">
-                <span class="item-name">{{headerItems.weapon.name}}</span>
                 {{#if editable}}
                 <a class="item-remove" data-action="removeWeapon" data-tooltip="{{ localize "HTBAH.Remove" }}">
                   <i class="fas fa-times"></i>
