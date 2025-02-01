@@ -1375,7 +1375,9 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 .how-to-be-a-hero.sheet.actor.character.minimized nav.tabs {
   display: none;
-}/* Header Container */
+}
+
+/* Header Container */
 .how-to-be-a-hero.sheet.actor.character .sheet-header {
   flex: 0 0 var(--htbah-sheet-header-height);
   border: none;
@@ -1389,7 +1391,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 
 /* Left Column - Name */
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-left {
-  flex: 1;
+  flex: 1.8;  /* Increased from 1 to 2 to take more space */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1416,12 +1418,13 @@ item-list-controls search .filter-control[data-action="sort"] {
 
 /* Center Column - Box */
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-center {
-  flex: 1;
+  flex: 1;  /* Kept at 1 to reduce relative space */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  margin-left: auto;  /* Push content to the right */
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-center .center-box {
@@ -1567,7 +1570,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 
 /* Right Column */
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-right {
-  flex: 1;
+  flex: 0.1;  /* Reduced from 1 to 0.5 to take less space */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1594,6 +1597,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   border: 1px solid var(--htbah-color-gold);
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
+
 /* ----------------------------------------- */
 /*  Inspiration Button & Value               */
 /* ----------------------------------------- */
