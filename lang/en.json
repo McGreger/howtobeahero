@@ -39,6 +39,11 @@
     }
   },
   
+  "HTBAH.Appearance": "Appearance description",
+  "HTBAH.Age": "Age",
+  "HTBAH.Alignment": "Alignment",
+  "HTBAH.Wealth": "Wealth",
+
   "HTBAH.SheetModeEdit": "Edit",
   "HTBAH.SheetModePlay": "Play",
 

@@ -39,6 +39,11 @@
     }
   },
 
+  "HTBAH.Appearance": "Beschreibung des Äußeren",
+  "HTBAH.Age": "Alter",
+  "HTBAH.Alignment": "Gesinnung",
+  "HTBAH.Wealth": "Reichtum",
+
   "HTBAH.SheetModeEdit": "Bearbeiten",
   "HTBAH.SheetModePlay": "Spielen",
 

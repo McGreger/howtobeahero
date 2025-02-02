@@ -466,8 +466,161 @@ item-list-controls search .filter-control[data-action="sort"] {
   color: var(--color-text-light-0);
 }
 
-.how-to-be-a-hero.sheet.actor.character .tab.biography textarea {
+/* Biography Tab Styles */
+.how-to-be-a-hero .tab.biography {
+  height: 100%;
+  padding: 0.2rem;
   color: var(--htbah-color-blue-white);
+}
+
+/* Top section with characteristics */
+.how-to-be-a-hero .tab.biography .top {
+  margin-bottom: 0.5rem;
+  padding: 0.2rem;
+  background: var(--htbah-color-blue-gray-2);
+  border: 1px solid var(--htbah-color-blue-gray-1);
+  border-radius: 4px;
+  box-shadow: 0 0 6px var(--htbah-shadow-45);
+}
+
+/* Characteristics grid and styling */
+.how-to-be-a-hero .tab.biography .characteristics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.how-to-be-a-hero .tab.biography .characteristics li {
+  margin-bottom: 0.5rem;
+}
+
+.how-to-be-a-hero .tab.biography .characteristics label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.how-to-be-a-hero .tab.biography .characteristics .label {
+  background: linear-gradient(to right, var(--htbah-color-hd-1) 0%, var(--htbah-color-hd-2) 100%);
+  color: white;
+  font-family: var(--htbah-font-roboto-condensed);
+  text-transform: uppercase;
+  font-size: var(--font-size-12);
+  font-weight: bold;
+  padding: 0.5rem;
+  border-radius: 3px;
+  /*border: 1px solid var(--htbah-color-gold);*/
+  margin-bottom: 0.25rem;
+  box-shadow: 0 0 6px var(--htbah-shadow-45);
+}
+
+/* Input container styling to match the rest of the layout */
+.how-to-be-a-hero .tab.biography .characteristics label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+/* Input and span styling for characteristics */
+.how-to-be-a-hero .tab.biography .characteristics input,
+.how-to-be-a-hero .tab.biography .characteristics .value {
+  background: var(--htbah-color-blue-gray-2);
+  border: 1px solid var(--htbah-color-blue-gray-3);
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: var(--htbah-color-blue-white);
+  min-height: 2.5rem;
+  display: block;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-13);
+}
+
+/* Middle and Bottom sections */
+.how-to-be-a-hero .tab.biography .middle,
+.how-to-be-a-hero .tab.biography .bottom {
+  background: var(--htbah-color-blue-gray-2);
+  border: 1px solid var(--htbah-color-blue-gray-1);
+  border-radius: 4px;
+  padding: 0.2rem;
+  box-shadow: 0 0 6px var(--htbah-shadow-45);
+  margin-bottom: 0.5rem;
+}
+
+/* Headers styling */
+.how-to-be-a-hero .tab.biography .middle h3,
+.how-to-be-a-hero .tab.biography .bottom h3 {
+  display: flex;
+  font-family: var(--htbah-font-roboto-condensed);
+  text-transform: uppercase;
+  background: linear-gradient(to right, var(--htbah-color-hd-1) 0%, var(--htbah-color-hd-2) 100%);
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  margin: 0 0 0.5rem 0;
+  border-radius: 3px;
+  align-items: center;
+  gap: 0.25rem;
+  box-shadow: 0 0 6px var(--htbah-shadow-45);
+  /*border: 1px solid var(--htbah-color-gold);*/
+}
+
+/* Icon styling in headers */
+.how-to-be-a-hero .tab.biography h3.icon htbah-icon {
+  --icon-fill: white;
+  margin-right: 0.25rem;
+}
+
+/* Middle section - Appearance (fixed height) */
+.how-to-be-a-hero .tab.biography .middle textarea.untext,
+.how-to-be-a-hero .tab.biography .middle p {
+  width: 100%;
+  height: 100px;
+  background: var(--htbah-color-blue-gray-2);
+  border: 1px solid var(--htbah-color-blue-gray-3);
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: var(--htbah-color-blue-white);
+  margin: 0;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-13);
+  line-height: 1.5;
+  resize: none;
+}
+
+/* Bottom section - Biography (flexible height) */
+.how-to-be-a-hero .tab.biography .bottom textarea.untext,
+.how-to-be-a-hero .tab.biography .bottom p {
+  width: 100%;
+  min-height: 140px;
+  background: var(--htbah-color-blue-gray-2);
+  border: 1px solid var(--htbah-color-blue-gray-3);
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: var(--htbah-color-blue-white);
+  margin: 0;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-13);
+  line-height: 1.5;
+  resize: vertical;
+}
+
+/* Common textarea styles */
+.how-to-be-a-hero .tab.biography textarea.untext {
+  background: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Text formatting */
+.how-to-be-a-hero .tab.biography p {
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+/* Focus and hover states */
+.how-to-be-a-hero .tab.biography textarea.untext:focus,
+.how-to-be-a-hero .tab.biography textarea.untext:hover {
+  border-color: var(--htbah-color-gold);
+  box-shadow: 0 0 6px var(--htbah-color-gold);
 }
 
 .how-to-be-a-hero.sheet.actor.character .ability-score::before {
