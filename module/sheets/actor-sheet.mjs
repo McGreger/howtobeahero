@@ -1021,6 +1021,9 @@ async _onUseFavorite(event) {
       html.find(selector).on("click", handler.bind(this));
     });
     
+    // Add bonus input change handlers
+    html.find('.item-bonus input[name="system.roll.diceBonus"]').on('change', this._onBonusInputChange.bind(this));
+
     // Apply tooltips
     this._initializeTooltips();
   }
@@ -1113,17 +1116,26 @@ async _onUseFavorite(event) {
     }
   }
 
+  // Updated _onBonusInputChange method
   async _onBonusInputChange(event) {
-    const itemId = event.currentTarget.closest('[data-item-id]').dataset.itemId;
+    event.preventDefault();
+    const input = event.currentTarget;
+    const itemId = input.closest('[data-item-id]')?.dataset.itemId;
+    if (!itemId) return;
+
     const item = this.actor.items.get(itemId);
-    const newBonus = this._clampBonus(Number(event.target.value));
-    
-    if (!isNaN(newBonus)) {
-      await item.update({"system.roll.diceBonus": newBonus});
-      
-      // Update the input value to show the clamped value
-      event.target.value = newBonus;
-    }
+    if (!item) return;
+
+    const newValue = Math.clamped(Number(input.value) || 0, -99, 99);
+    if (isNaN(newValue)) return;
+
+    // Update the item with the new bonus value
+    await item.update({
+        "system.roll.diceBonus": newValue
+    });
+
+    // Update the input value to show the clamped value
+    input.value = newValue;
   }
   
   /**

@@ -6,10 +6,6 @@
         <div class="item-bonus">
             <div class="bonus-input-group"> 
                 <input type="number" name="system.roll.diceBonus" value="{{system.roll.diceBonus}}" min="-99" max="99">
-                {{#if @root.editable}}
-                <i class="fa-solid fa-circle-plus" data-action="incrementBonus" data-item-id="{{_id}}"></i>
-                <i class="fa-solid fa-circle-minus" data-action="decrementBonus" data-item-id="{{_id}}"></i>
-                {{/if}}
             </div>
         </div>
         <div class="item-calculated-value">{{system.calculatedValue}}</div>
