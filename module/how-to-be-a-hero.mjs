@@ -84,8 +84,10 @@ Hooks.once('init', function () {
 
   // Set default token configuration for different actor types
   CONFIG.Actor.defaultTypes = ["character", "npc"];
+  
+  // Set default token configuration for all actor types
   CONFIG.Actor.prototypeToken = {
-    actorLink: false,  // Default for new actors
+    actorLink: true,  // Changed from false to true to ensure all tokens are linked by default
     displayName: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
     displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
     disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
@@ -202,7 +204,12 @@ Hooks.once('ready', function () {
       return false;
     }
   }, { priority: -1 }); // Lower priority to run first
-  
+
+  Hooks.on("preCreateToken", (document, data, options, userId) => {
+    // Force actorLink to true for all new tokens
+    document.updateSource({actorLink: true});
+  });
+
   // Register item update hook
   Hooks.on("updateItem", (item, changes, options, userId) => {
     if (item instanceof CONFIG.Item.dataModels.armor && "system.equipped" in changes) {
