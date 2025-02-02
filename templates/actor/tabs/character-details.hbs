@@ -6,18 +6,14 @@
         <div class="item-bonus">
             <div class="bonus-input-group"> 
                 <input type="number" name="system.roll.diceBonus" value="{{system.roll.diceBonus}}" min="-99" max="99">
-                {{#if @root.editable}}
-                <i class="fa-solid fa-circle-plus" data-action="incrementBonus" data-item-id="{{_id}}"></i>
-                <i class="fa-solid fa-circle-minus" data-action="decrementBonus" data-item-id="{{_id}}"></i>
-                {{/if}}
             </div>
         </div>
         <div class="item-calculated-value">{{system.calculatedValue}}</div>
         <div class="item-total">{{system.totalValue}}</div>
         {{#if @root.editable}}
         <div class="item-controls">
-            <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-            <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+            <a class="item-control item-edit" data-action="edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" data-action="delete" title="Delete Item"><i class="fas fa-trash"></i></a>
         </div>
         {{/if}}
     </li>
@@ -45,11 +41,13 @@
                     {{#each talentRows}}
                         <span>{{ value }}</span> 
                     {{/each}}
+                    {{#if (eq actor.type "character")}}
                     <div class="eureka">
                         {{#each talentRows}}
                             <input type="number" name="system.baseattributes.talents.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
                         {{/each}}
                     </div>
+                    {{/if}}
                 </div>
                 <div class="total-column flex1">
                     {{#each talentRows}}

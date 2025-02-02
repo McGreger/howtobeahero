@@ -106,6 +106,13 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
     html.find('[data-action="incrementBonus"]').click(this._onAdjustBonus.bind(this, 1));
     html.find('[data-action="decrementBonus"]').click(this._onAdjustBonus.bind(this, -1));
 
+    // Handle roll field changes for weapons
+    if (this.item.type === 'weapon') {
+      html.find('input[name="system.roll.diceNum"]').change(this._onUpdateRollFields.bind(this));
+      html.find('select[name="system.roll.diceSize"]').change(this._onUpdateRollFields.bind(this));
+      html.find('input[name="system.roll.diceBonus"]').change(this._onUpdateRollFields.bind(this));
+    }
+
     // Active Effect management
     html.on('click', '.effect-control', this._onEffectControl.bind(this));
     
@@ -121,7 +128,28 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
       calculatedValueInput.val(this.item.calculatedValue);
     });
   }
-
+  
+  async _onUpdateRollFields(event) {
+    event.preventDefault();
+    
+    // Get current roll values
+    const diceNum = this.item.system.roll.diceNum;
+    const diceSize = this.item.system.roll.diceSize;
+    const diceBonus = this.item.system.roll.diceBonus;
+  
+    // Format bonus string
+    const bonusStr = diceBonus > 0 ? `+${diceBonus}` : 
+                    diceBonus < 0 ? diceBonus.toString() : '';
+                    
+    // Create new formula
+    const formula = `${diceNum}${diceSize}${bonusStr}`;
+  
+    // Update the formula display
+    const formulaInput = this.element.find('input[name="system.formula"]');
+    if (formulaInput.length) {
+      formulaInput.val(formula);
+    }
+  }
 
   async _onAdjustBonus(delta, event) {
     event.preventDefault();
@@ -162,100 +190,4 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
   async _onSubmit(event, {updateData=null, preventClose=false, preventRender=false}={}) {
     return super._onSubmit(event, {updateData, preventClose, preventRender});
   }
-
-  /** @inheritdoc 
-  async _onSubmit(event, {updateData=null, preventClose=false, preventRender=false}={}) {
-    // Process and validate the form data
-    const formData = this._getSubmitData(updateData);
-    if (!formData) return false; // Submission blocked due to validation failure
-
-    // Adjust sheet height if the "details" tab is active
-    if (this._tabs[0].active === "details") this.position.height = "auto";
-
-    try {
-
-      // Update the item
-      await this.item.update(formData);
-
-      // If the item is embedded in an actor, render the actor sheet
-      if (this.item.actor) {
-        this.item.actor.sheet.render(false);
-      }
-
-      // Call the parent _onSubmit
-      return super._onSubmit(event, {updateData: formData, preventClose, preventRender});
-    } catch (error) {
-      console.error("Error updating item:", error);
-      ui.notifications.error("Failed to update item. Please check the console for details.");
-      return false;
-    }
-  }
-  */
-
-  /**
-   * Prepare data for submission when the form is submitted.
-   * @param {Object} updateData Additional data changes to apply
-   * @returns {Object|null} The prepared data object, or null if the submission should be blocked
-   * @private
-   
-  _getSubmitData(updateData={}) {
-    const formData = foundry.utils.expandObject(super._getSubmitData(updateData));
-
-    if (!this._validateFormData(formData)) return null;
-
-    this._processFormData(formData);
-
-    return formData;
-  }
-  */
-  /**
-   * Validate the form data
-   * @param {Object} formData The form data to validate
-   * @returns {boolean} Whether the form data is valid
-   * @private
-   
-  _validateFormData(formData) {
-    if (!formData.name) {
-      ui.notifications.error("Item name cannot be empty.");
-      return false;
-    }
-
-    if (formData.system?.value !== undefined && formData.system.value !== "" && isNaN(Number(formData.system.value))) {
-      ui.notifications.error("Value must be a number.");
-      return false;
-    }
-
-    return true;
-  }
-  */
-  /**
-   * Process and modify the form data as needed
-   * @param {Object} formData The form data to process
-   * @private
-   
-  _processFormData(formData) {
-    if (formData.system) {
-      // Process the value field
-      if (formData.system.value !== undefined) {
-        formData.system.value = formData.system.value === "" ? 0 : Number(formData.system.value);
-        //formData.system.calculatedvalue = formData.system.value * 2;
-      }
-
-      // Process the description
-      formData.system.description = formData.system.description || "";
-
-      // Process the roll data
-      if (formData.system.roll) {
-        formData.system.roll.diceNum = Number(formData.system.roll.diceNum) || 1;
-        formData.system.roll.diceSize = formData.system.roll.diceSize || "d100";
-        formData.system.roll.diceBonus = formData.system.roll.diceBonus || "+0";
-      }
-    }
-
-    // Handle image updates
-    if (formData.img) {
-      formData.img = formData.img.trim();
-    }
-  }
-  */
 }

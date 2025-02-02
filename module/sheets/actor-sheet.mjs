@@ -1,4 +1,5 @@
 import { HowToBeAHeroActor } from '../documents/actor.mjs';
+import { HowToBeAHeroDragDropHandler } from '../helpers/drag-drop-handler.mjs';
 import { formatNumber, simplifyBonus, staticID } from "../helpers/utils.mjs";
 
 /**
@@ -6,44 +7,26 @@ import { formatNumber, simplifyBonus, staticID } from "../helpers/utils.mjs";
  * @extends {Tabs}
  */
 class TabsHtbah extends Tabs {
-  constructor(options={}) {
-    super(options);
-  }
-
   /** @override */
   bind(html) {
     super.bind(html);
-    
-    // If the nav element wasn't found in the usual place, look for it in the closest ".app" ancestor
-    if (!this._nav) {
-      this._nav = html.closest(".app")?.querySelector(this._navSelector);
-      if (this._nav) {
-        this._nav.addEventListener("click", this._onClickNav.bind(this));
-      }
-    }
-    // Find the content element
+    this._nav = this._nav || html.closest(".app")?.querySelector(this._navSelector);
+    if (this._nav) this._nav.addEventListener("click", this._onClickNav.bind(this));
     this._content = html.querySelector(this._contentSelector) || html.closest(".app")?.querySelector(this._contentSelector);
-    // Activate the initial tab
     this.activate(this.active);
   }
 
   /** @override */
   activate(tabName, {triggerCallback=false}={}) {
     if (!this._nav) return false;
-    
     const result = super.activate(tabName, {triggerCallback});
-
-    // Add 'active' class to the selected tab content
+    
     if (this._content) {
-      const tabs = this._content.querySelectorAll(`.tab[data-tab]`);
-      tabs.forEach(t => {
+      this._content.querySelectorAll(`.tab[data-tab]`).forEach(t => {
         t.classList.toggle("active", t.dataset.tab === tabName);
       });
-    } else {
-      console.warn("TabsHtbah: Content element not found");
     }
 
-    // Update the form's class if we're in a sheet application
     const form = this._nav.closest("form");
     if (form) {
       form.className = form.className.replace(/tab-\w+/g, "");
@@ -62,24 +45,21 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
   constructor(object, options={}) {
     const key = `character${object.limited ? ":limited" : ""}`;
     const { width, height } = game.user.getFlag("how-to-be-a-hero", `sheetPrefs.${key}`) ?? {};
-    if ( width && !("width" in options) ) options.width = width;
-    if ( height && !("height" in options) ) options.height = height;
-  
+    if (width) options.width = width;
+    if (height) options.height = height;
     super(object, options);
+    this.dragDropHandler = new HowToBeAHeroDragDropHandler(this);
   }
 
-  /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['how-to-be-a-hero', 'sheet', 'actor', 'character'],
-      tabs: [
-        {
-          navSelector: '.tabs',
-          contentSelector: '.sheet-body .tab-body',
-          initial: 'details', 
-          group: "primary"
-        },
-      ],
+      tabs: [{
+        navSelector: '.tabs',
+        contentSelector: '.sheet-body .tab-body',
+        initial: 'details',
+        group: "primary"
+      }],
       dragDrop: [
         {dragSelector: ".item-list .item", dropSelector: ".favorites"},
         {dragSelector: ".favorites [data-favorite-id]", dropSelector: ".favorites"}
@@ -91,26 +71,8 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
     });
   }
 
-  /**
-   * Available sheet modes.
-   * @enum {number}
-   */
-  static MODES = {
-    PLAY: 1,
-    EDIT: 2
-  };
-  /**
-   * @typedef {object} SheetTabDescriptor
-   * @property {string} tab     The tab key.
-   * @property {string} label   The tab label's localization key.
-   * @property {string} [icon]  A font-awesome icon.
-   * @property {string} [svg]   An SVG icon.
-   */
-
-  /**
-   * Sheet tabs.
-   * @type {SheetTabDescriptor[]}
-   */
+  static MODES = { PLAY: 1, EDIT: 2 };
+  
   static TABS = [
     { tab: "details", label: "HTBAH.Details", icon: "fas fa-cog" },
     { tab: "inventory", label: "HTBAH.Inventory", svg: "backpack" },
@@ -118,31 +80,20 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
     { tab: "biography", label: "HTBAH.Biography", icon: "fas fa-feather" }
   ];
 
-  /**
-   * The mode the sheet is currently in.
-   * @type {ActorSheet.MODES}
-   * @protected
-   */
   _mode = this.constructor.MODES.PLAY;
 
-  /** @override */
   get template() {
     return `systems/how-to-be-a-hero/templates/actor/actor-${this.actor.type}-sheet.hbs`;
   }
-  
-  /* -------------------------------------------- */
 
   _createTabHandlers() {
-    return this.options.tabs.map(t => {
-      const tabOptions = foundry.utils.mergeObject({
-        navSelector: ".tabs",
-        contentSelector: ".tab-body",
-        initial: "details",
-        group: "primary",
-        callback: this._onChangeTab.bind(this)
-      }, t);
-      return new TabsHtbah(tabOptions);
-    });
+    return this.options.tabs.map(t => new TabsHtbah(foundry.utils.mergeObject({
+      navSelector: ".tabs",
+      contentSelector: ".tab-body",
+      initial: "details",
+      group: "primary",
+      callback: this._onChangeTab.bind(this)
+    }, t)));
   }
 
   /* -------------------------------------------- */
@@ -278,29 +229,23 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 
 /** @override */
 async getData(options) {
-  try {
-    const context = await super.getData(options);
-    //context.activeTab = this._activeTab;
+  const context = await super.getData(options);
   
-    this._prepareBasicContext(context, options);
-    this._preparePortraitData(context);
-    this._prepareHealthData(context);
-    this._prepareActorData(context);
+  await Promise.all([
+    this._prepareBasicContext(context, options),
+    this._preparePortraitData(context),
+    this._prepareHealthData(context),
+    this._prepareActorData(context),
+    this._prepareHeaderItems().then(items => context.headerItems = items),
+    this._prepareItemsAndEffects(context)
+  ]);
 
-    // Items, Effects and Conditions
-    await this._prepareItemsAndEffects(context);
-    
-    // Favorites - only prepare for character type actors
-    if (this.actor.type === "character") {
-      context.favorites = await this._prepareFavorites();
-      context.favorites.sort((a, b) => a.sort - b.sort);
-    }
-
-    return context;
-  } catch (error) {
-    console.error('Error in getData:', error);
-    throw error;
+  if (this.actor.type === "character") {
+    context.favorites = await this._prepareFavorites();
+    context.favorites.sort((a, b) => a.sort - b.sort);
   }
+
+  return context;
 }
 
 /**
@@ -387,6 +332,48 @@ _prepareActorData(context) {
 }
 
 /**
+ * Get the current header items for the character
+ * @returns {Promise<Object>}
+ * @protected
+ */
+async _prepareHeaderItems() {
+  const headerItems = {
+    skill: null,
+    weapon: null
+  };
+
+  // Get the stored header item IDs from flags
+  const skillId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+  const weaponId = this.actor.getFlag("how-to-be-a-hero", "headerWeapon");
+
+  if (skillId) {
+    const item = this.actor.items.get(skillId);
+    if (item) {
+      headerItems.skill = {
+        id: item.id,
+        name: item.name,
+        img: item.img,
+        type: item.type
+      };
+    }
+  }
+
+  if (weaponId) {
+    const item = this.actor.items.get(weaponId);
+    if (item) {
+      headerItems.weapon = {
+        id: item.id,
+        name: item.name,
+        img: item.img,
+        type: item.type
+      };
+    }
+  }
+
+  return headerItems;
+}
+
+/**
  * Prepares items and effects for the context
  * @param {SheetContext} context
  */
@@ -397,6 +384,7 @@ async _prepareItemsAndEffects(context) {
     await this._prepareCharacterData(context);
     await this._prepareItems(context);
   } else if (actorData.type === 'npc') {
+    await this._prepareNPCData(context);
     await this._prepareItems(context);
   }
   
@@ -474,6 +462,50 @@ async _prepareEffects(context) {
        v.label = game.i18n.localize(CONFIG.HTBAH.talents[k].label) ?? k;
      }
   }
+  
+  /**
+   * Organize and classify Items for Character sheets.
+   *
+   * @param {Object} actorData The actor to prepare.
+   *
+   * @return {undefined}
+   */
+  _prepareNPCData(context) {
+    //super._prepareCharacterData();
+    //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
+      //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
+    //}
+    // Handle talent scores
+    // Talent Scores
+    context.talentRows = Object.entries(context.system.baseattributes.talents).reduce((obj, [k, talent]) => {
+      talent.key = k;
+      talent.abbr = game.i18n.localize(CONFIG.HTBAH.talents[k]?.abbreviation) ?? "";
+      talent.long = game.i18n.localize(CONFIG.HTBAH.talents[k]?.long) ?? "";
+      //talent.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
+      //talent.mod = Math.abs(ability.mod);
+      talent.baseValue = context.system.baseattributes.talents[k]?.value ?? 0;
+      switch (k) {
+        case 'knowledge':
+            obj.knowledge.push(talent);
+            break;
+        case 'action':
+            obj.action.push(talent);
+            break;
+        case 'social':
+            obj.social.push(talent);
+            break;
+        default:
+            // Handle talents that do not fit into any category if necessary
+            break;
+      }
+      return obj;
+    }, { knowledge: [], action: [], social: []  });
+    context.talentRows.optional = Object.keys(CONFIG.HTBAH.talents).length - 6;
+    for (let [k, v] of Object.entries(context.system.baseattributes.talents)) {
+       v.label = game.i18n.localize(CONFIG.HTBAH.talents[k].label) ?? k;
+     }
+  }
+
   /**
    * Organize and classify Items for Character sheets.
    *
@@ -608,7 +640,7 @@ async _prepareEffects(context) {
   _getItemSubtitle(item) {
     switch(item.type) {
       case 'weapon':
-        return `${item.system.roll.diceNum}${item.system.roll.diceSize}${item.system.roll.diceBonus}`;
+        return `${item.system.formula}`;
       case 'armor':
         return `Armor: ${item.system.armor}`;
       case 'tool':
@@ -639,78 +671,75 @@ async _prepareEffects(context) {
   }
 
 /* -------------------------------------------- */
-/*  Favorites                                   */
+/*  Drop handling                               */
 /* -------------------------------------------- */
-
-_onDragOver(event) {
-  event.preventDefault();
-  event.dataTransfer.dropEffect = 'move';
-}
-/* -------------------------------------------- */
-
-/** @inheritDoc */
-_onDragStart(event) {
-  requestAnimationFrame(() => game.tooltip.deactivate());
-  game.tooltip.deactivate();
-
-  const li = event.currentTarget;
-  const item = this.actor.items.get(li.dataset.itemId);
+/** @override */
+_onDropItem(event, data) {
+  if (!event.target.closest(".favorites")) return super._onDropItem(event, data);
   
-  if (item) {
-    const dragData = {
-      type: "Item",
-      uuid: item.uuid,
-      data: item.toObject(),
-      htbah: { action: "favorite", type: "item", id: item.id }
-    };
-    event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
-  } else {
-    return super._onDragStart(event);
-  }
+  // For favorites, just store the reference
+  event.preventDefault();
+  const itemId = data.uuid.split('.').pop();
+  return this._onDropFavorite(event, { type: "item", id: itemId });
 }
 
-/* -------------------------------------------- */
-
-/** @inheritDoc */
-async _onDrop(event) {
+/**
+ * Handle dropping an item in a header slot
+ * @param {DragEvent} event - The drop event
+ * @param {string} dropZone - The drop zone identifier ("skill" or "weapon")
+ * @returns {Promise<void>}
+ * @private
+ */
+async _onHeaderDrop(event, dropZone) {
   event.preventDefault();
-  
-  if (!event.target.closest(".favorites")) return super._onDrop(event);
   
   let data;
   try {
     data = JSON.parse(event.dataTransfer.getData("text/plain"));
   } catch(e) {
-    console.error("Failed to parse drag data:", e);
-    return;
+    return false;
+  }
+
+  // Validate the drop
+  if (data.type !== "Item") return false;
+
+  const item = await Item.implementation.fromDropData(data);
+  if (!item) return false;
+
+  // Validate item type based on drop zone
+  if (dropZone === "skill" && !["knowledge", "social", "action"].includes(item.type)) {
+    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlySkillsAllowed"));
+    return false;
   }
   
-  const { action, type, id } = data.htbah ?? {};
-  if (action === "favorite" && type === "item") return this._onDropFavorite(event, { type, id });
-  
-  return super._onDrop(event);
+  if (dropZone === "weapon" && item.type !== "weapon") {
+    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyWeaponsAllowed"));
+    return false;
+  }
+  await this._setHeaderItem(dropZone, item.id);
 }
 
-/* -------------------------------------------- */
-
-/** @inheritDoc */
-async _onDropItem(event, data) {
-  if ( !event.target.closest(".favorites") ) return super._onDropItem(event, data);
-  const item = await Item.implementation.fromDropData(data);
-  if ( item?.parent !== this.actor ) return super._onDropItem(event, data);
-  const uuid = item.getRelativeUUID(this.actor);
-  return this._onDropFavorite(event, { type: "item", id: uuid });
+/**
+ * Set an item as a header item
+ * @param {string} slot - The header slot ("skill" or "weapon")
+ * @param {string} itemId - The item ID
+ * @returns {Promise<Actor>}
+ * @private
+ */
+async _setHeaderItem(slot, itemId) {
+  const flagKey = slot === "skill" ? "headerSkill" : "headerWeapon";
+  return this.actor.setFlag("how-to-be-a-hero", flagKey, itemId);
 }
 
-/* -------------------------------------------- */
-
-/** @inheritDoc */
-async _onDropActiveEffect(event, data) {
-  if ( !event.target.closest(".favorites") ) return super._onDropActiveEffect(event, data);
-  const effect = await ActiveEffect.implementation.fromDropData(data);
-  if ( effect.target !== this.actor ) return super._onDropActiveEffect(event, data);
-  const uuid = effect.getRelativeUUID(this.actor);
-  return this._onDropFavorite(event, { type: "effect", id: uuid });
+/**
+ * Remove an item from a header slot
+ * @param {string} slot - The header slot ("skill" or "weapon")
+ * @returns {Promise<Actor>}
+ * @private
+ */
+async _removeHeaderItem(slot) {
+  const flagKey = slot === "skill" ? "headerSkill" : "headerWeapon";
+  return this.actor.unsetFlag("how-to-be-a-hero", flagKey);
 }
 
 /* -------------------------------------------- */
@@ -722,16 +751,20 @@ async _onDropActiveEffect(event, data) {
  * @returns {Promise<ActorHTBAH>|void}
  * @protected
  */
-_onDropFavorite(event, favorite) {
-  if (this.actor.system.hasFavorite(favorite.id)) return this._onSortFavorites(event, favorite.id);
-  
-  const item = this.actor.items.get(favorite.id);
-  if (item) {
-    return this.actor.system.addFavorite({
-      type: "item",
-      id: item.uuid
-    });
+async _onDropFavorite(event, favorite) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  // Check if it's already a favorite
+  if (this.actor.system.hasFavorite(favorite.id)) {
+    return this._onSortFavorites(event, favorite.id);
   }
+
+  // Add as favorite using just the item ID
+  return this.actor.system.addFavorite({
+    type: "item",
+    id: `Actor.${this.actor.id}.Item.${favorite.id}` // Use full UUID format
+  });
 }
 
 /* -------------------------------------------- */
@@ -757,25 +790,34 @@ _onRemoveFavorite(event) {
  * @returns {Promise<ActorHTBAH>|void}
  * @protected
  */
-_onSortFavorites(event, srcId) {
+async _onSortFavorites(event, srcId) {
   const dropTarget = event.target.closest("[data-favorite-id]");
-  if ( !dropTarget ) return;
-  let source;
-  let target;
+  if (!dropTarget) return;
   const targetId = dropTarget.dataset.favoriteId;
-  if ( srcId === targetId ) return;
-  const siblings = this.actor.system.favorites.filter(f => {
-    if ( f.id === targetId ) target = f;
-    else if ( f.id === srcId ) source = f;
-    return f.id !== srcId;
-  });
+  if (srcId === targetId) return;
+
+  // Wait for all favorites to be resolved
+  const favorites = await Promise.all(this.actor.system.favorites.map(async f => {
+    if (f.id === targetId || f.id === srcId) {
+      const resolved = await fromUuid(f.id);  // Changed from fromUuidSync
+      return { ...f, resolved };
+    }
+    return f;
+  }));
+
+  const source = favorites.find(f => f.id === srcId);
+  const target = favorites.find(f => f.id === targetId);
+  const siblings = favorites.filter(f => f.id !== srcId);
+
   const updates = SortingHelpers.performIntegerSort(source, { target, siblings });
-  const favorites = this.actor.system.favorites.reduce((map, f) => map.set(f.id, { ...f }), new Map());
-  for ( const { target, update } of updates ) {
-    const favorite = favorites.get(target.id);
+  const favoritesMap = favorites.reduce((map, f) => map.set(f.id, { ...f }), new Map());
+  
+  for (const { target, update } of updates) {
+    const favorite = favoritesMap.get(target.id);
     foundry.utils.mergeObject(favorite, update);
   }
-  return this.actor.update({ "system.favorites": Array.from(favorites.values()) });
+
+  return this.actor.update({ "system.favorites": Array.from(favoritesMap.values()) });
 }
 
 /* -------------------------------------------- */
@@ -786,12 +828,49 @@ _onSortFavorites(event, srcId) {
  * @returns {Promise|void}
  * @protected
  */
-_onUseFavorite(event) {
+async _onUseFavorite(event) {
   const { favoriteId } = event.currentTarget.closest("[data-favorite-id]").dataset;
-  const favorite = fromUuidSync(favoriteId, { relative: this.actor });
-  if ( favorite instanceof HowToBeAHeroItemBase ) return favorite.use({}, { event });
-  if ( favorite instanceof ActiveEffect ) return favorite.update({ disabled: !favorite.disabled });
+  const favorite = await fromUuid(favoriteId, { relative: this.actor });  // Changed from fromUuidSync
+  if (favorite instanceof HowToBeAHeroItemBase) return favorite.use({}, { event });
+  if (favorite instanceof ActiveEffect) return favorite.update({ disabled: !favorite.disabled });
 }
+  /* -------------------------------------------- */
+
+  /**
+   * Get favorite data for a specific type and ID
+   * @param {string} type - The type of favorite
+   * @param {string} id - The ID of the favorite
+   * @returns {Promise<Object|null>} The favorite data
+   * @private
+   */
+  async _getFavoriteData(type, id) {
+    // Handle different types of favorites
+    switch(type) {
+      case 'effect':
+        const effect = await fromUuid(id);
+        if (!effect) return null;
+        return {
+          img: effect.icon,
+          title: effect.label,
+          subtitle: effect.description,
+          toggle: !effect.disabled
+        };
+        
+      default:
+        const item = await fromUuid(id);
+        if (!item) return null;
+        return {
+          img: item.img,
+          title: item.name,
+          subtitle: this._getItemSubtitle(item),
+          value: item.system.value,
+          uses: item.system.uses,
+          quantity: item.system.quantity,
+          toggle: item.system.equipped !== undefined ? item.system.equipped : undefined
+        };
+    }
+  }
+
   /* -------------------------------------------- */
 
   /**
@@ -799,47 +878,45 @@ _onUseFavorite(event) {
    * @returns {Promise<object>}
    * @protected
    */
-  async _prepareFavorites() {  // Get the base actor if this is a token actor
-    const baseActor = this.actor.isToken ? game.actors.get(this.actor.id.split('.')[0]) : this.actor;
-    
-    return baseActor.system.favorites.reduce(async (arr, f) => {
+  async _prepareFavorites() {
+    const favoritePromises = this.actor.system.favorites.map(async f => {
       const { id, type, sort } = f;
-      const favorite = fromUuidSync(id, { relative: this.actor });
-      if ( !favorite && ((type === "item") || (type === "effect")) ) return arr;
-      arr = await arr;
+      const favorite = await fromUuid(id);
+      if (!favorite && ((type === "item") || (type === "effect"))) return null;
   
       let data;
-      if ( type === "item" ) data = await favorite.system.getFavoriteData();
-      else if ( type === "effect" ) data = await favorite.getFavoriteData();
+      if (type === "item") data = await favorite.system.getFavoriteData();
+      else if (type === "effect") data = await favorite.getFavoriteData();
       else data = await this._getFavoriteData(type, id);
-      if ( !data ) return arr;
+      if (!data) return null;
   
       const { img, title, subtitle, value, uses, quantity, modifier, passive, save, range, reference, toggle, suppressed, level } = data;
   
       const css = [];
-      if ( uses ) css.push("uses");
-      else if ( modifier !== undefined ) css.push("modifier");
-      else if ( save?.dc ) css.push("save");
-      else if ( value !== undefined ) css.push("value");
+      if (uses) css.push("uses");
+      else if (modifier !== undefined) css.push("modifier");
+      else if (save?.dc) css.push("save");
+      else if (value !== undefined) css.push("value");
   
-      if ( toggle === false ) css.push("disabled");
-      if ( uses?.max > 100 ) css.push("uses-sm");
-      if ( modifier !== undefined ) {
+      if (toggle === false) css.push("disabled");
+      if (uses?.max > 100) css.push("uses-sm");
+      if (modifier !== undefined) {
         const value = Number(modifier.replace?.(/\s+/g, "") ?? modifier);
-        if ( !isNaN(value) ) modifier = { abs: Math.abs(value), sign: value < 0 ? "-" : "+" };
+        if (!isNaN(value)) modifier = { abs: Math.abs(value), sign: value < 0 ? "-" : "+" };
       }
   
       const rollableClass = [];
-      if ( this.isEditable && (type !== "slots") ) rollableClass.push("rollable");
-      if ( type === "skill" ) rollableClass.push("skill-name");
-      else if ( type === "tool" ) rollableClass.push("tool-name");
+      if (this.isEditable && (type !== "slots")) rollableClass.push("rollable");
+      if (type === "skill") rollableClass.push("skill-name");
+      else if (type === "tool") rollableClass.push("tool-name");
   
-      if ( suppressed ) subtitle = game.i18n.localize("DND5E.Suppressed");
-      arr.push({
+      if (suppressed) subtitle = game.i18n.localize("DND5E.Suppressed");
+      
+      return {
         id, img, type, title, value, uses, sort, save, modifier, passive, range, reference, suppressed, level,
         itemId: type === "item" ? favorite.id : null,
         effectId: type === "effect" ? favorite.id : null,
-        parentId: (type === "effect") && (favorite.parent !== favorite.target) ? favorite.parent.id: null,
+        parentId: (type === "effect") && (favorite.parent !== favorite.target) ? favorite.parent.id : null,
         preparationMode: type === "slots" ? id === "pact" ? "pact" : "prepared" : null,
         key: (type === "skill") || (type === "tool") ? id : null,
         toggle: toggle === undefined ? null : { applicable: true, value: toggle },
@@ -848,9 +925,12 @@ _onUseFavorite(event) {
         css: css.filterJoin(" "),
         bareName: type === "slots",
         subtitle: Array.isArray(subtitle) ? subtitle.filterJoin(" &bull; ") : subtitle
-      });
-      return arr;
-    }, []);
+      };
+    });
+  
+    // Wait for all promises to resolve and filter out null values
+    const resolvedFavorites = (await Promise.all(favoritePromises)).filter(f => f !== null);
+    return resolvedFavorites;
   }
 
   /**
@@ -885,153 +965,135 @@ _onUseFavorite(event) {
   }
 
   /* -------------------------------------------- */
+  /* activateListener                             */
+  /* -------------------------------------------- */
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
-
-    html.find(".pips[data-prop]").on("click", this._onTogglePip.bind(this));
-    html.find("[data-action]").on("click", this._onAction.bind(this));
-    html.find("[data-item-id][data-action]").on("click", this._onItemAction.bind(this));
-    html.find(".rollable:is(.talent-check)").on("click", this._onRollTalent.bind(this));
-    html.find('.item-roll').click(this._onItemRoll.bind(this));
-    //html.find("proficiency-cycle").on("change", this._onChangeInput.bind(this));
-    //html.find(".sidebar .collapser").on("click", this._onToggleSidebar.bind(this));
-    this.form.querySelectorAll(".item-tooltip").forEach(this._applyItemTooltips.bind(this));
-    this.form.querySelectorAll("[data-reference-tooltip]").forEach(this._applyReferenceTooltips.bind(this));
     
-    // Prevent default middle-click scrolling when locking a tooltip.
-    this.form.addEventListener("pointerdown", event => {
-      if ( (event.button === 1) && document.getElementById("tooltip")?.classList.contains("active") ) {
-        event.preventDefault();
+    // Common listeners
+    this._activateCommonListeners(html);
+    
+    // Edit mode only listeners
+    if (this.isEditable) {
+      this._activateEditModeListeners(html);
+    }
+
+    // Header roll handlers
+    html.find('.header-item').on('click', ev => {
+      // Don't trigger on remove button clicks
+      if (ev.target.closest('.item-remove')) return;
+      
+      const item = ev.currentTarget;
+      const action = item.dataset.action;
+      
+      switch(action) {
+        case 'rollSkill':
+          return this._onRollHeaderSkill(ev);
+        case 'rollWeapon':
+          return this._onRollHeaderWeapon(ev);
       }
     });
 
-    // Apply special context menus for items outside inventory elements
-    /*
-    const featuresElement = html[0].querySelector(`[data-tab="features"] ${this.options.elements.inventory}`);
-    if ( featuresElement ) new ContextMenu5e(html, ".pills-lg [data-item-id]", [], {
-      onOpen: (...args) => featuresElement._onOpenContextMenu(...args)
-    });
-    */
+    // Initiative roll handler
+    html.find('.header-stat-column .fa-dice-d20').parent().on('click', this._onRollInitiative.bind(this));
 
-    if ( this.isEditable ) {
-      html.find(".meter > .hit-points").on("click", event => this._toggleEditHP(event, true));
-      html.find(".meter > .hit-points > input").on("blur", event => this._toggleEditHP(event, false));
-      html.find(".create-child").on("click", this._onCreateChild.bind(this));
-    }
-
-    html.find('[data-action="incrementBonus"], [data-action="decrementBonus"]').click(this._onItemBonusClick.bind(this));
-    html.find('.bonus-input-group input[name="system.roll.diceBonus"]').change(this._onBonusInputChange.bind(this));
-
-    html.find(".tab.details .item-action").on("click", this._onItemAction.bind(this));
-
-    // Add listener for eureka input changes
-    html.find('.eureka-column input').on('change', this._onChangeEureka.bind(this));
-    
-    // Render the item sheet for viewing/editing prior to the editable check.
-    html.on('click', '.item-edit', (ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.sheet.render(true);
-    });
-
-    // -------------------------------------------------------------
-    // Everything below here is only needed if the sheet is editable
-    if (!this.isEditable) return;
-
-    // Add Inventory Item
-    html.on('click', '.item-create', this._onItemCreate.bind(this));
-
-    // Delete Inventory Item
-    html.on('click', '.item-delete', (ev) => {
-      const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
-      item.delete();
-      li.slideUp(200, () => this.render(false));
-    });
-    
-    // Add this new listener for condition toggling
-    /*
-    html.find('.conditions-list .condition').on('click', async (event) => {
-      event.preventDefault();
-      const conditionId = event.currentTarget.dataset.conditionId;
-      if (game.howtobeahero?.managers?.conditions) {
-        await game.howtobeahero.managers.conditions.toggleCondition(this.actor, conditionId);
-      } else {
-        console.warn('HowToBeAHero | ConditionManager not available.');
-      }
-    });
-    */
-    // Modify effect-control handler to not handle conditions
-    /*
-    html.find(".effect-control").click(ev => {
-      if (ev.currentTarget.dataset.action === 'toggleCondition') {
-        const row = ev.currentTarget.closest("li");
-        const effectId = row.dataset.effectId;
-        return;
-      }
-      game.htbah.effectsManager.onManageActiveEffect(ev, this.actor);
-    });
-    */
-    // Rollable abilities.
-    html.on('click', '.rollable', this._onRoll.bind(this));
-
-    // Drag events for macros.
-    if (this.actor.isOwner) {
-      const dragHandler = ev => this._onDragStart(ev);
-    
-      // Set up drag for items
-      html.find('li.item').each((i, li) => {
-        if (li.classList.contains('inventory-header')) return;
-        li.setAttribute('draggable', true);
-        li.addEventListener('dragstart', dragHandler, false);
-      });
-    }
-    // Add drop event listener to favorites area
-    const favoritesArea = html.find('.favorites');
-    if (favoritesArea.length) {
-      favoritesArea[0].addEventListener('dragover', this._onDragOver.bind(this));
-    }
-    
-    html.find('.deletion-control[data-action="removeFavorite"]').on('click', this._onRemoveFavorite.bind(this));
-
-    //tab-logic
-    
     // Initialize tabs
     this._tabs = this._createTabHandlers();
-    // Activate the initial tab
     this._tabs.forEach(tabSet => {
       tabSet.activate(tabSet.active);
       this._onChangeTab(null, tabSet, tabSet.active);
     });
   }
 
-  /**
-   * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
-   * @param {Event} event   The originating click event
-   * @private
-   */
-  async _onItemCreate(event) {
-    event.preventDefault();
-    const header = event.currentTarget;
-    const type = header.dataset.type;
-    
-    // Prepare the item data
-    const itemData = {
-      name: game.i18n.format("HTBAH.ItemNew", {type: game.i18n.localize(`ITEM.Type${type.capitalize()}`)}),
-      type: type,
-      img: Item.DEFAULT_ICON
+  _activateCommonListeners(html) {
+    const commonSelectors = {
+      ".pips[data-prop]": this._onTogglePip,
+      "[data-action]": this._onAction,
+      "[data-action]": this._onItemAction,
+      ".rollable:is(.talent-check)": this._onRollTalent,
+      ".item-roll": this._onItemRoll,
+      ".create-child": this._onCreateChild
     };
-  
-    // Create the item with default data structure
-    const item = await Item.create(itemData, {parent: this.actor});
+
+    Object.entries(commonSelectors).forEach(([selector, handler]) => {
+      html.find(selector).on("click", handler.bind(this));
+    });
     
-    // Open the item sheet
-    item.sheet.render(true);
-    
-    return item;
+    // Add bonus input change handlers
+    html.find('.item-bonus input[name="system.roll.diceBonus"]').on('change', this._onBonusInputChange.bind(this));
+
+    // Apply tooltips
+    this._initializeTooltips();
   }
+
+  _activateEditModeListeners(html) {
+    // Add drag and drop functionality
+    if (this.actor.isOwner) {
+      this._initializeDragDrop(html);
+    }
+
+    // Favorites and header item management
+    html.find('.deletion-control[data-action="removeFavorite"]').on('click', this._onRemoveFavorite.bind(this));
+    html.find('.item-remove[data-action="removeSkill"]').click(event => {
+      event.preventDefault();
+      this._removeHeaderItem("skill");
+    });
+    
+    html.find('.item-remove[data-action="removeWeapon"]').click(event => {
+      event.preventDefault();
+      this._removeHeaderItem("weapon");
+    });
+  }
+
+  _initializeTooltips() {
+    this.form.querySelectorAll(".item-tooltip").forEach(this._applyItemTooltips.bind(this));
+    this.form.querySelectorAll("[data-reference-tooltip]").forEach(this._applyReferenceTooltips.bind(this));
+  }
+
+  _initializeDragDrop(html) {
+    html.find('li.item').each((i, li) => {
+      if (!li.classList.contains('inventory-header')) {
+        li.setAttribute('draggable', true);
+        li.addEventListener('dragstart', this.dragDropHandler.onDragStart.bind(this.dragDropHandler), false);
+      }
+    });
+
+    html.find('.favorites, .header-stat-column').each((i, zone) => {
+      zone.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
+      zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
+    });
+  }
+
+  async _onRollInitiative(event) {
+    event.preventDefault();
+    return this.actor.rollInitiative({createCombatants: true});
+  }
+  
+  async _onRollHeaderSkill(event) {
+    event.preventDefault();
+    const skillId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+    if (!skillId) return;
+    
+    const item = this.actor.items.get(skillId);
+    if (!item) return;
+    
+    return item.roll();
+  }
+  
+  async _onRollHeaderWeapon(event) {
+    event.preventDefault();
+    const weaponId = this.actor.getFlag("how-to-be-a-hero", "headerWeapon");
+    if (!weaponId) return;
+    
+    const item = this.actor.items.get(weaponId);
+    if (!item) return;
+    
+    return item.roll();
+  }
+  /* -------------------------------------------- */
+
   /**
    * Clamps a bonus value between -99 and 99
    * @param {number} value - The value to clamp
@@ -1054,17 +1116,26 @@ _onUseFavorite(event) {
     }
   }
 
+  // Updated _onBonusInputChange method
   async _onBonusInputChange(event) {
-    const itemId = event.currentTarget.closest('[data-item-id]').dataset.itemId;
+    event.preventDefault();
+    const input = event.currentTarget;
+    const itemId = input.closest('[data-item-id]')?.dataset.itemId;
+    if (!itemId) return;
+
     const item = this.actor.items.get(itemId);
-    const newBonus = this._clampBonus(Number(event.target.value));
-    
-    if (!isNaN(newBonus)) {
-      await item.update({"system.roll.diceBonus": newBonus});
-      
-      // Update the input value to show the clamped value
-      event.target.value = newBonus;
-    }
+    if (!item) return;
+
+    const newValue = Math.clamped(Number(input.value) || 0, -99, 99);
+    if (isNaN(newValue)) return;
+
+    // Update the item with the new bonus value
+    await item.update({
+        "system.roll.diceBonus": newValue
+    });
+
+    // Update the input value to show the clamped value
+    input.value = newValue;
   }
   
   /**
@@ -1225,21 +1296,53 @@ _onUseFavorite(event) {
 
   /* -------------------------------------------- */
 
-  /**
-   * Toggle editing hit points.
-   * @param {PointerEvent} event  The triggering event.
-   * @param {boolean} edit        Whether to toggle to the edit state.
-   * @protected
-   */
-  _toggleEditHP(event, edit) {
-    const target = event.currentTarget.closest(".hit-points");
-    const label = target.querySelector(":scope > .label");
-    const input = target.querySelector(":scope > input");
-    label.hidden = edit;
-    input.hidden = !edit;
-    if ( edit ) input.focus();
-  }
+/**
+ * Toggle editing hit points.
+ * @param {PointerEvent} event  The triggering event.
+ * @protected
+ */
+_toggleEditHP(event, edit) {
+  // If in editable mode, we don't need to toggle anything
+  if (this._mode === this.constructor.MODES.EDIT) return;
 
+  const hitPointsSection = event.currentTarget;
+  if (!hitPointsSection) return;
+
+  // Get the first child which should be the progress div
+  const progress = hitPointsSection.children[0];
+  if (!progress) return;
+
+  const label = progress.querySelector(".label");
+  const input = progress.querySelector("input[hidden]");
+  
+  if (!label || !input) return;
+
+  // Toggle visibility for non-editable mode
+  if (edit) {
+    label.hidden = true;
+    input.hidden = false;
+    input.focus();
+  } else {
+    label.hidden = false;
+    input.hidden = true;
+    
+    // Update the displayed value in the label if it changed
+    const valueElement = label.querySelector('.value');
+    if (valueElement) {
+      valueElement.textContent = input.value;
+
+      // Update actor if value changed
+      const currentValue = Number(input.value);
+      const oldValue = this.actor.system.baseattributes.health.value;
+      if (currentValue !== oldValue) {
+        this.actor.update({
+          "system.baseattributes.health.value": currentValue
+        });
+      }
+    }
+  }
+}
+  
   /**
    * Handle the user toggling the sidebar collapsed state.
    * @protected

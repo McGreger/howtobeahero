@@ -46,23 +46,20 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
     this._updateArmorValue();
   }
 
-  /* -------------------------------------------- */
-
   _updateArmorValue() {
     const equippedArmor = this.parent.items.filter(item => 
       item.type === "armor" && item.system.equipped);
-    
     const totalArmorValue = equippedArmor.reduce((sum, armor) => 
       sum + (armor.system.armor || 0), 0);
-
     this.parent.system.baseattributes.armor.value = totalArmorValue;
   }
 
-  /* -------------------------------------------- */
-
   addFavorite(favorite) {
     const fullUUID = this._getFullUUID(favorite.id);
-    if (this.hasFavorite(fullUUID)) return;
+    
+    if (this.hasFavorite(fullUUID)) {
+      return;
+    }
 
     const favorites = this.favorites.concat([{
       type: favorite.type,
@@ -85,8 +82,11 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
   }
 
   _getFullUUID(id) {
-    if (id.startsWith("Actor.")) return id;
-    return `Actor.${this.parent.id}.Item.${id.replace(".Item.", "")}`;
+    if (id.includes(".")) {
+      return id;
+    }
+    
+    const actorId = this.parent.isToken ? this.parent.token.actor.id : this.parent.id;
+    return `Actor.${actorId}.Item.${id}`;
   }
-
 }

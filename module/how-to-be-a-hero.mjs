@@ -16,7 +16,8 @@ import { HOW_TO_BE_A_HERO } from './helpers/config.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 // Import Dice class
-import { D100Roll } from './dice/d100-roll.mjs';
+import { D100Roll } from './dice/rolls.mjs';
+import { D10Roll } from './dice/rolls.mjs';
 // Import Html custom element classes
 import * as element from './components/_module.mjs';
 
@@ -83,8 +84,10 @@ Hooks.once('init', function () {
 
   // Set default token configuration for different actor types
   CONFIG.Actor.defaultTypes = ["character", "npc"];
+  
+  // Set default token configuration for all actor types
   CONFIG.Actor.prototypeToken = {
-    actorLink: false,  // Default for new actors
+    actorLink: true,  // Changed from false to true to ensure all tokens are linked by default
     displayName: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
     displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
     disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
@@ -116,7 +119,7 @@ Hooks.once('init', function () {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: '1d100 + @talents.act.mod',
+    formula: '1d10 + @baseattributes.talents.action.totalValue',
     decimals: 2,
   };
 
@@ -150,9 +153,11 @@ Hooks.once('init', function () {
   console.log("Item data models:", CONFIG.Item.dataModels);
 
   CONFIG.Dice.D100Roll = D100Roll;
+  CONFIG.Dice.D10Roll = D10Roll;
   
   // Register Roll Extensions
   CONFIG.Dice.rolls.push(D100Roll);
+  CONFIG.Dice.rolls.push(D10Roll);
 
   // Initialize tooltips
   game.howtobeahero.tooltips = new Tooltips();
@@ -199,7 +204,12 @@ Hooks.once('ready', function () {
       return false;
     }
   }, { priority: -1 }); // Lower priority to run first
-  
+
+  Hooks.on("preCreateToken", (document, data, options, userId) => {
+    // Force actorLink to true for all new tokens
+    document.updateSource({actorLink: true});
+  });
+
   // Register item update hook
   Hooks.on("updateItem", (item, changes, options, userId) => {
     if (item instanceof CONFIG.Item.dataModels.armor && "system.equipped" in changes) {
@@ -208,20 +218,7 @@ Hooks.once('ready', function () {
       }
     }
   });
-
-  Hooks.on("preCreateActor", (actor, data, options, userId) => {
-  // Get the type-specific prototype token settings
-  const typeDefaults = CONFIG.Actor.typeDefaults[actor.type]?.prototypeToken;
-  if (typeDefaults) {
-    // Apply the type-specific token settings
-    actor.updateSource({
-      prototypeToken: foundry.utils.mergeObject(
-        foundry.utils.deepClone(CONFIG.Actor.prototypeToken),
-        typeDefaults
-      )
-    });
-  }
-});
+  
   game.howtobeahero.managers.conditions.registerAllConditions();
 });
 
@@ -293,17 +290,6 @@ async function rollItemMacro(itemUuid) {
   if (!item.parent) {
     const actor = _getMacroSpeaker();
     if (!actor) return ui.notifications.warn(game.i18n.localize("HTBAH.MacroNoActor"));
-    
-    // Create temporary item
-    const tempItem = await actor.createEmbeddedDocuments("Item", [{
-      ...item.toObject(),
-      _id: null
-    }]);
-    
-    if (tempItem.length > 0) {
-      await tempItem[0].roll();
-      await actor.deleteEmbeddedDocuments("Item", [tempItem[0].id]);
-    }
     return;
   }
 
@@ -315,7 +301,7 @@ async function rollItemMacro(itemUuid) {
  * @param {string} itemUuid
  */
 async function rollActionMacro(itemUuid) {
-  const item = await fromUuidSync(itemUuid);
+  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
   if (!item || item.type !== 'action') {
     return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
   }
@@ -327,7 +313,7 @@ async function rollActionMacro(itemUuid) {
  * @param {string} itemUuid
  */
 async function rollSocialMacro(itemUuid) {
-  const item = await fromUuidSync(itemUuid);
+  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
   if (!item || item.type !== 'social') {
     return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
   }
@@ -339,7 +325,7 @@ async function rollSocialMacro(itemUuid) {
  * @param {string} itemUuid
  */
 async function rollKnowledgeMacro(itemUuid) {
-  const item = await fromUuidSync(itemUuid);
+  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
   if (!item || item.type !== 'knowledge') {
     return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
   }

@@ -17,7 +17,7 @@
                 <div class="item-header effect-source">{{ localize "HTBAH.Source" }}</div>
                 <div class="item-header item-controls effect-controls">
                     {{#if info}}
-                    <a class="info-control" data-tooltip="{{ info }}" aria-label="{{ info }}">
+                    <a class="info-control" {{!-- data-tooltip="{{ info }}" --}} aria-label="{{ info }}">
                         <i class="fas fa-circle-question"></i>
                     </a>
                     {{/if}}
@@ -53,13 +53,17 @@
                     {{!-- Effect Source --}}
                     <div class="item-detail effect-source {{#unless source}}empty{{/unless}}">
                         {{#if source}}
+                        {{!-- 
                         {{#if hasTooltip}}
                         <a class="item-tooltip" data-uuid="{{ source.uuid }}" data-tooltip-direction="RIGHT">
                             {{ source.name }}
                         </a>
                         {{else}}
+                        --}}
                         {{ source.name }}
+                        {{!-- 
                         {{/if}}
+                        --}}
                         {{/if}}
                     </div>
 
@@ -68,20 +72,22 @@
 
                         {{#if @root.editable}}
                         {{!-- Editing --}}
-                        <a class="effect-control item-control" data-action="edit" data-tooltip="HTBAH.EffectEdit"
+                        <a class="effect-control item-control" data-action="edit" {{!-- data-tooltip="HTBAH.EffectEdit" --}}
                            aria-label="{{ localize "HTBAH.EffectEdit" }}">
                             <i class="fas fa-pen-to-square"></i>
                         </a>
 
                         {{!-- Deleting --}}
-                        <a class="effect-control item-control" data-action="delete" data-tooltip="HTBAH.EffectDelete"
+                        <a class="effect-control item-control" data-action="delete" {{!-- data-tooltip="HTBAH.EffectDelete" --}}
                            aria-label="{{ localize "HTBAH.EffectDelete" }}">
                             <i class="fas fa-trash"></i>
                         </a>
                         {{else if toggleable}}
                         <a class="effect-control item-control {{#unless disabled}}active{{/unless}}"
                            data-action="toggle"
+                            {{!-- 
                            data-tooltip="{{#if disabled}}HTBAH.EffectEnable{{else}}HTBAH.EffectDisable{{/if}}"
+                           --}}
                            aria-label="{{#if disabled}}{{ localize "HTBAH.EffectEnable" }}{{else}}{{ localize "HTBAH.EffectDisable" }}{{/if}}">
                             {{#if disabled}}
                             <i class="fas fa-toggle-off"></i>
@@ -121,7 +127,7 @@
                 {{#each conditions}}
                 <li class="condition {{#unless disabled}}active{{/unless}} {{#if reference}}content-link{{/if}}"
                     data-action="toggleCondition" data-uuid="{{ reference }}" data-condition-id="{{ id }}"
-                    data-tooltip="<section class=&quot;loading&quot;><i class=&quot;fas fa-spinner fa-spin-pulse&quot;></i></section>">
+                    {{!-- data-tooltip="<section class=&quot;loading&quot;><i class=&quot;fas fa-spinner fa-spin-pulse&quot;></i></section>" --}}>
                     <div class="icon">
                         <htbah-icon src="{{ icon }}"></htbah-icon>
                     </div>

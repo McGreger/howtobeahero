@@ -1,47 +1,63 @@
-{{#*inline "textbox"}}
-    <div class="textbox-half">
-        <h3 class="icon">
-            {{#if icon}}<i class="{{ icon }}"></i>
-            {{~else if svg}}<htbah-icon src="systems/how-to-be-a-hero/ui/icons/svg/{{svg}}.svg"></htbah-icon>{{/if}}
-            <span class="roboto-upper">{{ localize label }}</span>
-        </h3>
-        {{#if @root.editable}}
-        <textarea class="untext" name="{{ name }}">{{ value }}</textarea>
-        {{else}}
-        <p>{{ HTBAH-textFormat value }}</p>
-        {{/if}}
-    </div>
-{{/inline}}
-
 <div class="biography">
-
     {{!-- Characteristics --}}
     <div class="top">
         <ul class="unlist characteristics">
-            {{#each characteristics}}
             <li>
                 <label>
-                    <span class="roboto-upper label">{{ localize label }}</span>
+                    <span class="roboto-upper label">{{ localize "HTBAH.Age" }}</span>
                     {{#if @root.editable}}
-                    <input type="text" name="{{ name }}" value="{{ value }}">
+                    <input type="number" name="system.details.age" value="{{ system.details.age }}" min="0">
                     {{else}}
-                    <span class="value">{{ value }}</span>
+                    <span class="value">{{ system.details.age }}</span>
                     {{/if}}
                 </label>
             </li>
-            {{/each}}
+            <li>
+                <label>
+                    <span class="roboto-upper label">{{ localize "HTBAH.Alignment" }}</span>
+                    {{#if @root.editable}}
+                    <input type="text" name="system.details.alignment" value="{{ system.details.alignment }}">
+                    {{else}}
+                    <span class="value">{{ system.details.alignment }}</span>
+                    {{/if}}
+                </label>
+            </li>
+            <li>
+                <label>
+                    <span class="roboto-upper label">{{ localize "HTBAH.Wealth" }}</span>
+                    {{#if @root.editable}}
+                    <input type="text" name="system.details.wealth" value="{{ system.details.wealth }}">
+                    {{else}}
+                    <span class="value">{{ system.details.wealth }}</span>
+                    {{/if}}
+                </label>
+            </li>
         </ul>
+    </div>
+
+    {{!-- Appearance --}}
+    <div class="middle">
+        <h3 class="icon">
+            <htbah-icon src="systems/how-to-be-a-hero/ui/icons/svg/ink-pot.svg"></htbah-icon>
+            <span class="roboto-upper">{{ localize "HTBAH.Appearance" }}</span>
+        </h3>
+        {{#if @root.editable}}
+        <textarea class="untext" name="system.details.appearance">{{ system.details.appearance }}</textarea>
+        {{else}}
+        <p>{{ system.details.appearance }}</p>
+        {{/if}}
     </div>
 
     {{!-- Biography --}}
     <div class="bottom">
         <h3 class="icon">
-            <i class="fas fa-feather"></i>
             <htbah-icon src="systems/how-to-be-a-hero/ui/icons/svg/ink-pot.svg"></htbah-icon>
             <span class="roboto-upper">{{ localize "HTBAH.Biography" }}</span>
         </h3>
-        {{ editor biographyHTML target="system.details.biography.value" button=false editable=@root.editable
-                  engine="prosemirror" collaborate=false }}
+        {{#if @root.editable}}
+        <textarea class="untext" name="system.details.background">{{ system.details.background }}</textarea>
+        {{else}}
+        <p>{{ system.details.background }}</p>
+        {{/if}}
     </div>
-
 </div>

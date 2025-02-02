@@ -31,6 +31,13 @@ export default class HowToBeAHeroSkill extends HowToBeAHeroItemBase {
       diceSize: new fields.StringField({ initial: "d100" }),
       diceBonus: new fields.NumberField({ initial: 0 })
     })
+
+    schema.rollType = new fields.StringField({
+      required: true,
+      initial: "check",
+      label: "HOW_TO_BE_A_HERO.RollType"
+    });
+    
     schema.formula = new fields.StringField({ blank: true, label: "HOW_TO_BE_A_HERO.Item.Formula"});
   
     return schema

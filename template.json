@@ -75,6 +75,7 @@
       },
       "physical": {
         "quantity": 1,
+        "rollType": "check",
         "formula": ""
       },
       "skill": {
@@ -102,7 +103,12 @@
     "weapon": {
       "templates": ["base", "physical"],
       "weaponType": "",
-      "range": "",
+      "rollType": "damage",
+      "roll": {
+        "diceNum": 1,
+        "diceSize": "d10",
+        "diceBonus": 0
+      },
       "equipped": false
     },
     "armor": {

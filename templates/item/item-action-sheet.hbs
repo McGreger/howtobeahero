@@ -26,7 +26,7 @@
         </div>
         <div class="calculated-value-field">
           <label for="item-calculated-value">Calculated Value:</label>
-          <span id="item-calculated-value">{{item.system.calculatedValue}}</span>
+          <input id="item-calculated-value" type="text" value="{{item.system.calculatedValue}}" disabled />
         </div>
         
         {{!-- Roll Fields --}}
@@ -35,9 +35,9 @@
           <input id="roll-dice-num" name="system.roll.diceNum" type="number" value="{{item.system.roll.diceNum}}" min="1" />
       
           <div class="bonus-controls">
-            <label>Bonus:</label>
+            <label for="roll-dice-bonus">Bonus:</label>
             <div class="bonus-input-group">
-              <input type="number" name="system.roll.diceBonus" value="{{item.system.roll.diceBonus}}" min="-99" max="99">
+              <input id="roll-dice-bonus" type="number" name="system.roll.diceBonus" value="{{item.system.roll.diceBonus}}" min="-99" max="99">
               <i class="fa-solid fa-circle-plus" data-action="incrementBonus"></i>
               <i class="fa-solid fa-circle-minus" data-action="decrementBonus"></i>
             </div>
