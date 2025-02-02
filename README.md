@@ -20,7 +20,11 @@ To install "How to Be a Hero" in FoundryVTT, follow these steps:
    - Alternatively, place the extracted system files into the `Data/systems/` folder of your FoundryVTT installation.  
 
 3. **Start a New Game**  
-   - After installation, create a new world and select **"How to Be a Hero"** as the game system.  
+   - After installation, create a new world and select **"How to Be a Hero"** as the game system.
+---
+
+## Important
+The system is in beta. It is ready for the latest stable version 12.331 of FoundryVTT!
 
 ---
 
