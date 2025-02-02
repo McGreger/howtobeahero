@@ -1291,6 +1291,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-size: var(--font-size-24);
   text-align: center;
   background: none;
+  color: var(--htbah-color-black);
 }
 .how-to-be-a-hero.create-document .document-name:hover,
 .how-to-be-a-hero.create-document .document-name:focus {
