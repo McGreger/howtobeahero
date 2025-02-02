@@ -7,7 +7,6 @@ export default class HowToBeAHeroWeapon extends HowToBeAHeroPhysical {
     const schema = super.defineSchema();
     
     schema.weaponType = new fields.StringField({ blank: true, label: "HOW_TO_BE_A_HERO.Item.WeaponType"});
-    schema.range = new fields.StringField({ blank: true, label: "HOW_TO_BE_A_HERO.Item.Range"});
     schema.equipped = new fields.BooleanField({required: true, label: "HOW_TO_BE_A_HERO.Equipped"});
     
     schema.roll = new fields.SchemaField({
@@ -16,7 +15,31 @@ export default class HowToBeAHeroWeapon extends HowToBeAHeroPhysical {
       diceBonus: new fields.NumberField({ initial: 0 })
     });
 
+    // Add formula field with default value
+    schema.formula = new fields.StringField({ 
+      required: true, 
+      initial: "1d10",
+      label: "HOW_TO_BE_A_HERO.Item.Formula" 
+    });
+
     return schema;
+  }
+
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    
+    // Update formula based on roll data
+    this._updateFormula();
+  }
+
+  _updateFormula() {
+    const roll = this.roll;
+    if (!roll) return;
+
+    const bonusStr = roll.diceBonus > 0 ? `+${roll.diceBonus}` : 
+                    roll.diceBonus < 0 ? roll.diceBonus.toString() : '';
+                    
+    this.formula = `${roll.diceNum}${roll.diceSize}${bonusStr}`;
   }
 
   async richTooltip() {

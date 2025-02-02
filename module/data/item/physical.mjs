@@ -13,7 +13,7 @@ export default class HowToBeAHeroPhysical extends HowToBeAHeroItemBase {
       min: 0 
     });
     schema.formula = new fields.StringField({ 
-      required: true, 
+      required: false, 
       blank: true, 
       label: "HOW_TO_BE_A_HERO.Item.Formula" 
     });

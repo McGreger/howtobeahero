@@ -640,7 +640,7 @@ async _prepareEffects(context) {
   _getItemSubtitle(item) {
     switch(item.type) {
       case 'weapon':
-        return `${item.system.roll.diceNum}${item.system.roll.diceSize}${item.system.roll.diceBonus}`;
+        return `${item.system.formula}`;
       case 'armor':
         return `Armor: ${item.system.armor}`;
       case 'tool':

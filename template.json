@@ -102,7 +102,11 @@
     "weapon": {
       "templates": ["base", "physical"],
       "weaponType": "",
-      "range": "",
+      "roll": {
+        "diceNum": 1,
+        "diceSize": "d10",
+        "diceBonus": 0
+      },
       "equipped": false
     },
     "armor": {
