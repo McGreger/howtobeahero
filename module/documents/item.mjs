@@ -191,52 +191,72 @@ export class HowToBeAHeroItem extends Item {
  * Prepare a data object which defines the data schema used by dice roll commands against this Item
  * @override
  */
-async roll() {
-  const item = this;
-  const actor = this.actor;
-  if (!actor) return;
+  async roll() {
+    const item = this;
+    const actor = this.actor;
+    if (!actor) return;
 
-  const speaker = ChatMessage.getSpeaker({ actor: actor });
-  const rollMode = game.settings.get('core', 'rollMode');
-  const label = `[${item.type}] ${item.name}`;
+    const speaker = ChatMessage.getSpeaker({ actor: actor });
+    const rollMode = game.settings.get('core', 'rollMode');
+    const label = `[${item.type}] ${item.name}`;
 
-  if (!this.system.formula) {
-    ChatMessage.create({
-      speaker: speaker,
-      rollMode: rollMode,
-      flavor: label,
-      content: item.system.description ?? '',
-    });
-  } else {
-    const rollData = this.getRollData();
-    const targetValue = rollData.item.totalValue;
-    const baseValue = rollData.item.calculatedValue;
-    const bonusValue = rollData.item.roll.diceBonus;
-    const inspired = rollData.actor.baseattributes.inspiration.status;
-    const flavor = game.i18n.format("HTBAH.ItemRollPrompt", {itemName: item.name});
-
-    const itemRollData = {
-      formula: rollData.item.formula,
-      data: rollData,
-      title: `${flavor}: ${actor.name}`,
-      flavor,
-      targetValue,
-      baseValue,
-      bonusValue,
-      inspired,
-      messageData: {
+    // Handle non-rollable items
+    if (!this.system.formula) {
+      ChatMessage.create({
         speaker: speaker,
         rollMode: rollMode,
         flavor: label,
-        "flags.howtobeahero.roll": {type: "item", itemId: this.id}
-      }
-    };
+        content: item.system.description ?? ''
+      });
+      return;
+    }
 
-    const roll = await d100Roll(itemRollData);
-    Hooks.callAll("howToBeAHeroItemRolled", this, roll);
-    return roll;
+    const rollData = this.getRollData();
+    const rollType = this.system.rollType || "check"; // "check" or "damage"
+
+    if (rollType === "damage") {
+      const damageData = {
+        label: item.name,
+        critical: false, // This could be determined by previous roll or UI
+        bonus: rollData.item.roll.diceBonus,
+        target: null // This could be set from targeting system
+      };
+
+      return actor.rollDamage(damageData, {
+        speaker: speaker,
+        rollMode: rollMode,
+        flavor: label
+      });
+    } else {
+      // Regular ability check using d100
+      const targetValue = rollData.item.totalValue;
+      const baseValue = rollData.item.calculatedValue;
+      const bonusValue = rollData.item.roll.diceBonus;
+      const inspired = rollData.actor.baseattributes.inspiration.status;
+      const flavor = game.i18n.format("HTBAH.ItemRollPrompt", {itemName: item.name});
+
+      const itemRollData = {
+        formula: rollData.item.formula,
+        data: rollData,
+        title: `${flavor}: ${actor.name}`,
+        flavor,
+        targetValue,
+        baseValue,
+        bonusValue,
+        inspired,
+        messageData: {
+          speaker: speaker,
+          rollMode: rollMode,
+          flavor: label,
+          "flags.howtobeahero.roll": {type: "item", itemId: this.id}
+        }
+      };
+
+      const roll = await d100Roll(itemRollData);
+      Hooks.callAll("howToBeAHeroItemRolled", this, roll);
+      return roll;
+    }
   }
-}
 
 getRollData() {
   const rollData = { 

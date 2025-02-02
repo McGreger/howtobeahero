@@ -1,4 +1,4 @@
-import { d100Roll } from "../dice/dice.mjs";
+import { d100Roll, d10Roll } from "../dice/dice.mjs";
 
 
 export class HowToBeAHeroActor extends Actor {
@@ -73,6 +73,38 @@ export class HowToBeAHeroActor extends Actor {
       }
     }
     return data;
+  }
+
+  async rollDamage(damageData, options={}) {
+    const label = damageData.label || "";
+    const data = this.getRollData();
+    const critical = damageData.critical || false;
+    const bonusValue = damageData.bonus || 0;
+    const inspired = this.system.baseattributes.inspiration.status;
+    const target = damageData.target || null;
+    const flavor = game.i18n.localize("HTBAH.DamageRollPrompt");
+
+    const rollData = {
+      formula: "1d10",
+      data: {
+        actor: data,
+        item: null
+      },
+      title: `${flavor}: ${label}`,
+      flavor,
+      critical,
+      bonusValue,
+      inspiration: inspired,
+      target,
+      messageData: {
+        speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
+        "flags.howtobeahero.roll": {type: "damage", data: damageData}
+      }
+    };
+
+    const roll = await d10Roll(rollData);
+    Hooks.callAll("howToBeAHeroDamageRolled", this, damageData, roll);
+    return roll;
   }
 
   async rollTalent(talentId, options={}) {

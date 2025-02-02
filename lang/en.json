@@ -38,6 +38,15 @@
       "Inactive": "Inactive Effects"
     }
   },
+  
+  "HTBAH.SheetModeEdit": "Edit",
+  "HTBAH.SheetModePlay": "Play",
+
+  "HTBAH.DamageRollPrompt": "Rolled for",
+
+  "HTBAH.RollType": "Roll Type",
+  "HTBAH.RollTypeCheck": "Check",
+  "HTBAH.RollTypeDamage": "Damage",
 
   "HTBAH.SkillDrop": "Drop Skill",
   "HTBAH.WeaponDrop": "Drop Weapon",
@@ -56,12 +65,16 @@
   "HTBAH.FilterGroupCategory": "Group by",
   "HTBAH.SortManually": "Sort manually",
   "HTBAH.SortAuto": "A-Z",
+
+  "HTBAH.Equipped": "Equipped",
+  "HTBAH.Unequipped": "Unequipped",
   
   "HTBAH.Quantity": "Quantity",
   "HTBAH.Uses": "Uses",
 
   "HTBAH.ContextMenuActionEdit": "Edit",
   "HTBAH.ContextMenuActionDuplicate": "Duplicate",
+  "HTBAH.ContextMenuActionEquip": "Equip",
   "HTBAH.ContextMenuActionDelete": "Delete",
 
   "HTBAH.ItemEdit": "Edit",

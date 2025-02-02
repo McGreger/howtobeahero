@@ -39,6 +39,15 @@
     }
   },
 
+  "HTBAH.SheetModeEdit": "Bearbeiten",
+  "HTBAH.SheetModePlay": "Spielen",
+
+  "HTBAH.DamageRollPrompt": "W",
+
+  "HTBAH.RollType": "Würfeln auf",
+  "HTBAH.RollTypeCheck": "Prüfen",
+  "HTBAH.RollTypeDamage": "Schaden",
+
   "HTBAH.SkillDrop": "Fähigkeit ablegen",
   "HTBAH.WeaponDrop": "Waffe ablegen",
   "HTBAH.Skill": "Fähigkeit",
@@ -54,6 +63,9 @@
   "HTBAH.FilterGroupCategory": "Gruppieren",
   "HTBAH.SortManually": "Manuelle Sortierung",
   "HTBAH.SortAuto": "A-Z",
+
+  "HTBAH.Equipped": "Ausgerüstet",
+  "HTBAH.Unequipped": "Verstaut",
 
   "HTBAH.Quantity": "Anzahl",
   "HTBAH.Uses": "Verwendungen",

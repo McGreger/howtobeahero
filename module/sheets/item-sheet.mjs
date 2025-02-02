@@ -128,7 +128,7 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
       calculatedValueInput.val(this.item.calculatedValue);
     });
   }
-
+  
   async _onUpdateRollFields(event) {
     event.preventDefault();
     

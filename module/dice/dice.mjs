@@ -60,3 +60,40 @@ export async function d100Roll({
 
   return roll;
 }
+
+/* -------------------------------------------- */
+/* D10 Roll                                     */
+/* -------------------------------------------- */
+
+
+export async function d10Roll({
+  formula = "1d10",
+  data = {},
+  critical = false,
+  bonusValue = 0,
+  inspiration = false,
+  target = null,
+  chatMessage = true,
+  messageData = {},
+  flavor,
+  ...options
+} = {}) {
+  // Create the roll instance
+  const roll = new CONFIG.Dice.D10Roll(formula, data, {
+    flavor: options.title || flavor,
+    critical,
+    bonusValue,
+    inspiration,
+    target
+  });
+
+  // Evaluate the roll
+  await roll.evaluate();
+
+  // Send chat message if requested
+  if (chatMessage) {
+    await roll.toMessage(messageData);
+  }
+
+  return roll;
+}

@@ -16,7 +16,8 @@ import { HOW_TO_BE_A_HERO } from './helpers/config.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 // Import Dice class
-import { D100Roll } from './dice/d100-roll.mjs';
+import { D100Roll } from './dice/rolls.mjs';
+import { D10Roll } from './dice/rolls.mjs';
 // Import Html custom element classes
 import * as element from './components/_module.mjs';
 
@@ -150,9 +151,11 @@ Hooks.once('init', function () {
   console.log("Item data models:", CONFIG.Item.dataModels);
 
   CONFIG.Dice.D100Roll = D100Roll;
+  CONFIG.Dice.D10Roll = D10Roll;
   
   // Register Roll Extensions
   CONFIG.Dice.rolls.push(D100Roll);
+  CONFIG.Dice.rolls.push(D10Roll);
 
   // Initialize tooltips
   game.howtobeahero.tooltips = new Tooltips();
@@ -280,28 +283,6 @@ async function rollItemMacro(itemUuid) {
   if (!item.parent) {
     const actor = _getMacroSpeaker();
     if (!actor) return ui.notifications.warn(game.i18n.localize("HTBAH.MacroNoActor"));
-    
-    // Create temporary item
-    /*
-    let tempItem;
-    try {
-      tempItem = await actor.createEmbeddedDocuments("Item", [{
-        ...item.toObject(),
-        _id: null
-      }]);
-      
-      if (tempItem.length > 0) {
-        await tempItem[0].roll();
-      }
-    } catch (error) {
-      console.error("Error rolling macro item:", error);
-    } finally {
-      // Always clean up the temporary item
-      if (tempItem?.[0]?.id) {
-        await actor.deleteEmbeddedDocuments("Item", [tempItem[0].id]);
-      }
-    }
-    */
     return;
   }
 

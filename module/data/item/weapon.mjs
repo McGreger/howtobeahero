@@ -15,6 +15,14 @@ export default class HowToBeAHeroWeapon extends HowToBeAHeroPhysical {
       diceBonus: new fields.NumberField({ initial: 0 })
     });
 
+    // Override rollType default for weapons
+    schema.rollType = new fields.StringField({
+      required: true,
+      initial: "damage", // Weapons default to damage
+      choices: ["check", "damage"],
+      label: "HOW_TO_BE_A_HERO.RollType"
+    });
+
     // Add formula field with default value
     schema.formula = new fields.StringField({ 
       required: true, 
