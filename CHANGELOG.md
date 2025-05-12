@@ -1,5 +1,4 @@
 # CHANGELOG
 
-## 1.2.0
-
-- Add support for Foundry v10
+## 0.5.0
+- update licence to CC BY-NC-SA 4.0 (#19)

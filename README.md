@@ -30,4 +30,4 @@ The system is in beta. It is ready for the latest stable version 12.331 of Found
 
 ## License  
 
-This project is licensed under the **MIT License**, meaning you are free to use, modify, and distribute it with proper attribution.  
+This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
