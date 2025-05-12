@@ -11,12 +11,12 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
     
-    // Add eureka to each talent in baseattributes
-    schema.baseattributes.fields.talents.fields.knowledge.fields.eureka = 
+    // Add eureka to each talent in attributes
+    schema.attributes.fields.talents.fields.knowledge.fields.eureka = 
       new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Knowledge.eureka"});
-    schema.baseattributes.fields.talents.fields.action.fields.eureka = 
+    schema.attributes.fields.talents.fields.action.fields.eureka = 
       new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Action.eureka"});
-    schema.baseattributes.fields.talents.fields.social.fields.eureka = 
+    schema.attributes.fields.talents.fields.social.fields.eureka = 
       new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Social.eureka"});
       
     schema.favorites = new fields.ArrayField(new fields.SchemaField({
@@ -51,7 +51,7 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
       item.type === "armor" && item.system.equipped);
     const totalArmorValue = equippedArmor.reduce((sum, armor) => 
       sum + (armor.system.armor || 0), 0);
-    this.parent.system.baseattributes.armor.value = totalArmorValue;
+    this.parent.system.attributes.armor.value = totalArmorValue;
   }
 
   addFavorite(favorite) {

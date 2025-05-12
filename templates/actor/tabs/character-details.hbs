@@ -33,7 +33,7 @@
                 <div class="bonus-column flex1">
                     <div class="bonus">
                         {{#each talentRows}}
-                            <input type="number" name="system.baseattributes.talents.{{key}}.bonus" value="{{bonus}}" data-dtype="Number">
+                            <input type="number" name="system.attributes.talents.{{key}}.bonus" value="{{bonus}}" data-dtype="Number">
                         {{/each}}
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                     {{#if (eq actor.type "character")}}
                     <div class="eureka">
                         {{#each talentRows}}
-                            <input type="number" name="system.baseattributes.talents.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
+                            <input type="number" name="system.attributes.talents.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
                         {{/each}}
                     </div>
                     {{/if}}

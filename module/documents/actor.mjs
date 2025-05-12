@@ -7,10 +7,10 @@ export class HowToBeAHeroActor extends Actor {
  */
   get talentTotalValues() {
     const result = {};
-    for (const [key, talent] of Object.entries(this.system.baseattributes.talents)) {
+    for (const [key, talent] of Object.entries(this.system.attributes.talents)) {
       result[key] = (talent.value || 0) + 
                     (talent.bonus || 0) + 
-                    (this.system.baseattributes.inspiration.status ? this.system.baseattributes.inspiration.value : 0);
+                    (this.system.attributes.inspiration.status ? this.system.attributes.inspiration.value : 0);
     }
     return result;
   }
@@ -44,12 +44,12 @@ export class HowToBeAHeroActor extends Actor {
    * @private
    */
   _prepareSharedValues() {
-    if (!this.system?.baseattributes?.talents) return;
+    if (!this.system?.attributes?.talents) return;
     
     const totalValues = this.talentTotalValues;
     // Update the system data with the new values
-    for (const [key, talent] of Object.entries(this.system.baseattributes.talents)) {
-      this.system.baseattributes.talents[key].totalValue = totalValues[key];
+    for (const [key, talent] of Object.entries(this.system.attributes.talents)) {
+      this.system.attributes.talents[key].totalValue = totalValues[key];
     }
   }
 
@@ -67,8 +67,8 @@ export class HowToBeAHeroActor extends Actor {
   }
 
   prepareGeneralRollData(data) {
-    if (data.baseattributes.talents) {
-      for (let [k, v] of Object.entries(data.baseattributes.talents)) {
+    if (data.attributes.talents) {
+      for (let [k, v] of Object.entries(data.attributes.talents)) {
         data[k] = foundry.utils.deepClone(v);
       }
     }
@@ -80,7 +80,7 @@ export class HowToBeAHeroActor extends Actor {
     const data = this.getRollData();
     const critical = damageData.critical || false;
     const bonusValue = damageData.bonus || 0;
-    const inspired = this.system.baseattributes.inspiration.status;
+    const inspired = this.system.attributes.inspiration.status;
     const target = damageData.target || null;
     const flavor = game.i18n.localize("HTBAH.DamageRollPrompt");
 
@@ -111,9 +111,9 @@ export class HowToBeAHeroActor extends Actor {
     const label = game.i18n.localize(CONFIG.HTBAH.talents[talentId]?.label) ?? "";
     const data = this.getRollData();
     const targetValue = this.talentTotalValues[talentId];
-    const baseValue = this.system.baseattributes.talents[talentId]?.value ?? 0;
-    const bonusValue = this.system.baseattributes.talents[talentId]?.bonus ?? 0;
-    const inspired = this.system.baseattributes.inspiration.status;
+    const baseValue = this.system.attributes.talents[talentId]?.value ?? 0;
+    const bonusValue = this.system.attributes.talents[talentId]?.bonus ?? 0;
+    const inspired = this.system.attributes.inspiration.status;
     const flavor = game.i18n.localize("HTBAH.TalentCheckPromptTitle");
 
     const rollData = {
@@ -143,7 +143,7 @@ export class HowToBeAHeroActor extends Actor {
     const talentKey = item.type;
     if (!["knowledge", "action", "social"].includes(talentKey)) return;
 
-    const currentValue = this.system.baseattributes.talents[talentKey].value || 0;
+    const currentValue = this.system.attributes.talents[talentKey].value || 0;
     const oldValue = options.htbah?.oldValue || 0;
     
     let newValue = change.system?.value !== undefined
@@ -153,7 +153,7 @@ export class HowToBeAHeroActor extends Actor {
     let newTalentValue = currentValue === 0 ? newValue : currentValue - oldValue + newValue;
 
     this.update({
-      [`system.baseattributes.talents.${talentKey}.value`]: newTalentValue
+      [`system.attributes.talents.${talentKey}.value`]: newTalentValue
     });
   }
 }

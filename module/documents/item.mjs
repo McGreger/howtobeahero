@@ -36,13 +36,13 @@ export class HowToBeAHeroItem extends Item {
     if (this.system.value >= 80) return this.system.value;
     if (!this.actor) return this.system.value;
     
-    const talentValue = this.actor.system.baseattributes.talents[this.type]?.value || 0;
+    const talentValue = this.actor.system.attributes.talents[this.type]?.value || 0;
     return Math.min(80, talentValue + this.system.value);
   }
 
   get totalValue() {
     const bonus = Number(this.system?.roll?.diceBonus ?? 0);
-    const inspiration = this.actor?.system?.baseattributes?.inspiration?.status ? this.actor?.system?.baseattributes?.inspiration?.value : 0;
+    const inspiration = this.actor?.system?.attributes?.inspiration?.status ? this.actor?.system?.attributes?.inspiration?.value : 0;
     return this.calculatedValue + bonus + inspiration;
    }
   /**
@@ -232,7 +232,7 @@ export class HowToBeAHeroItem extends Item {
       const targetValue = rollData.item.totalValue;
       const baseValue = rollData.item.calculatedValue;
       const bonusValue = rollData.item.roll.diceBonus;
-      const inspired = rollData.actor.baseattributes.inspiration.status;
+      const inspired = rollData.actor.attributes.inspiration.status;
       const flavor = game.i18n.format("HTBAH.ItemRollPrompt", {itemName: item.name});
 
       const itemRollData = {
