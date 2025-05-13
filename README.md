@@ -28,6 +28,22 @@ The system is in beta. It is ready for the latest stable version 12.331 of Found
 
 ---
 
-## License  
+## 📄 Licenses
 
-This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+### Project Licensing
+
+All HTML, CSS, and JavaScript code in this project is licensed under the **MIT License**.  
+Some layout elements are adapted from the [FoundryVTT D&D 5e system](https://github.com/foundryvtt/dnd5e), also under the MIT License.
+
+### Content Usage and Licensing
+
+This game system is based on the *How to be a Hero* ruleset, created by **How to be a Hero e.V.**, and is licensed under the  
+**Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0)**.  
+Original ruleset available at: [https://howtobeahero.de](https://howtobeahero.de)
+
+> All content derived from the *How to be a Hero* rulebook is used non-commercially and must be shared under the same license.
+
+### Virtual Tabletop Platform Licenses
+
+This system is developed for **Foundry Virtual Tabletop** and complies with the  
+**Limited License Agreement for Package development** as provided by Foundry Gaming LLC.
