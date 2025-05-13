@@ -28,7 +28,7 @@ The system is in beta. It is ready for the latest stable version 12.331 of Found
 
 ---
 
-## 📄 Licenses
+## Licenses
 
 ### Project Licensing
 
