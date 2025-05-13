@@ -121,17 +121,6 @@
 ./ui/icons/svg/scale-value.svg
 ./ui/icons/svg/trait-weapon-proficiencies.svg
 ./ui/icons/svg/hit-points.svg
-./ui/icons/spell-tiers
-./ui/icons/spell-tiers/LICENSE
-./ui/icons/spell-tiers/spell3.webp
-./ui/icons/spell-tiers/spell8.webp
-./ui/icons/spell-tiers/spell5.webp
-./ui/icons/spell-tiers/spell7.webp
-./ui/icons/spell-tiers/spell1.webp
-./ui/icons/spell-tiers/spell9.webp
-./ui/icons/spell-tiers/spell6.webp
-./ui/icons/spell-tiers/spell4.webp
-./ui/icons/spell-tiers/spell2.webp
 ./ui/talent-score-tab-dark.svg
 ./ui/level-badge.webp
 ./ui/inspiration.webp
