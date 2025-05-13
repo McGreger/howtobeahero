@@ -149,18 +149,7 @@
 ./ui/denims
 ./ui/talent-score-tab.svg
 ./ui/character-sheet-imgs
-./ui/character-sheet-imgs/pill-texture-race.webp
-./ui/character-sheet-imgs/banner-character-dark.webp
-./ui/character-sheet-imgs/banner-character.jpg
-./ui/character-sheet-imgs/dnd5e-thumbnail.jpg
-./ui/character-sheet-imgs/pill-texture-background.webp
-./ui/character-sheet-imgs/dnd5e-background.webp
-./ui/character-sheet-imgs/banner-character copy.jpg
-./ui/character-sheet-imgs/ampersand.svg
-./ui/character-sheet-imgs/dnd5e-repo.jpg
 ./ui/character-sheet-imgs/banner-character-whitetree.webp
-./ui/character-sheet-imgs/pill-texture-type.webp
-./ui/character-sheet-imgs/dnd-badge-32.webp
 ./ui/texture1.webp
 ./ui/texture-gray2.webp
 ./ui/parchment.jpg
