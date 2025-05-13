@@ -49,16 +49,6 @@
 ./ui/icons/svg/trait-damage-immunities.svg
 ./ui/icons/svg/ability-score-improvement.svg
 ./ui/icons/svg/trait-languages.svg
-./ui/icons/svg/schools
-./ui/icons/svg/schools/LICENSE
-./ui/icons/svg/schools/enchantment.svg
-./ui/icons/svg/schools/divination.svg
-./ui/icons/svg/schools/illusion.svg
-./ui/icons/svg/schools/evocation.svg
-./ui/icons/svg/schools/conjuration.svg
-./ui/icons/svg/schools/abjuration.svg
-./ui/icons/svg/schools/necromancy.svg
-./ui/icons/svg/schools/transmutation.svg
 ./ui/icons/svg/statuses
 ./ui/icons/svg/statuses/marked.svg
 ./ui/icons/svg/statuses/silenced.svg
