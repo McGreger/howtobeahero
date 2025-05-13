@@ -32,7 +32,7 @@ The system is in beta. It is ready for the latest stable version 12.331 of Found
 
 ### Project Licensing
 
-All HTML, CSS, and JavaScript code in this project is licensed under the **MIT License**.  
+All HTML, CSS, and JavaScript code in this project is licensed under the **MIT License**, meaning you are free to use, modify, and distribute it with proper attribution.  
 Some layout elements are adapted from the [FoundryVTT D&D 5e system](https://github.com/foundryvtt/dnd5e), also under the MIT License.
 
 ### Content Usage and Licensing
