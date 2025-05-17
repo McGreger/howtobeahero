@@ -2558,10 +2558,10 @@ a {
 }
 
 /* ----------------------------------------- */
-/*  Talent scores                            */
+/*  SkillSet scores                            */
 /* ----------------------------------------- */
 
-.how-to-be-a-hero.sheet.actor.character .talent-scores {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores {
   position: absolute;
   top: 0;
   right: 0;
@@ -2569,29 +2569,29 @@ a {
   pointer-events: none;
   container-type: inline-size;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .rows {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows {
   padding: 76px 0 76px 24px;
   display: flex;
   flex-wrap: wrap;
   width: 546px;
   margin-left: auto;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .rows > div {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows > div {
   display: flex;
   gap: 22px;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores.optional-talent-0 .rows {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores.optional-skillSet-0 .rows {
   width: unset;
   margin: 0;
   justify-content: center;
   padding-inline: 12px;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .top {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .top {
   padding-right: calc(var(--htbah-sheet-header-right-width) + 49px);
   min-height: 72px;
   margin-left: auto;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score {
   width: 64px;
   height: 64px;
   position: relative;
@@ -2604,44 +2604,44 @@ a {
   filter: drop-shadow(0 0 6px var(--htbah-shadow-45));
   pointer-events: all;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score::before {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: transparent url("../ui/talent-score-tab-dark.svg") no-repeat top center / contain;
+  background: transparent url("../ui/skillSet-score-tab-dark.svg") no-repeat top center / contain;
   z-index: -1;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score.flipped {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score.flipped {
   padding: 0 0 8px 0;
   height: 72px;
   justify-content: start;
   gap: 2px;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score.flipped::before {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score.flipped::before {
   transform: scaleY(-1);
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score.flipped .mod {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score.flipped .mod {
   padding: 0;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score.flipped .score {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score.flipped .score {
   margin: 0;
   order: -1;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score .sign {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .sign {
   color: var(--color-text-light-6);
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score .label {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .label {
   text-transform: uppercase;
   font-size: var(--font-size-11);
   color: var(--htbah-color-gold);
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score .mod {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .mod {
   font-weight: bold;
   color: var(--htbah-color-black);
   font-size: var(--font-size-16);
   padding: 3px 0;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score .score {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .score {
   width: 50px;
   height: 23px;
   padding: 4px;
@@ -2652,7 +2652,7 @@ a {
   border-radius: 3px;
   margin-top: -2px;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score .score > input {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .score > input {
   padding: 4px;
   color: var(--htbah-color-gold);
   width: 50px;
@@ -2660,55 +2660,55 @@ a {
   border-radius: 3px;
   border: 1px solid transparent;
 }
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score .score > input:hover,
-.how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score .score > input:focus {
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .score > input:hover,
+.how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .score > input:focus {
   border: 1px solid var(--htbah-color-gold);
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
 
 @media (prefers-reduced-motion) {
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .talent-score > .concentration {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score > .concentration {
     animation: none;
   }
 }
 @container (min-width: 700px) {
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .rows {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows {
     justify-content: center;
     gap: 22px;
     padding-top: 148px;
     width: unset;
     margin: 0;
   }
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .rows .top {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows .top {
     padding: 0;
     margin: 0;
     min-height: unset;
     order: 2;
   }
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .rows .bottom {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows .bottom {
     padding: 0;
     margin: 0;
     min-height: unset;
     order: 0;
   }
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .rows .talent-score.flipped {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows .skillSet-score.flipped {
     padding: 12px 0 0;
     height: 64px;
     justify-content: space-between;
     gap: unset;
   }
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .rows .talent-score.flipped::before {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows .skillSet-score.flipped::before {
     transform: unset;
   }
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .rows .talent-score.flipped .mod {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows .skillSet-score.flipped .mod {
     padding: 3px 0;
   }
-  .how-to-be-a-hero.sheet.actor.character .talent-scores .rows .talent-score.flipped .score {
+  .how-to-be-a-hero.sheet.actor.character .skillSet-scores .rows .skillSet-score.flipped .score {
     margin: -2px 0 0;
     order: unset;
   }
 }
-.how-to-be-a-hero.sheet.actor.character form:not(.tab-details) .talent-scores {
+.how-to-be-a-hero.sheet.actor.character form:not(.tab-details) .skillSet-scores {
   display: none;
 }
 
@@ -2731,18 +2731,18 @@ a {
 /* Details Tab Styles */
 .how-to-be-a-hero .tab.details {
   /* ----------------------------------------- */
-  /*  Talents-container                        */
+  /*  SkillSets-container                        */
   /* ----------------------------------------- */
 }
 
-.how-to-be-a-hero .tab.details .talents-container {
+.how-to-be-a-hero .tab.details .skillSets-container {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   min-width: 250px;
 }
 
-.how-to-be-a-hero .tab.details .talents-container > div {
+.how-to-be-a-hero .tab.details .skillSets-container > div {
   flex: 1;
 }
 
@@ -2795,7 +2795,7 @@ a {
   position: relative;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .talent-values,
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .skillSet-values,
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .bonus-column,
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .total-column {
   flex: 0 0 15%;
@@ -2821,7 +2821,7 @@ a {
   color: var(--color-text-dark-primary);
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .talent-values > .eureka {
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .skillSet-values > .eureka {
   position: absolute;
   top: 0%;
   transform: translateY(-50%);
@@ -2831,7 +2831,7 @@ a {
   align-items: center;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .talent-values > .eureka input {
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .skillSet-values > .eureka input {
   width: 35px;
   height: 35px;
   text-align: center;
@@ -2848,21 +2848,21 @@ a {
   -moz-appearance: textfield;
 }
 
-.how-to-be-a-hero .tab.details .talents-container.talents {
+.how-to-be-a-hero .tab.details .skillSets-container.skillSets {
   margin-top: 10px;
 }
 
-.how-to-be-a-hero .tab.details .talent-category {
+.how-to-be-a-hero .tab.details .skillSet-category {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.how-to-be-a-hero .tab.details .talent-category .talents.header {
+.how-to-be-a-hero .tab.details .skillSet-category .skillSets.header {
   margin-bottom: 10px;
 }
 
-.how-to-be-a-hero .tab.details .items-list .talent-list {
+.how-to-be-a-hero .tab.details .items-list .skillSet-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -2872,7 +2872,7 @@ a {
   min-height: 375px;
 }
 
-.how-to-be-a-hero .tab.details .items-list.talent-list {
+.how-to-be-a-hero .tab.details .items-list.skillSet-list {
   min-height: 375px;
   padding: 0.75rem 1rem 0.375rem;
 }
@@ -2948,30 +2948,30 @@ a {
 }
 
 /* New flexbox additions */
-.how-to-be-a-hero .tab.details .talent-category {
+.how-to-be-a-hero .tab.details .skillSet-category {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.how-to-be-a-hero .tab.details .talent-category .talents.header {
+.how-to-be-a-hero .tab.details .skillSet-category .skillSets.header {
   margin-bottom: 10px;
 }
 
-.how-to-be-a-hero .tab.details .talent-category .header-content {
+.how-to-be-a-hero .tab.details .skillSet-category .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.how-to-be-a-hero .tab.details .talent-category .header-content h3 {
+.how-to-be-a-hero .tab.details .skillSet-category .header-content h3 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.how-to-be-a-hero .tab.details .talent-category .header-content .eureka-column,
-.how-to-be-a-hero .tab.details .talent-category .header-content .talent-values {
+.how-to-be-a-hero .tab.details .skillSet-category .header-content .eureka-column,
+.how-to-be-a-hero .tab.details .skillSet-category .header-content .skillSet-values {
   display: flex;
   flex-direction: column;
   align-items: center;

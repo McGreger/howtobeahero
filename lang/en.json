@@ -15,7 +15,7 @@
       "Wealth": "Wealth",
       "Age": "Age"
     },
-    "Talents": {
+    "SkillSets": {
       "Knowledge": { "label": "Knowledge", "long": "knowledge", "abbr": "kno", "bonus": "Knowledge-Bonus", "eureka": "Knowledge-Eureka", "total": "Knowledge-Total" },
       "Action": { "label": "Action", "long": "action", "abbr": "act", "bonus": "Action-Bonus", "eureka": "Action-Eureka", "total": "Action-Total" },
       "Social": { "label": "Social", "long": "social", "abbr": "soc", "bonus": "Social-Bonus", "eureka": "Social-Eureka", "total": "Social-Total" }
@@ -111,26 +111,26 @@
   "HTBAH.action": "Action",
   "HTBAH.social": "Social",
 
-  "HTBAH.Talent": "Talent",
-  "HTBAH.Talents": "Talents",
+  "HTBAH.SkillSet": "Skill Set",
+  "HTBAH.SkillSets": "Skill Sets",
   
-  "HTBAH.TalentCheckPromptTitle": "General roll",
+  "HTBAH.SkillSetCheckPromptTitle": "General roll",
   
-  "HTBAH.TalentKnowledge": "Knowledge",
-  "HTBAH.TalentKnowledgeLong": "knowledge",
-  "HTBAH.TalentKnowledgeAbbr": "kno",
-  "HTBAH.TalentKnowledgeEureka": "Knowledge Eureka",
-  "HTBAH.TalentAction": "Action",
-  "HTBAH.TalentActionLong": "action",
-  "HTBAH.TalentActionAbbr": "act",
-  "HTBAH.TalentActionEureka": "Action Eureka",
-  "HTBAH.TalentSocial": "Social",
-  "HTBAH.TalentSocialLong": "social",
-  "HTBAH.TalentSocialAbbr": "soc",
-  "HTBAH.TalentSocialEureka": "Social Eureka",
+  "HTBAH.SkillSetKnowledge": "Knowledge",
+  "HTBAH.SkillSetKnowledgeLong": "knowledge",
+  "HTBAH.SkillSetKnowledgeAbbr": "kno",
+  "HTBAH.SkillSetKnowledgeEureka": "Knowledge Eureka",
+  "HTBAH.SkillSetAction": "Action",
+  "HTBAH.SkillSetActionLong": "action",
+  "HTBAH.SkillSetActionAbbr": "act",
+  "HTBAH.SkillSetActionEureka": "Action Eureka",
+  "HTBAH.SkillSetSocial": "Social",
+  "HTBAH.SkillSetSocialLong": "social",
+  "HTBAH.SkillSetSocialAbbr": "soc",
+  "HTBAH.SkillSetSocialEureka": "Social Eureka",
   
-  "HTBAH.TalentSpentPoints": "Spent",
-  "HTBAH.TalentCalculatedPoint": "Calculated",
+  "HTBAH.SkillSetSpentPoints": "Spent",
+  "HTBAH.SkillSetCalculatedPoint": "Calculated",
   
   "HTBAH.SavePromptTitle": "{talent} Throw",
 

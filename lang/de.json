@@ -15,7 +15,7 @@
       "Wealth": "Reichtum",
       "Age": "Alter"
     },
-    "Talents": {
+    "SkillSets": {
       "Knowledge": { "label": "Wissen", "long": "wissen", "abbr": "wis", "bonus": "Wissen-Bonus", "eureka": "Wissen-Geistesblitz", "total": "Knowledge-Gesamt"  },
       "Action": { "label": "Handeln", "long": "handeln", "abbr": "han", "bonus": "Handeln-Bonus", "eureka": "Handeln-Geistesblitz", "total": "Handeln-Gesamt"  },
       "Social": { "label": "Soziales", "long": "soziales", "abbr": "soz", "bonus": "Sozial-Bonus", "eureka": "Sozial-Geistesblitz", "total": "Sozial-Gesamt"  }
@@ -103,28 +103,28 @@
   "HTBAH.action": "Handeln",
   "HTBAH.social": "Soziales",
 
-  "HTBAH.Talent": "Talent",
-  "HTBAH.Talents": "Talente",
+  "HTBAH.SkillSet": "Begabung",
+  "HTBAH.SkillSets": "Begabungen",
 
-  "HTBAH.TalentCheckPromptTitle": "Allgemeiner Wurf",
+  "HTBAH.SkillSetCheckPromptTitle": "Allgemeiner Wurf",
   
-  "HTBAH.TalentKnowledge": "Wissen",
-  "HTBAH.TalentKnowledgeLong": "wissen",
-  "HTBAH.TalentKnowledgeAbbr": "wis",
-  "HTBAH.TalentKnowledgeEureka": "Wissens-Geistesblitz",
-  "HTBAH.TalentAction": "Handeln",
-  "HTBAH.TalentActionLong": "handeln",
-  "HTBAH.TalentActionAbbr": "han",
-  "HTBAH.TalentActionEureka": "Handlungs-Geistesblitz",
-  "HTBAH.TalentSocial": "Soziales",
-  "HTBAH.TalentSocialLong": "soziales",
-  "HTBAH.TalentSocialAbbr": "soz",
-  "HTBAH.TalentSocialEureka": "Sozial-Geistesblitz",
+  "HTBAH.SkillSetKnowledge": "Wissen",
+  "HTBAH.SkillSetKnowledgeLong": "wissen",
+  "HTBAH.SkillSetKnowledgeAbbr": "wis",
+  "HTBAH.SkillSetKnowledgeEureka": "Wissens-Geistesblitz",
+  "HTBAH.SkillSetAction": "Handeln",
+  "HTBAH.SkillSetActionLong": "handeln",
+  "HTBAH.SkillSetActionAbbr": "han",
+  "HTBAH.SkillSetActionEureka": "Handlungs-Geistesblitz",
+  "HTBAH.SkillSetSocial": "Soziales",
+  "HTBAH.SkillSetSocialLong": "soziales",
+  "HTBAH.SkillSetSocialAbbr": "soz",
+  "HTBAH.SkillSetSocialEureka": "Sozial-Geistesblitz",
   
-  "HTBAH.TalentSpentPoints": "Verbraucht",
-  "HTBAH.TalentCalculatedPoint": "Berechnet",
+  "HTBAH.SkillSetSpentPoints": "Verbraucht",
+  "HTBAH.SkillSetCalculatedPoint": "Berechnet",
   
-  "HTBAH.SavePromptTitle": "{talent} Wurf",
+  "HTBAH.SavePromptTitle": "{skillSet} Wurf",
   
   "HTBAH.Favorite": "Favorit",
   "HTBAH.FavoriteDrop": "Favorit ablegen",
