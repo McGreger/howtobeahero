@@ -52,7 +52,6 @@ export class D10Roll extends Roll {
     // Initialize the required properties
     this.critical = options?.critical || false;
     this.bonusValue = options?.bonusValue || 0;
-    this.inspiration = options?.inspiration || false;
     this.target = options?.target || null;
     
     if (!this.options.configured) this.configureModifiers();
@@ -78,12 +77,7 @@ export class D10Roll extends Roll {
     
     // Add bonus value
     baseTotal += this.bonusValue;
-    
-    // Add inspiration bonus if applicable
-    if (this.inspiration && this.data?.actor?.system?.inspiration?.value) {
-      baseTotal += this.data.actor.system.inspiration.value;
-    }
-    
+        
     return baseTotal;
   }
 
@@ -110,7 +104,6 @@ export class D10Roll extends Roll {
       base: super.total,
       bonusValue: this.bonusValue,
       critical: this.critical,
-      inspiration: this.inspiration,
       target: this.target ? this.target.name : null
     };
 
@@ -131,7 +124,6 @@ export class D10Roll extends Roll {
         <div class="roll-breakdown">
           <p>Base Roll: ${details.base}</p>
           ${details.bonusValue ? `<p>Bonus: +${details.bonusValue}</p>` : ''}
-          ${details.inspiration ? '<p>Inspiration Applied</p>' : ''}
           ${details.target ? `<p>Target: ${details.target}</p>` : ''}
         </div>
       </div>

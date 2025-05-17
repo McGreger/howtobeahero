@@ -42,8 +42,7 @@ export class HowToBeAHeroItem extends Item {
 
   get totalValue() {
     const bonus = Number(this.system?.roll?.diceBonus ?? 0);
-    const inspiration = this.actor?.system?.attributes?.inspiration?.status ? this.actor?.system?.attributes?.inspiration?.value : 0;
-    return this.calculatedValue + bonus + inspiration;
+    return this.calculatedValue + bonus;
    }
   /**
    * @override

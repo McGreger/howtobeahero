@@ -17,10 +17,6 @@
           "min": 0,
           "max": 100
         },
-        "inspiration": {
-          "value": 0,
-          "min": 0
-        },
         "talents": {
           "knowledge": {
             "eureka": 0,
