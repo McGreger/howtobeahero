@@ -12,7 +12,6 @@ export default class HowToBeAHeroActorBase extends AbstractHowToBeAHeroActorData
  * @property {number} attributes.health.max                   Override for maximum HP.
  * @property {number} attributes.health.temp                  Temporary HP applied on top of value.
  * @property {number} attributes.health.tempmax               Temporary change to the maximum HP.
- * @property {number} attributes.inspiration                  Does this character have inspiration?
  * @property {object} attributes.talents                      
  * @property {number} attributes.talents.knowledge            Contains actors total knowledge value
  * @property {number} attributes.talents.action              Contains actors total action value
@@ -40,10 +39,6 @@ static defineSchema() {
       max: new fields.NumberField({...requiredInteger, initial: 100, label: "HOW_TO_BE_A_HERO.Attributes.HitPointsMaximum"}),
       temp: new fields.NumberField({...requiredInteger, initial: 0, min: 0, label: "HOW_TO_BE_A_HERO.Attributes.HitPointsTemp"}),
       tempmax: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Attributes.HitPointsTempMax"})
-    }),
-    inspiration: new fields.SchemaField({
-      status: new fields.BooleanField({required: true, label: "HOW_TO_BE_A_HERO.Attributes.InspirationStatus"}),
-      value: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Attributes.Inspiration"})
     }),
     talents: new fields.SchemaField({
       knowledge: new fields.SchemaField({

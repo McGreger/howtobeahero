@@ -9,8 +9,7 @@ export class HowToBeAHeroActor extends Actor {
     const result = {};
     for (const [key, talent] of Object.entries(this.system.attributes.talents)) {
       result[key] = (talent.value || 0) + 
-                    (talent.bonus || 0) + 
-                    (this.system.attributes.inspiration.status ? this.system.attributes.inspiration.value : 0);
+                    (talent.bonus || 0);
     }
     return result;
   }
@@ -80,7 +79,6 @@ export class HowToBeAHeroActor extends Actor {
     const data = this.getRollData();
     const critical = damageData.critical || false;
     const bonusValue = damageData.bonus || 0;
-    const inspired = this.system.attributes.inspiration.status;
     const target = damageData.target || null;
     const flavor = game.i18n.localize("HTBAH.DamageRollPrompt");
 
@@ -94,7 +92,6 @@ export class HowToBeAHeroActor extends Actor {
       flavor,
       critical,
       bonusValue,
-      inspiration: inspired,
       target,
       messageData: {
         speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
@@ -113,7 +110,6 @@ export class HowToBeAHeroActor extends Actor {
     const targetValue = this.talentTotalValues[talentId];
     const baseValue = this.system.attributes.talents[talentId]?.value ?? 0;
     const bonusValue = this.system.attributes.talents[talentId]?.bonus ?? 0;
-    const inspired = this.system.attributes.inspiration.status;
     const flavor = game.i18n.localize("HTBAH.TalentCheckPromptTitle");
 
     const rollData = {

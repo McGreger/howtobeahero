@@ -26,9 +26,7 @@ export async function d100Roll({
 
   await roll.evaluate();
 
-  const inspirationBonus = inspired ? data.actor.attributes.inspiration.value : 0;
   const totalTargetValue = targetValue;
-
   const criticalThreshold = Math.floor(totalTargetValue * 0.1);
   const fumbleThreshold = Math.ceil(100 - (100 - totalTargetValue) * 0.1);
 
@@ -43,7 +41,7 @@ export async function d100Roll({
       <div class="roll-details">
         <p>Roll: ${total}</p>
         <p>Target: ${totalTargetValue}</p> 
-        <p>(Base: ${baseValue}, Bonus: ${bonusValue}, Inspiration: +${inspirationBonus})</p>
+        <p>(Base: ${baseValue}, Bonus: ${bonusValue})</p>
         <p>Critical Success: ≤ ${criticalThreshold}</p>
         <p>Critical Failure: ≥ ${fumbleThreshold}</p>
       </div>
@@ -71,7 +69,6 @@ export async function d10Roll({
   data = {},
   critical = false,
   bonusValue = 0,
-  inspiration = false,
   target = null,
   chatMessage = true,
   messageData = {},
@@ -83,7 +80,6 @@ export async function d10Roll({
     flavor: options.title || flavor,
     critical,
     bonusValue,
-    inspiration,
     target
   });
 

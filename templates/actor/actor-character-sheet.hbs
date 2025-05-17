@@ -141,19 +141,6 @@
                         value="{{ system.attributes.armor.value }}">
                     </div>
                 </div>
-                {{!-- Inspiration & Button --}}
-                <div class="right">
-                {{!-- Value of the Inspiration --}}
-                <div class="inspirationValue" aria-label="{{ localize "HTBAH.InspirationValue" }}">
-                        <input type="text" name="system.attributes.inspiration.value" data-dtype="Number" placeholder="0"
-                        value="{{ system.attributes.inspiration.value }}"></div>
-
-                  {{!-- Inspiration --}}
-                  <button type="button" class="inspiration unbutton" data-action="toggleInspiration" aria-label="{{ localize "
-                    HTBAH.Inspiration" }}" data-tooltip="HTBAH.Inspiration"
-                    aria-pressed="{{ system.attributes.inspiration.status }}"></button>
-
-                </div>
             </div>
             {{!-- Hit Points --}}
             <div class="meter-group">

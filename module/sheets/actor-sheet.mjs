@@ -1451,16 +1451,6 @@ _toggleEditHP(event, edit) {
   /* -------------------------------------------- */
 
   /**
-   * Handle toggling inspiration.
-   * @protected
-   */
-  _onToggleInspiration() {
-    this.actor.update({ "system.attributes.inspiration.status": !this.actor.system.attributes.inspiration.status });
-  }
-
-  /* -------------------------------------------- */
-
-  /**
    * Initialize item tooltips on an element.
    * @param {HTMLElement} element  The tooltipped element.
    * @protected

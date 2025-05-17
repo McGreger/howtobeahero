@@ -42,8 +42,7 @@ export class HowToBeAHeroItem extends Item {
 
   get totalValue() {
     const bonus = Number(this.system?.roll?.diceBonus ?? 0);
-    const inspiration = this.actor?.system?.attributes?.inspiration?.status ? this.actor?.system?.attributes?.inspiration?.value : 0;
-    return this.calculatedValue + bonus + inspiration;
+    return this.calculatedValue + bonus;
    }
   /**
    * @override
@@ -232,7 +231,6 @@ export class HowToBeAHeroItem extends Item {
       const targetValue = rollData.item.totalValue;
       const baseValue = rollData.item.calculatedValue;
       const bonusValue = rollData.item.roll.diceBonus;
-      const inspired = rollData.actor.attributes.inspiration.status;
       const flavor = game.i18n.format("HTBAH.ItemRollPrompt", {itemName: item.name});
 
       const itemRollData = {

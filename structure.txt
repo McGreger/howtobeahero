@@ -123,7 +123,6 @@
 ./ui/icons/svg/hit-points.svg
 ./ui/talent-score-tab-dark.svg
 ./ui/level-badge.webp
-./ui/inspiration.webp
 ./ui/talent-score-tab-hc.svg
 ./ui/denims
 ./ui/talent-score-tab.svg
