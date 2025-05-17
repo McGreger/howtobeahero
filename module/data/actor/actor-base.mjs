@@ -4,19 +4,19 @@ export default class HowToBeAHeroActorBase extends AbstractHowToBeAHeroActorData
 /**
  * System data definition for actors.
  *
- * @property {object} baseattributes
- * @property {object} baseattributes.armor
- * @property {number} baseattributes.armor.value                  Current hit points.
- * @property {object} baseattributes.health
- * @property {number} baseattributes.health.value                 Current hit points.
- * @property {number} baseattributes.health.max                   Override for maximum HP.
- * @property {number} baseattributes.health.temp                  Temporary HP applied on top of value.
- * @property {number} baseattributes.health.tempmax               Temporary change to the maximum HP.
- * @property {number} baseattributes.inspiration                  Does this character have inspiration?
- * @property {object} baseattributes.talents                      
- * @property {number} baseattributes.talents.knowledge            Contains actors total knowledge value
- * @property {number} baseattributes.talents.action              Contains actors total action value
- * @property {number} baseattributes.talents.social               Contains actors total social value
+ * @property {object} attributes
+ * @property {object} attributes.armor
+ * @property {number} attributes.armor.value                  Current hit points.
+ * @property {object} attributes.health
+ * @property {number} attributes.health.value                 Current hit points.
+ * @property {number} attributes.health.max                   Override for maximum HP.
+ * @property {number} attributes.health.temp                  Temporary HP applied on top of value.
+ * @property {number} attributes.health.tempmax               Temporary change to the maximum HP.
+ * @property {number} attributes.inspiration                  Does this character have inspiration?
+ * @property {object} attributes.talents                      
+ * @property {number} attributes.talents.knowledge            Contains actors total knowledge value
+ * @property {number} attributes.talents.action              Contains actors total action value
+ * @property {number} attributes.talents.social               Contains actors total social value
  * @property {object} details
  * @property {string} details.background                      Character's background.
  * @property {string} details.alignment                       Character's alignment.
@@ -31,7 +31,7 @@ static defineSchema() {
   const schema = {};
 
   // Attributes
-  schema.baseattributes = new fields.SchemaField({
+  schema.attributes = new fields.SchemaField({
     armor: new fields.SchemaField({
       value: new fields.NumberField({...requiredInteger, initial: 0, min: 0, label: "HOW_TO_BE_A_HERO.Attributes.Armor"}),
     }),
@@ -79,9 +79,9 @@ static defineSchema() {
   async richTooltip() {
     const content = await renderTemplate("systems/how-to-be-a-hero/templates/actor/parts/actor-tooltip.hbs", {
       name: this.parent.name,
-      health: this.baseattributes.health,
-      armor: this.baseattributes.armor,
-      talents: this.baseattributes.talents
+      health: this.attributes.health,
+      armor: this.attributes.armor,
+      talents: this.attributes.talents
     });
 
     return {

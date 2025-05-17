@@ -26,7 +26,7 @@ export async function d100Roll({
 
   await roll.evaluate();
 
-  const inspirationBonus = inspired ? data.actor.baseattributes.inspiration.value : 0;
+  const inspirationBonus = inspired ? data.actor.attributes.inspiration.value : 0;
   const totalTargetValue = targetValue;
 
   const criticalThreshold = Math.floor(totalTargetValue * 0.1);

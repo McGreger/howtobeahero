@@ -313,7 +313,7 @@ _preparePortraitData(context) {
  * @param {SheetContext} context
  */
 _prepareHealthData(context) {
-  const health = this.actor.system.baseattributes.health;
+  const health = this.actor.system.attributes.health;
   context.healthPercentage = health.max ? (health.value / health.max) * 100 : 0;
 }
 
@@ -434,13 +434,13 @@ async _prepareEffects(context) {
     //}
     // Handle talent scores
     // Talent Scores
-    context.talentRows = Object.entries(context.system.baseattributes.talents).reduce((obj, [k, talent]) => {
+    context.talentRows = Object.entries(context.system.attributes.talents).reduce((obj, [k, talent]) => {
       talent.key = k;
       talent.abbr = game.i18n.localize(CONFIG.HTBAH.talents[k]?.abbreviation) ?? "";
       talent.long = game.i18n.localize(CONFIG.HTBAH.talents[k]?.long) ?? "";
       //talent.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
       //talent.mod = Math.abs(ability.mod);
-      talent.baseValue = context.system.baseattributes.talents[k]?.value ?? 0;
+      talent.baseValue = context.system.attributes.talents[k]?.value ?? 0;
       switch (k) {
         case 'knowledge':
             obj.knowledge.push(talent);
@@ -458,7 +458,7 @@ async _prepareEffects(context) {
       return obj;
     }, { knowledge: [], action: [], social: []  });
     context.talentRows.optional = Object.keys(CONFIG.HTBAH.talents).length - 6;
-    for (let [k, v] of Object.entries(context.system.baseattributes.talents)) {
+    for (let [k, v] of Object.entries(context.system.attributes.talents)) {
        v.label = game.i18n.localize(CONFIG.HTBAH.talents[k].label) ?? k;
      }
   }
@@ -477,13 +477,13 @@ async _prepareEffects(context) {
     //}
     // Handle talent scores
     // Talent Scores
-    context.talentRows = Object.entries(context.system.baseattributes.talents).reduce((obj, [k, talent]) => {
+    context.talentRows = Object.entries(context.system.attributes.talents).reduce((obj, [k, talent]) => {
       talent.key = k;
       talent.abbr = game.i18n.localize(CONFIG.HTBAH.talents[k]?.abbreviation) ?? "";
       talent.long = game.i18n.localize(CONFIG.HTBAH.talents[k]?.long) ?? "";
       //talent.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
       //talent.mod = Math.abs(ability.mod);
-      talent.baseValue = context.system.baseattributes.talents[k]?.value ?? 0;
+      talent.baseValue = context.system.attributes.talents[k]?.value ?? 0;
       switch (k) {
         case 'knowledge':
             obj.knowledge.push(talent);
@@ -501,7 +501,7 @@ async _prepareEffects(context) {
       return obj;
     }, { knowledge: [], action: [], social: []  });
     context.talentRows.optional = Object.keys(CONFIG.HTBAH.talents).length - 6;
-    for (let [k, v] of Object.entries(context.system.baseattributes.talents)) {
+    for (let [k, v] of Object.entries(context.system.attributes.talents)) {
        v.label = game.i18n.localize(CONFIG.HTBAH.talents[k].label) ?? k;
      }
   }
@@ -1255,7 +1255,7 @@ async _onUseFavorite(event) {
     const newValue = Number(input.value);
 
     await this.actor.update({
-      [`system.baseattributes.talents.${talentKey}.eureka`]: newValue
+      [`system.attributes.talents.${talentKey}.eureka`]: newValue
     });
   }
 
@@ -1333,10 +1333,10 @@ _toggleEditHP(event, edit) {
 
       // Update actor if value changed
       const currentValue = Number(input.value);
-      const oldValue = this.actor.system.baseattributes.health.value;
+      const oldValue = this.actor.system.attributes.health.value;
       if (currentValue !== oldValue) {
         this.actor.update({
-          "system.baseattributes.health.value": currentValue
+          "system.attributes.health.value": currentValue
         });
       }
     }
@@ -1455,7 +1455,7 @@ _toggleEditHP(event, edit) {
    * @protected
    */
   _onToggleInspiration() {
-    this.actor.update({ "system.baseattributes.inspiration.status": !this.actor.system.baseattributes.inspiration.status });
+    this.actor.update({ "system.attributes.inspiration.status": !this.actor.system.attributes.inspiration.status });
   }
 
   /* -------------------------------------------- */
