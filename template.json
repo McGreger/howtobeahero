@@ -21,7 +21,7 @@
           "value": 0,
           "min": 0
         },
-        "talents": {
+        "skillSets": {
           "knowledge": {
             "eureka": 0,
             "value": 0,

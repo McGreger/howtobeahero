@@ -121,12 +121,12 @@
 ./ui/icons/svg/scale-value.svg
 ./ui/icons/svg/trait-weapon-proficiencies.svg
 ./ui/icons/svg/hit-points.svg
-./ui/talent-score-tab-dark.svg
+./ui/skillSet-score-tab-dark.svg
 ./ui/level-badge.webp
 ./ui/inspiration.webp
-./ui/talent-score-tab-hc.svg
+./ui/skillSet-score-tab-hc.svg
 ./ui/denims
-./ui/talent-score-tab.svg
+./ui/skillSet-score-tab.svg
 ./ui/character-sheet-imgs
 ./ui/character-sheet-imgs/banner-character-whitetree.webp
 ./ui/texture1.webp

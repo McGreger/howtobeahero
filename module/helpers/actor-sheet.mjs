@@ -475,7 +475,7 @@ async _prepareEffects(context) {
     //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
       //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
     //}
-    // Handle skill set scores
+    // Handle skillSet scores
     // SkillSet Scores
     context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
       skillSet.key = k;
@@ -1244,14 +1244,14 @@ async _onUseFavorite(event) {
   /* -------------------------------------------- */
   
   /**
-   * Handle changing the eureka value for a skill set.
+   * Handle changing the eureka value for a skillSet.
    * @param {Event} event - The change event.
    * @private
    */
   async _onChangeEureka(event) {
     event.preventDefault();
     const input = event.currentTarget;
-    const skillSetKey = input.name.split('.')[3]; // Extracting the skill set key from the input name
+    const skillSetKey = input.name.split('.')[3]; // Extracting the skillSet key from the input name
     const newValue = Number(input.value);
 
     await this.actor.update({

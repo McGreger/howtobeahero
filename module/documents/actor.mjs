@@ -3,13 +3,13 @@ import { d100Roll, d10Roll } from "../dice/dice.mjs";
 
 export class HowToBeAHeroActor extends Actor {
   /**
- * Getter for talent total values
+ * Getter for skill set total values
  */
-  get talentTotalValues() {
+  get skillSetTotalValues() {
     const result = {};
-    for (const [key, talent] of Object.entries(this.system.attributes.talents)) {
-      result[key] = (talent.value || 0) + 
-                    (talent.bonus || 0) + 
+    for (const [key, skillSet] of Object.entries(this.system.attributes.skillSets)) {
+      result[key] = (skillSet.value || 0) + 
+                    (skillSet.bonus || 0) + 
                     (this.system.attributes.inspiration.status ? this.system.attributes.inspiration.value : 0);
     }
     return result;
@@ -40,16 +40,16 @@ export class HowToBeAHeroActor extends Actor {
   }
 
   /**
-   * Calculate and update shared values for all talents
+   * Calculate and update shared values for all skillSets
    * @private
    */
   _prepareSharedValues() {
-    if (!this.system?.attributes?.talents) return;
+    if (!this.system?.attributes?.skillSets) return;
     
-    const totalValues = this.talentTotalValues;
+    const totalValues = this.skillSetTotalValues;
     // Update the system data with the new values
-    for (const [key, talent] of Object.entries(this.system.attributes.talents)) {
-      this.system.attributes.talents[key].totalValue = totalValues[key];
+    for (const [key, skillSet] of Object.entries(this.system.attributes.skillSets)) {
+      this.system.attributes.skillSets[key].totalValue = totalValues[key];
     }
   }
 
@@ -67,8 +67,8 @@ export class HowToBeAHeroActor extends Actor {
   }
 
   prepareGeneralRollData(data) {
-    if (data.attributes.talents) {
-      for (let [k, v] of Object.entries(data.attributes.talents)) {
+    if (data.attributes.skillSets) {
+      for (let [k, v] of Object.entries(data.attributes.skillSets)) {
         data[k] = foundry.utils.deepClone(v);
       }
     }
@@ -107,14 +107,14 @@ export class HowToBeAHeroActor extends Actor {
     return roll;
   }
 
-  async rollTalent(talentId, options={}) {
-    const label = game.i18n.localize(CONFIG.HTBAH.talents[talentId]?.label) ?? "";
+  async rollSkillSet(skillSetId, options={}) {
+    const label = game.i18n.localize(CONFIG.HTBAH.skillSets[skillSetId]?.label) ?? "";
     const data = this.getRollData();
-    const targetValue = this.talentTotalValues[talentId];
-    const baseValue = this.system.attributes.talents[talentId]?.value ?? 0;
-    const bonusValue = this.system.attributes.talents[talentId]?.bonus ?? 0;
+    const targetValue = this.skillSetTotalValues[skillSetId];
+    const baseValue = this.system.attributes.skillSets[skillSetId]?.value ?? 0;
+    const bonusValue = this.system.attributes.skillSets[skillSetId]?.bonus ?? 0;
     const inspired = this.system.attributes.inspiration.status;
-    const flavor = game.i18n.localize("HTBAH.TalentCheckPromptTitle");
+    const flavor = game.i18n.localize("HTBAH.SkillSetCheckPromptTitle");
 
     const rollData = {
       formula: "1d100",
@@ -130,30 +130,30 @@ export class HowToBeAHeroActor extends Actor {
       inspired,
       messageData: {
         speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
-        "flags.howtobeahero.roll": {type: "talent", talentId }
+        "flags.howtobeahero.roll": {type: "skillSet", skillSetId }
       }
     };
 
     const roll = await d100Roll(rollData);
-    Hooks.callAll("howToBeAHeroTalentRolled", this, talentId, roll);
+    Hooks.callAll("howToBeAHeroSkillSetRolled", this, skillSetId, roll);
     return roll;
   }
 
   _onItemUpdate(item, change, options, userId) {
-    const talentKey = item.type;
-    if (!["knowledge", "action", "social"].includes(talentKey)) return;
+    const skillSetKey = item.type;
+    if (!["knowledge", "action", "social"].includes(skillSetKey)) return;
 
-    const currentValue = this.system.attributes.talents[talentKey].value || 0;
+    const currentValue = this.system.attributes.skillSets[skillSetKey].value || 0;
     const oldValue = options.htbah?.oldValue || 0;
     
     let newValue = change.system?.value !== undefined
       ? (change.system.value >= 80 ? change.system.value * 0.1 + 10 : change.system.value * 0.1)
       : oldValue;
 
-    let newTalentValue = currentValue === 0 ? newValue : currentValue - oldValue + newValue;
+    let newSkillSetValue = currentValue === 0 ? newValue : currentValue - oldValue + newValue;
 
     this.update({
-      [`system.attributes.talents.${talentKey}.value`]: newTalentValue
+      [`system.attributes.skillSets.${skillSetKey}.value`]: newSkillSetValue
     });
   }
 }
