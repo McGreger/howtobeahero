@@ -2997,7 +2997,7 @@ a {
 }
 
 .how-to-be-a-hero .tab.details .items-list .item-bonus,
-.how-to-be-a-hero .tab.details .items-list .item-calculated-value,
+.how-to-be-a-hero .tab.details .items-list .item-value,
 .how-to-be-a-hero .tab.details .items-list .item-total {
   flex: 0 0 15%;
   text-align: center;
