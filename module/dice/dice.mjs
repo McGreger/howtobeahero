@@ -57,10 +57,6 @@ export async function d100Roll({
         icon: '<i class="fas fa-comments" style="color: #4B0082;"></i>',
         title: abilityName || game.i18n.localize("HTBAH.SocialCheck")
       },
-      wealth: {
-        icon: '<i class="fas fa-coins" style="color:rgb(255, 149, 0);"></i>',
-        title: game.i18n.localize("HTBAH.WealthCheck")
-      },
       talent: {
         icon: '<i class="fas fa-star" style="color: #4169E1;"></i>',
         title: abilityName || game.i18n.localize("HTBAH.Talent")

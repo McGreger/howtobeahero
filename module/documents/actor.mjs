@@ -107,35 +107,6 @@ export class HowToBeAHeroActor extends Actor {
     return roll;
   }
 
-  /**
-   * Perform a wealth check for the actor
-   * @returns {Promise<Roll>} The resulting roll
-   */
-  async rollWealth() {
-    const wealth = this.system.details.wealth;
-    const inspired = false; //this.system.baseattributes.inspiration.status;
-    
-    const rollData = {
-      formula: "1d100",
-      targetValue: wealth.value,
-      baseValue: wealth.value,
-      bonusValue: wealth.bonus || 0,
-      inspired,
-      flavor: game.i18n.localize("HTBAH.WealthCheck"),
-      messageData: {
-        speaker: ChatMessage.getSpeaker({ actor: this }),
-        flags: {
-          howtobeahero: {
-            roll: { type: "wealth" }
-          }
-        }
-      }
-    };
-
-    const roll = await d100Roll(rollData);
-    return roll;
-  }
-
   async rollTalent(talentId, options={}) {
     const label = game.i18n.localize(CONFIG.HTBAH.talents[talentId]?.label) ?? "";
     const data = this.getRollData();

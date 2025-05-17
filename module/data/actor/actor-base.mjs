@@ -69,11 +69,7 @@ static defineSchema() {
     background: new fields.StringField({required: true, blank: true, label: "HOW_TO_BE_A_HERO.Details.Background"}),
     alignment: new fields.StringField({label: "HOW_TO_BE_A_HERO.Details.Alignment"}),
     appearance: new fields.StringField({required: true, blank: true, label: "HOW_TO_BE_A_HERO.Details.Appearance"}),
-    wealth: new fields.SchemaField({
-      value: new fields.NumberField({...requiredInteger, initial: 0, min: 0, label: "HOW_TO_BE_A_HERO.Details.Wealth"}),
-      max: new fields.NumberField({...requiredInteger, initial: 100, label: "HOW_TO_BE_A_HERO.Details.WealthMax"}),
-      bonus: new fields.NumberField({...requiredInteger, initial: 0, min: 0, label: "HOW_TO_BE_A_HERO.Details.WealthBonus"}),
-    }),
+    wealth: new fields.NumberField({label: "HOW_TO_BE_A_HERO.Details.Wealth"}),
     age: new fields.NumberField({label: "HOW_TO_BE_A_HERO.Details.Age"})
   });
 

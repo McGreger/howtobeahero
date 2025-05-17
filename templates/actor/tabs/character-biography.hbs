@@ -26,9 +26,9 @@
                 <label>
                     <span class="roboto-upper label">{{ localize "HTBAH.Wealth" }}</span>
                     {{#if @root.editable}}
-                    <input type="number" name="system.details.wealth.value" value="{{ system.details.wealth.value }}">
+                    <input type="text" name="system.details.wealth" value="{{ system.details.wealth }}">
                     {{else}}
-                    <span class="value">{{ system.details.wealth.value}}</span>
+                    <span class="value">{{ system.details.wealth }}</span>
                     {{/if}}
                 </label>
             </li>

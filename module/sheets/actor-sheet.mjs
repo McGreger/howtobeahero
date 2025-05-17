@@ -996,9 +996,6 @@ async _onUseFavorite(event) {
       }
     });
 
-    // Add wealth roll listener
-    html.find('.wealth-roll').on('click', this._onRollWealth.bind(this));
-
     // Initiative roll handler
     html.find('.header-stat-column .fa-dice-d20').parent().on('click', this._onRollInitiative.bind(this));
 
@@ -1109,15 +1106,6 @@ async _onUseFavorite(event) {
     const name = input.name;
     
     this.actor.update({[name]: value});
-  }
-  /**
-     * Handle wealth roll button click
-     * @param {Event} event The originating click event
-     * @private
-     */
-  async _onRollWealth(event) {
-    event.preventDefault();
-    await this.actor.rollWealth();
   }
 
   /* -------------------------------------------- */

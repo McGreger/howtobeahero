@@ -134,18 +134,6 @@
                     </div>
                 </div>
 
-                {{!-- Treasure --}}
-                <div class="wealth" aria-label="{{ localize "HTBAH.Wealth" }}">
-                  {{#if editable}}
-                      <input type="number" name="system.details.wealth.value" data-dtype="Number" placeholder="0"
-                      value="{{ system.details.wealth.value }}">
-                      {{else}}
-                      <a class="wealth-roll rollable" title="{{localize 'HTBAH.RollWealth'}}">
-                         {{system.details.wealth.value}}
-                      </a>
-                  {{/if}}
-                </div>
-
                 {{!-- Inspiration & Button --}}
                 <div class="right">
                 {{!-- Value of the Inspiration --}}

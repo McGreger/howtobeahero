@@ -44,7 +44,6 @@
   "HTBAH.AbilitySocial": "Social",
   "HTBAH.ItemRollPrompt": "{itemName} ({ability} Check)",
   
-  "HTBAH.WealthCheck": "Roll for Wealth",
   "HTBAH.TalentCheck": "Roll for Talent",
   "HTBAH.KnowledgeCheck": "Roll for Knowledge",
   "HTBAH.ActionCheck": "Roll for Action",
