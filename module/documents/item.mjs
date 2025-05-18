@@ -241,7 +241,6 @@ export class HowToBeAHeroItem extends Item {
         targetValue,
         baseValue,
         bonusValue,
-        inspired,
         messageData: {
           speaker: speaker,
           rollMode: rollMode,

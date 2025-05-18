@@ -10,7 +10,6 @@ export async function d100Roll({
   targetValue,
   baseValue,
   bonusValue,
-  inspired,
   chatMessage = true,
   messageData = {},
   flavor,
@@ -21,7 +20,6 @@ export async function d100Roll({
     critical,
     fumble,
     targetValue,
-    inspired
   });
 
   await roll.evaluate();
