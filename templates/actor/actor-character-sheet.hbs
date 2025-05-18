@@ -129,8 +129,8 @@
                 <div class="ac" aria-label="{{ localize "HTBAH.ArmorClass" }}">
                     <div data-attribution="attributes.armor" data-attribution-caption="HTBAH.ArmorClass"
                         data-tooltip-direction="DOWN">
-                        <input type="text" name="system.baseattributes.armor.value" data-dtype="Number" placeholder="0"
-                        value="{{ system.baseattributes.armor.value }}" disabled>
+                        <input type="text" name="system.attributes.armor.value" data-dtype="Number" placeholder="0"
+                        value="{{ system.attributes.armor.value }}" disabled>
                     </div>
                 </div>
 
@@ -139,21 +139,21 @@
                 {{!-- Value of the Inspiration --}}
                 <div class="inspirationValue" aria-label="{{ localize "HTBAH.InspirationValue" }}">
                   {{#if editable}}
-                    <input type="number" name="system.baseattributes.inspiration.value" data-dtype="Number" placeholder="0"
-                    value="{{ system.baseattributes.inspiration.value }}"></div>
+                    <input type="number" name="system.attributes.inspiration.value" data-dtype="Number" placeholder="0"
+                    value="{{ system.attributes.inspiration.value }}"></div>
 
                     {{!-- Inspiration --}}
                     <button type="button" class="inspiration unbutton" data-action="toggleInspiration" aria-label="{{ localize "
                     HTBAH.Inspiration" }}" data-tooltip="HTBAH.Inspiration"
-                    aria-pressed="{{ system.baseattributes.inspiration.status }}"></button>
+                    aria-pressed="{{ system.attributes.inspiration.status }}"></button>
                     {{else}}
-                    <input type="number" name="system.baseattributes.inspiration.value" data-dtype="Number" placeholder="0"
-                    value="{{ system.baseattributes.inspiration.value }}" disabled></div>
+                    <input type="number" name="system.attributes.inspiration.value" data-dtype="Number" placeholder="0"
+                    value="{{ system.attributes.inspiration.value }}" disabled></div>
 
                     {{!-- Inspiration --}}
                     <button type="button" class="inspiration unbutton" data-action="toggleInspiration" aria-label="{{ localize "
                     HTBAH.Inspiration" }}" data-tooltip="HTBAH.Inspiration"
-                    aria-pressed="{{ system.baseattributes.inspiration.status }}" disabled></button>
+                    aria-pressed="{{ system.attributes.inspiration.status }}" disabled></button>
                   {{/if}}
 
                 </div>
@@ -166,7 +166,7 @@
             </div>
             {{#if  (and editable (or actor.isOwner @root.user.isGM))}}
               {{!-- Edit Mode: Show direct input fields --}}
-              {{#with system.baseattributes.health}}
+              {{#with system.attributes.health}}
                 <div class="meter sectioned hit-points">
                   <div class="progress hit-points {{~#if (gt tempmax 0)}} temp-positive{{~else if (lt tempmax 0)}} temp-negative\ {{/if}}" 
                       role="meter" 
@@ -176,14 +176,14 @@
                       style="--bar-percentage: {{ ../healthPercentage }}%">
                     <div class="label">
                       <input type="text" 
-                            name="system.baseattributes.health.value" 
+                            name="system.attributes.health.value" 
                             class="uninput value" 
                             data-dtype="Number" 
                             value="{{ value }}" 
                             placeholder="0">
                       <span class="separator">&sol;</span>
                       <input type="text" 
-                            name="system.baseattributes.health.max" 
+                            name="system.attributes.health.max" 
                             class="uninput max" 
                             data-dtype="Number" 
                             value="{{ max }}" 
@@ -195,7 +195,7 @@
                   </div>
                   <div class="tmp">
                     <input type="text" 
-                          name="system.baseattributes.health.temp" 
+                          name="system.attributes.health.temp" 
                           data-dtype="Number" 
                           placeholder="{{ localize "HTBAH.TMP" }}" 
                           value="{{ temp }}">
@@ -204,7 +204,7 @@
               {{/with}}
             {{else}}
               {{!-- Play Mode: Toggle edit for current HP only --}}
-              {{#with system.baseattributes.health}}
+              {{#with system.attributes.health}}
                 <div class="meter sectioned hit-points">
                   <div class="progress hit-points {{~#if (gt tempmax 0)}} temp-positive{{~else if (lt tempmax 0)}} temp-negative {{/if}}" 
                       role="meter" 
@@ -215,7 +215,7 @@
                     <div class="label">
                       <span class="value">{{ value }}</span>
                       <input type="text" 
-                            name="system.baseattributes.health.value" 
+                            name="system.attributes.health.value" 
                             data-dtype="Number" 
                             value="{{ value }}" 
                             style="display: none">
@@ -228,7 +228,7 @@
                   </div>
                   <div class="tmp">
                     <input type="text" 
-                          name="system.baseattributes.health.temp" 
+                          name="system.attributes.health.temp" 
                           data-dtype="Number" 
                           placeholder="{{ localize "HTBAH.TMP" }}" 
                           value="{{ temp }}">
