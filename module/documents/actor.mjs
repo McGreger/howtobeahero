@@ -123,7 +123,6 @@ export class HowToBeAHeroActor extends Actor {
       targetValue,
       baseValue,
       bonusValue,
-      inspired,
       messageData: {
         speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
         flags: {
