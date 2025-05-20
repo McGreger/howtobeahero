@@ -44,6 +44,12 @@ export class HowToBeAHeroDragDropHandler {
         const slotType = headerSlot.dataset.slot;
         return { action: "headerSlot", type: slotType };
       }
+
+      const skillSet = dropTarget.closest('.talent-category');
+      if (skillSet) {
+        const skillType = skillSet.dataset.skillType;
+        return { action: "skillSet", type: skillType };
+      }
   
       return { action: "default", type: "item" };
     }
@@ -128,6 +134,23 @@ export class HowToBeAHeroDragDropHandler {
     
           // Update the header slot
           return this.sheet._setHeaderItem(actionConfig.type, droppedItem.id);
+
+        case "skillSet":
+          // Handle drops onto skill set lists
+          const skillItem = await this._resolveDroppedItem(data);
+          if (!skillItem) return false;
+
+          if (!["knowledge", "social", "action"].includes(skillItem.type)) {
+            ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlySkillsAllowed"));
+            return false;
+          }
+
+          if (skillItem.type !== actionConfig.type) {
+            ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlySkillsAllowed"));
+            return false;
+          }
+
+          return true;
 
         default:
           return false;

@@ -1060,7 +1060,7 @@ async _onUseFavorite(event) {
       }
     });
 
-    html.find('.favorites, .header-stat-column').each((i, zone) => {
+    html.find('.favorites, .header-stat-column, .talent-category').each((i, zone) => {
       zone.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
       zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
     });
