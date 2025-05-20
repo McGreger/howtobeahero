@@ -11,13 +11,13 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
     
-    // Add eureka to each talent in attributes
-    schema.attributes.fields.talents.fields.knowledge.fields.eureka = 
-      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Knowledge.eureka"});
-    schema.attributes.fields.talents.fields.action.fields.eureka = 
-      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Action.eureka"});
-    schema.attributes.fields.talents.fields.social.fields.eureka = 
-      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Talents.Social.eureka"});
+    // Add eureka to each skill Set in attributes
+    schema.attributes.fields.skillSets.fields.knowledge.fields.eureka = 
+      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Knowledge.eureka"});
+    schema.attributes.fields.skillSets.fields.action.fields.eureka = 
+      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Action.eureka"});
+    schema.attributes.fields.skillSets.fields.social.fields.eureka = 
+      new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Social.eureka"});
       
     schema.favorites = new fields.ArrayField(new fields.SchemaField({
       type: new fields.StringField({ required: true, blank: false }),

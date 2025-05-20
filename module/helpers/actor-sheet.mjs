@@ -475,7 +475,7 @@ async _prepareEffects(context) {
     //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
       //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
     //}
-    // Handle skill set scores
+    // Handle skillSet scores
     // SkillSet Scores
     context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
       skillSet.key = k;
@@ -999,9 +999,6 @@ async _onUseFavorite(event) {
     // Initiative roll handler
     html.find('.header-stat-column .fa-dice-d20').parent().on('click', this._onRollInitiative.bind(this));
 
-    // Handle number input changes
-    html.find('input[type="number"]').change(this._onNumberChange.bind(this));
-
     // Initialize tabs
     this._tabs = this._createTabHandlers();
     this._tabs.forEach(tabSet => {
@@ -1048,9 +1045,6 @@ async _onUseFavorite(event) {
       event.preventDefault();
       this._removeHeaderItem("weapon");
     });
-    
-    html.find(".meter > .hit-points").on("click", event => this._toggleEditHP(event, true));
-    html.find(".meter > .hit-points > input").on("blur", event => this._toggleEditHP(event, false));
   }
 
   _initializeTooltips() {
@@ -1098,16 +1092,6 @@ async _onUseFavorite(event) {
     
     return item.roll();
   }
-
-  _onNumberChange(event) {
-    event.preventDefault();
-    const input = event.currentTarget;
-    const value = input.value;
-    const name = input.name;
-    
-    this.actor.update({[name]: value});
-  }
-
   /* -------------------------------------------- */
 
   /**
@@ -1260,14 +1244,14 @@ async _onUseFavorite(event) {
   /* -------------------------------------------- */
   
   /**
-   * Handle changing the eureka value for a skill set.
+   * Handle changing the eureka value for a skillSet.
    * @param {Event} event - The change event.
    * @private
    */
   async _onChangeEureka(event) {
     event.preventDefault();
     const input = event.currentTarget;
-    const skillSetKey = input.name.split('.')[3]; // Extracting the skill set key from the input name
+    const skillSetKey = input.name.split('.')[3]; // Extracting the skillSet key from the input name
     const newValue = Number(input.value);
 
     await this.actor.update({
@@ -1312,51 +1296,52 @@ async _onUseFavorite(event) {
 
   /* -------------------------------------------- */
 
-  /**
-   * Toggle editing hit points.
-   * @param {PointerEvent} event  The triggering event.
-   * @protected
-   */
-  async _toggleEditHP(event, toggle) {
-    event.preventDefault();
-    event.stopPropagation();
+/**
+ * Toggle editing hit points.
+ * @param {PointerEvent} event  The triggering event.
+ * @protected
+ */
+_toggleEditHP(event, edit) {
+  // If in editable mode, we don't need to toggle anything
+  if (this._mode === this.constructor.MODES.EDIT) return;
 
-    // Check if in edit mode
-    const isEditMode = this._mode === this.constructor.MODES.EDIT;
-    if (isEditMode) return;
+  const hitPointsSection = event.currentTarget;
+  if (!hitPointsSection) return;
+
+  // Get the first child which should be the progress div
+  const progress = hitPointsSection.children[0];
+  if (!progress) return;
+
+  const label = progress.querySelector(".label");
+  const input = progress.querySelector("input[hidden]");
+  
+  if (!label || !input) return;
+
+  // Toggle visibility for non-editable mode
+  if (edit) {
+    label.hidden = true;
+    input.hidden = false;
+    input.focus();
+  } else {
+    label.hidden = false;
+    input.hidden = true;
     
-    // Check if user has permission to edit
-    const hasPermission = this.actor.isOwner || game.user.isGM;
-    if (!hasPermission) return;
+    // Update the displayed value in the label if it changed
+    const valueElement = label.querySelector('.value');
+    if (valueElement) {
+      valueElement.textContent = input.value;
 
-    const container = event.currentTarget.closest(".hit-points");
-    const input = container.querySelector("input[name='system.attributes.health.value']");
-    const value = container.querySelector(".value");
-
-    // Toggle edit mode
-    if (toggle) {
-      // Hide the span and show the input
-      value.style.display = "none";
-      input.style.display = "inline";
-      input.focus();
-      input.select();
-    } else {
-      // Hide the input and show the span
-      value.style.display = "inline";
-      input.style.display = "none";
-
-      // Update the actor with the new value
-      if (input.value !== value.textContent) {
-        await this.actor.update({
-          "system.attributes.health.value": Math.clamped(
-            parseInt(input.value) || 0,
-            0,
-            this.actor.system.attributes.health.max
-          )
+      // Update actor if value changed
+      const currentValue = Number(input.value);
+      const oldValue = this.actor.system.attributes.health.value;
+      if (currentValue !== oldValue) {
+        this.actor.update({
+          "system.attributes.health.value": currentValue
         });
       }
     }
   }
+}
   
   /**
    * Handle the user toggling the sidebar collapsed state.
@@ -1412,6 +1397,7 @@ async _onUseFavorite(event) {
     const target = event.currentTarget;
     switch ( target.dataset.action ) {
       //case "findItem": this._onFindItem(target.dataset.itemType); break;
+      case "toggleInspiration": this._onToggleInspiration(); break;
     }
   }
 
@@ -1460,6 +1446,16 @@ async _onUseFavorite(event) {
       case "background": game.packs.get("dnd5e.backgrounds").render(true); break;
     }
     */
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Handle toggling inspiration.
+   * @protected
+   */
+  _onToggleInspiration() {
+    this.actor.update({ "system.attributes.inspiration.status": !this.actor.system.attributes.inspiration.status });
   }
 
   /* -------------------------------------------- */

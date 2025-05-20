@@ -36,8 +36,8 @@ export class HowToBeAHeroItem extends Item {
     if (this.system.value >= 80) return this.system.value;
     if (!this.actor) return this.system.value;
     
-    const talentValue = this.actor.system.attributes.talents[this.type]?.value || 0;
-    return Math.min(80, talentValue + this.system.value);
+    const skillSetValue = this.actor.system.attributes.skillSets[this.type]?.value || 0;
+    return Math.min(80, skillSetValue + this.system.value);
   }
 
   get totalValue() {

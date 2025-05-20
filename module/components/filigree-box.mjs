@@ -82,12 +82,12 @@ export default class FiligreeBoxElement extends AdoptedStyleSheetMixin(HTMLEleme
       block: "M 0 0 L 10 0 L 10 3.1 L 0 3.1 L 0 0 Z",
       inline: "M 0 10 L 0 0 L 2.99 0 L 2.989 10 L 0 10 Z M 6.9 10 L 6.9 0 L 8.6 0 L 8.6 10 L 6.9 10 Z"
     },
-    typeTalents: {
+    typeSkillSets: {
       corner: "M 3 24 C 6 14 24 2 10 3 L 10 3 C 5 3 3 6 3 11 Z Z M 7 19 C 6 20 3.776 23.004 3 26.9 L 2.999 30 L 0 30 L 0 15 C 0 7 4 0 6 0 L 14 0 C 17 0 17.3333 0 19 0 L 25 0 L 25 3.1 L 17 3 C 28 7 10 15 9 16 L 9 30 L 6.9 30 Z",
       block: "M 0 0 L 15 0 L 15 3 L 0 3 L 0 0 Z",
       inline: "M 0 15 L 0 0 L 3 0 L 3 15 L 0 15 Z M 7 15 L 7 0 L 9 0 L 9 15 L 7 15 Z"
     },
-    typeTalentsHeader: {
+    typeSkillSetsHeader: {
       corner: "M 3 24 C 9 18 2 6 10 3 L 10 3 C 5 3 3 6 3 11 Z Z M 7 19 C 6 20 3.776 23.004 3 26.9 L 2.999 30 L 0 30 L 0 15 C 0 7 4 0 6 0 L 14 0 C 14 2 17.3333 0 19 0 L 25 0 L 25 3.1 L 22.4 3.1 C 6 5 10 15 9 18 L 8.6 30 L 6.9 30 Z",
       block: "M 0 0 L 15 0 L 15 3 L 0 3 L 0 0 Z",
       inline: "M 0 15 L 0 0 L 3 0 L 3 15 L 0 15 Z M 7 15 L 7 0 L 9 0 L 9 15 L 7 15 Z"

@@ -2,30 +2,30 @@ import { preLocalize } from "./utils.mjs";
 
 export const HOW_TO_BE_A_HERO = {};
 /**
- * The set of talents used within the system.
+ * The set of skillSets used within the system.
  * @type {Object}
  */
-HOW_TO_BE_A_HERO.talents = {
+HOW_TO_BE_A_HERO.skillSets = {
   knowledge: {
-    label: 'HOW_TO_BE_A_HERO.Talents.Knowledge.label',
-    long: 'HOW_TO_BE_A_HERO.Talents.Knowledge.long',
-    abbreviation: 'HOW_TO_BE_A_HERO.Talents.Knowledge.abbr',
-    eureka: 'HOW_TO_BE_A_HERO.Talents.Knowledge.eureka'
+    label: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.label',
+    long: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.long',
+    abbreviation: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.abbr',
+    eureka: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.eureka'
   },
   action: {
-    label: 'HOW_TO_BE_A_HERO.Talents.Action.label',
-    long: 'HOW_TO_BE_A_HERO.Talents.Action.long',
-    abbreviation: 'HOW_TO_BE_A_HERO.Talents.Action.abbr',
-    eureka: 'HOW_TO_BE_A_HERO.Talents.Action.eureka'
+    label: 'HOW_TO_BE_A_HERO.SkillSets.Action.label',
+    long: 'HOW_TO_BE_A_HERO.SkillSets.Action.long',
+    abbreviation: 'HOW_TO_BE_A_HERO.SkillSets.Action.abbr',
+    eureka: 'HOW_TO_BE_A_HERO.SkillSets.Action.eureka'
   },
   social: {
-    label: 'HOW_TO_BE_A_HERO.Talents.Social.label',
-    long: 'HOW_TO_BE_A_HERO.Talents.Social.long',
-    abbreviation: 'HOW_TO_BE_A_HERO.Talents.Social.abbr',
-    eureka: 'HOW_TO_BE_A_HERO.Talents.Social.eureka'
+    label: 'HOW_TO_BE_A_HERO.SkillSets.Social.label',
+    long: 'HOW_TO_BE_A_HERO.SkillSets.Social.long',
+    abbreviation: 'HOW_TO_BE_A_HERO.SkillSets.Social.abbr',
+    eureka: 'HOW_TO_BE_A_HERO.SkillSets.Social.eureka'
   }
 };
-preLocalize("talents", { keys: ["label", "long", "abbreviation", "eureka"] });
+preLocalize("skillSets", { keys: ["label", "long", "abbreviation", "eureka"] });
 
 /**
 * Conditions that can affect an actor.
