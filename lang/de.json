@@ -6,7 +6,6 @@
       "HitPointsMaximum": "Maximale Lebenspunkte",
       "HitPointsTemp": "Temporäre Lebenspunkte",
       "HitPointsTempMax": "Temporäre maximale Lebenspunkte",
-      "Inspiration": "Inspiration",
       "Eureka": "Geistesblitz"
     },
     "Details": {
@@ -126,9 +125,6 @@
   "HTBAH.TalentCalculatedPoint": "Berechnet",
   
   "HTBAH.SavePromptTitle": "{talent} Wurf",
-  
-  "HTBAH.Inspiration": "Inspiration",
-  "HTBAH.InspirationValue": "Inspiration {inspirationValue}",
   
   "HTBAH.Favorite": "Favorit",
   "HTBAH.FavoriteDrop": "Favorit ablegen",

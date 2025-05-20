@@ -1412,7 +1412,6 @@ async _onUseFavorite(event) {
     const target = event.currentTarget;
     switch ( target.dataset.action ) {
       //case "findItem": this._onFindItem(target.dataset.itemType); break;
-      case "toggleInspiration": this._onToggleInspiration(); break;
     }
   }
 
@@ -1461,16 +1460,6 @@ async _onUseFavorite(event) {
       case "background": game.packs.get("dnd5e.backgrounds").render(true); break;
     }
     */
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Handle toggling inspiration.
-   * @protected
-   */
-  _onToggleInspiration() {
-    this.actor.update({ "system.attributes.inspiration.status": !this.actor.system.attributes.inspiration.status });
   }
 
   /* -------------------------------------------- */

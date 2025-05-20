@@ -42,8 +42,7 @@ export class HowToBeAHeroItem extends Item {
 
   get totalValue() {
     const bonus = Number(this.system?.roll?.diceBonus ?? 0);
-    const inspiration = this.actor?.system?.attributes?.inspiration?.status ? this.actor?.system?.attributes?.inspiration?.value : 0;
-    return this.calculatedValue + bonus + inspiration;
+    return this.calculatedValue + bonus;
    }
   /**
    * @override
@@ -232,7 +231,6 @@ async roll() {
     const targetValue = rollData.item.totalValue;
     const baseValue = rollData.item.calculatedValue;
     const bonusValue = rollData.item.roll.diceBonus;
-    const inspired = rollData.actor.attributes.inspiration.status;
     
     // Get localized ability name
     const abilityName = rollData.item.name;
@@ -265,7 +263,6 @@ async roll() {
       targetValue,
       baseValue,
       bonusValue,
-      inspired,
       messageData: {
         speaker: speaker,
         rollMode: rollMode,

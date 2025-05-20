@@ -133,32 +133,8 @@
                         value="{{ system.attributes.armor.value }}" disabled>
                     </div>
                 </div>
-
-                {{!-- Inspiration & Button --}}
-                <div class="right">
-                {{!-- Value of the Inspiration --}}
-                <div class="inspirationValue" aria-label="{{ localize "HTBAH.InspirationValue" }}">
-                  {{#if editable}}
-                    <input type="number" name="system.attributes.inspiration.value" data-dtype="Number" placeholder="0"
-                    value="{{ system.attributes.inspiration.value }}"></div>
-
-                    {{!-- Inspiration --}}
-                    <button type="button" class="inspiration unbutton" data-action="toggleInspiration" aria-label="{{ localize "
-                    HTBAH.Inspiration" }}" data-tooltip="HTBAH.Inspiration"
-                    aria-pressed="{{ system.attributes.inspiration.status }}"></button>
-                    {{else}}
-                    <input type="number" name="system.attributes.inspiration.value" data-dtype="Number" placeholder="0"
-                    value="{{ system.attributes.inspiration.value }}" disabled></div>
-
-                    {{!-- Inspiration --}}
-                    <button type="button" class="inspiration unbutton" data-action="toggleInspiration" aria-label="{{ localize "
-                    HTBAH.Inspiration" }}" data-tooltip="HTBAH.Inspiration"
-                    aria-pressed="{{ system.attributes.inspiration.status }}" disabled></button>
-                  {{/if}}
-
-                </div>
             </div>
-            {{!-- Hit Points --}}
+            
             {{!-- Hit Points --}}
           <div class="meter-group">
             <div class="label roboto-condensed-upper">

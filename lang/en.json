@@ -6,7 +6,6 @@
       "HitPointsMaximum": "Override Maximum Hit Points",
       "HitPointsTemp": "Temporary Hit Points",
       "HitPointsTempMax": "Temporary Maximum Hit Points",
-      "Inspiration": "Inspiration",
       "Eureka": "Eureka"
     },
     "Details": {
@@ -134,9 +133,6 @@
   "HTBAH.TalentCalculatedPoint": "Calculated",
   
   "HTBAH.SavePromptTitle": "{talent} Throw",
-  
-  "HTBAH.Inspiration": "Inspiration",
-  "HTBAH.InspirationValue": "Inspiration {inspirationValue}",
 
   "HTBAH.Favorite": "Favorite",
   "HTBAH.FavoriteDrop": "Drop Favorite",
