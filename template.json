@@ -74,7 +74,7 @@
         "rollType": "check",
         "formula": ""
       },
-      "skill": {
+      "ability": {
         "type": "",
         "value": 0,
         "calculatedValue": 0,
@@ -125,13 +125,13 @@
       }
     },
     "knowledge": {
-      "templates": ["base", "skill"]
+      "templates": ["base", "ability"]
     },
     "action": {
-      "templates": ["base", "skill"]
+      "templates": ["base", "ability"]
     },
     "social": {
-      "templates": ["base", "skill"]
+      "templates": ["base", "ability"]
     }
   }
 }

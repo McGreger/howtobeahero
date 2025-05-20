@@ -1,4 +1,4 @@
-import HowToBeAHeroSkill from "./skill.mjs";
+import HowToBeAHeroSkill from "./ability.mjs";
 
 export default class HowToBeAHeroKnowledge extends HowToBeAHeroSkill {
 

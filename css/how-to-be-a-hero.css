@@ -438,7 +438,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   background: none;
 }
 
-.how-to-be-a-hero.sheet.actor.character .sheet-body .skills .ability,
+.how-to-be-a-hero.sheet.actor.character .sheet-body .abilities .ability,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .tools .ability,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .saves .ability {
   color: var(--htbah-color-gold);
@@ -2038,7 +2038,7 @@ a {
   /* Main Content */
   /* Sidebar */
   /* Tabbed Content */
-  /* Skills, Tools, & Saving Throws */
+  /* Abilities, Tools, & Saving Throws */
   /* Background Pills */
   /* Senses & Traits */
 }

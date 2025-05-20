@@ -116,7 +116,6 @@
 ./ui/icons/svg/trait-damage-resistances.svg
 ./ui/icons/svg/spell-slot.svg
 ./ui/icons/svg/trait-condition-immunities.svg
-./ui/icons/svg/trait-skills.svg
 ./ui/icons/svg/ink-pot.svg
 ./ui/icons/svg/scale-value.svg
 ./ui/icons/svg/trait-weapon-proficiencies.svg
@@ -201,7 +200,7 @@
 ./module/data/item/knowledge.mjs
 ./module/data/item/action.mjs
 ./module/data/item/item-base.mjs
-./module/data/item/skill.mjs
+./module/data/item/ability.mjs
 ./module/data/actor
 ./module/data/actor/npc.mjs
 ./module/data/actor/actor-base.mjs

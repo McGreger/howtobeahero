@@ -513,10 +513,10 @@ export function getHumanReadableAttributeLabel(attr, { actor }={}) {
     label = game.i18n.format("DND5E.AbilityScoreL", { ability: CONFIG.DND5E.abilities[key].label });
   }
 
-  // Skills.
-  else if ( attr.startsWith("skills.") ) {
+  // Abilities.
+  else if ( attr.startsWith("abilities.") ) {
     const [, key] = attr.split(".");
-    label = game.i18n.format("DND5E.SkillPassiveScore", { skill: CONFIG.DND5E.skills[key].label });
+    label = game.i18n.format("DND5E.SkillPassiveScore", { ability: CONFIG.DND5E.abilities[key].label });
   }
 
   // Spell slots.

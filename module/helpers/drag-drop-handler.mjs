@@ -94,8 +94,8 @@ export class HowToBeAHeroDragDropHandler {
           if (!droppedItem) return false;
     
           // Validate item type based on slot
-          if (actionConfig.type === "skill" && !["knowledge", "social", "action"].includes(droppedItem.type)) {
-            ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlySkillsAllowed"));
+          if (actionConfig.type === "ability" && !["knowledge", "social", "action"].includes(droppedItem.type)) {
+            ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyAbilitiesAllowed"));
             return false;
           }
           
