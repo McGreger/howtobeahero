@@ -130,7 +130,11 @@ export class HowToBeAHeroActor extends Actor {
       inspired,
       messageData: {
         speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
-        "flags.howtobeahero.roll": {type: "talent", talentId }
+        flags: {
+          howtobeahero: {
+            roll: { type: talentId, talentId }
+          }
+        }
       }
     };
 
