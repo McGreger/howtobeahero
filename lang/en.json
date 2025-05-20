@@ -16,9 +16,30 @@
       "Age": "Age"
     },
     "SkillSets": {
-      "Knowledge": { "label": "Knowledge", "long": "knowledge", "abbr": "kno", "bonus": "Knowledge-Bonus", "eureka": "Knowledge-Eureka", "total": "Knowledge-Total" },
-      "Action": { "label": "Action", "long": "action", "abbr": "act", "bonus": "Action-Bonus", "eureka": "Action-Eureka", "total": "Action-Total" },
-      "Social": { "label": "Social", "long": "social", "abbr": "soc", "bonus": "Social-Bonus", "eureka": "Social-Eureka", "total": "Social-Total" }
+      "Knowledge": { 
+        "label": "Knowledge", 
+        "long": "knowledge", 
+        "abbr": "kno", 
+        "bonus": "Knowledge-Bonus", 
+        "eureka": "Knowledge-Eureka", 
+        "total": "Knowledge-Total" 
+      },
+      "Action": { 
+        "label": "Action", 
+        "long": "action", 
+        "abbr": "act", 
+        "bonus": "Action-Bonus", 
+        "eureka": "Action-Eureka", 
+        "total": "Action-Total" 
+      },
+      "Social": { 
+        "label": "Social", 
+        "long": "social", 
+        "abbr": "soc", 
+        "bonus": "Social-Bonus", 
+        "eureka": "Social-Eureka", 
+        "total": "Social-Total" 
+      }
     },
     "Item":{
       "Quantity": "Quantity",
@@ -235,9 +256,7 @@
       "npc": "NPC"
     },
     "Item": {
-      "knowledge": "Knowledge",
-      "social": "Social",
-      "action": "Action",
+      "ability": "Ability",
       "tool": "Tool",
       "weapon": "Weapon",
       "consumable": "Consumable",

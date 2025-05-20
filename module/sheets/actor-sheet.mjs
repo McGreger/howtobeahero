@@ -523,9 +523,7 @@ async _prepareEffects(context) {
 
     const all = [];
 
-    const knowledge = [];
-    const action = [];
-    const social = [];
+    const ability = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -584,14 +582,8 @@ async _prepareEffects(context) {
         case 'tool':
           tools.push(itemWithContext);
           break;
-        case 'knowledge':
-          knowledge.push(itemWithContext);
-          break;
-        case 'action':
-          action.push(itemWithContext);
-          break;
-        case 'social':
-          social.push(itemWithContext);
+        case 'ability':
+          ability.push(itemWithContext);
           break;
       }
     }
@@ -603,9 +595,7 @@ async _prepareEffects(context) {
     context.weapons = weapons;
     context.armors = armors;
     context.tools = tools;
-    context.knowledge = knowledge;
-    context.action = action;
-    context.social = social;
+    context.ability = ability;
 
     // Create sections array for use in the template
     context.sections = [
@@ -615,11 +605,6 @@ async _prepareEffects(context) {
       { label: "HTBAH.armorPl", dataset: { type: "armor" }, items: armors },
       { label: "HTBAH.toolPl", dataset: { type: "tool" }, items: tools },
       { label: "HTBAH.Names", dataset: { type: "all" }, items: all }
-      /*
-      { label: "HTBAH.ItemTypeKnowledge", dataset: { type: "knowledge" }, items: knowledge },
-      { label: "HTBAH.ItemTypeAction", dataset: { type: "action" }, items: action },
-      { label: "HTBAH.ItemTypeSocial", dataset: { type: "social" }, items: social }
-       */
     ];
 
     // Remove empty sections
@@ -707,7 +692,7 @@ async _onHeaderDrop(event, dropZone) {
   if (!item) return false;
 
   // Validate item type based on drop zone
-  if (dropZone === "ability" && !["knowledge", "social", "action"].includes(item.type)) {
+  if (dropZone === "ability" && !["ability"].includes(item.type)) {
     ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyAbilitiesAllowed"));
     return false;
   }
@@ -1429,7 +1414,7 @@ async _onUseFavorite(event) {
 
     let types = {
       inventory: ["item", "consumable", "weapon", "tool", "armor"],
-      details: ["knowledge", "action", "social"],
+      details: ["ability"],
       effects: [], // Currently no effects are added through this
       biography: [] // Assuming no item types are created from the biography tab
     }[activeTab] ?? [];

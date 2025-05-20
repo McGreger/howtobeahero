@@ -134,13 +134,13 @@ export class HowToBeAHeroActor extends Actor {
     };
 
     const roll = await d100Roll(rollData);
-    Hooks.callAll("howToBeAHeroSkillSetRolled", this, skillSetId, roll);
+    Hooks.callAll("HowToBeAHeroAbilitySetRolled", this, skillSetId, roll);
     return roll;
   }
 
   _onItemUpdate(item, change, options, userId) {
     const skillSetKey = item.type;
-    if (!["knowledge", "action", "social"].includes(skillSetKey)) return;
+    if (!["ability"].includes(skillSetKey)) return;
 
     const currentValue = this.system.attributes.skillSets[skillSetKey].value || 0;
     const oldValue = options.htbah?.oldValue || 0;

@@ -1,6 +1,6 @@
 import HowToBeAHeroItemBase from "./item-base.mjs";
 
-export default class HowToBeAHeroSkill extends HowToBeAHeroItemBase {
+export default class HowToBeAHeroAbility extends HowToBeAHeroItemBase {
   /**
    * System data definition for abilities.
    *
@@ -21,6 +21,7 @@ export default class HowToBeAHeroSkill extends HowToBeAHeroItemBase {
     const schema = super.defineSchema();
 
     schema.type = new fields.StringField({label: "HTBAH.Type"});
+    schema.skillSet = new fields.StringField({ initial: 'action' });
     schema.value = new fields.NumberField({...requiredInteger, initial: 0, min: 0});
     schema.calculatedValue = new fields.NumberField({...requiredInteger, initial: 0, min: 0});
     schema.totalValue = new fields.NumberField({...requiredInteger, initial: 0, min: 0});
