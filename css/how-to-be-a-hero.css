@@ -1841,9 +1841,6 @@ item-list-controls search .filter-control[data-action="sort"] {
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
 
-/* ----------------------------------------- */
-/*  Inspiration Button & Value               */
-/* ----------------------------------------- */
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .stats .right {
   position: relative;
 }

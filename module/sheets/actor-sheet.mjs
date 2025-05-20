@@ -1412,7 +1412,6 @@ async _onUseFavorite(event) {
     const target = event.currentTarget;
     switch ( target.dataset.action ) {
       //case "findItem": this._onFindItem(target.dataset.itemType); break;
-      case "toggleInspiration": this._onToggleInspiration(); break;
     }
   }
 
