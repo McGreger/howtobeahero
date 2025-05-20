@@ -140,6 +140,10 @@
   "HTBAH.Effects": "Effects",
   "HTBAH.EffectsApplyTokens": "Apply to selected tokens",
   "HTBAH.EffectApplyWarningOwnership": "Effects cannot be applied to tokens you are not the owner of.",
+  "HTBAH.WarningOnlySkillsAllowed": "Only skills can be placed here.",
+  "HTBAH.WarningOnlyWeaponsAllowed": "Only weapons can be placed here.",
+  "HTBAH.WarningWrongSkillSet": "Drop the skill onto the correct skill set.",
+  "HTBAH.WarningSkillNotOwned": "Add the skill to the actor before using it here.",
   "HTBAH.EffectsSearch": "Search effects",
   
   "HTBAH.EffectCreate": "Create Effect",

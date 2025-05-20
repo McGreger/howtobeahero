@@ -137,6 +137,10 @@
   "HTBAH.Effects": "Effekte",
   "HTBAH.EffectsApplyTokens": "Auf ausgewählte Token anwenden",
   "HTBAH.EffectApplyWarningOwnership": "Effekte können nicht auf Token angewendet werden, deren Besitzer Sie nicht sind.",
+  "HTBAH.WarningOnlySkillsAllowed": "Hier dürfen nur Talente abgelegt werden.",
+  "HTBAH.WarningOnlyWeaponsAllowed": "Hier dürfen nur Waffen abgelegt werden.",
+  "HTBAH.WarningWrongSkillSet": "Dieses Talent gehört zu einer anderen Kategorie.",
+  "HTBAH.WarningSkillNotOwned": "Füge das Talent zuerst dem Charakter hinzu, bevor du es hier benutzt.",
   "HTBAH.EffectsSearch": "Effekte durchsuchen",
 
   "HTBAH.EffectCreate": "Effekt erstellen",

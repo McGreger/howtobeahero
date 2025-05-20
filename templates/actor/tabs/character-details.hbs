@@ -20,7 +20,7 @@
 {{/inline}}
 
 {{#*inline "talent-category"}}
-    <div class="talent-category flexcol">
+    <div class="talent-category flexcol" data-skill-type="{{categoryType}}">
         <filigree-box class="talents header" filigree-type="typeTalentsHeader">
             <div class="header-content flexrow">
                 <h3 class="flex3">
@@ -68,12 +68,12 @@
 
 <div class="talents-container flexrow">
     <div class="center flex1">
-        {{> talent-category title="Action" talentRows=talentRows.action items=action}}
+        {{> talent-category title="Action" talentRows=talentRows.action items=action categoryType="action"}}
     </div>
     <div class="left flex1">
-        {{> talent-category title="Knowledge" talentRows=talentRows.knowledge items=knowledge}}
+        {{> talent-category title="Knowledge" talentRows=talentRows.knowledge items=knowledge categoryType="knowledge"}}
     </div>
     <div class="right flex1">
-        {{> talent-category title="Social" talentRows=talentRows.social items=social}}
+        {{> talent-category title="Social" talentRows=talentRows.social items=social categoryType="social"}}
     </div>
 </div>
