@@ -504,8 +504,8 @@ item-list-controls search .filter-control[data-action="sort"] {
   opacity: 1;
 }
 
-/* Talent scores */
-.how-to-be-a-hero .talent-scores .rollable::after {
+/* Skill Set scores */
+.how-to-be-a-hero .skillSet-scores .rollable::after {
   top: 0px;
   right: 4px;
 }
@@ -2746,21 +2746,21 @@ a {
   flex: 1;
 }
 
-.how-to-be-a-hero .tab.details .talent-check {
+.how-to-be-a-hero .tab.details .skillSet-check {
   display: block;
   width: 100%;
   position: relative;
   padding-right: 30px;  /* Space for the d20 icon */
 }
 
-/* Adjust the rollable icon positioning specifically for talent checks */
-.how-to-be-a-hero .tab.details .talent-check.rollable::after {
+/* Adjust the rollable icon positioning specifically for skillSet checks */
+.how-to-be-a-hero .tab.details .skillSet-check.rollable::after {
   top: 50%;
   transform: translateY(-50%);
   right: 0;
 }
 
-.how-to-be-a-hero .tab.details .talent-check.rollable:hover::after {
+.how-to-be-a-hero .tab.details .skillSet-check.rollable:hover::after {
   transform: translateY(-50%) scale(1.1);
 }
 

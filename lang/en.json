@@ -43,7 +43,7 @@
   "HTBAH.AbilitySocial": "Social",
   "HTBAH.ItemRollPrompt": "{itemName} ({ability} Check)",
   
-  "HTBAH.TalentCheck": "Roll for Talent",
+  "HTBAH.SkillSetCheck": "Roll for Skill Set",
   "HTBAH.KnowledgeCheck": "Roll for Knowledge",
   "HTBAH.ActionCheck": "Roll for Action",
   "HTBAH.SocialCheck": "Roll for Social",
@@ -132,7 +132,7 @@
   "HTBAH.SkillSetSpentPoints": "Spent",
   "HTBAH.SkillSetCalculatedPoint": "Calculated",
   
-  "HTBAH.SavePromptTitle": "{talent} Throw",
+  "HTBAH.SavePromptTitle": "{skillSet} Throw",
 
   "HTBAH.Favorite": "Favorite",
   "HTBAH.FavoriteDrop": "Drop Favorite",

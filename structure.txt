@@ -123,7 +123,7 @@
 ./ui/icons/svg/hit-points.svg
 ./ui/skillSet-score-tab-dark.svg
 ./ui/level-badge.webp
-./ui/talent-score-tab-hc.svg
+./ui/skillSet-score-tab-hc.svg
 ./ui/denims
 ./ui/skillSet-score-tab.svg
 ./ui/character-sheet-imgs

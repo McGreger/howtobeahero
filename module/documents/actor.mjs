@@ -7,9 +7,9 @@ export class HowToBeAHeroActor extends Actor {
  */
   get skillSetTotalValues() {
     const result = {};
-    for (const [key, talent] of Object.entries(this.system.attributes.talents)) {
-      result[key] = (talent.value || 0) + 
-                    (talent.bonus || 0);
+    for (const [key, skillSet] of Object.entries(this.system.attributes.skillSets)) {
+      result[key] = (skillSet.value || 0) + 
+                    (skillSet.bonus || 0);
     }
     return result;
   }
@@ -127,7 +127,7 @@ export class HowToBeAHeroActor extends Actor {
         speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
         flags: {
           howtobeahero: {
-            roll: { type: talentId, talentId }
+            roll: { type: skillSetId, skillSetId }
           }
         }
       }

@@ -53,9 +53,9 @@ export async function d100Roll({
         icon: '<i class="fas fa-comments" style="color: #4B0082;"></i>',
         title: abilityName || game.i18n.localize("HTBAH.SocialCheck")
       },
-      talent: {
+      skillSet: {
         icon: '<i class="fas fa-star" style="color: #4169E1;"></i>',
-        title: abilityName || game.i18n.localize("HTBAH.Talent")
+        title: abilityName || game.i18n.localize("HTBAH.SkillSet")
       },
       default: {
         icon: '<i class="fas fa-dice-d20"></i>',
