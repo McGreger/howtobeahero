@@ -59,6 +59,10 @@
   "HTBAH.Weapon": "Weapon",
   "HTBAH.Initiative": "Initiative",
 
+  "HTBAH.WarningOnlySkillsAllowed": "Only skills may be dropped here.",
+  "HTBAH.WarningOnlyWeaponsAllowed": "Only weapons may be dropped here.",
+  "HTBAH.WarningWrongSkillSet": "You can only drop {expected} skills here.",
+
   "HTBAH.Names": "Names",
 
   "HTBAH.HitPoints": "Hitpoints",

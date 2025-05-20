@@ -59,6 +59,10 @@
   "HTBAH.Weapon": "Waffe",
   "HTBAH.Initiative": "Initiative",
 
+  "HTBAH.WarningOnlySkillsAllowed": "Hier können nur Fähigkeiten abgelegt werden.",
+  "HTBAH.WarningOnlyWeaponsAllowed": "Hier können nur Waffen abgelegt werden.",
+  "HTBAH.WarningWrongSkillSet": "Hier können nur {expected} Fähigkeiten abgelegt werden.",
+
   "HTBAH.HitPoints": "Lebenspunkte",
 
   "HTBAH.Inventory": "Inventar",  
