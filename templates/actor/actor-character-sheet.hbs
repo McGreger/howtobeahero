@@ -39,12 +39,12 @@
           </div>
         </div>
 
-        <div class="header-stat-column" data-slot="skill">
+        <div class="header-stat-column" data-slot="ability">
           <div class="stat-header">{{ localize "HTBAH.Skill" }}</div>
           <div class="stat-content">
-            {{#if headerItems.skill}}
-              <div class="header-item rollable" data-item-id="{{headerItems.skill._id}}" data-action="rollSkill">
-                <img src="{{headerItems.skill.img}}" alt="{{headerItems.skill.name}}" title="{{headerItems.skill.name}}">
+            {{#if headerItems.ability}}
+              <div class="header-item rollable" data-item-id="{{headerItems.ability._id}}" data-action="rollSkill">
+                <img src="{{headerItems.ability.img}}" alt="{{headerItems.ability.name}}" title="{{headerItems.ability.name}}">
                 {{#if editable}}
                 <a class="item-remove" data-action="removeSkill" data-tooltip="{{ localize "HTBAH.Remove" }}">
                   <i class="fas fa-times"></i>

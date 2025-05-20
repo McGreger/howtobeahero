@@ -2,17 +2,17 @@ import HowToBeAHeroItemBase from "./item-base.mjs";
 
 export default class HowToBeAHeroSkill extends HowToBeAHeroItemBase {
   /**
-   * System data definition for skills.
+   * System data definition for abilities.
    *
-   * @property {object} description                           Description of the skill
-   * @property {object} type                                  Type of the skill
-   * @property {object} value                                 Type of the skill
-   * @property {object} calculatedValue                       Type of the skill
+   * @property {object} description                           Description of the ability
+   * @property {object} type                                  Type of the ability
+   * @property {object} value                                 Type of the ability
+   * @property {object} calculatedValue                       Type of the ability
    * @property {object} roll                                  
-   * @property {object} roll.diceNum                          Type of the skill
-   * @property {object} roll.diceSize                         Type of the skill
-   * @property {object} roll.diceBonus                        Type of the skill
-   * @property {object} formula                               Type of the skill
+   * @property {object} roll.diceNum                          Type of the ability
+   * @property {object} roll.diceSize                         Type of the ability
+   * @property {object} roll.diceBonus                        Type of the ability
+   * @property {object} formula                               Type of the ability
    */
   
   static defineSchema() {

@@ -147,7 +147,7 @@ export class HowToBeAHeroItem extends Item {
   /* -------------------------------------------- */
 
   /**
-   * Prepare derived data for an skill-type item and define labels.
+   * Prepare derived data for an ability-type item and define labels.
    * @protected
    */
   _prepareKnowledge() {
@@ -157,7 +157,7 @@ export class HowToBeAHeroItem extends Item {
   /* -------------------------------------------- */
 
   /**
-   * Prepare derived data for an skill-type item and define labels.
+   * Prepare derived data for an ability-type item and define labels.
    * @protected
    */
   _prepareAction() {
@@ -167,14 +167,14 @@ export class HowToBeAHeroItem extends Item {
   /* -------------------------------------------- */
 
   /**
-   * Prepare derived data for an skill-type item and define labels.
+   * Prepare derived data for an ability-type item and define labels.
    * @protected
    */
   _prepareSocial() {
     this._prepareSharedSkillValues();
   }
   /**
-   * Prepare shared data for an skill-type item.
+   * Prepare shared data for an ability-type item.
    * @protected
    */
 

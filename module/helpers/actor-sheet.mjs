@@ -338,18 +338,18 @@ _prepareActorData(context) {
  */
 async _prepareHeaderItems() {
   const headerItems = {
-    skill: null,
+    ability: null,
     weapon: null
   };
 
   // Get the stored header item IDs from flags
-  const skillId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+  const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
   const weaponId = this.actor.getFlag("how-to-be-a-hero", "headerWeapon");
 
-  if (skillId) {
-    const item = this.actor.items.get(skillId);
+  if (abilityId) {
+    const item = this.actor.items.get(abilityId);
     if (item) {
-      headerItems.skill = {
+      headerItems.ability = {
         id: item.id,
         name: item.name,
         img: item.img,
@@ -686,7 +686,7 @@ _onDropItem(event, data) {
 /**
  * Handle dropping an item in a header slot
  * @param {DragEvent} event - The drop event
- * @param {string} dropZone - The drop zone identifier ("skill" or "weapon")
+ * @param {string} dropZone - The drop zone identifier ("ability" or "weapon")
  * @returns {Promise<void>}
  * @private
  */
@@ -707,8 +707,8 @@ async _onHeaderDrop(event, dropZone) {
   if (!item) return false;
 
   // Validate item type based on drop zone
-  if (dropZone === "skill" && !["knowledge", "social", "action"].includes(item.type)) {
-    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlySkillsAllowed"));
+  if (dropZone === "ability" && !["knowledge", "social", "action"].includes(item.type)) {
+    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyAbilitiesAllowed"));
     return false;
   }
   
@@ -721,24 +721,24 @@ async _onHeaderDrop(event, dropZone) {
 
 /**
  * Set an item as a header item
- * @param {string} slot - The header slot ("skill" or "weapon")
+ * @param {string} slot - The header slot ("ability" or "weapon")
  * @param {string} itemId - The item ID
  * @returns {Promise<Actor>}
  * @private
  */
 async _setHeaderItem(slot, itemId) {
-  const flagKey = slot === "skill" ? "headerSkill" : "headerWeapon";
+  const flagKey = slot === "ability" ? "headerSkill" : "headerWeapon";
   return this.actor.setFlag("how-to-be-a-hero", flagKey, itemId);
 }
 
 /**
  * Remove an item from a header slot
- * @param {string} slot - The header slot ("skill" or "weapon")
+ * @param {string} slot - The header slot ("ability" or "weapon")
  * @returns {Promise<Actor>}
  * @private
  */
 async _removeHeaderItem(slot) {
-  const flagKey = slot === "skill" ? "headerSkill" : "headerWeapon";
+  const flagKey = slot === "ability" ? "headerSkill" : "headerWeapon";
   return this.actor.unsetFlag("how-to-be-a-hero", flagKey);
 }
 
@@ -907,7 +907,7 @@ async _onUseFavorite(event) {
   
       const rollableClass = [];
       if (this.isEditable && (type !== "slots")) rollableClass.push("rollable");
-      if (type === "skill") rollableClass.push("skill-name");
+      if (type === "ability") rollableClass.push("ability-name");
       else if (type === "tool") rollableClass.push("tool-name");
   
       if (suppressed) subtitle = game.i18n.localize("DND5E.Suppressed");
@@ -918,7 +918,7 @@ async _onUseFavorite(event) {
         effectId: type === "effect" ? favorite.id : null,
         parentId: (type === "effect") && (favorite.parent !== favorite.target) ? favorite.parent.id : null,
         preparationMode: type === "slots" ? id === "pact" ? "pact" : "prepared" : null,
-        key: (type === "skill") || (type === "tool") ? id : null,
+        key: (type === "ability") || (type === "tool") ? id : null,
         toggle: toggle === undefined ? null : { applicable: true, value: toggle },
         quantity: quantity > 1 ? quantity : "",
         rollableClass: rollableClass.filterJoin(" "),
@@ -1038,7 +1038,7 @@ async _onUseFavorite(event) {
     html.find('.deletion-control[data-action="removeFavorite"]').on('click', this._onRemoveFavorite.bind(this));
     html.find('.item-remove[data-action="removeSkill"]').click(event => {
       event.preventDefault();
-      this._removeHeaderItem("skill");
+      this._removeHeaderItem("ability");
     });
     
     html.find('.item-remove[data-action="removeWeapon"]').click(event => {
@@ -1073,10 +1073,10 @@ async _onUseFavorite(event) {
   
   async _onRollHeaderSkill(event) {
     event.preventDefault();
-    const skillId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
-    if (!skillId) return;
+    const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+    if (!abilityId) return;
     
-    const item = this.actor.items.get(skillId);
+    const item = this.actor.items.get(abilityId);
     if (!item) return;
     
     return item.roll();

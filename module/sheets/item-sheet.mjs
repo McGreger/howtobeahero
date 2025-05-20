@@ -102,7 +102,7 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
-    // Add bonus handlers for skills
+    // Add bonus handlers for abilities
     html.find('[data-action="incrementBonus"]').click(this._onAdjustBonus.bind(this, 1));
     html.find('[data-action="decrementBonus"]').click(this._onAdjustBonus.bind(this, -1));
 
