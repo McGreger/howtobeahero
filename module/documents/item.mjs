@@ -218,18 +218,10 @@ async roll() {
 
     // Determine the category type for the icon
     let category;
-    switch(item.type) {
-      case "knowledge":
-        category = "knowledge";
-        break;
-      case "action":
-        category = "action";
-        break;
-      case "social":
-        category = "social";
-        break;
-      default:
-        category = "item";
+    if (item.type == "ability") {
+      category = item.system.skillSet;
+    } else {
+      category = "item";
     }
 
     const itemRollData = {

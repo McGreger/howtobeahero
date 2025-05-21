@@ -523,7 +523,9 @@ async _prepareEffects(context) {
 
     const all = [];
 
-    const ability = [];
+    const action = [];
+    const knowledge = [];
+    const social = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -583,7 +585,17 @@ async _prepareEffects(context) {
           tools.push(itemWithContext);
           break;
         case 'ability':
-          ability.push(itemWithContext);
+          switch (i.system.skillSet) {
+            case 'action':
+              action.push(itemWithContext);
+              break;
+            case 'knowledge':
+              knowledge.push(itemWithContext);
+              break;
+            case 'social':
+              social.push(itemWithContext);
+              break;
+          }
           break;
       }
     }
@@ -595,7 +607,9 @@ async _prepareEffects(context) {
     context.weapons = weapons;
     context.armors = armors;
     context.tools = tools;
-    context.ability = ability;
+    context.action = action;
+    context.knowledge = knowledge;
+    context.social = social;
 
     // Create sections array for use in the template
     context.sections = [
