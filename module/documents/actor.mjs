@@ -167,9 +167,3 @@ Hooks.on("preUpdateItem", (item, change, options, userId) => {
       : item.system.value * 0.1;
   }
 });
-
-Hooks.on("updateItem", (item, change, options, userId) => {
-  if (item.parent instanceof HowToBeAHeroActor) {
-    item.parent._onItemUpdate(item, change, options, userId);
-  }
-});
