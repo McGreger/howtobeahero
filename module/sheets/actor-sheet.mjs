@@ -1416,15 +1416,67 @@ async _onUseFavorite(event) {
     console.warn("Invalid JSON in data-system attribute:", button.dataset.system, err);
   }
   
-  const data = {
-    name: game.i18n.format("DOCUMENT.New", {
-      type: game.i18n.localize(`TYPES.Item.${type}`)
-    }),
-    type,
-    system: systemData
-  };
+  // Create Prompt for Item Name
+  
+  return new Promise(resolve => {
+    const dlg = new Dialog({
+      title: game.i18n.localize("Name"),
 
-  return this.actor.createEmbeddedDocuments(documentClass, [data]);
+      // HTML Definition
+      content: `
+        <form>
+          <div class="form-group">
+            <label>${game.i18n.localize("Name")}:</label>
+            <input type="text" name="name">
+          </div>
+        </form>
+      `,
+
+      // Definiere die Buttons
+      buttons: {
+        ok: {
+          // Beschriftung des OK-Buttons
+          label: game.i18n.localize("OK"),
+
+          // Was passiert beim Klick auf OK
+          callback: html => {
+            // Hole den eingegebenen Namen aus dem Input-Feld
+            const name = html.find('[name="name"]').val();
+
+            // Baue das Item-Datenobjekt
+            const data = {
+              name,
+              type,
+              system: systemData // systemData stammt aus dem äußeren Kontext
+            };
+
+            // Erstelle das Item beim Actor und liefere das Promise-Ergebnis
+            resolve(this.actor.createEmbeddedDocuments(documentClass, [data]));
+          }
+        },
+        cancel: {
+          // Abbrechen-Button
+          label: game.i18n.localize("Cancel"),
+          callback: () => resolve() // tue nichts, wenn abgebrochen wird
+        }
+      },
+
+      // Standardaktion bei Enter-Taste: OK
+      default: "ok"
+    });
+
+    // Zeige den Dialog an
+    dlg.render(true);
+
+    // Setze den Fokus manuell auf das Eingabefeld nach dem Rendern
+    setTimeout(() => {
+      const input = dlg.element.find('input[name="name"]');
+      if (input.length) {
+        input.focus();       // setzt den Cursor ins Feld
+        input[0].select();   // optional: markiert den Text (falls vorhanden)
+      }
+    }, 50); // Verzögerung nötig, da Foundry sonst den Fokus auf den OK-Button setzt
+  });
 }
 
   /**
