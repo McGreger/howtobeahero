@@ -1,6 +1,5 @@
 import { HowToBeAHeroActor } from '../documents/actor.mjs';
 import { HowToBeAHeroDragDropHandler } from '../helpers/drag-drop-handler.mjs';
-import { formatNumber, simplifyBonus, staticID } from "../helpers/utils.mjs";
 
 /**
  * A specialized subclass of Tabs that handles tabs which exist outside an Application's inner HTML.
@@ -36,6 +35,63 @@ class TabsHtbah extends Tabs {
     return result;
   }
 }
+
+  /**
+   * A simple name input dialog for item creation.
+   * @extends {Application}
+   */
+  class NameInputDialog extends Application {
+    constructor({ defaultName = "", onSubmit }) {
+      super();
+      this.defaultName = defaultName;
+      this.onSubmit = onSubmit;
+    }
+
+    static get defaultOptions() {
+      return foundry.utils.mergeObject(super.defaultOptions, {
+        id: "create-item-dialog",
+        title: game.i18n.localize("Name"),
+        template: "systems/how-to-be-a-hero/templates/dialogs/create-item.hbs",
+        classes: ["dialog", "htbah"],
+        width: 400,
+        height: "auto",
+        resizable: false
+      });
+    }
+
+    getData() {
+      return {
+        defaultName: this.defaultName
+      };
+    }
+
+    activateListeners(html) {
+      super.activateListeners(html);
+
+      const input = html.find('input[name="name"]');
+      input.focus();
+      input[0]?.select();
+
+      html.find("[data-action='confirm']").on("click", this._submit.bind(this));
+
+      input.on("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          this._submit();
+        }
+      });
+    }
+
+    _submit() {
+      const name = this.element.find('input[name="name"]').val()?.trim();
+      if (!name) {
+        ui.notifications.warn(game.i18n.localize("HTBAH.WarnNameRequired"));
+        return;
+      }
+      this.close();
+      this.onSubmit(name);
+    }
+  }
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -1382,119 +1438,42 @@ async _onUseFavorite(event) {
   /* -------------------------------------------- */
 
   /**
-   * Handle creating a new embedded document on the actor.
-   * Supports dynamic document types and system data via data attributes.
-   * Usage:
-   * <button data-action="createDoc" data-document-class="Item" data-type="ability" data-system.skillSet="action">...</button>
+   * Handle creating a new embedded document via dialog prompt.
    *
-   * @param {Event} event - The originating click event
-   * @returns {Promise<Document[]>|void}
-   * @protected
-   */
-/**
-   * Handle creating a new embedded document on the actor.
-   * Supports JSON-based system data to preserve field casing.
-   *
-   * @param {Event} event - The originating click event
-   * @returns {Promise<Document[]>|void}
+   * @param {Event} event - The triggering event
+   * @returns {Promise<Item[]>|void}
    * @protected
    */
   async _onCreateDocument(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const button = event.currentTarget;
+    const button = event.currentTarget;
+    const documentClass = button.dataset.documentClass ?? "Item";
+    const type = button.dataset.type ?? "item";
 
-  const documentClass = button.dataset.documentClass ?? "Item";
-  const type = button.dataset.type ?? "item";
-
-  // Parse system data from JSON-encoded data-system attribute
-  let systemData = {};
-  try {
-    const rawSystem = button.dataset.system;
-    if (rawSystem) systemData = JSON.parse(rawSystem);
-  } catch (err) {
-    console.warn("Invalid JSON in data-system attribute:", button.dataset.system, err);
-  }
-  
-  // Create Prompt for Item Name
-  
-  return new Promise(resolve => {
-    const dlg = new Dialog({
-      title: game.i18n.localize("Name"),
-
-      // HTML Definition
-      content: `
-        <form>
-          <div class="form-group">
-            <label>${game.i18n.localize("Name")}:</label>
-            <input type="text" name="name">
-          </div>
-        </form>
-      `,
-
-      // Definiere die Buttons
-      buttons: {
-        ok: {
-          // Beschriftung des OK-Buttons
-          label: game.i18n.localize("OK"),
-
-          // Was passiert beim Klick auf OK
-          callback: html => {
-            // Hole den eingegebenen Namen aus dem Input-Feld
-            const name = html.find('[name="name"]').val();
-
-            // Baue das Item-Datenobjekt
-            const data = {
-              name,
-              type,
-              system: systemData // systemData stammt aus dem äußeren Kontext
-            };
-
-            // Erstelle das Item beim Actor und liefere das Promise-Ergebnis
-            resolve(this.actor.createEmbeddedDocuments(documentClass, [data]));
-          }
-        },
-        cancel: {
-          // Abbrechen-Button
-          label: game.i18n.localize("Cancel"),
-          callback: () => resolve() // tue nichts, wenn abgebrochen wird
-        }
-      },
-
-      // Standardaktion bei Enter-Taste: OK
-      default: "ok"
-    });
-
-    // Zeige den Dialog an
-    dlg.render(true);
-
-    // Setze den Fokus manuell auf das Eingabefeld nach dem Rendern
-    setTimeout(() => {
-      const input = dlg.element.find('input[name="name"]');
-      if (input.length) {
-        input.focus();       // setzt den Cursor ins Feld
-        input[0].select();   // optional: markiert den Text (falls vorhanden)
-      }
-    }, 50); // Verzögerung nötig, da Foundry sonst den Fokus auf den OK-Button setzt
-  });
-}
-
-  /**
-   * Build a localized name for a new document.
-   * Can be customized for different types (e.g., localize abilities by skillSet).
-   *
-   * @param {string} type - The document type
-   * @param {Object} systemData - The extracted system data
-   * @returns {string}
-   * @protected
-   */
-  _buildDocumentName(type, systemData) {
-    if (type === "ability" && systemData.skillSet) {
-      const label = CONFIG.HTBAH?.skillSets?.[systemData.skillSet]?.label || systemData.skillSet;
-      return `${game.i18n.localize(label)} Ability`;
+    // Parse system data from JSON-encoded data-system attribute
+    let systemData = {};
+    try {
+      const rawSystem = button.dataset.system;
+      if (rawSystem) systemData = JSON.parse(rawSystem);
+    } catch (err) {
+      console.warn("Invalid JSON in data-system attribute:", button.dataset.system, err);
     }
 
-    return game.i18n.localize("DOCUMENT.New");
+     // Show the custom input dialog and wait for confirmation
+    return new Promise(resolve => {
+      new NameInputDialog({
+        defaultName: "",
+        onSubmit: name => {
+          const data = {
+            name,
+            type,
+            system: systemData
+          };
+          resolve(this.actor.createEmbeddedDocuments(documentClass, [data]));
+        }
+      }).render(true);
+    });
   }
 
 /* -------------------------------------------- */
