@@ -343,7 +343,7 @@ async _prepareHeaderItems() {
   };
 
   // Get the stored header item IDs from flags
-  const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+  const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerAbility");
   const weaponId = this.actor.getFlag("how-to-be-a-hero", "headerWeapon");
 
   if (abilityId) {
@@ -726,7 +726,7 @@ async _onHeaderDrop(event, dropZone) {
  * @private
  */
 async _setHeaderItem(slot, itemId) {
-  const flagKey = slot === "ability" ? "headerSkill" : "headerWeapon";
+  const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
   return this.actor.setFlag("how-to-be-a-hero", flagKey, itemId);
 }
 
@@ -737,7 +737,7 @@ async _setHeaderItem(slot, itemId) {
  * @private
  */
 async _removeHeaderItem(slot) {
-  const flagKey = slot === "ability" ? "headerSkill" : "headerWeapon";
+  const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
   return this.actor.unsetFlag("how-to-be-a-hero", flagKey);
 }
 
@@ -989,7 +989,7 @@ async _onUseFavorite(event) {
       
       switch(action) {
         case 'rollSkill':
-          return this._onRollHeaderSkill(ev);
+          return this._onRollheaderAbility(ev);
         case 'rollWeapon':
           return this._onRollHeaderWeapon(ev);
       }
@@ -1070,9 +1070,9 @@ async _onUseFavorite(event) {
     return this.actor.rollInitiative({createCombatants: true});
   }
   
-  async _onRollHeaderSkill(event) {
+  async _onRollheaderAbility(event) {
     event.preventDefault();
-    const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+    const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerAbility");
     if (!abilityId) return;
     
     const item = this.actor.items.get(abilityId);
