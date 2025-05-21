@@ -75,6 +75,7 @@
         "formula": ""
       },
       "ability": {
+        "skillSet": "action",
         "type": "",
         "value": 0,
         "calculatedValue": 0,

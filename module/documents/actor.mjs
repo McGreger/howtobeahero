@@ -173,20 +173,3 @@ Hooks.on("updateItem", (item, change, options, userId) => {
     item.parent._onItemUpdate(item, change, options, userId);
   }
 });
-
-Hooks.on("createItem", (item, options, userId) => {
-  if (item.parent instanceof HowToBeAHeroActor) {
-    const change = { system: { value: item.system.value } };
-    item.parent._onItemUpdate(item, change, { htbah: { oldValue: 0 } }, userId);
-  }
-});
-
-Hooks.on("deleteItem", (item, options, userId) => {
-  if (item.parent instanceof HowToBeAHeroActor) {
-    const change = { system: { value: 0 } };
-    const oldValue = item.system.value >= 80 
-      ? item.system.value * 0.1 + 10  // 18 for a value of 80
-      : item.system.value * 0.1;
-    item.parent._onItemUpdate(item, change, { htbah: { oldValue } }, userId);
-  }
-});

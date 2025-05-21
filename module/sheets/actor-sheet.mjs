@@ -980,7 +980,8 @@ async _onUseFavorite(event) {
       "[data-action]": this._onItemAction,
       ".rollable:is(.skillSet-check)": this._onRollSkillSet,
       ".item-roll": this._onItemRoll,
-      ".create-child": this._onCreateChild
+      ".create-child": this._onCreateChild,
+      "[data-action=createDoc]": this._onCreateDocument
     };
 
     Object.entries(commonSelectors).forEach(([selector, handler]) => {
@@ -1379,6 +1380,72 @@ async _onUseFavorite(event) {
   }
 
   /* -------------------------------------------- */
+
+  /**
+   * Handle creating a new embedded document on the actor.
+   * Supports dynamic document types and system data via data attributes.
+   * Usage:
+   * <button data-action="createDoc" data-document-class="Item" data-type="ability" data-system.skillSet="action">...</button>
+   *
+   * @param {Event} event - The originating click event
+   * @returns {Promise<Document[]>|void}
+   * @protected
+   */
+/**
+   * Handle creating a new embedded document on the actor.
+   * Supports JSON-based system data to preserve field casing.
+   *
+   * @param {Event} event - The originating click event
+   * @returns {Promise<Document[]>|void}
+   * @protected
+   */
+  async _onCreateDocument(event) {
+  event.preventDefault();
+
+  const button = event.currentTarget;
+
+  const documentClass = button.dataset.documentClass ?? "Item";
+  const type = button.dataset.type ?? "item";
+
+  // Parse system data from JSON-encoded data-system attribute
+  let systemData = {};
+  try {
+    const rawSystem = button.dataset.system;
+    if (rawSystem) systemData = JSON.parse(rawSystem);
+  } catch (err) {
+    console.warn("Invalid JSON in data-system attribute:", button.dataset.system, err);
+  }
+  
+  const data = {
+    name: game.i18n.format("DOCUMENT.New", {
+      type: game.i18n.localize(`TYPES.Item.${type}`)
+    }),
+    type,
+    system: systemData
+  };
+
+  return this.actor.createEmbeddedDocuments(documentClass, [data]);
+}
+
+  /**
+   * Build a localized name for a new document.
+   * Can be customized for different types (e.g., localize abilities by skillSet).
+   *
+   * @param {string} type - The document type
+   * @param {Object} systemData - The extracted system data
+   * @returns {string}
+   * @protected
+   */
+  _buildDocumentName(type, systemData) {
+    if (type === "ability" && systemData.skillSet) {
+      const label = CONFIG.HTBAH?.skillSets?.[systemData.skillSet]?.label || systemData.skillSet;
+      return `${game.i18n.localize(label)} Ability`;
+    }
+
+    return game.i18n.localize("DOCUMENT.New");
+  }
+
+/* -------------------------------------------- */
 
   /**
  * Handle creating a new embedded child.
