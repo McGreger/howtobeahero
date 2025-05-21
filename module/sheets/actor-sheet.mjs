@@ -683,42 +683,6 @@ _onDropItem(event, data) {
 }
 
 /**
- * Handle dropping an item in a header slot
- * @param {DragEvent} event - The drop event
- * @param {string} dropZone - The drop zone identifier ("ability" or "weapon")
- * @returns {Promise<void>}
- * @private
- */
-async _onHeaderDrop(event, dropZone) {
-  event.preventDefault();
-  
-  let data;
-  try {
-    data = JSON.parse(event.dataTransfer.getData("text/plain"));
-  } catch(e) {
-    return false;
-  }
-
-  // Validate the drop
-  if (data.type !== "Item") return false;
-
-  const item = await Item.implementation.fromDropData(data);
-  if (!item) return false;
-
-  // Validate item type based on drop zone
-  if (dropZone === "ability" && !["ability"].includes(item.type)) {
-    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyAbilitiesAllowed"));
-    return false;
-  }
-  
-  if (dropZone === "weapon" && item.type !== "weapon") {
-    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyWeaponsAllowed"));
-    return false;
-  }
-  await this._setHeaderItem(dropZone, item.id);
-}
-
-/**
  * Set an item as a header item
  * @param {string} slot - The header slot ("ability" or "weapon")
  * @param {string} itemId - The item ID
