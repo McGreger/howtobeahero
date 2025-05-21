@@ -285,13 +285,14 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 
 /** @override */
 async getData(options) {
+  debugger;
   const context = await super.getData(options);
   
+  this._prepareContext(options),
+
   await Promise.all([
-    this._prepareBasicContext(context, options),
     this._preparePortraitData(context),
     this._prepareHealthData(context),
-    this._prepareActorData(context),
     this._prepareHeaderItems().then(items => context.headerItems = items),
     this._prepareItemsAndEffects(context)
   ]);
@@ -305,15 +306,31 @@ async getData(options) {
 }
 
 /**
- * Prepares basic context data
- * @param {SheetContext} context
+ * Prepares the base context data for rendering the actor sheet.
  * @param {GetDataOptions} options
+ * @returns {Object} context
  */
-_prepareBasicContext(context, options) {
-  context.editable = this.isEditable && (this._mode === this.constructor.MODES.EDIT);
-  context.cssClass = this._getContextCssClass(context.editable);
-  context.rollableClass = this.isEditable ? 'rollable' : '';
+_prepareContext(options) {
+  const actor = this.actor;
+
+  const context = {
+    editable: this.isEditable,
+    owner: actor.isOwner,
+    limited: actor.limited,
+    actor: actor,
+    system: actor.system,
+    flags: actor.flags,
+    config: CONFIG.HTBAH,
+    fields: actor.schema.fields,
+    systemFields: actor.system.schema.fields,
+    cssClass: this._getContextCssClass(this.isEditable),
+    rollableClass: this.isEditable ? 'rollable' : '',
+    rollData: actor.getRollData()
+  };
+
+  return context;
 }
+
 
 /**
  * Generates CSS class string for the context
@@ -377,7 +394,7 @@ _prepareHealthData(context) {
  * Prepares actor data for the context
  * @param {SheetContext} context
  */
-_prepareActorData(context) {
+_prepareAbilities(context) {
   const actor = this.actor;
   const actorData = context.data;
 
@@ -435,15 +452,21 @@ async _prepareHeaderItems() {
  */
 async _prepareItemsAndEffects(context) {
   const actorData = context.data;
-  
-  if (actorData.type === 'character') {
-    await this._prepareCharacterData(context);
-    await this._prepareItems(context);
-  } else if (actorData.type === 'npc') {
-    await this._prepareNPCData(context);
-    await this._prepareItems(context);
+  debugger;
+  switch (actorData.type) {
+    case "character":
+      await this._prepareCharacterData(context);
+      break;
+    case "npc":
+      await this._prepareNPCData(context);
+      break;
+    // Optional: handle other types explicitly or with default
+    default:
+      console.warn(`Unhandled actor type in _prepareItemsAndEffects: ${actorData.type}`);
+      break;
   }
   
+  await this._prepareItems(context);
   await this._prepareEffects(context);
 }
 
