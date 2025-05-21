@@ -9,3 +9,4 @@
 - Added dice icons to rollable items and optimized css in chatcard presentation 
 - Removed Homebrew Inspiration points, as this should be a module (#40)
 - Reanmed _skill_ to _ability_ in internal data structure
+- Refactor Action, Knowledge and Social into single Ability Item Type (#22)
