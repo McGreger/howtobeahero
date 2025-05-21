@@ -61,6 +61,17 @@
                 {{#each items}}
                     {{> item-list}}
                 {{/each}}
+                <li
+                class='item-control item-create'
+                title='{{localize "DOCUMENT.Create" type='Item'}}'
+                data-action='createDoc'
+                data-document-class='Item'
+                data-type='ability'
+                data-system='{"skillSet": "{{title}}"}'
+                >
+                <i class='fas fa-plus'></i>
+                {{localize 'DOCUMENT.New' type='item'}}
+                </li>
             </ol>
         </filigree-box>
     </div>
@@ -68,12 +79,12 @@
 
 <div class="skillSets-container flexrow">
     <div class="center flex1">
-        {{> skillSet-category title="Action" skillSetRows=skillSetRows.action items=action}}
+        {{> skillSet-category title="action" skillSetRows=skillSetRows.action items=action}}
     </div>
     <div class="left flex1">
-        {{> skillSet-category title="Knowledge" skillSetRows=skillSetRows.knowledge items=knowledge}}
+        {{> skillSet-category title="knowledge" skillSetRows=skillSetRows.knowledge items=knowledge}}
     </div>
     <div class="right flex1">
-        {{> skillSet-category title="Social" skillSetRows=skillSetRows.social items=social}}
+        {{> skillSet-category title="social" skillSetRows=skillSetRows.social items=social}}
     </div>
 </div>

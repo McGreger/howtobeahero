@@ -75,12 +75,8 @@ export class HowToBeAHeroItem extends Item {
         this._prepareArmor(); break;
       case "tool":
         this._prepareTool(); break;
-      case "knowledge":
-        this._prepareKnowledge(); break;
-      case "action":
-        this._prepareAction(); break;
-      case "social":
-        this._prepareSocial(); break;
+      case "ability":
+        this._prepareAbility(); break;
     }
   }
 
@@ -150,29 +146,10 @@ export class HowToBeAHeroItem extends Item {
    * Prepare derived data for an ability-type item and define labels.
    * @protected
    */
-  _prepareKnowledge() {
+  _prepareAbility() {
     this._prepareSharedSkillValues();
   }
   
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare derived data for an ability-type item and define labels.
-   * @protected
-   */
-  _prepareAction() {
-    this._prepareSharedSkillValues();
-  }
-  
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare derived data for an ability-type item and define labels.
-   * @protected
-   */
-  _prepareSocial() {
-    this._prepareSharedSkillValues();
-  }
   /**
    * Prepare shared data for an ability-type item.
    * @protected
@@ -241,18 +218,10 @@ async roll() {
 
     // Determine the category type for the icon
     let category;
-    switch(item.type) {
-      case "knowledge":
-        category = "knowledge";
-        break;
-      case "action":
-        category = "action";
-        break;
-      case "social":
-        category = "social";
-        break;
-      default:
-        category = "item";
+    if (item.type == "ability") {
+      category = item.system.skillSet;
+    } else {
+      category = "item";
     }
 
     const itemRollData = {
@@ -326,14 +295,8 @@ getRollData() {
       case "tool":
         updates = this._onCreateOwnedTool(data, isNPC);
         break;
-      case "knowledge":
-        updates = this._onCreateOwnedKnowledge(data, isNPC);
-        break;
-      case "action":
-        updates = this._onCreateOwnedAction(data, isNPC);
-        break;
-      case "social":
-        updates = this._onCreateOwnedSocial(data, isNPC);
+      case "ability":
+        updates = this._onCreateOwnedAbility(data, isNPC);
         break;
     }
     if ( updates ) return this.updateSource(updates);
@@ -471,41 +434,7 @@ getRollData() {
    * @returns {object}          Updates to apply to the item data.
    * @private
    */
-  _onCreateOwnedKnowledge(data, isNPC) {
-    const updates = {};
-    /*
-    if ( isNPC && !foundry.utils.getProperty(data, "system.type.value") ) {
-      updates["system.type.value"] = "monster"; // Set features on NPCs to be 'monster features'.
-    }
-    */
-    return updates;
-  }
-
-  /**
-   * Pre-creation logic for the automatic configuration of owned feature type Items.
-   * @param {object} data       Data for the newly created item.
-   * @param {boolean} isNPC     Is this actor an NPC?
-   * @returns {object}          Updates to apply to the item data.
-   * @private
-   */
-  _onCreateOwnedAction(data, isNPC) {
-    const updates = {};
-    /*
-    if ( isNPC && !foundry.utils.getProperty(data, "system.type.value") ) {
-      updates["system.type.value"] = "monster"; // Set features on NPCs to be 'monster features'.
-    }
-    */
-    return updates;
-  }
-
-  /**
-   * Pre-creation logic for the automatic configuration of owned feature type Items.
-   * @param {object} data       Data for the newly created item.
-   * @param {boolean} isNPC     Is this actor an NPC?
-   * @returns {object}          Updates to apply to the item data.
-   * @private
-   */
-  _onCreateOwnedSocial(data, isNPC) {
+  _onCreateOwnedAbility(data, isNPC) {
     const updates = {};
     /*
     if ( isNPC && !foundry.utils.getProperty(data, "system.type.value") ) {

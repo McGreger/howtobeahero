@@ -1,6 +1,5 @@
 import { HowToBeAHeroActor } from '../documents/actor.mjs';
 import { HowToBeAHeroDragDropHandler } from '../helpers/drag-drop-handler.mjs';
-import { formatNumber, simplifyBonus, staticID } from "../helpers/utils.mjs";
 
 /**
  * A specialized subclass of Tabs that handles tabs which exist outside an Application's inner HTML.
@@ -36,6 +35,63 @@ class TabsHtbah extends Tabs {
     return result;
   }
 }
+
+  /**
+   * A simple name input dialog for item creation.
+   * @extends {Application}
+   */
+  class NameInputDialog extends Application {
+    constructor({ defaultName = "", onSubmit }) {
+      super();
+      this.defaultName = defaultName;
+      this.onSubmit = onSubmit;
+    }
+
+    static get defaultOptions() {
+      return foundry.utils.mergeObject(super.defaultOptions, {
+        id: "create-item-dialog",
+        title: game.i18n.localize("Name"),
+        template: "systems/how-to-be-a-hero/templates/dialogs/create-item.hbs",
+        classes: ["dialog", "htbah"],
+        width: 400,
+        height: "auto",
+        resizable: false
+      });
+    }
+
+    getData() {
+      return {
+        defaultName: this.defaultName
+      };
+    }
+
+    activateListeners(html) {
+      super.activateListeners(html);
+
+      const input = html.find('input[name="name"]');
+      input.focus();
+      input[0]?.select();
+
+      html.find("[data-action='confirm']").on("click", this._submit.bind(this));
+
+      input.on("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          this._submit();
+        }
+      });
+    }
+
+    _submit() {
+      const name = this.element.find('input[name="name"]').val()?.trim();
+      if (!name) {
+        ui.notifications.warn(game.i18n.localize("HTBAH.WarnNameRequired"));
+        return;
+      }
+      this.close();
+      this.onSubmit(name);
+    }
+  }
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -343,7 +399,7 @@ async _prepareHeaderItems() {
   };
 
   // Get the stored header item IDs from flags
-  const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+  const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerAbility");
   const weaponId = this.actor.getFlag("how-to-be-a-hero", "headerWeapon");
 
   if (abilityId) {
@@ -523,8 +579,8 @@ async _prepareEffects(context) {
 
     const all = [];
 
-    const knowledge = [];
     const action = [];
+    const knowledge = [];
     const social = [];
 
     // Iterate through items, allocating to containers
@@ -584,14 +640,18 @@ async _prepareEffects(context) {
         case 'tool':
           tools.push(itemWithContext);
           break;
-        case 'knowledge':
-          knowledge.push(itemWithContext);
-          break;
-        case 'action':
-          action.push(itemWithContext);
-          break;
-        case 'social':
-          social.push(itemWithContext);
+        case 'ability':
+          switch (i.system.skillSet) {
+            case 'action':
+              action.push(itemWithContext);
+              break;
+            case 'knowledge':
+              knowledge.push(itemWithContext);
+              break;
+            case 'social':
+              social.push(itemWithContext);
+              break;
+          }
           break;
       }
     }
@@ -603,8 +663,8 @@ async _prepareEffects(context) {
     context.weapons = weapons;
     context.armors = armors;
     context.tools = tools;
-    context.knowledge = knowledge;
     context.action = action;
+    context.knowledge = knowledge;
     context.social = social;
 
     // Create sections array for use in the template
@@ -615,11 +675,6 @@ async _prepareEffects(context) {
       { label: "HTBAH.armorPl", dataset: { type: "armor" }, items: armors },
       { label: "HTBAH.toolPl", dataset: { type: "tool" }, items: tools },
       { label: "HTBAH.Names", dataset: { type: "all" }, items: all }
-      /*
-      { label: "HTBAH.ItemTypeKnowledge", dataset: { type: "knowledge" }, items: knowledge },
-      { label: "HTBAH.ItemTypeAction", dataset: { type: "action" }, items: action },
-      { label: "HTBAH.ItemTypeSocial", dataset: { type: "social" }, items: social }
-       */
     ];
 
     // Remove empty sections
@@ -684,42 +739,6 @@ _onDropItem(event, data) {
 }
 
 /**
- * Handle dropping an item in a header slot
- * @param {DragEvent} event - The drop event
- * @param {string} dropZone - The drop zone identifier ("ability" or "weapon")
- * @returns {Promise<void>}
- * @private
- */
-async _onHeaderDrop(event, dropZone) {
-  event.preventDefault();
-  
-  let data;
-  try {
-    data = JSON.parse(event.dataTransfer.getData("text/plain"));
-  } catch(e) {
-    return false;
-  }
-
-  // Validate the drop
-  if (data.type !== "Item") return false;
-
-  const item = await Item.implementation.fromDropData(data);
-  if (!item) return false;
-
-  // Validate item type based on drop zone
-  if (dropZone === "ability" && !["knowledge", "social", "action"].includes(item.type)) {
-    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyAbilitiesAllowed"));
-    return false;
-  }
-  
-  if (dropZone === "weapon" && item.type !== "weapon") {
-    ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyWeaponsAllowed"));
-    return false;
-  }
-  await this._setHeaderItem(dropZone, item.id);
-}
-
-/**
  * Set an item as a header item
  * @param {string} slot - The header slot ("ability" or "weapon")
  * @param {string} itemId - The item ID
@@ -727,7 +746,7 @@ async _onHeaderDrop(event, dropZone) {
  * @private
  */
 async _setHeaderItem(slot, itemId) {
-  const flagKey = slot === "ability" ? "headerSkill" : "headerWeapon";
+  const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
   return this.actor.setFlag("how-to-be-a-hero", flagKey, itemId);
 }
 
@@ -738,7 +757,7 @@ async _setHeaderItem(slot, itemId) {
  * @private
  */
 async _removeHeaderItem(slot) {
-  const flagKey = slot === "ability" ? "headerSkill" : "headerWeapon";
+  const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
   return this.actor.unsetFlag("how-to-be-a-hero", flagKey);
 }
 
@@ -990,7 +1009,7 @@ async _onUseFavorite(event) {
       
       switch(action) {
         case 'rollSkill':
-          return this._onRollHeaderSkill(ev);
+          return this._onRollheaderAbility(ev);
         case 'rollWeapon':
           return this._onRollHeaderWeapon(ev);
       }
@@ -1017,7 +1036,8 @@ async _onUseFavorite(event) {
       "[data-action]": this._onItemAction,
       ".rollable:is(.skillSet-check)": this._onRollSkillSet,
       ".item-roll": this._onItemRoll,
-      ".create-child": this._onCreateChild
+      ".create-child": this._onCreateChild,
+      "[data-action=createDoc]": this._onCreateDocument
     };
 
     Object.entries(commonSelectors).forEach(([selector, handler]) => {
@@ -1077,9 +1097,9 @@ async _onUseFavorite(event) {
     return this.actor.rollInitiative({createCombatants: true});
   }
   
-  async _onRollHeaderSkill(event) {
+  async _onRollheaderAbility(event) {
     event.preventDefault();
-    const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerSkill");
+    const abilityId = this.actor.getFlag("how-to-be-a-hero", "headerAbility");
     if (!abilityId) return;
     
     const item = this.actor.items.get(abilityId);
@@ -1418,6 +1438,47 @@ async _onUseFavorite(event) {
   /* -------------------------------------------- */
 
   /**
+   * Handle creating a new embedded document via dialog prompt.
+   *
+   * @param {Event} event - The triggering event
+   * @returns {Promise<Item[]>|void}
+   * @protected
+   */
+  async _onCreateDocument(event) {
+    event.preventDefault();
+
+    const button = event.currentTarget;
+    const documentClass = button.dataset.documentClass ?? "Item";
+    const type = button.dataset.type ?? "item";
+
+    // Parse system data from JSON-encoded data-system attribute
+    let systemData = {};
+    try {
+      const rawSystem = button.dataset.system;
+      if (rawSystem) systemData = JSON.parse(rawSystem);
+    } catch (err) {
+      console.warn("Invalid JSON in data-system attribute:", button.dataset.system, err);
+    }
+
+     // Show the custom input dialog and wait for confirmation
+    return new Promise(resolve => {
+      new NameInputDialog({
+        defaultName: "",
+        onSubmit: name => {
+          const data = {
+            name,
+            type,
+            system: systemData
+          };
+          resolve(this.actor.createEmbeddedDocuments(documentClass, [data]));
+        }
+      }).render(true);
+    });
+  }
+
+/* -------------------------------------------- */
+
+  /**
  * Handle creating a new embedded child.
  * @returns {Item|Weapon|Knowledge|Action|Social|void}
  * @protected
@@ -1429,7 +1490,7 @@ async _onUseFavorite(event) {
 
     let types = {
       inventory: ["item", "consumable", "weapon", "tool", "armor"],
-      details: ["knowledge", "action", "social"],
+      details: [],
       effects: [], // Currently no effects are added through this
       biography: [] // Assuming no item types are created from the biography tab
     }[activeTab] ?? [];

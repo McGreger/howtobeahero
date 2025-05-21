@@ -16,9 +16,29 @@
       "Age": "Alter"
     },
     "SkillSets": {
-      "Knowledge": { "label": "Wissen", "long": "wissen", "abbr": "wis", "bonus": "Wissen-Bonus", "eureka": "Wissen-Geistesblitz", "total": "Knowledge-Gesamt"  },
-      "Action": { "label": "Handeln", "long": "handeln", "abbr": "han", "bonus": "Handeln-Bonus", "eureka": "Handeln-Geistesblitz", "total": "Handeln-Gesamt"  },
-      "Social": { "label": "Soziales", "long": "soziales", "abbr": "soz", "bonus": "Sozial-Bonus", "eureka": "Sozial-Geistesblitz", "total": "Sozial-Gesamt"  }
+      "Knowledge": { 
+        "label": "Wissen", 
+        "long": "wissen", 
+        "abbr": "wis", 
+        "bonus": "Wissen-Bonus", 
+        "eureka": "Wissen-Geistesblitz", 
+        "total": "Knowledge-Gesamt"  
+      },
+      "Action": { 
+        "label": "Handeln", 
+        "long": "handeln", 
+        "abbr": "han", 
+        "bonus": "Handeln-Bonus", 
+        "eureka": "Handeln-Geistesblitz", 
+        "total": "Handeln-Gesamt"  
+      },
+      "Social": { 
+        "label": "Soziales", 
+        "long": "soziales", 
+        "abbr": "soz", 
+        "bonus": "Sozial-Bonus", 
+        "eureka": "Sozial-Geistesblitz", 
+        "total": "Sozial-Gesamt"  }
     },
     "Item": {
       "Quantity": "Anzahl",
@@ -227,9 +247,7 @@
       "npc": "NSC"
     },
     "Item": {
-      "knowledge": "Wissen",
-      "social": "Sozial",
-      "action": "Handeln",
+      "ability": "Fähigkeit",
       "tool": "Werkzeug",
       "weapon": "Waffe",
       "consumable": "Verbrauchsgegenstand",
