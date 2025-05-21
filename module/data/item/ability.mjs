@@ -23,8 +23,6 @@ export default class HowToBeAHeroAbility extends HowToBeAHeroItemBase {
     schema.type = new fields.StringField({label: "HTBAH.Type"});
     schema.skillSet = new fields.StringField({ initial: 'action' });
     schema.value = new fields.NumberField({...requiredInteger, initial: 0, min: 0});
-    schema.calculatedValue = new fields.NumberField({...requiredInteger, initial: 0, min: 0});
-    schema.totalValue = new fields.NumberField({...requiredInteger, initial: 0, min: 0});
   
     // Break down roll formula into three independent fields
     schema.roll = new fields.SchemaField({

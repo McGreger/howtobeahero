@@ -105,7 +105,7 @@ Hooks.once('init', function () {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: '1d10 + @attributes.skillSets.action.totalValue',
+    formula: '1d10 + @attributes.skillSets.action.value',
     decimals: 2,
   };
 

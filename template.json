@@ -78,8 +78,6 @@
         "skillSet": "action",
         "type": "",
         "value": 0,
-        "calculatedValue": 0,
-        "totalValue": 0,
         "roll": {
           "diceNum": 1,
           "diceSize": "d100",

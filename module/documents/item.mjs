@@ -20,31 +20,6 @@ export class HowToBeAHeroItem extends Item {
   }
   
   /**
-   * Getter for calculatedValue
-   * Getter for totalValue
-   * Getter for formula
-   * @type {number}
-   */
-  get formula() {
-    const roll = this.system.roll;
-    if (!roll) return '';
-    const bonusStr = roll.diceBonus > 0 ? `+${roll.diceBonus}` : roll.diceBonus === 0 ? '' : roll.diceBonus;
-    return `${roll.diceNum}${roll.diceSize}${bonusStr}`;
-  }
-
-  get calculatedValue() {
-    if (this.system.value >= 80) return this.system.value;
-    if (!this.actor) return this.system.value;
-    
-    const skillSetValue = this.actor.system.attributes.skillSets[this.type]?.value || 0;
-    return Math.min(80, skillSetValue + this.system.value);
-  }
-
-  get totalValue() {
-    const bonus = Number(this.system?.roll?.diceBonus ?? 0);
-    return this.calculatedValue + bonus;
-   }
-  /**
    * @override
    * Augment the item source data with additional dynamic data that isn't 
    * handled by the actor's DataModel. Data calculated in this step should be
@@ -57,10 +32,6 @@ export class HowToBeAHeroItem extends Item {
     super.prepareDerivedData();
     this.labels = {}
     
-    // Calculate and set the calculatedValue
-    //this.system.calculatedValue = this.calculatedValue;
-    //this.system.totalValue = this.totalValue;
-
     // Specialized preparation per Item type
     switch ( this.type ) {
       case "baseitem":
@@ -147,18 +118,7 @@ export class HowToBeAHeroItem extends Item {
    * @protected
    */
   _prepareAbility() {
-    this._prepareSharedSkillValues();
-  }
-  
-  /**
-   * Prepare shared data for an ability-type item.
-   * @protected
-   */
-
-  _prepareSharedSkillValues() {
-    this.system.calculatedValue = this.calculatedValue;
-    this.system.totalValue = this.totalValue;
-    this.system.formula = this.formula;
+    
   }
 
   /* -------------------------------------------- */
