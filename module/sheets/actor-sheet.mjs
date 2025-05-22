@@ -504,25 +504,23 @@ async _prepareEffects(context) {
     }
     
     // Create grouped skillSets context
-    debugger;
-    const skillSets = Object.entries(CONFIG.HTBAH.skillSets).map(([key, def]) => {
-      // Defensive filtering with safe normalization
+    const skillSets = {};
+
+    for (const [key, def] of Object.entries(CONFIG.HTBAH.skillSets)) {
       const filtered = abilities.filter(ab =>
         String(ab.system?.skillSet ?? "").trim().toLowerCase() === key.toLowerCase()
       );
-  
-      // Optional derived values
+    
       const totalValue = filtered.reduce((sum, ab) => sum + (ab.system.value ?? 0), 0);
       const mod = Math.floor(totalValue / 10);
       const eurekaValue = context.system.attributes.skillSets?.[key]?.eureka ?? 0;
       const eurekaMax = Math.floor(totalValue / 100);
-  
-      // Decorate each ability (optional)
+    
       for (const ab of filtered) {
-        ab.system.total = ab.system.value + mod;
+        ab.system.total = (ab.system.value ?? 0) + mod;
       }
-      debugger
-      return {
+    
+      skillSets[key] = {
         key,
         label: game.i18n.localize(def.label),
         abilities: filtered,
@@ -532,7 +530,7 @@ async _prepareEffects(context) {
           max: eurekaMax
         }
       };
-    });
+    }
   
     // Attach to context
     context.skillSets = skillSets;
