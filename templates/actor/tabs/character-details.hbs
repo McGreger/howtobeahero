@@ -24,7 +24,7 @@
         <filigree-box class="skillSets header" filigree-type="typeSkillSetsHeader">
             <div class="header-content flexrow">
                 <h3 class="flex3">
-                {{#each skillSetRows}}
+                {{#each skillSet}}
                     <a class="label {{ @root.rollableClass }} skillSet-check" data-action="roll" data-skillSet="{{ long }}">
                         {{label}}    
                     </a> 
@@ -32,25 +32,25 @@
                 </h3>
                 <div class="bonus-column flex1">
                     <div class="bonus">
-                        {{#each skillSetRows}}
+                        {{#each skillSets}}
                             <input type="number" name="system.attributes.skillSets.{{key}}.bonus" value="{{bonus}}" data-dtype="Number">
                         {{/each}}
                     </div>
                 </div>
                 <div class="skillSet-values flex1">
-                    {{#each skillSetRows}}
+                    {{#each skillSets}}
                         <span>{{ value }}</span> 
                     {{/each}}
                     {{#if (eq actor.type "character")}}
                     <div class="eureka">
-                        {{#each skillSetRows}}
+                        {{#each skillSets}}
                             <input type="number" name="system.attributes.skillSets.{{key}}.eureka" value="{{eureka}}" data-dtype="Number">
                         {{/each}}
                     </div>
                     {{/if}}
                 </div>
                 <div class="total-column flex1">
-                    {{#each skillSetRows}}
+                    {{#each skillSets}}
                         <span>{{ totalValue }}</span> 
                     {{/each}}
                 </div>
@@ -79,12 +79,12 @@
 
 <div class="skillSets-container flexrow">
     <div class="center flex1">
-        {{> skillSet-category title="action" skillSetRows=skillSetRows.action items=action}}
+        {{> skillSet-category title="action" skillSets=skillSets.action items=action}}
     </div>
     <div class="left flex1">
-        {{> skillSet-category title="knowledge" skillSetRows=skillSetRows.knowledge items=knowledge}}
+        {{> skillSet-category title="knowledge" skillSets=skillSets.knowledge items=knowledge}}
     </div>
     <div class="right flex1">
-        {{> skillSet-category title="social" skillSetRows=skillSetRows.social items=social}}
+        {{> skillSet-category title="social" skillSets=skillSets.social items=social}}
     </div>
 </div>

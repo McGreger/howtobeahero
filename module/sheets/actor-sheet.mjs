@@ -293,7 +293,6 @@ async getData(options) {
     this._prepareHeaderItems().then(items => context.headerItems = items),
     this._prepareItems(context),
     this._prepareEffects(context),
-    this._prepareSkillSets(context),
   ]);
 
   if (this.actor.type === "character") {
@@ -462,45 +461,6 @@ async _prepareEffects(context) {
   /**
    * Organize and classify Items for Character sheets.
    *
-   * @param {Object} actorData The actor to prepare.
-   *
-   * @return {undefined}
-   */
-  _prepareSkillSets(context) {
-    // Handle skill set scores
-    // SkillSet Scores#
-    context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
-      skillSet.key = k;
-      skillSet.abbr = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.abbreviation) ?? "";
-      skillSet.long = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.long) ?? "";
-      //skillSet.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
-      //skillSet.mod = Math.abs(ability.mod);
-      skillSet.baseValue = context.system.attributes.skillSets[k]?.value ?? 0;
-      switch (k) {
-        case 'knowledge':
-            obj.knowledge.push(skillSet);
-            break;
-        case 'action':
-            obj.action.push(skillSet);
-            break;
-        case 'social':
-            obj.social.push(skillSet);
-            break;
-        default:
-            // Handle skill Sets that do not fit into any category if necessary
-            break;
-      }
-      return obj;
-    }, { knowledge: [], action: [], social: []  });
-    context.skillSetRows.optional = Object.keys(CONFIG.HTBAH.skillSets).length - 6;
-    for (let [k, v] of Object.entries(context.system.attributes.skillSets)) {
-       v.label = game.i18n.localize(CONFIG.HTBAH.skillSets[k].label) ?? k;
-     }
-  }
-
-  /**
-   * Organize and classify Items for Character sheets.
-   *
    * @param {Object} context The context object to prepare.
    *
    * @return {undefined}
@@ -544,6 +504,7 @@ async _prepareEffects(context) {
     }
     
     // Create grouped skillSets context
+    debugger;
     const skillSets = Object.entries(CONFIG.HTBAH.skillSets).map(([key, def]) => {
       // Defensive filtering with safe normalization
       const filtered = abilities.filter(ab =>
@@ -560,7 +521,7 @@ async _prepareEffects(context) {
       for (const ab of filtered) {
         ab.system.total = ab.system.value + mod;
       }
-  
+      debugger
       return {
         key,
         label: game.i18n.localize(def.label),
