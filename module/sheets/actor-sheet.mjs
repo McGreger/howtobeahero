@@ -286,8 +286,7 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 /** @override */
 async getData(options) {
   const context = await this._prepareContext(options);
-  
-  debugger;
+
   await Promise.all([
     this._preparePortraitData(context),
     this._prepareHealthData(context),
@@ -470,7 +469,6 @@ async _prepareEffects(context) {
   _prepareSkillSets(context) {
     // Handle skill set scores
     // SkillSet Scores#
-    debugger;
     context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
       skillSet.key = k;
       skillSet.abbr = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.abbreviation) ?? "";
@@ -508,94 +506,80 @@ async _prepareEffects(context) {
    * @return {undefined}
    */
   _prepareItems(context) {
-    // Initialize containers.
-    debugger;
+    const allItems = this.document.items;
+  
+    // Containers for non-ability types
     const items = [];
     const consumables = [];
     const weapons = [];
     const armors = [];
     const tools = [];
-
-    const all = [];
-
-    const action = [];
-    const knowledge = [];
-    const social = [];
-
-    // Iterate through items, allocating to containers
-    for (let i of context.items) {
-      i.img = i.img || Item.DEFAULT_ICON;
-      
-      // Prepare item data
-      const itemData = i.system;
-      
-      // Prepare context data
-      const ctx = {
-        subtitle: this._getItemSubtitle(i),
-        equip: this._getEquipData(i),
-        quantity: itemData.quantity,
-        description: itemData.description
-      };
-
-      // Add type-specific properties
-      switch(i.type) {
-        case 'consumable':
-        case 'item':
-          ctx.roll = itemData.roll;
-          ctx.formula = itemData.formula;
+  
+    // Collect and decorate each item
+    const abilities = [];
+  
+    for (const item of allItems) {
+      item.img ||= Item.DEFAULT_ICON;
+  
+      switch (item.type) {
+        case "item":
+          items.push(item);
           break;
-        case 'armor':
-          ctx.armor = itemData.armor;
+        case "consumable":
+          consumables.push(item);
           break;
-        case 'tool':
-          ctx.hasUses = true;
+        case "weapon":
+          weapons.push(item);
           break;
-      }
-
-      // Append to appropriate array
-      const itemWithContext = { ...i, ctx };
-      switch (i.type) {
-        case 'item':
-          items.push(itemWithContext);
+        case "armor":
+          armors.push(item);
           break;
-        case 'consumable':
-          consumables.push(itemWithContext);
+        case "tool":
+          tools.push(item);
           break;
-        case 'weapon':
-          weapons.push(itemWithContext);
-          break;
-        case 'armor':
-          armors.push(itemWithContext);
-          break;
-        case 'tool':
-          tools.push(itemWithContext);
-          break;
-        case 'ability':
-          switch (i.system.skillSet) {
-            case 'action':
-              action.push(itemWithContext);
-              break;
-            case 'knowledge':
-              knowledge.push(itemWithContext);
-              break;
-            case 'social':
-              social.push(itemWithContext);
-              break;
-          }
+        case "ability":
+          abilities.push(item);
           break;
       }
     }
-
-    // Assign and return
-    context.all = all;
+    
+    // Create grouped skillSets context
+    const skillSets = Object.entries(CONFIG.HTBAH.skillSets).map(([key, def]) => {
+      // Defensive filtering with safe normalization
+      const filtered = abilities.filter(ab =>
+        String(ab.system?.skillSet ?? "").trim().toLowerCase() === key.toLowerCase()
+      );
+  
+      // Optional derived values
+      const totalValue = filtered.reduce((sum, ab) => sum + (ab.system.value ?? 0), 0);
+      const mod = Math.floor(totalValue / 10);
+      const eurekaValue = context.system.attributes.skillSets?.[key]?.eureka ?? 0;
+      const eurekaMax = Math.floor(totalValue / 100);
+  
+      // Decorate each ability (optional)
+      for (const ab of filtered) {
+        ab.system.total = ab.system.value + mod;
+      }
+  
+      return {
+        key,
+        label: game.i18n.localize(def.label),
+        abilities: filtered,
+        mod,
+        eureka: {
+          value: eurekaValue,
+          max: eurekaMax
+        }
+      };
+    });
+  
+    // Attach to context
+    context.skillSets = skillSets;
     context.items = items;
     context.consumables = consumables;
     context.weapons = weapons;
     context.armors = armors;
     context.tools = tools;
-    context.action = action;
-    context.knowledge = knowledge;
-    context.social = social;
 
     // Create sections array for use in the template
     context.sections = [
@@ -604,7 +588,6 @@ async _prepareEffects(context) {
       { label: "HTBAH.weaponPl", dataset: { type: "weapon" }, items: weapons },
       { label: "HTBAH.armorPl", dataset: { type: "armor" }, items: armors },
       { label: "HTBAH.toolPl", dataset: { type: "tool" }, items: tools },
-      { label: "HTBAH.Names", dataset: { type: "all" }, items: all }
     ];
 
     // Remove empty sections
