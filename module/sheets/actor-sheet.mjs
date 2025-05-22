@@ -285,16 +285,16 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 
 /** @override */
 async getData(options) {
-  debugger;
-  const context = await super.getData(options);
+  const context = await this._prepareContext(options);
   
-  this._prepareContext(options),
-
+  debugger;
   await Promise.all([
     this._preparePortraitData(context),
     this._prepareHealthData(context),
     this._prepareHeaderItems().then(items => context.headerItems = items),
-    this._prepareItemsAndEffects(context)
+    this._prepareItems(context),
+    this._prepareEffects(context),
+    this._prepareSkillSets(context),
   ]);
 
   if (this.actor.type === "character") {
@@ -311,23 +311,22 @@ async getData(options) {
  * @returns {Object} context
  */
 _prepareContext(options) {
-  const actor = this.actor;
 
   const context = {
     editable: this.isEditable,
-    owner: actor.isOwner,
-    limited: actor.limited,
-    actor: actor,
-    system: actor.system,
-    flags: actor.flags,
+    owner: this.actor.isOwner,
+    limited: this.actor.limited,
+    actor: this.actor,
+    system: this.actor.system,
+    flags: this.actor.flags,
     config: CONFIG.HTBAH,
-    fields: actor.schema.fields,
-    systemFields: actor.system.schema.fields,
+    fields: this.actor.schema.fields,
+    systemFields: this.actor.system.schema.fields,
     cssClass: this._getContextCssClass(this.isEditable),
     rollableClass: this.isEditable ? 'rollable' : '',
-    rollData: actor.getRollData()
+    rollData: this.actor.getRollData()
   };
-
+  
   return context;
 }
 
@@ -391,20 +390,6 @@ _prepareHealthData(context) {
 }
 
 /**
- * Prepares actor data for the context
- * @param {SheetContext} context
- */
-_prepareAbilities(context) {
-  const actor = this.actor;
-  const actorData = context.data;
-
-  context.system = actorData.system;
-  context.flags = actorData.flags;
-  context.rollData = actor.getRollData();
-  // Add any other actor-specific properties here
-}
-
-/**
  * Get the current header items for the character
  * @returns {Promise<Object>}
  * @protected
@@ -447,30 +432,6 @@ async _prepareHeaderItems() {
 }
 
 /**
- * Prepares items and effects for the context
- * @param {SheetContext} context
- */
-async _prepareItemsAndEffects(context) {
-  const actorData = context.data;
-  debugger;
-  switch (actorData.type) {
-    case "character":
-      await this._prepareCharacterData(context);
-      break;
-    case "npc":
-      await this._prepareNPCData(context);
-      break;
-    // Optional: handle other types explicitly or with default
-    default:
-      console.warn(`Unhandled actor type in _prepareItemsAndEffects: ${actorData.type}`);
-      break;
-  }
-  
-  await this._prepareItems(context);
-  await this._prepareEffects(context);
-}
-
-/**
  * Prepares effects for the context
  * @param {SheetContext} context
  */
@@ -506,13 +467,10 @@ async _prepareEffects(context) {
    *
    * @return {undefined}
    */
-  _prepareCharacterData(context) {
-    //super._prepareCharacterData();
-    //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
-      //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
-    //}
+  _prepareSkillSets(context) {
     // Handle skill set scores
-    // SkillSet Scores
+    // SkillSet Scores#
+    debugger;
     context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
       skillSet.key = k;
       skillSet.abbr = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.abbreviation) ?? "";
@@ -541,49 +499,6 @@ async _prepareEffects(context) {
        v.label = game.i18n.localize(CONFIG.HTBAH.skillSets[k].label) ?? k;
      }
   }
-  
-  /**
-   * Organize and classify Items for Character sheets.
-   *
-   * @param {Object} actorData The actor to prepare.
-   *
-   * @return {undefined}
-   */
-  _prepareNPCData(context) {
-    //super._prepareCharacterData();
-    //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
-      //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
-    //}
-    // Handle skill set scores
-    // SkillSet Scores
-    context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
-      skillSet.key = k;
-      skillSet.abbr = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.abbreviation) ?? "";
-      skillSet.long = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.long) ?? "";
-      //skillSet.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
-      //skillSet.mod = Math.abs(ability.mod);
-      skillSet.baseValue = context.system.attributes.skillSets[k]?.value ?? 0;
-      switch (k) {
-        case 'knowledge':
-            obj.knowledge.push(skillSet);
-            break;
-        case 'action':
-            obj.action.push(skillSet);
-            break;
-        case 'social':
-            obj.social.push(skillSet);
-            break;
-        default:
-            // Handle skillSets that do not fit into any category if necessary
-            break;
-      }
-      return obj;
-    }, { knowledge: [], action: [], social: []  });
-    context.skillSetRows.optional = Object.keys(CONFIG.HTBAH.skillSets).length - 6;
-    for (let [k, v] of Object.entries(context.system.attributes.skillSets)) {
-       v.label = game.i18n.localize(CONFIG.HTBAH.skillSets[k].label) ?? k;
-     }
-  }
 
   /**
    * Organize and classify Items for Character sheets.
@@ -594,6 +509,7 @@ async _prepareEffects(context) {
    */
   _prepareItems(context) {
     // Initialize containers.
+    debugger;
     const items = [];
     const consumables = [];
     const weapons = [];
@@ -635,15 +551,6 @@ async _prepareEffects(context) {
           ctx.hasUses = true;
           break;
       }
-
-      // Add item properties
-      /*
-      const properties = this._getItemProperties(i);
-      ctx.properties = properties.map(p => ({
-        label: p,
-        icon: CONFIG.HTBAH.propertyIcons[p] || null
-      }));
-      */
 
       // Append to appropriate array
       const itemWithContext = { ...i, ctx };
