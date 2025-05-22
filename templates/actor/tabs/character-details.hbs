@@ -5,11 +5,11 @@
         </a>
         <div class="item-bonus">
             <div class="bonus-input-group"> 
-                <input type="number" name="system.roll.diceBonus" value="{{system.roll.diceBonus}}" min="-99" max="99">
+                <input type="number" name="system.value" value="{{system.value}}">
             </div>
         </div>
-        <div class="item-value">{{system.value}}</div>
-        <div class="item-total">{{system.totalValue}}</div>
+        <div class="item-value">{{skillSet.mod}}</div>
+        <div class="item-total">{{system.total}}</div>
         {{#if @root.editable}}
         <div class="item-controls">
             <a class="item-control item-edit" data-action="edit" title="Edit Item"><i class="fas fa-edit"></i></a>
