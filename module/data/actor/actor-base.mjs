@@ -43,18 +43,12 @@ static defineSchema() {
     skillSets: new fields.SchemaField({
       knowledge: new fields.SchemaField({
         value: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Knowledge.long"}),
-        bonus: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Knowledge.bonus"}),
-        totalValue: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Knowledge.total"}),
       }),
       action: new fields.SchemaField({
         value: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Action.long"}),
-        bonus: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Action.bonus"}),
-        totalValue: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Action.total"}),
       }),
       social: new fields.SchemaField({
         value: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Social.long"}),
-        bonus: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Social.bonus"}),
-        totalValue: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Social.total"}),
       })
     })
   });

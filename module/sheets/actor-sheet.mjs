@@ -285,15 +285,14 @@ export class HowToBeAHeroActorSheet extends ActorSheet {
 
 /** @override */
 async getData(options) {
-  const context = await super.getData(options);
-  
+  const context = await this._prepareContext(options);
+
   await Promise.all([
-    this._prepareBasicContext(context, options),
     this._preparePortraitData(context),
     this._prepareHealthData(context),
-    this._prepareActorData(context),
     this._prepareHeaderItems().then(items => context.headerItems = items),
-    this._prepareItemsAndEffects(context)
+    this._prepareItems(context),
+    this._prepareEffects(context),
   ]);
 
   if (this.actor.type === "character") {
@@ -305,15 +304,30 @@ async getData(options) {
 }
 
 /**
- * Prepares basic context data
- * @param {SheetContext} context
+ * Prepares the base context data for rendering the actor sheet.
  * @param {GetDataOptions} options
+ * @returns {Object} context
  */
-_prepareBasicContext(context, options) {
-  context.editable = this.isEditable && (this._mode === this.constructor.MODES.EDIT);
-  context.cssClass = this._getContextCssClass(context.editable);
-  context.rollableClass = this.isEditable ? 'rollable' : '';
+_prepareContext(options) {
+
+  const context = {
+    editable: this.isEditable,
+    owner: this.actor.isOwner,
+    limited: this.actor.limited,
+    actor: this.actor,
+    system: this.actor.system,
+    flags: this.actor.flags,
+    config: CONFIG.HTBAH,
+    fields: this.actor.schema.fields,
+    systemFields: this.actor.system.schema.fields,
+    cssClass: this._getContextCssClass(this.isEditable),
+    rollableClass: this.isEditable ? 'rollable' : '',
+    rollData: this.actor.getRollData()
+  };
+  
+  return context;
 }
+
 
 /**
  * Generates CSS class string for the context
@@ -374,20 +388,6 @@ _prepareHealthData(context) {
 }
 
 /**
- * Prepares actor data for the context
- * @param {SheetContext} context
- */
-_prepareActorData(context) {
-  const actor = this.actor;
-  const actorData = context.data;
-
-  context.system = actorData.system;
-  context.flags = actorData.flags;
-  context.rollData = actor.getRollData();
-  // Add any other actor-specific properties here
-}
-
-/**
  * Get the current header items for the character
  * @returns {Promise<Object>}
  * @protected
@@ -430,24 +430,6 @@ async _prepareHeaderItems() {
 }
 
 /**
- * Prepares items and effects for the context
- * @param {SheetContext} context
- */
-async _prepareItemsAndEffects(context) {
-  const actorData = context.data;
-  
-  if (actorData.type === 'character') {
-    await this._prepareCharacterData(context);
-    await this._prepareItems(context);
-  } else if (actorData.type === 'npc') {
-    await this._prepareNPCData(context);
-    await this._prepareItems(context);
-  }
-  
-  await this._prepareEffects(context);
-}
-
-/**
  * Prepares effects for the context
  * @param {SheetContext} context
  */
@@ -479,193 +461,84 @@ async _prepareEffects(context) {
   /**
    * Organize and classify Items for Character sheets.
    *
-   * @param {Object} actorData The actor to prepare.
-   *
-   * @return {undefined}
-   */
-  _prepareCharacterData(context) {
-    //super._prepareCharacterData();
-    //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
-      //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
-    //}
-    // Handle skill set scores
-    // SkillSet Scores
-    context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
-      skillSet.key = k;
-      skillSet.abbr = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.abbreviation) ?? "";
-      skillSet.long = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.long) ?? "";
-      //skillSet.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
-      //skillSet.mod = Math.abs(ability.mod);
-      skillSet.baseValue = context.system.attributes.skillSets[k]?.value ?? 0;
-      switch (k) {
-        case 'knowledge':
-            obj.knowledge.push(skillSet);
-            break;
-        case 'action':
-            obj.action.push(skillSet);
-            break;
-        case 'social':
-            obj.social.push(skillSet);
-            break;
-        default:
-            // Handle skill Sets that do not fit into any category if necessary
-            break;
-      }
-      return obj;
-    }, { knowledge: [], action: [], social: []  });
-    context.skillSetRows.optional = Object.keys(CONFIG.HTBAH.skillSets).length - 6;
-    for (let [k, v] of Object.entries(context.system.attributes.skillSets)) {
-       v.label = game.i18n.localize(CONFIG.HTBAH.skillSets[k].label) ?? k;
-     }
-  }
-  
-  /**
-   * Organize and classify Items for Character sheets.
-   *
-   * @param {Object} actorData The actor to prepare.
-   *
-   * @return {undefined}
-   */
-  _prepareNPCData(context) {
-    //super._prepareCharacterData();
-    //if ( ("how-to-be-a-hero" in this.flags) && this._systemFlagsDataModel ) {
-      //this.flags.howtobeahero = new this._systemFlagsDataModel(this._source.flags.howtobeahero, { parent: this });
-    //}
-    // Handle skill set scores
-    // SkillSet Scores
-    context.skillSetRows = Object.entries(context.system.attributes.skillSets).reduce((obj, [k, skillSet]) => {
-      skillSet.key = k;
-      skillSet.abbr = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.abbreviation) ?? "";
-      skillSet.long = game.i18n.localize(CONFIG.HTBAH.skillSets[k]?.long) ?? "";
-      //skillSet.sign = Math.sign(ability.mod) < 0 ? "-" : "+";
-      //skillSet.mod = Math.abs(ability.mod);
-      skillSet.baseValue = context.system.attributes.skillSets[k]?.value ?? 0;
-      switch (k) {
-        case 'knowledge':
-            obj.knowledge.push(skillSet);
-            break;
-        case 'action':
-            obj.action.push(skillSet);
-            break;
-        case 'social':
-            obj.social.push(skillSet);
-            break;
-        default:
-            // Handle skillSets that do not fit into any category if necessary
-            break;
-      }
-      return obj;
-    }, { knowledge: [], action: [], social: []  });
-    context.skillSetRows.optional = Object.keys(CONFIG.HTBAH.skillSets).length - 6;
-    for (let [k, v] of Object.entries(context.system.attributes.skillSets)) {
-       v.label = game.i18n.localize(CONFIG.HTBAH.skillSets[k].label) ?? k;
-     }
-  }
-
-  /**
-   * Organize and classify Items for Character sheets.
-   *
    * @param {Object} context The context object to prepare.
    *
    * @return {undefined}
    */
   _prepareItems(context) {
-    // Initialize containers.
+    const allItems = this.document.items;
+  
+    // Containers for non-ability types
     const items = [];
     const consumables = [];
     const weapons = [];
     const armors = [];
     const tools = [];
-
-    const all = [];
-
-    const action = [];
-    const knowledge = [];
-    const social = [];
-
-    // Iterate through items, allocating to containers
-    for (let i of context.items) {
-      i.img = i.img || Item.DEFAULT_ICON;
-      
-      // Prepare item data
-      const itemData = i.system;
-      
-      // Prepare context data
-      const ctx = {
-        subtitle: this._getItemSubtitle(i),
-        equip: this._getEquipData(i),
-        quantity: itemData.quantity,
-        description: itemData.description
-      };
-
-      // Add type-specific properties
-      switch(i.type) {
-        case 'consumable':
-        case 'item':
-          ctx.roll = itemData.roll;
-          ctx.formula = itemData.formula;
+  
+    // Collect and decorate each item
+    const abilities = [];
+  
+    for (const item of allItems) {
+      item.img ||= Item.DEFAULT_ICON;
+  
+      switch (item.type) {
+        case "item":
+          items.push(item);
           break;
-        case 'armor':
-          ctx.armor = itemData.armor;
+        case "consumable":
+          consumables.push(item);
           break;
-        case 'tool':
-          ctx.hasUses = true;
+        case "weapon":
+          weapons.push(item);
           break;
-      }
-
-      // Add item properties
-      /*
-      const properties = this._getItemProperties(i);
-      ctx.properties = properties.map(p => ({
-        label: p,
-        icon: CONFIG.HTBAH.propertyIcons[p] || null
-      }));
-      */
-
-      // Append to appropriate array
-      const itemWithContext = { ...i, ctx };
-      switch (i.type) {
-        case 'item':
-          items.push(itemWithContext);
+        case "armor":
+          armors.push(item);
           break;
-        case 'consumable':
-          consumables.push(itemWithContext);
+        case "tool":
+          tools.push(item);
           break;
-        case 'weapon':
-          weapons.push(itemWithContext);
-          break;
-        case 'armor':
-          armors.push(itemWithContext);
-          break;
-        case 'tool':
-          tools.push(itemWithContext);
-          break;
-        case 'ability':
-          switch (i.system.skillSet) {
-            case 'action':
-              action.push(itemWithContext);
-              break;
-            case 'knowledge':
-              knowledge.push(itemWithContext);
-              break;
-            case 'social':
-              social.push(itemWithContext);
-              break;
-          }
+        case "ability":
+          abilities.push(item);
           break;
       }
     }
+    
+    // Create grouped skillSets context
+    const skillSets = {};
 
-    // Assign and return
-    context.all = all;
+    for (const [key, def] of Object.entries(CONFIG.HTBAH.skillSets)) {
+      const filtered = abilities.filter(ab =>
+        String(ab.system?.skillSet ?? "").trim().toLowerCase() === key.toLowerCase()
+      );
+    
+      const totalValue = filtered.reduce((sum, ab) => sum + (ab.system.value ?? 0), 0);
+      const mod = Math.floor(totalValue / 10);
+      const eurekaValue = context.system.attributes.skillSets?.[key]?.eureka ?? 0;
+      const eurekaMax = Math.floor(totalValue / 100);
+    
+      for (const ab of filtered) {
+        ab.system.total = (ab.system.value ?? 0) + mod;
+      }
+    
+      skillSets[key] = {
+        key,
+        label: game.i18n.localize(def.label),
+        abilities: filtered,
+        mod,
+        eureka: {
+          value: eurekaValue,
+          max: eurekaMax
+        }
+      };
+    }
+  
+    // Attach to context
+    context.skillSets = skillSets;
     context.items = items;
     context.consumables = consumables;
     context.weapons = weapons;
     context.armors = armors;
     context.tools = tools;
-    context.action = action;
-    context.knowledge = knowledge;
-    context.social = social;
 
     // Create sections array for use in the template
     context.sections = [
@@ -674,7 +547,6 @@ async _prepareEffects(context) {
       { label: "HTBAH.weaponPl", dataset: { type: "weapon" }, items: weapons },
       { label: "HTBAH.armorPl", dataset: { type: "armor" }, items: armors },
       { label: "HTBAH.toolPl", dataset: { type: "tool" }, items: tools },
-      { label: "HTBAH.Names", dataset: { type: "all" }, items: all }
     ];
 
     // Remove empty sections
@@ -998,6 +870,25 @@ async _onUseFavorite(event) {
     if (this.isEditable) {
       this._activateEditModeListeners(html);
     }
+
+    // Additional listener for updating item system.value
+    html.find('.ability-value').on('change', async (event) => {
+      event.preventDefault();
+      const input = event.currentTarget;
+      const itemId = input.dataset.itemId;
+      const newValue = Number(input.value);
+
+      console.log("Item ID:", itemId);
+      console.log("Actor items:", this.actor.items);
+
+      const item = this.actor.items.get(itemId);
+      if (!item) {
+        console.warn(`Item with ID ${itemId} not found on actor.`);
+        return;
+      }
+
+      await item.update({ 'system.value': newValue });
+    });
 
     // Header roll handlers
     html.find('.header-item').on('click', ev => {
@@ -1609,5 +1500,6 @@ async _onUseFavorite(event) {
   _filterItem(item) {
     if ( item.type === "container" ) return true;
   }
+
 
 }
