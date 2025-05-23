@@ -36,13 +36,13 @@
                 <div class="eureka-column flex1">
                     {{#if (eq actor.type "character")}}
                     <div class="eureka-value">
-                        <input type="number" name="system.attributes.skillSets.{{skillSet.key}}.eureka" value="{{skillSet.eurekaValue}}" data-dtype="Number">
+                        <input type="number" name="system.attributes.skillSets.{{skillSet.key}}.eureka" value="{{skillSet.eureka.value}}" data-dtype="Number">
                     </div>
                     <div class="delimiter">
                         /
                     </div>
                     <div class="eureka-max">
-                        {{skillSet.eurekaMax}}
+                        {{skillSet.eureka.max}}
                     </div>
                     {{/if}}
                 </div>
