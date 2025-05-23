@@ -33,6 +33,9 @@
                         {{skillSet.label}}    
                     </a> 
                 </h3>
+                <div class="total-column flex1">
+                    <span>{{skillSet.mod}}</span> 
+                </div>
                 <div class="eureka-column flex1">
                     {{#if (eq actor.type "character")}}
                     <div class="eureka-value">
@@ -45,9 +48,6 @@
                         {{skillSet.eureka.max}}
                     </div>
                     {{/if}}
-                </div>
-                <div class="total-column flex1">
-                    <span>{{skillSet.mod}}</span> 
                 </div>
             </div>
         </filigree-box>
