@@ -1,10 +1,10 @@
 {{#*inline "item-list"}}
     <li class="item flexrow" data-item-id="{{_id}}">
-        <a class="item-name {{ @root.rollableClass }} item-roll" data-action="rollItem" data-item-id="{{_id}}" draggable="true">
+        <a class="item-name {{ @root.rollableClass }} item-roll flex1" data-action="rollItem" data-item-id="{{_id}}" draggable="true">
             <h3>{{name}}</h3>
         </a>
-        <div class="item-bonus">
-            <div class="bonus-input-group"> 
+        <div class="item-ability-value flex1">
+            <div class="ability-value-input-group"> 
                 <input 
                     class="ability-value" 
                     type="number" 
@@ -13,8 +13,8 @@
                     value="{{system.value}}">
             </div>
         </div>
-        <div class="item-value">{{skillSet.mod}}</div>
-        <div class="item-total">{{system.total}}</div>
+        <div class="item-mod flex1">{{skillSet.mod}}</div>
+        <div class="item-total flex1">{{system.total}}</div>
         {{#if @root.editable}}
         <div class="item-controls">
             <a class="item-control item-edit" data-action="edit" title="Edit Item"><i class="fas fa-edit"></i></a>
@@ -33,10 +33,16 @@
                         {{skillSet.label}}    
                     </a> 
                 </h3>
-                <div class="skillSet-values flex1">
+                <div class="eureka-column flex1">
                     {{#if (eq actor.type "character")}}
-                    <div class="eureka">
-                        <input type="number" name="system.attributes.skillSets.{{key}}.eureka" value="{{skillSet.eureka}}" data-dtype="Number">
+                    <div class="eureka-value">
+                        <input type="number" name="system.attributes.skillSets.{{skillSet.key}}.eureka" value="{{skillSet.eurekaValue}}" data-dtype="Number">
+                    </div>
+                    <div class="delimiter">
+                        /
+                    </div>
+                    <div class="eureka-max">
+                        {{skillSet.eurekaMax}}
                     </div>
                     {{/if}}
                 </div>

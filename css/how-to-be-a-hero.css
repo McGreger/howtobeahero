@@ -2724,7 +2724,6 @@ a {
 }
 
 /* Show create-child button based on the active tab class on the parent div */
-.how-to-be-a-hero.sheet.actor.character.tab-details .create-child,
 .how-to-be-a-hero.sheet.actor.character.tab-inventory .create-child {
   display: block;
 }
@@ -2771,11 +2770,11 @@ a {
   border: none;
   font-size: var(--font-size-18);
   align-items: center;
-  position: relative;  /* Added for absolute positioning context */
+  position: relative;
 }
 
 .how-to-be-a-hero .tab.details filigree-box > .header-content > h3 {
-  flex: 0 0 55%;
+  flex: 0 0 50%;
   margin: 5px 0;
   display: flex;
   flex-direction: column;
@@ -2795,57 +2794,59 @@ a {
   position: relative;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .skillSet-values,
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .bonus-column,
+/* Modified eureka-column to display items horizontally */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column {
+  flex: 0 0 30%;
+  margin: 5px 0;
+  display: flex;
+  flex-direction: row; /* Changed from column to row */
+  align-items: center;
+  gap: 6px; /* Slightly larger gap for better visual separation */
+}
+
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .total-column {
-  flex: 0 0 15%;
+  flex: 0 0 10%;
+  margin: 5px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .bonus-column {
-  color: var(--htbah-color-gold);
-  font-weight: bold;
-}
-
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .bonus-column > .bonus input {
+/* Style the eureka value input */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-value > input {
   width: 35px;
+  height: 24px;
   text-align: center;
   font-family: var(--htbah-font-roboto);
   font-weight: bold;
   font-size: var(--font-size-16);
   border: var(--htbah-border-gold);
   border-radius: 4px;
-  padding: 2px;
-  color: var(--color-text-dark-primary);
-}
-
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .skillSet-values > .eureka {
-  position: absolute;
-  top: 0%;
-  transform: translateY(-50%);
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.how-to-be-a-hero .tab.details filigree-box > .header-content > .skillSet-values > .eureka input {
-  width: 35px;
-  height: 35px;
-  text-align: center;
-  background: transparent url(../ui/golden-badge.webp) no-repeat center / contain;
-  color: var(--color-text-light-0);
-  font-size: var(--font-size-18);
-  font-family: var(--htbah-font-roboto);
-  font-weight: bold;
-  border: none;
   padding: 0;
-  margin: 2px 0;
-  filter: drop-shadow(0 0 6px var(--color-shadow-dark));
-  -webkit-appearance: none;
-  -moz-appearance: textfield;
+  margin: 0;
+  color: var(--color-text-dark-primary);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style the delimiter */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .delimiter {
+  font-weight: bold;
+  font-size: var(--font-size-16);
+  color: var(--color-text-dark-primary);
+  margin: 0 4px; /* Increased margin for better spacing */
+  line-height: 1;
+}
+
+/* Style the eureka max value */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-max {
+  font-weight: bold;
+  font-size: var(--font-size-16);
+  color: var(--color-text-dark-primary);
+  line-height: 1;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 .how-to-be-a-hero .tab.details .skillSets-container.skillSets {
@@ -2882,13 +2883,13 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
   background-color: transparent;
   transition: all 0.3s ease;
 }
 
 .how-to-be-a-hero .tab.details .items-list .item-name {
-  flex: 0 0 55%;
+  flex: 0 0 50%;
   text-decoration: none;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -2910,10 +2911,10 @@ a {
   color: var(--htbah-color-beige);
 }
 
-.how-to-be-a-hero .tab.details .items-list .item-bonus,
-.how-to-be-a-hero .tab.details .items-list .item-value,
+.how-to-be-a-hero .tab.details .items-list .item-ability-value,
+.how-to-be-a-hero .tab.details .items-list .item-mod,
 .how-to-be-a-hero .tab.details .items-list .item-total {
-  flex: 0 0 15%;
+  flex: 0 0 5%;
   text-align: center;
   font-family: var(--htbah-font-roboto);
   font-size: var(--font-size-18);
@@ -2930,7 +2931,6 @@ a {
 
 .how-to-be-a-hero .tab.details .items-list .item-control {
   color: var(--htbah-color-tan);
-  margin-left: 8px;
   font-size: var(--font-size-14);
   transition: color 0.3s ease;
 }
@@ -2970,58 +2970,58 @@ a {
   align-items: flex-start;
 }
 
-.how-to-be-a-hero .tab.details .skillSet-category .header-content .eureka-column,
-.how-to-be-a-hero .tab.details .skillSet-category .header-content .skillSet-values {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Bonus Input Group */
-.bonus-input-group {
+/* Ability value Input Group */
+.ability-value-input-group {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   width: fit-content;
+  margin: 0 auto; /* Center the entire group if needed */
 }
 
-.bonus-input-group input {
+.ability-value-input-group input {
   width: 35px;
+  height: 24px; /* Set explicit height for consistent sizing */
   text-align: center;
   font-family: var(--htbah-font-roboto);
   font-weight: bold;
   font-size: var(--font-size-16);
   border: var(--htbah-border-gold);
   border-radius: 4px;
-  padding: 2px;
-  /*padding-right: 8px;  Make room for the icons */
+  padding: 0; /* Remove padding to ensure perfect centering */
+  margin: 0; /* Remove any default margins */
   color: var(--color-text-dark-primary);
+  line-height: 1; /* Ensure text is vertically centered */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.bonus-input-group input:focus {
+.ability-value-input-group input:focus {
   box-shadow: 0 0 6px var(--htbah-color-gold);
   outline: none;
 }
 
-.bonus-input-group i {
+.ability-value-input-group i {
   cursor: pointer;
   color: var(--htbah-color-tan);
   font-size: var(--font-size-12);
   transition: color 0.2s ease, transform 0.2s ease;
   position: absolute;
-  right: -8px;
+  /*right: -12px; /* Moved further out to avoid overlap */
+  z-index: 1; /* Ensure icons are above input */
 }
 
-.bonus-input-group .fa-circle-plus {
+.ability-value-input-group .fa-circle-plus {
   top: -2px;
 }
 
-.bonus-input-group .fa-circle-minus {
+.ability-value-input-group .fa-circle-minus {
   bottom: 0px;
 }
 
-.bonus-input-group i:hover {
+.ability-value-input-group i:hover {
   color: var(--htbah-color-gold);
   transform: scale(1.1);
 }
