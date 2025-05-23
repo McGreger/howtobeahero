@@ -871,6 +871,25 @@ async _onUseFavorite(event) {
       this._activateEditModeListeners(html);
     }
 
+    // Additional listener for updating item system.value
+    html.find('.ability-value').on('change', async (event) => {
+      event.preventDefault();
+      const input = event.currentTarget;
+      const itemId = input.dataset.itemId;
+      const newValue = Number(input.value);
+
+      console.log("Item ID:", itemId);
+      console.log("Actor items:", this.actor.items);
+
+      const item = this.actor.items.get(itemId);
+      if (!item) {
+        console.warn(`Item with ID ${itemId} not found on actor.`);
+        return;
+      }
+
+      await item.update({ 'system.value': newValue });
+    });
+
     // Header roll handlers
     html.find('.header-item').on('click', ev => {
       // Don't trigger on remove button clicks
@@ -1481,5 +1500,6 @@ async _onUseFavorite(event) {
   _filterItem(item) {
     if ( item.type === "container" ) return true;
   }
+
 
 }

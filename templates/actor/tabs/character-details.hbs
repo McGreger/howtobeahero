@@ -5,7 +5,12 @@
         </a>
         <div class="item-bonus">
             <div class="bonus-input-group"> 
-                <input type="number" name="system.value" value="{{system.value}}">
+                <input 
+                    class="ability-value" 
+                    type="number" 
+                    data-item-id="{{this._id}}"
+                    name="system.value" 
+                    value="{{system.value}}">
             </div>
         </div>
         <div class="item-value">{{skillSet.mod}}</div>
