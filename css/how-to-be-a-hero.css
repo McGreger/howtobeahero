@@ -3641,6 +3641,26 @@ a {
 }
 
 /* Details Tab */
+
+/* Details tab input text color */
+.how-to-be-a-hero.sheet.item .tab.details input[type="text"],
+.how-to-be-a-hero.sheet.item .tab.details input[type="number"] {
+  color: var(--htbah-color-dark); /* Change this to your desired text color */
+}
+
+/* Details tab placeholder color */
+.how-to-be-a-hero.sheet.item form .details input[type="text"]::placeholder,
+.how-to-be-a-hero.sheet.item form .details input[type="number"]::placeholder {
+  color: var(--color-text-dark-inactive);
+  opacity: 1;
+}
+
+/* If you want to make the text more visible, you can also adjust the background */
+.how-to-be-a-hero.sheet.item .tab.details input[type="text"],
+.how-to-be-a-hero.sheet.item .tab.details input[type="number"] {
+  background: var(--htbah-color-parchment); /* Ensures good contrast */
+}
+
 .how-to-be-a-hero.sheet.item .details input[type="text"],
 .how-to-be-a-hero.sheet.item .details input[type="number"],
 .how-to-be-a-hero.sheet.item .details select {
