@@ -3162,6 +3162,7 @@ a {
   font-weight: bold;
   font-size: var(--font-size-18);
   font-family: var(--htbah-font-roboto-slab);
+  color: var(--htbah-color-beige);
 }
 
 .how-to-be-a-hero .tab.inventory .items-section .item-name .name-stacked .subtitle {
