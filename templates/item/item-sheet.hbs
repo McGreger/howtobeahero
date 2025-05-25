@@ -38,13 +38,6 @@
           <select id="roll-dice-size" name="system.roll.diceSize">
             {{selectOptions diceTypes selected=item.system.roll.diceSize}}
           </select>
-          
-          <label for="roll-dice-bonus">Bonus:</label>
-            <div class="bonus-input-group">
-              <input id="roll-dice-bonus" type="number" name="system.roll.diceBonus" value="{{item.system.roll.diceBonus}}">
-              <i class="fa-solid fa-circle-plus" data-action="incrementBonus"></i>
-              <i class="fa-solid fa-circle-minus" data-action="decrementBonus"></i>
-            </div>
         </div>
       </div>
     </div>
