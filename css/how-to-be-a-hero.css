@@ -2926,18 +2926,33 @@ a {
   color: var(--htbah-color-beige);
 }
 
-.how-to-be-a-hero .tab.details .items-list .item-ability-value,
-.how-to-be-a-hero .tab.details .items-list .item-mod,
+.how-to-be-a-hero .tab.details .items-list .item-ability-value {
+  flex: 0 0 15%;
+  text-align: center;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-18);
+  color: var(--htbah-color-beige);
+  border-right: 1px solid var(--htbah-color-faint);
+}
+
 .how-to-be-a-hero .tab.details .items-list .item-total {
-  flex: 0 0 5%;
+  flex: 0 0 15%;
   text-align: center;
   font-family: var(--htbah-font-roboto);
   font-size: var(--font-size-18);
   color: var(--htbah-color-beige);
 }
 
+.how-to-be-a-hero .tab.details .items-list .item-spacer {
+  flex: 0 0 5%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-left: auto;
+}
+
 .how-to-be-a-hero .tab.details .items-list .item-controls {
-  flex: 0 0 0%;
+  flex: 0 0 5%;
   display: flex;
   justify-content: flex-end;
   gap: 4px;

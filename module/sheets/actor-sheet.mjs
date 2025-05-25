@@ -310,8 +310,9 @@ async getData(options) {
  */
 _prepareContext(options) {
 
+  const isEditable = this.isEditable && (this._mode === this.constructor.MODES.EDIT);
   const context = {
-    editable: this.isEditable,
+    editable: isEditable,
     owner: this.actor.isOwner,
     limited: this.actor.limited,
     actor: this.actor,

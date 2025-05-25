@@ -13,12 +13,15 @@
                     value="{{system.value}}">
             </div>
         </div>
-        <div class="item-mod flex1">{{skillSet.mod}}</div>
+        <!---<div class="item-mod flex1">{{skillSet.mod}}</div>--->
         <div class="item-total flex1">{{system.total}}</div>
         {{#if @root.editable}}
         <div class="item-controls">
             <a class="item-control item-edit" data-action="edit" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" data-action="delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+        </div>
+        {{else}}
+        <div class="item-spacer">
         </div>
         {{/if}}
     </li>
