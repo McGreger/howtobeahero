@@ -310,8 +310,9 @@ async getData(options) {
  */
 _prepareContext(options) {
 
+  const isEditable = this.isEditable && (this._mode === this.constructor.MODES.EDIT);
   const context = {
-    editable: this.isEditable,
+    editable: isEditable,
     owner: this.actor.isOwner,
     limited: this.actor.limited,
     actor: this.actor,
@@ -512,9 +513,9 @@ async _prepareEffects(context) {
       );
     
       const totalValue = filtered.reduce((sum, ab) => sum + (ab.system.value ?? 0), 0);
-      const mod = Math.floor(totalValue / 10);
+      const mod = Math.round(totalValue / 10);
       const eurekaValue = context.system.attributes.skillSets?.[key]?.eureka ?? 0;
-      const eurekaMax = Math.floor(totalValue / 100);
+      const eurekaMax = Math.round(totalValue / 100);
     
       for (const ab of filtered) {
         ab.system.total = (ab.system.value ?? 0) + mod;
