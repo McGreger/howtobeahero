@@ -9,10 +9,8 @@ import HowToBeAHeroWeapon from "./item/weapon.mjs";
 import HowToBeAHeroArmor from "./item/armor.mjs";
 import HowToBeAHeroTool from "./item/tool.mjs";
 
-// Import Skill data
-import HowToBeAHeroKnowledge from "./item/knowledge.mjs"
-import HowToBeAHeroAction from "./item/action.mjs"
-import HowToBeAHeroSocial from "./item/social.mjs"
+// Import Ability data
+import HowToBeAHeroAbility from "./item/ability.mjs"
 
 // Import Effect data
 import HowToBeAHeroActiveEffectData from "./effect/active-effect.mjs";
@@ -28,9 +26,7 @@ export {
     HowToBeAHeroWeapon,
     HowToBeAHeroArmor,
     HowToBeAHeroTool,
-    HowToBeAHeroKnowledge,
-    HowToBeAHeroAction,
-    HowToBeAHeroSocial,
+    HowToBeAHeroAbility,
     // Export effect types
     HowToBeAHeroActiveEffectData
   };
@@ -49,8 +45,6 @@ export const config = {
     weapon: HowToBeAHeroWeapon,
     armor: HowToBeAHeroArmor,
     tool: HowToBeAHeroTool,
-    action: HowToBeAHeroAction,
-    knowledge: HowToBeAHeroKnowledge,
-    social: HowToBeAHeroSocial,
+    ability: HowToBeAHeroAbility,
     effect: HowToBeAHeroActiveEffectData,
   };

@@ -35,9 +35,6 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
       const context = await super.getData();
       const item = context.item;
 
-      //context.item.system.calculatedValue = item.calculatedValue;
-      //context.item.system.totalValue = item.totalValue;
-
       this._prepareBaseItemData(context, item);
       this._prepareGameConfig(context);
       this._prepareAdditionalData(context, item);

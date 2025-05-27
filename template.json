@@ -64,7 +64,7 @@
     }
   },
   "Item": {
-    "types": ["item", "consumable", "weapon", "armor", "tool", "knowledge", "action", "social"],
+    "types": ["item", "consumable", "weapon", "armor", "tool", "ability"],
     "templates": {
       "base": {
         "description": ""
@@ -75,10 +75,9 @@
         "formula": ""
       },
       "ability": {
+        "skillSet": "action",
         "type": "",
         "value": 0,
-        "calculatedValue": 0,
-        "totalValue": 0,
         "roll": {
           "diceNum": 1,
           "diceSize": "d100",
@@ -123,15 +122,6 @@
         "min": 0,
         "max": 1
       }
-    },
-    "knowledge": {
-      "templates": ["base", "ability"]
-    },
-    "action": {
-      "templates": ["base", "ability"]
-    },
-    "social": {
-      "templates": ["base", "ability"]
     }
   }
 }

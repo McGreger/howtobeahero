@@ -49,27 +49,13 @@ Hooks.once('init', function () {
       }
       return item.roll();
     },
-    rollActionMacro: async (itemUuid) => {
+    rollAbilityMacro: async (itemUuid) => {
       const item = await fromUuid(itemUuid);
-      if (!item || item.type !== 'action') {
+      if (!item || item.type !== 'ability') {
         return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
       }
       return item.roll();
     },
-    rollSocialMacro: async (itemUuid) => {
-      const item = await fromUuid(itemUuid);
-      if (!item || item.type !== 'social') {
-        return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
-      }
-      return item.roll();
-    },
-    rollKnowledgeMacro: async (itemUuid) => {
-      const item = await fromUuid(itemUuid);
-      if (!item || item.type !== 'knowledge') {
-        return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
-      }
-      return item.roll();
-    }
   };
   //Add managers  
   game.howtobeahero.managers = {
@@ -119,7 +105,7 @@ Hooks.once('init', function () {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: '1d10 + @attributes.skillSets.action.totalValue',
+    formula: '1d10 + @attributes.skillSets.action.value',
     decimals: 2,
   };
 
@@ -136,9 +122,7 @@ Hooks.once('init', function () {
     weapon: models.HowToBeAHeroWeapon,
     armor: models.HowToBeAHeroArmor,
     tool: models.HowToBeAHeroTool,
-    knowledge: models.HowToBeAHeroKnowledge,
-    action: models.HowToBeAHeroAction,
-    social: models.HowToBeAHeroSocial,
+    ability: models.HowToBeAHeroAbility
   }
   
   // Verify that all data models are defined
@@ -240,14 +224,8 @@ async function createItemMacro(data, slot) {
 
   let command;
   switch (item.type) {
-    case 'action':
-      command = `game.howtobeahero.rollActionMacro("${data.uuid}");`;
-      break;
-    case 'social':
-      command = `game.howtobeahero.rollSocialMacro("${data.uuid}");`;
-      break;
-    case 'knowledge':
-      command = `game.howtobeahero.rollKnowledgeMacro("${data.uuid}");`;
+    case 'ability':
+      command = `game.howtobeahero.rollAbilityMacro("${data.uuid}");`;
       break;
     default:
       command = `game.howtobeahero.rollItemMacro("${data.uuid}");`;
@@ -297,36 +275,12 @@ async function rollItemMacro(itemUuid) {
 }
 
 /**
- * Execute a macro for an action item.
+ * Execute a macro for an ability item.
  * @param {string} itemUuid
  */
-async function rollActionMacro(itemUuid) {
+async function rollAbilityMacro(itemUuid) {
   const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
-  if (!item || item.type !== 'action') {
-    return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
-  }
-  return item.roll();
-}
-
-/**
- * Execute a macro for a social item.
- * @param {string} itemUuid
- */
-async function rollSocialMacro(itemUuid) {
-  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
-  if (!item || item.type !== 'social') {
-    return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
-  }
-  return item.roll();
-}
-
-/**
- * Execute a macro for a knowledge item.
- * @param {string} itemUuid
- */
-async function rollKnowledgeMacro(itemUuid) {
-  const item = await fromUuid(itemUuid);  // Changed from fromUuidSync
-  if (!item || item.type !== 'knowledge') {
+  if (!item || item.type !== 'ability') {
     return ui.notifications.warn(game.i18n.format("HTBAH.MacroItemMissing", {item: itemUuid}));
   }
   return item.roll();

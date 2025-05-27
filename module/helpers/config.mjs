@@ -6,17 +6,17 @@ export const HOW_TO_BE_A_HERO = {};
  * @type {Object}
  */
 HOW_TO_BE_A_HERO.skillSets = {
-  knowledge: {
-    label: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.label',
-    long: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.long',
-    abbreviation: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.abbr',
-    eureka: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.eureka'
-  },
   action: {
     label: 'HOW_TO_BE_A_HERO.SkillSets.Action.label',
     long: 'HOW_TO_BE_A_HERO.SkillSets.Action.long',
     abbreviation: 'HOW_TO_BE_A_HERO.SkillSets.Action.abbr',
     eureka: 'HOW_TO_BE_A_HERO.SkillSets.Action.eureka'
+  },
+  knowledge: {
+    label: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.label',
+    long: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.long',
+    abbreviation: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.abbr',
+    eureka: 'HOW_TO_BE_A_HERO.SkillSets.Knowledge.eureka'
   },
   social: {
     label: 'HOW_TO_BE_A_HERO.SkillSets.Social.label',

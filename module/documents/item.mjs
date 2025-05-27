@@ -20,31 +20,6 @@ export class HowToBeAHeroItem extends Item {
   }
   
   /**
-   * Getter for calculatedValue
-   * Getter for totalValue
-   * Getter for formula
-   * @type {number}
-   */
-  get formula() {
-    const roll = this.system.roll;
-    if (!roll) return '';
-    const bonusStr = roll.diceBonus > 0 ? `+${roll.diceBonus}` : roll.diceBonus === 0 ? '' : roll.diceBonus;
-    return `${roll.diceNum}${roll.diceSize}${bonusStr}`;
-  }
-
-  get calculatedValue() {
-    if (this.system.value >= 80) return this.system.value;
-    if (!this.actor) return this.system.value;
-    
-    const skillSetValue = this.actor.system.attributes.skillSets[this.type]?.value || 0;
-    return Math.min(80, skillSetValue + this.system.value);
-  }
-
-  get totalValue() {
-    const bonus = Number(this.system?.roll?.diceBonus ?? 0);
-    return this.calculatedValue + bonus;
-   }
-  /**
    * @override
    * Augment the item source data with additional dynamic data that isn't 
    * handled by the actor's DataModel. Data calculated in this step should be
@@ -57,10 +32,6 @@ export class HowToBeAHeroItem extends Item {
     super.prepareDerivedData();
     this.labels = {}
     
-    // Calculate and set the calculatedValue
-    //this.system.calculatedValue = this.calculatedValue;
-    //this.system.totalValue = this.totalValue;
-
     // Specialized preparation per Item type
     switch ( this.type ) {
       case "baseitem":
@@ -75,12 +46,8 @@ export class HowToBeAHeroItem extends Item {
         this._prepareArmor(); break;
       case "tool":
         this._prepareTool(); break;
-      case "knowledge":
-        this._prepareKnowledge(); break;
-      case "action":
-        this._prepareAction(); break;
-      case "social":
-        this._prepareSocial(); break;
+      case "ability":
+        this._prepareAbility(); break;
     }
   }
 
@@ -150,38 +117,8 @@ export class HowToBeAHeroItem extends Item {
    * Prepare derived data for an ability-type item and define labels.
    * @protected
    */
-  _prepareKnowledge() {
-    this._prepareSharedSkillValues();
-  }
-  
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare derived data for an ability-type item and define labels.
-   * @protected
-   */
-  _prepareAction() {
-    this._prepareSharedSkillValues();
-  }
-  
-  /* -------------------------------------------- */
-
-  /**
-   * Prepare derived data for an ability-type item and define labels.
-   * @protected
-   */
-  _prepareSocial() {
-    this._prepareSharedSkillValues();
-  }
-  /**
-   * Prepare shared data for an ability-type item.
-   * @protected
-   */
-
-  _prepareSharedSkillValues() {
-    this.system.calculatedValue = this.calculatedValue;
-    this.system.totalValue = this.totalValue;
-    this.system.formula = this.formula;
+  _prepareAbility() {
+    
   }
 
   /* -------------------------------------------- */
@@ -241,18 +178,10 @@ async roll() {
 
     // Determine the category type for the icon
     let category;
-    switch(item.type) {
-      case "knowledge":
-        category = "knowledge";
-        break;
-      case "action":
-        category = "action";
-        break;
-      case "social":
-        category = "social";
-        break;
-      default:
-        category = "item";
+    if (item.type == "ability") {
+      category = item.system.skillSet;
+    } else {
+      category = "item";
     }
 
     const itemRollData = {
@@ -326,14 +255,8 @@ getRollData() {
       case "tool":
         updates = this._onCreateOwnedTool(data, isNPC);
         break;
-      case "knowledge":
-        updates = this._onCreateOwnedKnowledge(data, isNPC);
-        break;
-      case "action":
-        updates = this._onCreateOwnedAction(data, isNPC);
-        break;
-      case "social":
-        updates = this._onCreateOwnedSocial(data, isNPC);
+      case "ability":
+        updates = this._onCreateOwnedAbility(data, isNPC);
         break;
     }
     if ( updates ) return this.updateSource(updates);
@@ -471,41 +394,7 @@ getRollData() {
    * @returns {object}          Updates to apply to the item data.
    * @private
    */
-  _onCreateOwnedKnowledge(data, isNPC) {
-    const updates = {};
-    /*
-    if ( isNPC && !foundry.utils.getProperty(data, "system.type.value") ) {
-      updates["system.type.value"] = "monster"; // Set features on NPCs to be 'monster features'.
-    }
-    */
-    return updates;
-  }
-
-  /**
-   * Pre-creation logic for the automatic configuration of owned feature type Items.
-   * @param {object} data       Data for the newly created item.
-   * @param {boolean} isNPC     Is this actor an NPC?
-   * @returns {object}          Updates to apply to the item data.
-   * @private
-   */
-  _onCreateOwnedAction(data, isNPC) {
-    const updates = {};
-    /*
-    if ( isNPC && !foundry.utils.getProperty(data, "system.type.value") ) {
-      updates["system.type.value"] = "monster"; // Set features on NPCs to be 'monster features'.
-    }
-    */
-    return updates;
-  }
-
-  /**
-   * Pre-creation logic for the automatic configuration of owned feature type Items.
-   * @param {object} data       Data for the newly created item.
-   * @param {boolean} isNPC     Is this actor an NPC?
-   * @returns {object}          Updates to apply to the item data.
-   * @private
-   */
-  _onCreateOwnedSocial(data, isNPC) {
+  _onCreateOwnedAbility(data, isNPC) {
     const updates = {};
     /*
     if ( isNPC && !foundry.utils.getProperty(data, "system.type.value") ) {
