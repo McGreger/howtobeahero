@@ -2335,7 +2335,6 @@ a {
   font-weight: bold;
   background: none;
   color: var(--color-text-light-0);
-  box-shadow: 0 0 8px var(--htbah-color-gold);
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.sectioned input:hover,
