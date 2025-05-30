@@ -6,11 +6,12 @@
         <div class="item-ability-value flex1">
             <div class="ability-value-input-group">
                 <input
-                    class="ability-value"
+                    class="ability-value {{#unless @root.editable}}play-mode{{/unless}}"
                     type="number"
                     data-item-id="{{this._id}}"
                     name="system.value"
-                    value="{{system.value}}">
+                    value="{{system.value}}"
+                    {{#unless @root.editable}}disabled{{/unless}}>
             </div>
         </div>
         <!---<div class="item-mod flex1">{{skillSet.mod}}</div>--->
@@ -47,9 +48,7 @@
                             type="number" 
                             name="system.attributes.skillSets.{{skillSet.key}}.eureka" 
                             value="{{skillSet.eureka.value}}" 
-                            data-dtype="Number"
-                            {{#unless @root.editable}}disabled{{/unless}}
-                            class="{{#unless @root.editable}}play-mode{{/unless}}">
+                            data-dtype="Number">
                     </div>
                     <div class="delimiter flex1">
                         /
