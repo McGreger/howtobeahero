@@ -37,7 +37,7 @@ export default class HowToBeAHeroAbility extends HowToBeAHeroItemBase {
       label: "HOW_TO_BE_A_HERO.RollType"
     });
     
-    schema.formula = new fields.StringField({ blank: true, label: "HOW_TO_BE_A_HERO.Item.Formula"});
+    schema.formula = new fields.StringField({ initial: "d100", label: "HOW_TO_BE_A_HERO.Item.Formula"});
   
     return schema
   }

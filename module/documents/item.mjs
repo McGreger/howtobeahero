@@ -165,8 +165,8 @@ async roll() {
     });
   } else {
     // Regular ability check using d100
-    const targetValue = rollData.item.totalValue;
-    const baseValue = rollData.item.calculatedValue;
+    const targetValue = rollData.item.total;
+    const baseValue = rollData.item.value;
     const bonusValue = rollData.item.roll.diceBonus;
     
     // Get localized ability name
