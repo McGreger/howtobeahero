@@ -11,10 +11,64 @@ export class HowToBeAHeroActor extends Actor {
     const flags = this.flags.howtobeahero || {};
 
     this._prepareCharacterData();
-    this._prepareNpcData();
-
+    this._prepareNpcData(); 
+    this._prepareSkillSets(); 
   }
 
+  /**
+   * Prepare skill set calculations for easy access
+   * @private
+   */
+  _prepareSkillSets() {
+    // Initialize skillSetTotalValues and skillSetMods if they don't exist
+    this.skillSetTotalValues = {};
+    this.skillSetMods = {};
+    this.skillSetData = {};
+
+    // Get all abilities from the actor
+    const abilities = this.items.filter(item => item.type === 'ability');
+
+    // Process each skill set defined in config
+    for (const [key, def] of Object.entries(CONFIG.HTBAH.skillSets)) {
+      // Filter abilities that belong to this skill set
+      const skillSetAbilities = abilities.filter(ab =>
+        String(ab.system?.skillSet ?? "").trim().toLowerCase() === key.toLowerCase()
+      );
+
+      // Calculate total value from all abilities in this skill set
+      const totalValue = skillSetAbilities.reduce((sum, ab) => sum + (ab.system.value ?? 0), 0);
+      
+      // Calculate modifier (total value / 10, rounded)
+      const mod = Math.round(totalValue / 10);
+      
+      // Get eureka data
+      const eurekaValue = this.system.attributes.skillSets?.[key]?.eureka ?? 0;
+      const eurekaMax = Math.round(totalValue / 100);
+
+      // Store the calculated values
+      this.skillSetTotalValues[key] = totalValue;
+      this.skillSetMods[key] = mod;
+      
+      // Store complete skill set data for easy access
+      this.skillSetData[key] = {
+        key,
+        label: game.i18n.localize(def.label),
+        abilities: skillSetAbilities,
+        totalValue,
+        mod,
+        eureka: {
+          value: eurekaValue,
+          max: eurekaMax
+        }
+      };
+
+      // Update ability totals (base value + modifier)
+      skillSetAbilities.forEach(ab => {
+        ab.system.total = (ab.system.value ?? 0) + mod;
+      });
+    }
+  }
+  
   _prepareCharacterData() {
     if (this.type !== 'character') return;
     // Character-specific preparations...
@@ -27,6 +81,11 @@ export class HowToBeAHeroActor extends Actor {
 
   getRollData() {
     const data = super.getRollData();
+
+    data.skillSets = this.skillSetData;
+    data.skillSetTotalValues = this.skillSetTotalValues;
+    data.skillSetMods = this.skillSetMods;
+    
     return this.type === 'character' ? this._getCharacterRollData(data) : this._getNpcRollData(data);
   }
 
@@ -73,13 +132,19 @@ export class HowToBeAHeroActor extends Actor {
   }
 
   async rollSkillSet(skillSetId, options={}) {
+    if (!this.skillSetTotalValues) {
+      this._prepareSkillSets();
+    }
+
     const label = game.i18n.localize(CONFIG.HTBAH.skillSets[skillSetId]?.label) ?? "";
     const data = this.getRollData();
-    const targetValue = this.skillSetTotalValues[skillSetId];
-    const baseValue = this.system.attributes.skillSets[skillSetId]?.value ?? 0;
+    
+    const targetValue = this.skillSetTotalValues[skillSetId] ?? 0;
+    const baseValue = this.skillSetTotalValues[skillSetId] ?? 0; 
     const bonusValue = this.system.attributes.skillSets[skillSetId]?.bonus ?? 0;
+    
     const flavor = game.i18n.localize("HTBAH.SkillSetCheckPromptTitle");
-
+    
     const rollData = {
       formula: "1d100",
       data: {
@@ -88,7 +153,7 @@ export class HowToBeAHeroActor extends Actor {
       },
       title: `${flavor}: ${label}`,
       flavor,
-      targetValue,
+      targetValue: targetValue + bonusValue, 
       baseValue,
       bonusValue,
       messageData: {
@@ -100,13 +165,9 @@ export class HowToBeAHeroActor extends Actor {
         }
       }
     };
-
+    
     const roll = await d100Roll(rollData);
     Hooks.callAll("HowToBeAHeroAbilitySetRolled", this, skillSetId, roll);
     return roll;
-  }
-
-  _onItemUpdate(item, change, options, userId) {
-    
   }
 }
