@@ -503,38 +503,9 @@ async _prepareEffects(context) {
           break;
       }
     }
-    
-    // Create grouped skillSets context
-    const skillSets = {};
-
-    for (const [key, def] of Object.entries(CONFIG.HTBAH.skillSets)) {
-      const filtered = abilities.filter(ab =>
-        String(ab.system?.skillSet ?? "").trim().toLowerCase() === key.toLowerCase()
-      );
-    
-      const totalValue = filtered.reduce((sum, ab) => sum + (ab.system.value ?? 0), 0);
-      const mod = Math.round(totalValue / 10);
-      const eurekaValue = context.system.attributes.skillSets?.[key]?.eureka ?? 0;
-      const eurekaMax = Math.round(totalValue / 100);
-    
-      for (const ab of filtered) {
-        ab.system.total = (ab.system.value ?? 0) + mod;
-      }
-    
-      skillSets[key] = {
-        key,
-        label: game.i18n.localize(def.label),
-        abilities: filtered,
-        mod,
-        eureka: {
-          value: eurekaValue,
-          max: eurekaMax
-        }
-      };
-    }
   
     // Attach to context
-    context.skillSets = skillSets;
+    context.skillSets = this.actor.skillSetData || {};
     context.items = items;
     context.consumables = consumables;
     context.weapons = weapons;
@@ -1481,7 +1452,7 @@ async _onUseFavorite(event) {
    * @protected
    */
   _onRollSkillSet(event) {
-    const skillSetId = event.currentTarget.closest("[data-action]").dataset.skillSet;
+    const skillSetId = event.currentTarget.closest("[data-action]").dataset.skillset;
     this.actor.rollSkillSet(skillSetId, { event });
   }
 
