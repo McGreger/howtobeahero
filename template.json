@@ -19,24 +19,15 @@
         },
         "skillSets": {
           "knowledge": {
-            "eureka": 0,
             "value": 0,
-            "totalValue": 0,
-            "bonus": 0,
             "min": 0
           },
           "action": {
-            "eureka": 0,
             "value": 0,
-            "totalValue": 0,
-            "bonus": 0,
             "min": 0
           },
           "socials": {
-            "eureka": 0,
             "value": 0,
-            "totalValue": 0,
-            "bonus": 0,
             "min": 0
           }
         },
