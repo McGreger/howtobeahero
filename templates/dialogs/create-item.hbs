@@ -1,9 +1,23 @@
-<form>
+{{!-- templates/dialogs/create-item.hbs --}}
+<form class="htbah-create-item">
   <div class="form-group">
-    <label for="name">{{localize "Name"}}:</label>
-    <input type="text" name="name" id="name" value="{{defaultName}}">
+    <label for="item-name">{{localize "Name"}}</label>
+    <input type="text" 
+           id="item-name"
+           name="name" 
+           value="{{defaultName}}" 
+           placeholder="{{localize 'Name'}}" 
+           autofocus>
   </div>
-  <footer class="form-footer">
-    <button type="button" class="dialog-button" data-action="confirm">{{localize "OK"}}</button>
+  
+  <footer class="form-footer flexrow">
+    <button type="button" data-action="confirm" class="default">
+      <i class="fas fa-check"></i>
+      {{localize "Confirm"}}
+    </button>
+    <button type="button" data-action="cancel">
+      <i class="fas fa-times"></i>
+      {{localize "Cancel"}}
+    </button>
   </footer>
 </form>

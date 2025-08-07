@@ -2047,7 +2047,6 @@ a {
   grid-template-columns: var(--htbah-sheet-sidebar-width) 1fr;
   gap: 12px;
   position: absolute;
-  inset: 0;
   padding: 25px;
   overflow: hidden auto;
   scrollbar-width: thin;
