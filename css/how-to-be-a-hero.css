@@ -397,6 +397,55 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero.sheet.actor .window-header .header-button > i {
   margin: 0;
 }
+
+/* Ensure FontAwesome icons display properly on header controls */
+.how-to-be-a-hero .window-header .header-control[class*="fa-"]:before {
+  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", "FontAwesome" !important;
+  font-weight: 900 !important;
+  font-size: 12px !important;
+  display: inline-block !important;
+  width: auto !important;
+  text-align: center !important;
+}
+
+/* Force solid style for FontAwesome 6 */
+.how-to-be-a-hero .window-header .header-control.fa-solid:before {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+/* Unicode fallbacks for when FontAwesome completely fails to load */
+.how-to-be-a-hero .window-header .header-control.fa-times:before {
+  content: "✕" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-xmark:before {
+  content: "✕" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-cog:before,
+.how-to-be-a-hero .window-header .header-control.fa-gear:before {
+  content: "⚙" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-ellipsis-vertical:before {
+  content: "⋮" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-download:before {
+  content: "⬇" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-passport:before {
+  content: "📋︎" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
 .how-to-be-a-hero.sheet.actor .window-header .header-button,
 .how-to-be-a-hero.sheet.actor .window-header .document-id-link {
   margin-top: 0.25rem;
@@ -1603,7 +1652,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .window-content {
-  margin-top: -30px;
+  margin-top: -35px;
 }
 .how-to-be-a-hero.sheet.actor.character.minimized {
   background: url("../ui/denim075.png");
@@ -1670,6 +1719,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  padding-right: 2rem;
   margin-left: auto;  /* Push content to the right */
 }
 
@@ -2001,6 +2051,23 @@ item-list-controls search .filter-control[data-action="sort"] {
 .tabs .item {
   text-align: center;
 }
+
+/* Navigation tab icons */
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item htbah-icon {
+  --icon-size: 1.25em;
+  --icon-fill: currentColor;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item.active htbah-icon {
+  --icon-fill: var(--htbah-color-gold);
+}
+
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item:hover htbah-icon {
+  --icon-fill: var(--htbah-color-gold);
+}
+
 a {
   cursor: pointer;
 }

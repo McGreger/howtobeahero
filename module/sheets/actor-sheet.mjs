@@ -166,8 +166,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
   static DEFAULT_OPTIONS = {
     classes: ["how-to-be-a-hero", "sheet", "actor", "character"],
     position: {
-      width: 1000,
-      height: 1000
+      width: 1200,
+      height: 700
     },
     window: {
       resizable: true
@@ -274,21 +274,21 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     return {
       action: {
         key: "action",
-        label: game.i18n.localize("HTBAH.Action"),
+        label: game.i18n.localize("HTBAH.SkillSetAction"),
         mod: skillSets.action?.value || 0,
         eureka: skillSets.action?.eureka || { value: 0, max: 10 },
         abilities: items.filter(i => i.type === "ability" && i.system.skillSet === "action")
       },
       knowledge: {
         key: "knowledge", 
-        label: game.i18n.localize("HTBAH.Knowledge"),
+        label: game.i18n.localize("HTBAH.SkillSetKnowledge"),
         mod: skillSets.knowledge?.value || 0,
         eureka: skillSets.knowledge?.eureka || { value: 0, max: 10 },
         abilities: items.filter(i => i.type === "ability" && i.system.skillSet === "knowledge")
       },
       social: {
         key: "social",
-        label: game.i18n.localize("HTBAH.Social"), 
+        label: game.i18n.localize("HTBAH.SkillSetSocial"), 
         mod: skillSets.social?.value || 0,
         eureka: skillSets.social?.eureka || { value: 0, max: 10 },
         abilities: items.filter(i => i.type === "ability" && i.system.skillSet === "social")
@@ -345,6 +345,14 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       
       // Wait a tick and then initialize htbah-icon elements specifically
       setTimeout(() => {
+        // Force upgrade of any htbah-icon elements that might not be initialized
+        this.element.querySelectorAll('htbah-icon').forEach(element => {
+          if (element.constructor === HTMLElement || element.constructor === HTMLUnknownElement) {
+            console.log("HowToBeAHero | Force upgrading htbah-icon element");
+            customElements.upgrade(element);
+          }
+        });
+        
         this._initializeHtbahIcons();
       }, 0);
 
@@ -409,52 +417,88 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Initialize htbah-icon elements specifically
    */
   _initializeHtbahIcons() {
-    this.element.querySelectorAll('htbah-icon').forEach((iconElement, index) => {
+    console.log("HowToBeAHero | Starting htbah-icon initialization...");
+    const iconElements = this.element.querySelectorAll('htbah-icon');
+    console.log(`HowToBeAHero | Found ${iconElements.length} htbah-icon elements`);
+    
+    iconElements.forEach((iconElement, index) => {
       const src = iconElement.getAttribute('src');
-      if (!src) return;
+      if (!src) {
+        console.warn(`HowToBeAHero | htbah-icon ${index} has no src attribute`);
+        return;
+      }
 
       console.log(`HowToBeAHero | Processing htbah-icon ${index}:`, {
         src: src,
         isCustomElement: iconElement.constructor !== HTMLElement,
-        hasContent: iconElement.innerHTML.trim() !== ''
+        hasContent: iconElement.innerHTML.trim() !== '',
+        shadowRoot: iconElement.shadowRoot !== null,
+        tagName: iconElement.tagName,
+        constructor: iconElement.constructor.name
       });
 
       try {
-        // Check if the custom element is working properly
-        if (iconElement.constructor !== HTMLElement && typeof iconElement.connectedCallback === 'function') {
-          // Custom element is properly initialized, let it handle itself
-          console.log(`HowToBeAHero | htbah-icon ${index} is properly initialized`);
-          return;
+        // Wait for the custom element to initialize, then check if it worked
+        setTimeout(() => {
+          const hasVisibleContent = iconElement.shadowRoot && 
+                                   iconElement.shadowRoot.children.length > 0;
+          const hasFallbackContent = iconElement.querySelector('img, svg, i');
+          
+          console.log(`HowToBeAHero | htbah-icon ${index} status check:`, {
+            hasVisibleContent,
+            hasFallbackContent,
+            shadowChildren: iconElement.shadowRoot?.children?.length || 0
+          });
+          
+          if (!hasVisibleContent && !hasFallbackContent) {
+            console.log(`HowToBeAHero | Creating delayed fallback for htbah-icon ${index}`);
+            this._createIconFallback(iconElement, src, index);
+          }
+        }, 100);
+        
+        // Also create immediate fallback if element looks uninitialized
+        if (iconElement.constructor === HTMLElement || iconElement.constructor === HTMLUnknownElement) {
+          console.log(`HowToBeAHero | Creating immediate fallback for htbah-icon ${index}`);
+          this._createIconFallback(iconElement, src, index);
         }
         
-        // Fallback: manually create img element
-        if (!iconElement.querySelector('img, svg')) {
-          console.log(`HowToBeAHero | Creating fallback for htbah-icon ${index}`);
-          
-          const img = document.createElement('img');
-          img.src = src;
-          img.alt = iconElement.getAttribute('alt') || '';
-          img.style.width = '100%';
-          img.style.height = '100%';
-          img.style.objectFit = 'contain';
-          img.style.display = 'block';
-          
-          // Clear existing content and append img
-          iconElement.innerHTML = '';
-          iconElement.appendChild(img);
-          
-          // Set some styles on the icon element itself
-          iconElement.style.display = 'inline-block';
-          iconElement.style.width = '1em';
-          iconElement.style.height = '1em';
-          iconElement.style.verticalAlign = 'middle';
-        }
       } catch (error) {
-        console.warn("HowToBeAHero | Error initializing htbah-icon:", error);
-        // Last resort fallback: replace with a FontAwesome icon
-        iconElement.innerHTML = '<i class="fas fa-cube" style="font-size: 1em;"></i>';
+        console.warn(`HowToBeAHero | Error processing htbah-icon ${index}:`, error);
+        this._createIconFallback(iconElement, src, index);
       }
     });
+  }
+  
+  /**
+   * Create fallback content for failed htbah-icon elements
+   */
+  _createIconFallback(iconElement, src, index) {
+    // Clear any existing content
+    iconElement.innerHTML = '';
+    
+    // Try IMG fallback first
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = iconElement.getAttribute('alt') || `Icon ${index}`;
+    img.style.cssText = 'width: 100%; height: 100%; object-fit: contain; display: block;';
+    
+    // Handle image load success/failure
+    img.onload = () => {
+      console.log(`HowToBeAHero | Fallback image loaded successfully for htbah-icon ${index}`);
+    };
+    
+    img.onerror = () => {
+      console.warn(`HowToBeAHero | Fallback image failed to load for htbah-icon ${index}, using FontAwesome fallback`);
+      iconElement.innerHTML = '<i class="fas fa-cube" style="font-size: 1em; color: currentColor;"></i>';
+    };
+    
+    iconElement.appendChild(img);
+    
+    // Set container styles
+    iconElement.style.cssText = 'display: inline-block; width: 1em; height: 1em; vertical-align: middle;';
+    iconElement.classList.add('fallback-icon');
+    
+    console.log(`HowToBeAHero | Created fallback for htbah-icon ${index} with src: ${src}`);
   }
 
   /**
