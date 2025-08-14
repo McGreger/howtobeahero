@@ -723,6 +723,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero .tab.biography .bottom p {
   width: 100%;
   min-height: 140px;
+  max-height: calc(100vh - var(--htbah-sheet-header-height) - 300px); /* Limit resize to available space */
   background: var(--htbah-color-blue-gray-2);
   border: 1px solid var(--htbah-color-blue-gray-3);
   border-radius: 4px;
@@ -733,6 +734,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-size: var(--font-size-13);
   line-height: 1.5;
   resize: vertical;
+  box-sizing: border-box;
 }
 
 /* Common textarea styles */
@@ -2001,6 +2003,22 @@ item-list-controls search .filter-control[data-action="sort"] {
 /* ----------------------------------------- */
 /*  Navigation for Charactersheets           */
 /* ----------------------------------------- */
+
+/* Allow tabs to hang outside the window */
+.how-to-be-a-hero.sheet.actor.character {
+  overflow: visible;
+}
+
+.how-to-be-a-hero.sheet.actor.character .window-content {
+  overflow: visible;
+}
+
+/* Form container needs relative positioning for absolute nav tabs */
+.how-to-be-a-hero.sheet.actor.character form.interactable {
+  position: relative;
+  height: 100%; /* This should reference the character sheet's min-height */
+}
+
 .how-to-be-a-hero.sheet.actor.character nav.tabs {
   --tab-full-width: 44px;
   --tab-inactive-width: 34px;
@@ -2010,7 +2028,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  z-index: -1;
+  z-index: 10;
 }
 
 .how-to-be-a-hero.sheet.actor.character nav.tabs > .item {
@@ -2082,10 +2100,25 @@ a {
 
 .how-to-be-a-hero .tab-body .tab {
   display: none;
+  overflow-wrap: break-word; /* Allow long words to break */
+  word-wrap: break-word; /* Legacy support */
 }
 
 .how-to-be-a-hero .tab-body .tab.active {
   display: block;
+}
+
+/* Ensure tab content respects boundaries */
+.how-to-be-a-hero .tab-body .tab textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.how-to-be-a-hero .tab-body .tab table,
+.how-to-be-a-hero .tab-body .tab .form-grid {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed; /* For tables to respect width constraints */
 }
 
 /* ----------------------------------------- */
@@ -2098,7 +2131,7 @@ a {
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body {
   border-radius: 5px;
-  position: relative;
+  height: calc(100% - var(--htbah-sheet-header-height)); /* Available height minus header */
   /*
   background: url("../ui/texture1.webp") no-repeat top center / auto 770px, url("../ui/texture2.webp") no-repeat bottom center / auto 704px;
   */
@@ -2120,6 +2153,40 @@ a {
   scrollbar-color: var(--htbah-color-scrollbar) transparent;
   transition: all 450ms ease;
   padding-bottom: 30px;
+  width: 100%;
+  top: var(--htbah-sheet-header-height);
+  bottom: 0; /* Connect to bottom of the form */
+  box-sizing: border-box; /* Ensures padding is included in width calculation */
+  min-width: 0; /* Prevents grid container from expanding beyond bounds */
+}
+
+/* Ensure grid items don't overflow */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content > * {
+  min-width: 0; /* Prevents grid items from expanding beyond their column */
+  min-height: 0; /* Prevents grid items from expanding beyond their row */
+  overflow: hidden; /* Prevents content from escaping grid items */
+}
+
+/* Specific constraint for tab-body as the second grid item */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content .tab-body {
+  overflow: hidden auto; /* Allow vertical scrolling but prevent horizontal overflow */
+  max-width: 100%; /* Ensure it doesn't expand beyond allocated grid space */
+  height: 100%; /* Fill available grid cell height */
+}
+
+/* For any nested content that might have tables, forms, or other wide content */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Specific handling for common overflow culprits */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content table,
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content pre,
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content code {
+  max-width: 100%;
+  overflow-x: auto;
+  word-wrap: break-word;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .main-content::-webkit-scrollbar-track {
   box-shadow: none;
