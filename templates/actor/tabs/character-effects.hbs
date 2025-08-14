@@ -5,6 +5,7 @@
 
     <section class="items-list effects-list" data-item-list="effects">
         {{#each effects}}
+        {{#if effects.length}}
         <div class="items-section card" data-effect-type="{{ type }}">
             <div class="items-header header {{#if disabled}}disabled{{/if}}">
                 <h3 class="item-name effect-name">{{ localize label }}</h3>
@@ -77,6 +78,7 @@
                 {{/each}}
             </ol>
         </div>
+        {{/if}}
         {{/each}}
     </section>
 

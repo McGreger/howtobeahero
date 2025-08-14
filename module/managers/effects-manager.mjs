@@ -13,8 +13,7 @@ export class effectsManager {
     const categories = {
       temporary: { type: 'temporary', label: 'HOW_TO_BE_A_HERO.Effect.Temporary', effects: [] },
       passive: { type: 'passive', label: 'HOW_TO_BE_A_HERO.Effect.Passive', effects: [] },
-      inactive: { type: 'inactive', label: 'HOW_TO_BE_A_HERO.Effect.Inactive', effects: [] },
-      conditions: { type: 'conditions', label: 'HOW_TO_BE_A_HERO.Effect.Conditions', effects: this.conditionManager.getAllConditions() }
+      inactive: { type: 'inactive', label: 'HOW_TO_BE_A_HERO.Effect.Inactive', effects: [] }
     };
 
     for (let e of effects) {
