@@ -975,7 +975,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     // Handle all input changes for automatic saving
     this.element.querySelectorAll('input[type="text"], input[type="number"], textarea, select').forEach(input => {
       // Skip inputs that shouldn't auto-save (like search fields)
-      if (input.name && input.name.startsWith('system.')) {
+      if (input.name && (input.name.startsWith('system.') || input.name === 'name')) {
         input.addEventListener('change', this._onFormInput.bind(this));
         input.addEventListener('blur', this._onFormInput.bind(this)); // Also save on blur
       }
@@ -992,7 +992,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     
     console.log(`HowToBeAHero | Form input changed: ${name} = ${value}`);
     
-    if (!name || !name.startsWith('system.')) return;
+    if (!name || !(name.startsWith('system.') || name === 'name')) return;
     
     // Create update data
     const updateData = {};
