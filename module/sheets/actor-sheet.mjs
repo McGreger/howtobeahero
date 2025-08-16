@@ -289,40 +289,12 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       context.favorites.sort((a, b) => a.sort - b.sort);
     }
 
-    context.skillSets = this._prepareSkillSets();
+    context.skillSets = this.document.skillSetData || {};
 
     console.log("HowToBeAHero | Final context prepared successfully");
     return context;
   }
 
-  _prepareSkillSets() {
-    const skillSets = this.document.system.attributes?.skillSets || {};
-    const items = this.document.items;
-    
-    return {
-      action: {
-        key: "action",
-        label: game.i18n.localize("HTBAH.SkillSetAction"),
-        mod: skillSets.action?.value || 0,
-        eureka: skillSets.action?.eureka || { value: 0, max: 10 },
-        abilities: items.filter(i => i.type === "ability" && i.system.skillSet === "action")
-      },
-      knowledge: {
-        key: "knowledge", 
-        label: game.i18n.localize("HTBAH.SkillSetKnowledge"),
-        mod: skillSets.knowledge?.value || 0,
-        eureka: skillSets.knowledge?.eureka || { value: 0, max: 10 },
-        abilities: items.filter(i => i.type === "ability" && i.system.skillSet === "knowledge")
-      },
-      social: {
-        key: "social",
-        label: game.i18n.localize("HTBAH.SkillSetSocial"), 
-        mod: skillSets.social?.value || 0,
-        eureka: skillSets.social?.eureka || { value: 0, max: 10 },
-        abilities: items.filter(i => i.type === "ability" && i.system.skillSet === "social")
-      }
-    };
-  }
 
   _onRender(context, options) {
     try {
