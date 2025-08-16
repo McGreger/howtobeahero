@@ -12,7 +12,8 @@ export class HowToBeAHeroActor extends Actor {
 
     this._prepareCharacterData();
     this._prepareNpcData(); 
-    this._prepareSkillSets(); 
+    this._prepareSkillSets();
+    this._prepareArmorClass();
   }
 
   /**
@@ -77,6 +78,45 @@ export class HowToBeAHeroActor extends Actor {
   _prepareNpcData() {
     if (this.type !== 'npc') return;
     // NPC-specific preparations...
+  }
+
+  /**
+   * Prepare armor class calculation from equipped armor items only
+   * @private
+   */
+  _prepareArmorClass() {
+    console.log(`HowToBeAHero | Calculating armor for actor: ${this.name}`);
+    
+    // Get all equipped armor items
+    const equippedArmor = this.items.filter(item => 
+      item.type === 'armor' && item.system.equipped === true
+    );
+    
+    console.log(`HowToBeAHero | Found ${equippedArmor.length} equipped armor items:`, 
+      equippedArmor.map(armor => `${armor.name} (${armor.system.armor || 0})`)
+    );
+    
+    // Calculate total armor value from equipped items only
+    const totalArmorClass = equippedArmor.reduce((total, armor) => {
+      const armorValue = armor.system.armor || 0;
+      console.log(`HowToBeAHero | Adding armor: ${armor.name} = ${armorValue}`);
+      return total + armorValue;
+    }, 0);
+    
+    console.log(`HowToBeAHero | Total armor class calculated: ${totalArmorClass}`);
+    
+    // Store the calculated values for easy access
+    this.armorData = {
+      equipped: totalArmorClass,
+      total: totalArmorClass,
+      equippedItems: equippedArmor.map(armor => ({
+        id: armor.id,
+        name: armor.name,
+        armorValue: armor.system.armor || 0
+      }))
+    };
+    
+    console.log(`HowToBeAHero | Stored armor data:`, this.armorData);
   }
 
   getRollData() {

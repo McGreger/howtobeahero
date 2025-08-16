@@ -263,6 +263,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       system: this.document.system,
       flags: this.document.flags,
       config: CONFIG.HTBAH,
+      armorData: this.document.armorData,
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
       cssClass: this._getContextCssClass(this.isEditable),
@@ -420,25 +421,11 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Initialize htbah-icon elements specifically
    */
   _initializeHtbahIcons() {
-    console.log("HowToBeAHero | Starting htbah-icon initialization...");
     const iconElements = this.element.querySelectorAll('htbah-icon');
-    console.log(`HowToBeAHero | Found ${iconElements.length} htbah-icon elements`);
     
     iconElements.forEach((iconElement, index) => {
       const src = iconElement.getAttribute('src');
-      if (!src) {
-        console.warn(`HowToBeAHero | htbah-icon ${index} has no src attribute`);
-        return;
-      }
-
-      console.log(`HowToBeAHero | Processing htbah-icon ${index}:`, {
-        src: src,
-        isCustomElement: iconElement.constructor !== HTMLElement,
-        hasContent: iconElement.innerHTML.trim() !== '',
-        shadowRoot: iconElement.shadowRoot !== null,
-        tagName: iconElement.tagName,
-        constructor: iconElement.constructor.name
-      });
+      if (!src) return;
 
       try {
         // Wait for the custom element to initialize, then check if it worked
@@ -447,26 +434,17 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
                                    iconElement.shadowRoot.children.length > 0;
           const hasFallbackContent = iconElement.querySelector('img, svg, i');
           
-          console.log(`HowToBeAHero | htbah-icon ${index} status check:`, {
-            hasVisibleContent,
-            hasFallbackContent,
-            shadowChildren: iconElement.shadowRoot?.children?.length || 0
-          });
-          
           if (!hasVisibleContent && !hasFallbackContent) {
-            console.log(`HowToBeAHero | Creating delayed fallback for htbah-icon ${index}`);
             this._createIconFallback(iconElement, src, index);
           }
         }, 100);
         
         // Also create immediate fallback if element looks uninitialized
         if (iconElement.constructor === HTMLElement || iconElement.constructor === HTMLUnknownElement) {
-          console.log(`HowToBeAHero | Creating immediate fallback for htbah-icon ${index}`);
           this._createIconFallback(iconElement, src, index);
         }
         
       } catch (error) {
-        console.warn(`HowToBeAHero | Error processing htbah-icon ${index}:`, error);
         this._createIconFallback(iconElement, src, index);
       }
     });
@@ -485,13 +463,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     img.alt = iconElement.getAttribute('alt') || `Icon ${index}`;
     img.style.cssText = 'width: 100%; height: 100%; object-fit: contain; display: block;';
     
-    // Handle image load success/failure
-    img.onload = () => {
-      console.log(`HowToBeAHero | Fallback image loaded successfully for htbah-icon ${index}`);
-    };
-    
+    // Handle image load failure
     img.onerror = () => {
-      console.warn(`HowToBeAHero | Fallback image failed to load for htbah-icon ${index}, using FontAwesome fallback`);
       iconElement.innerHTML = '<i class="fas fa-cube" style="font-size: 1em; color: currentColor;"></i>';
     };
     
@@ -500,8 +473,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     // Set container styles
     iconElement.style.cssText = 'display: inline-block; width: 1em; height: 1em; vertical-align: middle;';
     iconElement.classList.add('fallback-icon');
-    
-    console.log(`HowToBeAHero | Created fallback for htbah-icon ${index} with src: ${src}`);
   }
 
   /**
@@ -806,6 +777,9 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     for (const item of allItems) {
       item.img ||= Item.DEFAULT_ICON;
 
+      // Prepare item context for template usage
+      item.ctx = this._prepareItemContext(item);
+
       switch (item.type) {
         case "item":
           items.push(item);
@@ -850,6 +824,39 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     for (let section of context.sections) {
       section.items?.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     }
+  }
+
+  /**
+   * Prepare item context for template usage
+   * @param {Item} item - The item to prepare context for
+   * @returns {Object} Context object for the item
+   */
+  _prepareItemContext(item) {
+    const ctx = {};
+
+    // Prepare equip context
+    if (["weapon", "armor"].includes(item.type)) {
+      const isEquipped = item.system.equipped || false;
+      ctx.equip = {
+        applicable: true,
+        cls: isEquipped ? "active" : "",
+        title: isEquipped ? "HTBAH.Unequip" : "HTBAH.Equip",
+        disabled: false
+      };
+    }
+
+    // Prepare uses context
+    if (item.system.uses) {
+      ctx.hasUses = true;
+      ctx.uses = item.system.uses;
+    } else {
+      ctx.hasUses = false;
+    }
+
+    // Prepare subtitle for display
+    ctx.subtitle = this._getItemSubtitle(item);
+
+    return ctx;
   }
 
   /**

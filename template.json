@@ -12,11 +12,6 @@
           "value": 0,
           "min": 0
         },
-        "armor": {
-          "value": 100,
-          "min": 0,
-          "max": 100
-        },
         "skillSets": {
           "knowledge": {
             "value": 0,

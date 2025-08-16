@@ -104,6 +104,8 @@
 
   "HTBAH.Equipped": "Equipped",
   "HTBAH.Unequipped": "Unequipped",
+  "HTBAH.Equip": "Equip",
+  "HTBAH.Unequip": "Unequip",
   
   "HTBAH.Quantity": "Quantity",
   "HTBAH.Uses": "Uses",
