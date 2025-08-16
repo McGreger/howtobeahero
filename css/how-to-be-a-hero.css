@@ -2649,6 +2649,7 @@ a {
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked.rollable {
   cursor: pointer;
+  color: var(--color-text-dark-primary);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked.rollable:hover .title {
   text-shadow: 0 0 8px var(--color-shadow-primary);
