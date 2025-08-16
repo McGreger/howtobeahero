@@ -151,10 +151,27 @@ async roll() {
   const rollType = this.system.rollType || "check";
 
   if (rollType === "damage") {
+    // Build the damage formula from the weapon's roll configuration
+    const roll = this.system.roll || {};
+    const diceNum = roll.diceNum || 1;
+    const diceSize = roll.diceSize || "d10";
+    const diceBonus = roll.diceBonus || 0;
+    
+    // Construct the formula: e.g., "2d8+3" or "1d10"
+    let formula = `${diceNum}${diceSize}`;
+    if (diceBonus > 0) {
+      formula += `+${diceBonus}`;
+    } else if (diceBonus < 0) {
+      formula += `${diceBonus}`;
+    }
+
+    console.log(`HowToBeAHero | Item ${item.name} damage formula: ${formula} (${diceNum}${diceSize}${diceBonus > 0 ? '+' + diceBonus : diceBonus < 0 ? diceBonus : ''})`);
+
     const damageData = {
       label: item.name,
+      formula: formula,
       critical: false,
-      bonus: rollData.item.roll.diceBonus,
+      bonus: diceBonus,
       target: null
     };
 

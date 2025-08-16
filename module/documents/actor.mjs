@@ -148,9 +148,14 @@ export class HowToBeAHeroActor extends Actor {
     const bonusValue = damageData.bonus || 0;
     const target = damageData.target || null;
     const flavor = game.i18n.localize("HTBAH.DamageRollPrompt");
+    
+    // Use the formula from damageData if provided, otherwise default to 1d10
+    const formula = damageData.formula || "1d10";
+    
+    console.log(`HowToBeAHero | Rolling damage with formula: ${formula}`);
 
     const rollData = {
-      formula: "1d10",
+      formula: formula,
       data: {
         actor: data,
         item: null
