@@ -1,7 +1,7 @@
 {{!-- templates/actor/tabs/character-details.hbs --}}
 {{#*inline "item-list"}}
     <li class="item flexrow" data-item-id="{{_id}}">
-        <a class="item-name {{ @root.rollableClass }} item-roll flex1" 
+        <a class="item-name {{ ctx.rollableClass }} item-roll flex1" 
            data-action="itemAction" data-sub-action="roll" data-item-id="{{_id}}" draggable="true">
             <h3>{{name}}</h3>
         </a>

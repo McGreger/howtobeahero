@@ -853,6 +853,13 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       ctx.hasUses = false;
     }
 
+    // Prepare rollable context - armor items should not be rollable
+    const rollableClasses = [];
+    if (this.isEditable && item.type !== "armor") {
+      rollableClasses.push("rollable");
+    }
+    ctx.rollableClass = rollableClasses.join(" ");
+
     // Prepare subtitle for display
     ctx.subtitle = this._getItemSubtitle(item);
 
