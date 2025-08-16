@@ -249,6 +249,8 @@
   "HTBAH.ConStunned": "Stunned",
 
   "HTBAH.Biography": "Biography",
+
+  "HTBAH.WarnNameRequired": "Name is required",
     
   "TYPES": {
     "Actor": {

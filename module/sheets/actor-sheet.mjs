@@ -77,8 +77,9 @@ class TabsHtbah {
 /**
  * Simple name input dialog for item creation using AppV2
  */
-class NameInputDialog extends foundry.applications.api.ApplicationV2 {
+class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
   constructor({ defaultName = "", onSubmit } = {}) {
+    console.log("NameInputDialog constructor called");
     super();
     this.defaultName = defaultName;
     this.onSubmit = onSubmit;
@@ -96,12 +97,16 @@ class NameInputDialog extends foundry.applications.api.ApplicationV2 {
       width: 400,
       height: "auto"
     },
-    classes: ["dialog", "htbah"]
+    classes: ["dialog", "how-to-be-a-hero"],
+    actions: {
+      confirm: this.prototype._onConfirm,
+      cancel: this.prototype._onCancel
+    }
   };
 
   static PARTS = {
     form: {
-      template: "templates/dialogs/create-item.hbs"
+      template: "systems/how-to-be-a-hero/templates/dialogs/create-item.hbs"
     }
   };
 
@@ -111,8 +116,21 @@ class NameInputDialog extends foundry.applications.api.ApplicationV2 {
     };
   }
 
+
   _onRender(context, options) {
+    console.log("NameInputDialog _onRender called");
+    console.log("Dialog element:", this.element);
+    console.log("Dialog visible:", this.element?.style.display);
+    console.log("Dialog in DOM:", document.contains(this.element));
+    
+    // Ensure the dialog is opened (HTML dialog element needs open attribute)
+    if (this.element && !this.element.open) {
+      this.element.showModal();
+      console.log("Dialog opened with showModal()");
+    }
+    
     const input = this.element.querySelector('input[name="name"]');
+    console.log("Input found:", input);
     if (input) {
       input.focus();
       input.select();
@@ -122,10 +140,6 @@ class NameInputDialog extends foundry.applications.api.ApplicationV2 {
   _attachFrameListeners() {
     super._attachFrameListeners();
     
-    this.element.querySelector("[data-action='confirm']")?.addEventListener("click", () => {
-      this._submit();
-    });
-
     this.element.querySelector('input[name="name"]')?.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -134,12 +148,26 @@ class NameInputDialog extends foundry.applications.api.ApplicationV2 {
     });
   }
 
+  _onConfirm(event, target) {
+    console.log("_onConfirm called");
+    this._submit();
+  }
+
+  _onCancel(event, target) {
+    console.log("_onCancel called");
+    this.close();
+  }
+
   _submit() {
+    console.log("_submit called");
     const name = this.element.querySelector('input[name="name"]')?.value?.trim();
+    console.log("Name entered:", name);
     if (!name) {
+      console.log("Warning: no name provided");
       ui.notifications.warn(game.i18n.localize("HTBAH.WarnNameRequired"));
       return;
     }
+    console.log("Closing dialog and calling onSubmit");
     this.close();
     this.onSubmit?.(name);
   }
@@ -1212,13 +1240,17 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     }
 
     return new Promise(resolve => {
-      new NameInputDialog({
+      console.log("Creating NameInputDialog with type:", type);
+      const dialog = new NameInputDialog({
         defaultName: "",
         onSubmit: name => {
+          console.log("Dialog submitted with name:", name);
           const data = { name, type, system: systemData };
           resolve(this.document.createEmbeddedDocuments(documentClass, [data]));
         }
-      }).render(true);
+      });
+      console.log("Attempting to render dialog");
+      dialog.render(true);
     });
   }
 
