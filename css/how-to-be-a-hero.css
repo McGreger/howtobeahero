@@ -1880,6 +1880,13 @@ item-list-controls search .filter-control[data-action="sort"] {
   box-shadow: inset 0 0 8px var(--htbah-color-gold);
 }
 
+/* Skillset Category Drag Over State */
+.how-to-be-a-hero.sheet.actor.character .skillSet-category.dragover {
+  background: rgba(var(--htbah-color-gold-rgb), 0.1);
+  box-shadow: inset 0 0 8px var(--htbah-color-gold);
+  border-radius: 4px;
+}
+
 /* Input Styles */
 .how-to-be-a-hero.sheet.actor.character .sheet-header input {
   background: rgba(0, 0, 0, 0.45);

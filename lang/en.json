@@ -251,6 +251,7 @@
   "HTBAH.Biography": "Biography",
 
   "HTBAH.WarnNameRequired": "Name is required",
+  "HTBAH.WarningOnlyAbilitiesInSkillSets": "Only abilities can be moved between skill sets",
     
   "TYPES": {
     "Actor": {
