@@ -1027,7 +1027,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       }
     });
 
-    this.element.querySelectorAll('.favorites, .header-stat-column[data-slot], .skillSet-category').forEach(zone => {
+    this.element.querySelectorAll('.favorites, .header-stat-column[data-slot], .skillSet-category, .items-section').forEach(zone => {
       zone.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
       zone.addEventListener('dragleave', this.dragDropHandler.onDragLeave.bind(this.dragDropHandler));
       zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));

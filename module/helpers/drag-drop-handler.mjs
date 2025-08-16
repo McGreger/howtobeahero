@@ -44,6 +44,16 @@ export class HowToBeAHeroDragDropHandler {
           return { action: "skillSet", type: skillSetType };
         }
       }
+
+      // Check for inventory item type sections
+      const inventorySection = dropTarget.closest('.items-section');
+      if (inventorySection) {
+        const sectionDataset = inventorySection.dataset;
+        // Check if this section has a type specified
+        if (sectionDataset.type) {
+          return { action: "itemType", type: sectionDataset.type };
+        }
+      }
   
       return { action: "default", type: "item" };
     }
@@ -78,6 +88,11 @@ export class HowToBeAHeroDragDropHandler {
         }
       } else if (actionConfig.action === "favorite") {
         dropTarget.classList.add('dragover');
+      } else if (actionConfig.action === "itemType") {
+        const inventorySection = dropTarget.closest('.items-section');
+        if (inventorySection) {
+          inventorySection.classList.add('dragover');
+        }
       }
     }
   
@@ -249,9 +264,288 @@ export class HowToBeAHeroDragDropHandler {
           return actorItem.update({
             "system.skillSet": actionConfig.type
           });
+
+        case "itemType":
+          // Handle item type changes in inventory
+          console.log("ItemType drop - data:", data);
+          
+          if (data.type !== "Item") {
+            console.log("ItemType drop - not an item, rejecting");
+            return false;
+          }
+          
+          let itemTypeItem;
+          try {
+            itemTypeItem = await Item.implementation.fromDropData(data);
+          } catch (error) {
+            console.error("ItemType drop - error getting item from drop data:", error);
+            ui.notifications.error(`Failed to get item: ${error.message}`);
+            return false;
+          }
+          
+          if (!itemTypeItem) {
+            console.log("ItemType drop - itemTypeItem is null/undefined");
+            return false;
+          }
+
+          console.log("ItemType drop - itemTypeItem:", itemTypeItem);
+
+          // Check if this item belongs to the current actor
+          const actorItemForType = this.actor.items.get(itemTypeItem.id);
+          if (!actorItemForType) {
+            console.warn(`ItemType drop - Item ${itemTypeItem.id} does not belong to actor ${this.actor.name}`);
+            ui.notifications.warn("This item does not belong to this character.");
+            return false;
+          }
+
+          // Don't allow dropping in the same item type
+          if (itemTypeItem.type === actionConfig.type) {
+            console.log(`ItemType drop - same item type: ${actionConfig.type}`);
+            return false; // No change needed
+          }
+
+          // Validate that the target type is a valid item type
+          const validItemTypes = ["item", "consumable", "weapon", "armor", "tool"];
+          if (!validItemTypes.includes(actionConfig.type)) {
+            console.log(`ItemType drop - invalid target type: ${actionConfig.type}`);
+            ui.notifications.warn("Invalid item type.");
+            return false;
+          }
+
+          console.log(`Converting item "${itemTypeItem.name}" from "${itemTypeItem.type}" to "${actionConfig.type}"`);
+
+          // Convert the item type properly by creating a new item and deleting the old one
+          return this._convertItemType(actorItemForType, actionConfig.type);
     
         default:
           return false;
       }
+    }
+
+    /**
+     * Convert an item from one type to another by creating a new item and deleting the old one
+     * @param {Item} sourceItem - The original item to convert
+     * @param {string} targetType - The target item type
+     * @returns {Promise<Item>} The newly created item
+     * @private
+     */
+    async _convertItemType(sourceItem, targetType) {
+      try {
+        // Check for potential data loss and show confirmation dialog
+        const dataLossWarning = this._getDataLossWarning(sourceItem, targetType);
+        const shouldProceed = await this._showConversionConfirmation(sourceItem.name, sourceItem.type, targetType, dataLossWarning);
+        
+        if (!shouldProceed) {
+          console.log("Item conversion cancelled by user");
+          return false;
+        }
+
+        // Extract core data that's common across all item types
+        const coreData = {
+          name: sourceItem.name,
+          img: sourceItem.img,
+          type: targetType,
+          sort: sourceItem.sort,
+          system: {
+            description: sourceItem.system.description || ""
+          }
+        };
+
+        // Map compatible data based on target type templates
+        // Base template: description (already included)
+        // Physical template: quantity, rollType, formula
+        // Ability template: skillSet, type, value, roll, formula
+
+        const hasPhysicalTemplate = ["item", "consumable", "weapon", "tool"].includes(targetType);
+        const sourceHasPhysical = ["item", "consumable", "weapon", "tool"].includes(sourceItem.type);
+
+        if (hasPhysicalTemplate && sourceHasPhysical) {
+          // Transfer physical template data
+          coreData.system.quantity = sourceItem.system.quantity || 1;
+          coreData.system.rollType = sourceItem.system.rollType || "check";
+          coreData.system.formula = sourceItem.system.formula || "";
+        } else if (hasPhysicalTemplate) {
+          // Set default physical template data
+          coreData.system.quantity = 1;
+          coreData.system.rollType = "check";
+          coreData.system.formula = "";
+        }
+
+        // Add type-specific data with defaults
+        switch (targetType) {
+          case "item":
+            coreData.system.type = sourceItem.system.type || "";
+            break;
+
+          case "consumable":
+            coreData.system.type = sourceItem.system.type || "";
+            coreData.system.duration = sourceItem.system.duration || "";
+            break;
+
+          case "weapon":
+            coreData.system.weaponType = sourceItem.system.weaponType || "";
+            coreData.system.rollType = "damage"; // Override for weapons
+            coreData.system.roll = sourceItem.system.roll || {
+              diceNum: 1,
+              diceSize: "d10",
+              diceBonus: 0
+            };
+            coreData.system.equipped = sourceItem.system.equipped || false;
+            break;
+
+          case "armor":
+            // Armor doesn't use physical template, has its own quantity
+            coreData.system.quantity = sourceItem.system.quantity || 1;
+            coreData.system.armorType = sourceItem.system.armorType || "";
+            coreData.system.armor = sourceItem.system.armor || 0;
+            coreData.system.material = sourceItem.system.material || "";
+            coreData.system.equipped = sourceItem.system.equipped || false;
+            break;
+
+          case "tool":
+            coreData.system.type = sourceItem.system.type || "";
+            coreData.system.uses = sourceItem.system.uses || {
+              value: 1,
+              min: 0,
+              max: 1
+            };
+            break;
+        }
+
+        console.log("Creating new item with data:", coreData);
+
+        // Create the new item
+        const [newItem] = await this.actor.createEmbeddedDocuments("Item", [coreData]);
+        
+        // Delete the old item
+        await sourceItem.delete();
+
+        console.log(`Successfully converted item to ${targetType}:`, newItem);
+        ui.notifications.info(`Converted "${sourceItem.name}" to ${targetType}`);
+        
+        return newItem;
+
+      } catch (error) {
+        console.error("Error converting item type:", error);
+        ui.notifications.error(`Failed to convert item type: ${error.message}`);
+        return false;
+      }
+    }
+
+    /**
+     * Analyze potential data loss when converting between item types
+     * @param {Item} sourceItem - The source item
+     * @param {string} targetType - The target item type
+     * @returns {Array<string>} Array of warnings about data that will be lost
+     * @private
+     */
+    _getDataLossWarning(sourceItem, targetType) {
+      const warnings = [];
+      const sourceType = sourceItem.type;
+
+      // Define what data each type has
+      const typeFeatures = {
+        item: ['type'],
+        consumable: ['type', 'duration'],
+        weapon: ['weaponType', 'roll', 'equipped'],
+        armor: ['armorType', 'armor', 'material', 'equipped'],
+        tool: ['type', 'uses']
+      };
+
+      const sourceFeatures = typeFeatures[sourceType] || [];
+      const targetFeatures = typeFeatures[targetType] || [];
+
+      // Check for specific data that will be lost
+      sourceFeatures.forEach(feature => {
+        if (!targetFeatures.includes(feature)) {
+          const value = sourceItem.system[feature];
+          if (value !== undefined && value !== null && value !== "" && value !== 0) {
+            switch (feature) {
+              case 'weaponType':
+                if (value) warnings.push(`Weapon type: "${value}"`);
+                break;
+              case 'armorType':
+                if (value) warnings.push(`Armor type: "${value}"`);
+                break;
+              case 'armor':
+                if (value) warnings.push(`Armor value: ${value}`);
+                break;
+              case 'material':
+                if (value) warnings.push(`Material: "${value}"`);
+                break;
+              case 'duration':
+                if (value) warnings.push(`Duration: "${value}"`);
+                break;
+              case 'equipped':
+                if (value) warnings.push(`Equipped status`);
+                break;
+              case 'uses':
+                if (value && (value.value || value.max)) warnings.push(`Uses: ${value.value}/${value.max}`);
+                break;
+              case 'roll':
+                if (value && (value.diceNum || value.diceSize || value.diceBonus)) {
+                  warnings.push(`Roll data: ${value.diceNum || 1}${value.diceSize || 'd10'}${value.diceBonus ? '+' + value.diceBonus : ''}`);
+                }
+                break;
+              case 'type':
+                if (value) warnings.push(`Subtype: "${value}"`);
+                break;
+            }
+          }
+        }
+      });
+
+      return warnings;
+    }
+
+    /**
+     * Show confirmation dialog for item type conversion
+     * @param {string} itemName - Name of the item being converted
+     * @param {string} sourceType - Current item type
+     * @param {string} targetType - Target item type
+     * @param {Array<string>} dataLossWarnings - Array of data loss warnings
+     * @returns {Promise<boolean>} Whether the user confirmed the conversion
+     * @private
+     */
+    async _showConversionConfirmation(itemName, sourceType, targetType, dataLossWarnings) {
+      return new Promise((resolve) => {
+        let content = `<div style="color: black;">
+          <p>Convert <strong>"${itemName}"</strong> from <strong>${sourceType}</strong> to <strong>${targetType}</strong>?</p>`;
+        
+        if (dataLossWarnings.length > 0) {
+          content += `<div style="margin: 1rem 0;">
+            <p><strong>Warning: The following data will be lost:</strong></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              ${dataLossWarnings.map(warning => `<li>${warning}</li>`).join('')}
+            </ul>
+          </div>`;
+        }
+
+        content += `<p>This action cannot be undone.</p>
+        </div>`;
+
+        const dialog = new Dialog({
+          title: "Confirm Item Type Conversion",
+          content: content,
+          buttons: {
+            yes: {
+              icon: '<i class="fas fa-check"></i>',
+              label: "Convert",
+              callback: () => resolve(true)
+            },
+            no: {
+              icon: '<i class="fas fa-times"></i>',
+              label: "Cancel",
+              callback: () => resolve(false)
+            }
+          },
+          default: "no",
+          close: () => resolve(false)
+        }, {
+          classes: ["how-to-be-a-hero", "dialog"]
+        });
+
+        dialog.render(true);
+      });
     }
   }

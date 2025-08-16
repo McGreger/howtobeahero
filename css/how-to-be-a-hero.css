@@ -27,6 +27,7 @@
   --htbah-color-crimson: #44191A;
   --htbah-color-groove: #eeede0;
   --htbah-color-gold: #9f9275;
+  --htbah-color-gold-rgb: 159, 146, 117;
   --htbah-color-red: #ed1c24;
   --htbah-color-blue: cornflowerblue;
   --htbah-color-green: #205b15;
@@ -1885,6 +1886,15 @@ item-list-controls search .filter-control[data-action="sort"] {
   background: rgba(var(--htbah-color-gold-rgb), 0.1);
   box-shadow: inset 0 0 8px var(--htbah-color-gold);
   border-radius: 4px;
+}
+
+/* Inventory Section Drag Over State */
+.how-to-be-a-hero.sheet.actor.character .items-section.dragover {
+  background: rgba(var(--htbah-color-gold-rgb), 0.1);
+  box-shadow: inset 0 0 8px var(--htbah-color-gold);
+  border-radius: 4px;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
 }
 
 /* Input Styles */
