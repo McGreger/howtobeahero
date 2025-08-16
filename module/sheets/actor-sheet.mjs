@@ -326,6 +326,9 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       // Setup edit mode toggle in header
       this._setupModeToggle();
       
+      // Setup form input handling for ApplicationV2
+      this._setupFormHandling();
+      
       console.log("HowToBeAHero | Actor sheet rendered successfully with main template");
     } catch (error) {
       console.error("HowToBeAHero | Error in _onRender:", error);
@@ -961,6 +964,56 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
   _initializeTooltips() {
     this.element.querySelectorAll(".item-tooltip").forEach(this._applyItemTooltips.bind(this));
     this.element.querySelectorAll("[data-reference-tooltip]").forEach(this._applyReferenceTooltips.bind(this));
+  }
+
+  /**
+   * Setup form input handling for ApplicationV2
+   */
+  _setupFormHandling() {
+    console.log("HowToBeAHero | Setting up form handling");
+    
+    // Handle all input changes for automatic saving
+    this.element.querySelectorAll('input[type="text"], input[type="number"], textarea, select').forEach(input => {
+      // Skip inputs that shouldn't auto-save (like search fields)
+      if (input.name && input.name.startsWith('system.')) {
+        input.addEventListener('change', this._onFormInput.bind(this));
+        input.addEventListener('blur', this._onFormInput.bind(this)); // Also save on blur
+      }
+    });
+  }
+
+  /**
+   * Handle form input changes
+   */
+  async _onFormInput(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    
+    console.log(`HowToBeAHero | Form input changed: ${name} = ${value}`);
+    
+    if (!name || !name.startsWith('system.')) return;
+    
+    // Create update data
+    const updateData = {};
+    
+    // Handle different data types
+    let processedValue = value;
+    if (target.dataset.dtype === "Number") {
+      processedValue = Number(value) || 0;
+    } else if (target.dataset.dtype === "Boolean") {
+      processedValue = target.checked;
+    }
+    
+    updateData[name] = processedValue;
+    
+    try {
+      console.log("HowToBeAHero | Updating actor with:", updateData);
+      await this.document.update(updateData);
+    } catch (error) {
+      console.error("HowToBeAHero | Error updating actor:", error);
+      ui.notifications.error("Failed to save changes.");
+    }
   }
 
   /**
