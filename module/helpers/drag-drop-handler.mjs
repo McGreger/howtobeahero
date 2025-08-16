@@ -18,7 +18,10 @@ export class HowToBeAHeroDragDropHandler {
       const headerSlot = dropTarget.closest('.header-stat-column');
       if (headerSlot) {
         const slotType = headerSlot.dataset.slot;
-        return { action: "headerSlot", type: slotType };
+        // Only treat as header slot if it has a valid slot type
+        if (slotType && (slotType === "ability" || slotType === "weapon")) {
+          return { action: "headerSlot", type: slotType };
+        }
       }
 
       const skillSetCategory = dropTarget.closest('.skillSet-category');

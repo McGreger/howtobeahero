@@ -974,7 +974,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       }
     });
 
-    this.element.querySelectorAll('.favorites, .header-stat-column, .skillSet-category').forEach(zone => {
+    this.element.querySelectorAll('.favorites, .header-stat-column[data-slot], .skillSet-category').forEach(zone => {
       zone.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
       zone.addEventListener('dragleave', this.dragDropHandler.onDragLeave.bind(this.dragDropHandler));
       zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
@@ -1186,6 +1186,40 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     const slot = action === "removeSkill" ? "ability" : "weapon";
     const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
     return this.document.unsetFlag("how-to-be-a-hero", flagKey);
+  }
+
+  /**
+   * Set header item for a specific slot
+   * @param {string} slot - The slot type ("ability" or "weapon")
+   * @param {string} itemId - The ID of the item to set
+   */
+  async _setHeaderItem(slot, itemId) {
+    console.log(`Setting header ${slot} to item ${itemId}`);
+    
+    // Validate the item exists and belongs to this actor
+    const item = this.document.items.get(itemId);
+    if (!item) {
+      console.warn(`Item ${itemId} not found on actor ${this.document.name}`);
+      ui.notifications.warn("Item not found on this character.");
+      return false;
+    }
+    
+    // Validate item type for the slot
+    if (slot === "ability" && item.type !== "ability") {
+      console.warn(`Cannot set ${item.type} item in ability slot`);
+      ui.notifications.warn("Only abilities can be placed in the ability slot.");
+      return false;
+    }
+    
+    if (slot === "weapon" && item.type !== "weapon") {
+      console.warn(`Cannot set ${item.type} item in weapon slot`);
+      ui.notifications.warn("Only weapons can be placed in the weapon slot.");
+      return false;
+    }
+    
+    // Set the appropriate flag
+    const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
+    return this.document.setFlag("how-to-be-a-hero", flagKey, itemId);
   }
 
   /**

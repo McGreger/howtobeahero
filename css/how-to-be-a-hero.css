@@ -2041,6 +2041,8 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero.sheet.actor.character nav.tabs > .item {
   width: var(--tab-full-width);
   height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   position: relative;
   display: flex;
   justify-content: end;
@@ -2054,11 +2056,16 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-size: var(--font-size-14);
   margin-left: calc((var(--tab-full-width) - var(--tab-inactive-width))* -1);
   transition: all 250ms ease;
+  box-sizing: border-box;
+  line-height: 1;
 }
 
 .how-to-be-a-hero.sheet.actor.character nav.tabs > .item.active, .how-to-be-a-hero.sheet.actor.character nav.tabs > .item:hover {
   text-shadow: none;
   margin: 0;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   border-color: var(--htbah-color-gold);
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
@@ -2079,10 +2086,22 @@ item-list-controls search .filter-control[data-action="sort"] {
 
 /* Navigation tab icons */
 .how-to-be-a-hero.sheet.actor.character nav.tabs > .item htbah-icon {
-  --icon-size: 1.25em;
+  --icon-size: 20px;
   --icon-fill: currentColor;
-  display: inline-block;
-  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Ensure SVG icons within htbah-icon elements are properly sized */
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item htbah-icon svg {
+  width: 20px;
+  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
 }
 
 .how-to-be-a-hero.sheet.actor.character nav.tabs > .item.active htbah-icon {
@@ -2940,6 +2959,7 @@ a {
   flex-direction: column;
   align-items: center;
   font-weight: bold;
+  color: var(--color-text-dark-primary);
   border-right: 1px solid var(--htbah-color-faint);
 }
 
