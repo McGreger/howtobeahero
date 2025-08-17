@@ -5,8 +5,16 @@
     <label for="item-quantity">Quantity:</label>
     <input id="item-quantity" name="system.quantity" type="number" value="{{system.quantity}}" min="1" />
   </div>
+  
+  <div class="rollable-field">
+    <label class="checkbox" for="rollable-checkbox">
+      <input type="checkbox" id="rollable-checkbox" name="system.rollable" {{checked system.rollable}} />
+      Rollable
+    </label>
+  </div>
+  
   {{!-- Roll Fields --}}
-  <div class="roll-fields">
+  <div class="roll-fields" style="{{#unless system.rollable}}display: none;{{/unless}}">
     <label for="roll-dice-num">Number of Dice:</label>
     <input id="roll-dice-num" name="system.roll.diceNum" type="number" value="{{system.roll.diceNum}}" min="1" />
     
@@ -14,9 +22,15 @@
     <select id="roll-dice-size" name="system.roll.diceSize">
       {{selectOptions diceTypes selected=document.system.roll.diceSize}}
     </select>
+    
+    <label for="roll-dice-bonus">Bonus:</label>
+    <input id="roll-dice-bonus" name="system.roll.diceBonus" type="number" value="{{system.roll.diceBonus}}" />
   </div>
-  <div class="formula-field">
+  <div class="formula-field" style="{{#unless system.rollable}}display: none;{{/unless}}">
     <label for="item-formula">Effect Formula:</label>
     <input id="item-formula" name="system.formula" type="text" value="{{system.formula}}" disabled />
+  </div>
+  <div class="roll-button" style="{{#unless system.rollable}}display: none;{{/unless}}">
+    <i class="fas fa-dice-d20" data-action="rollItem" role="button" aria-label="Roll Consumable"></i>
   </div>
 </div>

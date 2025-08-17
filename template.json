@@ -58,12 +58,19 @@
       "physical": {
         "quantity": 1,
         "rollType": "check",
-        "formula": ""
+        "formula": "",
+        "rollable": false,
+        "roll": {
+          "diceNum": 1,
+          "diceSize": "d10",
+          "diceBonus": 0
+        }
       },
       "ability": {
         "skillSet": "action",
         "type": "",
         "value": 0,
+        "rollable": true,
         "roll": {
           "diceNum": 1,
           "diceSize": "d100",
@@ -85,6 +92,7 @@
       "templates": ["base", "physical"],
       "weaponType": "",
       "rollType": "damage",
+      "rollable": true,
       "roll": {
         "diceNum": 1,
         "diceSize": "d10",

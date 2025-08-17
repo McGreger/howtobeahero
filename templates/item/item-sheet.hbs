@@ -28,7 +28,10 @@
 
     <div class="main-content">
       <div class="tab description" data-group="primary" data-tab="description">
-        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+        <div class="description-field">
+          <label for="description">Description:</label>
+          <textarea name="system.description" id="description" rows="6" placeholder="Enter item description...">{{system.description}}</textarea>
+        </div>
       </div>
       
       {{!-- Dynamic main content based on item type --}}

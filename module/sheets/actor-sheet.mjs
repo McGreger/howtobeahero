@@ -853,9 +853,9 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       ctx.hasUses = false;
     }
 
-    // Prepare rollable context - armor items should not be rollable
+    // Prepare rollable context - abilities are always rollable, others need rollable property set to true
     const rollableClasses = [];
-    if (this.isEditable && item.type !== "armor") {
+    if (this.isEditable && (item.type === "ability" || item.system.rollable === true)) {
       rollableClasses.push("rollable");
     }
     ctx.rollableClass = rollableClasses.join(" ");

@@ -22,7 +22,8 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
       effectControl: this.prototype._onEffectControl,
       editDescription: this.prototype._onEditDescription,
       updateValue: this.prototype._onUpdateValue,
-      showPortrait: this.prototype._onShowPortrait
+      showPortrait: this.prototype._onShowPortrait,
+      rollItem: this.prototype._onRollItem
     }
   };
 
@@ -73,6 +74,16 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
       context.itemType = this._getLocalizedItemType(item);
       context.document = this.document; // Ensure document is available in template
 
+      // Ensure rollable property exists with proper default for template rendering
+      if (this.document.system.rollable === undefined) {
+        // Set default rollable state based on item type for template
+        const defaultRollable = this.document.type === 'weapon' || this.document.type === 'ability';
+        console.log(`HowToBeAHero | Setting default rollable to ${defaultRollable} for ${this.document.type} item template`);
+        
+        // Set context for template rendering only
+        context.system.rollable = defaultRollable;
+      }
+
       return context;
     } catch (error) {
       console.error('Error in _prepareContext:', error);
@@ -115,8 +126,24 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     // Setup form input handling for automatic saving
     this._setupFormHandling();
 
-    // Handle roll field changes for weapons
-    if (this.document.type === 'weapon') {
+    // Handle rollable checkbox changes
+    const rollableCheckbox = this.element.querySelector('input[name="system.rollable"]');
+    if (rollableCheckbox) {
+      // Remove any existing event listeners to prevent duplicates
+      rollableCheckbox.removeEventListener('change', this._onRollableChange.bind(this));
+      
+      // Add the event listener with proper binding
+      this._rollableChangeHandler = this._onRollableChange.bind(this);
+      rollableCheckbox.addEventListener('change', this._rollableChangeHandler);
+      
+      // Set initial height based on rollable state
+      const isRollable = this.document.system.rollable ?? (this.document.type === 'weapon' || this.document.type === 'ability');
+      this._updateSheetHeight(isRollable);
+    }
+
+    // Handle roll field changes for all item types that have roll fields
+    const itemTypesWithRolls = ['weapon', 'item', 'consumable', 'tool'];
+    if (itemTypesWithRolls.includes(this.document.type)) {
       this.element.querySelectorAll('input[name="system.roll.diceNum"], select[name="system.roll.diceSize"], input[name="system.roll.diceBonus"]').forEach(input => {
         input.addEventListener('change', this._onUpdateRollFields.bind(this));
       });
@@ -132,6 +159,7 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
         }
       });
     }
+
   }
 
   /**
@@ -142,10 +170,17 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     
     // Handle all input changes for automatic saving
     this.element.querySelectorAll('input[type="text"], input[type="number"], textarea, select').forEach(input => {
-      // Skip inputs that shouldn't auto-save (like disabled fields)
-      if (input.name && (input.name.startsWith('system.') || input.name === 'name') && !input.disabled) {
+      // Skip inputs that shouldn't auto-save (like disabled fields or rollable checkbox)
+      if (input.name && (input.name.startsWith('system.') || input.name === 'name') && !input.disabled && input.name !== 'system.rollable') {
         input.addEventListener('change', this._onFormInput.bind(this));
         input.addEventListener('blur', this._onFormInput.bind(this)); // Also save on blur
+      }
+    });
+    
+    // Handle checkbox inputs separately (they don't have blur events)
+    this.element.querySelectorAll('input[type="checkbox"]').forEach(input => {
+      if (input.name && input.name.startsWith('system.') && input.name !== 'system.rollable') {
+        input.addEventListener('change', this._onFormInput.bind(this));
       }
     });
   }
@@ -187,10 +222,16 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
   async _onUpdateRollFields(event) {
     event.preventDefault();
     
-    // Get current roll values
-    const diceNum = this.document.system.roll.diceNum;
-    const diceSize = this.document.system.roll.diceSize;
-    const diceBonus = this.document.system.roll.diceBonus;
+    // Check if roll object exists
+    if (!this.document.system.roll) {
+      console.warn(`HowToBeAHero | No roll data found for item ${this.document.name}`);
+      return;
+    }
+    
+    // Get current roll values with defaults
+    const diceNum = this.document.system.roll.diceNum || 1;
+    const diceSize = this.document.system.roll.diceSize || 'd10';
+    const diceBonus = this.document.system.roll.diceBonus || 0;
   
     // Format bonus string
     const bonusStr = diceBonus > 0 ? `+${diceBonus}` : 
@@ -208,6 +249,13 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
 
   async _onIncrementBonus(event, target) {
     event.preventDefault();
+    
+    // Check if roll object exists
+    if (!this.document.system.roll) {
+      console.warn(`HowToBeAHero | No roll data found for item ${this.document.name}`);
+      return;
+    }
+    
     const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
     const newBonus = currentBonus + 1;
     await this.document.update({"system.roll.diceBonus": newBonus});
@@ -215,6 +263,13 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
 
   async _onDecrementBonus(event, target) {
     event.preventDefault();
+    
+    // Check if roll object exists
+    if (!this.document.system.roll) {
+      console.warn(`HowToBeAHero | No roll data found for item ${this.document.name}`);
+      return;
+    }
+    
     const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
     const newBonus = currentBonus - 1;
     await this.document.update({"system.roll.diceBonus": newBonus});
@@ -288,5 +343,121 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
       // In play mode, show the image popup
       new ImagePopout(img, { title: this.document.name, uuid: this.document.uuid }).render(true);
     }
+  }
+
+  /**
+   * Handle rollable checkbox changes
+   */
+  async _onRollableChange(event) {
+    // Stop event propagation to prevent bubbling
+    event.stopPropagation();
+    
+    const checkbox = event.target;
+    
+    // Ensure we're handling the correct checkbox
+    if (checkbox.name !== 'system.rollable') {
+      console.warn(`HowToBeAHero | Unexpected checkbox triggered rollable handler: ${checkbox.name}`);
+      return;
+    }
+    
+    const isRollable = checkbox.checked;
+    console.log(`HowToBeAHero | Item rollable changed to: ${isRollable}`);
+    
+    // Manually show/hide roll elements and update height immediately
+    this._toggleRollFields(isRollable);
+    this._updateSheetHeight(isRollable);
+    
+    // Update the document with rollable property and ensure roll object exists
+    const updateData = {};
+    
+    // Explicitly set the rollable boolean value
+    updateData["system.rollable"] = Boolean(isRollable);
+    
+    // If item doesn't have roll data, initialize it
+    if (!this.document.system.roll) {
+      updateData["system.roll"] = {
+        diceNum: 1,
+        diceSize: "d10",
+        diceBonus: 0
+      };
+      console.log(`HowToBeAHero | Initializing roll data for item ${this.document.name}`);
+    }
+    
+    // Also ensure formula is initialized if missing
+    if (!this.document.system.formula) {
+      updateData["system.formula"] = "";
+    }
+    
+    try {
+      // Check if rollable property exists in the data model
+      if (this.document.system.rollable !== undefined) {
+        // Best practice: Direct property assignment for defined properties
+        this.document.system.rollable = isRollable;
+        console.log(`HowToBeAHero | Direct assignment - rollable set to: ${this.document.system.rollable}`);
+      } else {
+        // Legacy item: Use document.update() to add the property
+        console.log(`HowToBeAHero | Legacy item - using document.update() to add rollable property`);
+        
+        await this.document.update(updateData);
+        console.log(`HowToBeAHero | Legacy item updated - rollable: ${this.document.system.rollable}`);
+      }
+    } catch (error) {
+      console.error(`HowToBeAHero | Error updating rollable state:`, error);
+      // Revert UI changes if update failed
+      this._toggleRollFields(!isRollable);
+      this._updateSheetHeight(!isRollable);
+      checkbox.checked = !isRollable;
+    }
+  }
+
+  /**
+   * Toggle roll fields visibility
+   */
+  _toggleRollFields(isRollable) {
+    const rollFields = this.element.querySelector('.roll-fields');
+    const formulaField = this.element.querySelector('.formula-field');
+    const rollButton = this.element.querySelector('.roll-button');
+    
+    if (rollFields) {
+      rollFields.style.display = isRollable ? 'block' : 'none';
+    }
+    if (formulaField) {
+      formulaField.style.display = isRollable ? 'block' : 'none';
+    }
+    if (rollButton) {
+      rollButton.style.display = isRollable ? 'block' : 'none';
+    }
+  }
+
+  /**
+   * Update sheet height based on rollable state
+   */
+  _updateSheetHeight(isRollable) {
+    if (isRollable) {
+      this.element.classList.add('rollable-expanded');
+    } else {
+      this.element.classList.remove('rollable-expanded');
+    }
+  }
+
+
+  /**
+   * Handle item roll actions
+   */
+  async _onRollItem(event, target) {
+    event.preventDefault();
+    console.log(`HowToBeAHero | Rolling item: ${this.document.name}`);
+    console.log(`HowToBeAHero | Item type: ${this.document.type}`);
+    console.log(`HowToBeAHero | Item rollable: ${this.document.system.rollable}`);
+    
+    // Check if item is rollable
+    if (!this.document.system.rollable && this.document.type !== 'ability') {
+      console.warn(`HowToBeAHero | Item ${this.document.name} is not rollable - rollable: ${this.document.system.rollable}, type: ${this.document.type}`);
+      ui.notifications.warn("This item is not configured as rollable.");
+      return;
+    }
+    
+    // Call the item's roll method
+    await this.document.roll();
   }
 }

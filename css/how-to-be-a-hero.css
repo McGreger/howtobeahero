@@ -3632,6 +3632,13 @@ a {
   max-width: 570px;
   display: flex;
   flex-direction: column;
+  transition: min-height 0.3s ease, max-height 0.3s ease;
+}
+
+/* Expanded height when rollable is enabled */
+.how-to-be-a-hero.how-to-be-a-hero.sheet.item.rollable-expanded {
+  min-height: 650px;
+  max-height: 650px;
 }
 
 /* Sheet Header */
@@ -3791,6 +3798,70 @@ a {
 .how-to-be-a-hero.sheet.item h5,
 .how-to-be-a-hero.sheet.item h6 {
   color: var(--htbah-color-dark-gray);
+  text-shadow: none;
+}
+
+/* Item roll icon styling */
+.how-to-be-a-hero.sheet.item .roll-button {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.how-to-be-a-hero.sheet.item .roll-button i[data-action="rollItem"] {
+  font-size: var(--font-size-20);
+  color: var(--htbah-color-gold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 3px;
+}
+
+.how-to-be-a-hero.sheet.item .roll-button i[data-action="rollItem"]:hover {
+  color: var(--htbah-color-dark);
+  background-color: var(--htbah-color-gold);
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.how-to-be-a-hero.sheet.item .roll-button i[data-action="rollItem"]:active {
+  transform: scale(1.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Rollable checkbox styling */
+.how-to-be-a-hero.sheet.item .rollable-field {
+  margin: 8px 0;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--htbah-color-tan);
+}
+
+.how-to-be-a-hero.sheet.item .rollable-field label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-12);
+  font-weight: bold;
+  color: var(--htbah-color-dark);
+  cursor: pointer;
+}
+
+.how-to-be-a-hero.sheet.item .rollable-field input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #000000; /* Modern browsers - makes checkmark black */
+  color: #000000; /* Fallback for older browsers */
+}
+
+/* Additional styling to ensure black checkmark in all browsers */
+.how-to-be-a-hero.sheet.item .rollable-field input[type="checkbox"]:checked {
+  color: #000000;
+}
+
+/* Custom checkbox styling for maximum compatibility */
+.how-to-be-a-hero.sheet.item .rollable-field input[type="checkbox"]:checked::after {
+  color: #000000 !important;
 }
 
 /* Main Content Area */
