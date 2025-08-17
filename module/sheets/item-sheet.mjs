@@ -1,43 +1,52 @@
 import { HowToBeAHeroItem } from '../documents/item.mjs';
 
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+
 /**
- * Extend the basic ItemSheet with some very simple modifications
- * @extends {ItemSheet}
+ * How To Be A Hero Item Sheet - AppV2 Implementation
+ * @extends {foundry.applications.sheets.ItemSheetV2}
  */
-export class HowToBeAHeroItemSheet extends ItemSheet {
-  /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ['how-to-be-a-hero', 'sheet', 'item'],
+export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.applications.sheets.ItemSheetV2) {
+  static DEFAULT_OPTIONS = {
+    classes: ["how-to-be-a-hero", "sheet", "item"],
+    position: {
       width: 560,
-      scrollY: [
-        ".tab[data-tab=description] .editor-content",
-      ],
-      tabs: [
-        {
-          navSelector: '.tabs',
-          contentSelector: '.sheet-body',
-          initial: 'description',
-        },
-      ],
-    });
+      height: "auto"
+    },
+    window: {
+      resizable: true
+    },
+    actions: {
+      incrementBonus: this.prototype._onIncrementBonus,
+      decrementBonus: this.prototype._onDecrementBonus,
+      effectControl: this.prototype._onEffectControl,
+      editDescription: this.prototype._onEditDescription,
+      updateValue: this.prototype._onUpdateValue,
+      showPortrait: this.prototype._onShowPortrait
+    }
+  };
+
+  static PARTS = {
+    form: {
+      template: "systems/how-to-be-a-hero/templates/item/item-sheet.hbs",
+      scrollable: [".tab[data-tab=description] .editor-content"]
+    }
+  };
+
+  get title() {
+    return this.document.name;
   }
 
   /** @override */
-  get template() {
-    const path = 'systems/how-to-be-a-hero/templates/item';
-    return `${path}/item-${this.item.type}-sheet.hbs`;
-  }
-
-  /** @override */
-  async getData() {
+  async _prepareContext(options) {
     try {
-      const context = await super.getData();
-      const item = context.item;
+      const context = await super._prepareContext(options);
+      const item = this.document;
 
       this._prepareBaseItemData(context, item);
       this._prepareGameConfig(context);
       this._prepareAdditionalData(context, item);
+      
       // Add dice type options for selects
       context.diceTypes = {
         "d4": "d4",
@@ -56,12 +65,17 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
         "heavy": "Heavy",
         "shield": "Shield"
       };
+      
       // Prepares active effects but is not used for items at the moment!!!
-      //context.effects = game.howtobeahero.managers.effects.prepareActiveEffectCategories(this.item.effects);
+      //context.effects = game.howtobeahero.managers.effects.prepareActiveEffectCategories(this.document.effects);
+
+      // Ensure item type is available for template partials
+      context.itemType = this._getLocalizedItemType(item);
+      context.document = this.document; // Ensure document is available in template
 
       return context;
     } catch (error) {
-      console.error('Error in getData:', error);
+      console.error('Error in _prepareContext:', error);
       throw error;
     }
   }
@@ -84,7 +98,6 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
 
   _prepareAdditionalData(context, item) {
     context.itemType = this._getLocalizedItemType(item);
-    context.elements = this.options.elements;
     context.concealDetails = !game.user.isGM;
   }
 
@@ -93,46 +106,91 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-
+  _onRender(context, options) {
+    super._onRender(context, options);
+    
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
-    // Add bonus handlers for abilities
-    html.find('[data-action="incrementBonus"]').click(this._onAdjustBonus.bind(this, 1));
-    html.find('[data-action="decrementBonus"]').click(this._onAdjustBonus.bind(this, -1));
+    // Setup form input handling for automatic saving
+    this._setupFormHandling();
 
     // Handle roll field changes for weapons
-    if (this.item.type === 'weapon') {
-      html.find('input[name="system.roll.diceNum"]').change(this._onUpdateRollFields.bind(this));
-      html.find('select[name="system.roll.diceSize"]').change(this._onUpdateRollFields.bind(this));
-      html.find('input[name="system.roll.diceBonus"]').change(this._onUpdateRollFields.bind(this));
+    if (this.document.type === 'weapon') {
+      this.element.querySelectorAll('input[name="system.roll.diceNum"], select[name="system.roll.diceSize"], input[name="system.roll.diceBonus"]').forEach(input => {
+        input.addEventListener('change', this._onUpdateRollFields.bind(this));
+      });
     }
 
-    // Active Effect management
-    html.on('click', '.effect-control', this._onEffectControl.bind(this));
-    
-    html.find(".description-edit").click(event => {
-      this.editingDescriptionTarget = event.currentTarget.dataset.target;
-      this.render();
-    });
+    // Update calculated value display when base value changes
+    const valueInput = this.element.querySelector('input[name="system.value"]');
+    if (valueInput) {
+      valueInput.addEventListener('change', (event) => {
+        const calculatedValueInput = this.element.querySelector('input[name="system.calculatedValue"]');
+        if (calculatedValueInput) {
+          calculatedValueInput.value = this.document.calculatedValue;
+        }
+      });
+    }
+  }
 
-    // Update calculatedvalue display when base value changes
-    html.find('input[name="system.value"]').on('change', (event) => {
-      const newBaseValue = Number(event.target.value);
-      const calculatedValueInput = html.find('input[name="system.calculatedValue"]');
-      calculatedValueInput.val(this.item.calculatedValue);
+  /**
+   * Setup form input handling for ApplicationV2
+   */
+  _setupFormHandling() {
+    console.log("HowToBeAHero | Setting up item sheet form handling");
+    
+    // Handle all input changes for automatic saving
+    this.element.querySelectorAll('input[type="text"], input[type="number"], textarea, select').forEach(input => {
+      // Skip inputs that shouldn't auto-save (like disabled fields)
+      if (input.name && (input.name.startsWith('system.') || input.name === 'name') && !input.disabled) {
+        input.addEventListener('change', this._onFormInput.bind(this));
+        input.addEventListener('blur', this._onFormInput.bind(this)); // Also save on blur
+      }
     });
+  }
+
+  /**
+   * Handle form input changes
+   */
+  async _onFormInput(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    
+    console.log(`HowToBeAHero | Item form input changed: ${name} = ${value}`);
+    
+    if (!name || !(name.startsWith('system.') || name === 'name')) return;
+    
+    // Create update data
+    const updateData = {};
+    
+    // Handle different data types
+    let processedValue = value;
+    if (target.dataset.dtype === "Number") {
+      processedValue = Number(value) || 0;
+    } else if (target.dataset.dtype === "Boolean") {
+      processedValue = target.checked;
+    }
+    
+    updateData[name] = processedValue;
+    
+    try {
+      console.log("HowToBeAHero | Updating item with:", updateData);
+      await this.document.update(updateData);
+    } catch (error) {
+      console.error("HowToBeAHero | Error updating item:", error);
+      ui.notifications.error("Failed to save changes.");
+    }
   }
   
   async _onUpdateRollFields(event) {
     event.preventDefault();
     
     // Get current roll values
-    const diceNum = this.item.system.roll.diceNum;
-    const diceSize = this.item.system.roll.diceSize;
-    const diceBonus = this.item.system.roll.diceBonus;
+    const diceNum = this.document.system.roll.diceNum;
+    const diceSize = this.document.system.roll.diceSize;
+    const diceBonus = this.document.system.roll.diceBonus;
   
     // Format bonus string
     const bonusStr = diceBonus > 0 ? `+${diceBonus}` : 
@@ -142,36 +200,44 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
     const formula = `${diceNum}${diceSize}${bonusStr}`;
   
     // Update the formula display
-    const formulaInput = this.element.find('input[name="system.formula"]');
-    if (formulaInput.length) {
-      formulaInput.val(formula);
+    const formulaInput = this.element.querySelector('input[name="system.formula"]');
+    if (formulaInput) {
+      formulaInput.value = formula;
     }
   }
 
-  async _onAdjustBonus(delta, event) {
+  async _onIncrementBonus(event, target) {
     event.preventDefault();
-    const currentBonus = Number(this.item.system.roll.diceBonus) || 0;
-    const newBonus = currentBonus + delta;
-    await this.item.update({"system.roll.diceBonus": newBonus});
+    const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
+    const newBonus = currentBonus + 1;
+    await this.document.update({"system.roll.diceBonus": newBonus});
+  }
+
+  async _onDecrementBonus(event, target) {
+    event.preventDefault();
+    const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
+    const newBonus = currentBonus - 1;
+    await this.document.update({"system.roll.diceBonus": newBonus});
   }
 
   /**
    * Handle active effect actions
    * @param {Event} event The originating click event
+   * @param {HTMLElement} target The clicked element
    * @private
    */
-  _onEffectControl(event) {
+  _onEffectControl(event, target) {
     event.preventDefault();
-    const button = event.currentTarget;
-    const effectId = button.closest('li')?.dataset.effectId;
-    const effect = this.item.effects.get(effectId);
+    const effectId = target.closest('li')?.dataset.effectId;
+    const effect = this.document.effects.get(effectId);
+    const action = target.dataset.subAction || target.dataset.action;
 
-    switch (button.dataset.action) {
+    switch (action) {
       case "create":
-        return this.item.createEmbeddedDocuments("ActiveEffect", [{
+        return this.document.createEmbeddedDocuments("ActiveEffect", [{
           label: "New Effect",
           icon: "icons/svg/aura.svg",
-          origin: this.item.uuid,
+          origin: this.document.uuid,
           disabled: false
         }]);
       case "edit":
@@ -183,8 +249,44 @@ export class HowToBeAHeroItemSheet extends ItemSheet {
     }
   }
 
-  /** @inheritdoc */
-  async _onSubmit(event, {updateData=null, preventClose=false, preventRender=false}={}) {
-    return super._onSubmit(event, {updateData, preventClose, preventRender});
+  /**
+   * Handle description editing
+   */
+  _onEditDescription(event, target) {
+    this.editingDescriptionTarget = target.dataset.target;
+    this.render();
+  }
+
+  /**
+   * Handle value updates
+   */
+  _onUpdateValue(event, target) {
+    const newBaseValue = Number(target.value);
+    const calculatedValueInput = this.element.querySelector('input[name="system.calculatedValue"]');
+    if (calculatedValueInput) {
+      calculatedValueInput.value = this.document.calculatedValue;
+    }
+  }
+
+  /**
+   * Handle portrait display or editing
+   */
+  _onShowPortrait(event, target) {
+    const img = this.document.img;
+    
+    // If editable, open file picker to change the image
+    if (this.isEditable) {
+      const fp = new FilePicker({
+        type: "image",
+        current: img,
+        callback: (path) => {
+          this.document.update({ img: path });
+        }
+      });
+      fp.render(true);
+    } else {
+      // In play mode, show the image popup
+      new ImagePopout(img, { title: this.document.name, uuid: this.document.uuid }).render(true);
+    }
   }
 }

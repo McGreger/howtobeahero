@@ -30,11 +30,25 @@ export const preloadHandlebarsTemplates = async function () {
       "systems/how-to-be-a-hero/templates/actor/parts/actor-items.hbs"
     ],
     
-    // Item partials (for ItemSheet - still v1)
+    // Item partials (for ItemSheet AppV2)
     items: [
       "systems/how-to-be-a-hero/templates/item/parts/item-effects.hbs",
       "systems/how-to-be-a-hero/templates/item/parts/item-description.hbs",
-      "systems/how-to-be-a-hero/templates/item/parts/item-tooltip.hbs"
+      "systems/how-to-be-a-hero/templates/item/parts/item-tooltip.hbs",
+      // Item type-specific sidebar parts
+      "systems/how-to-be-a-hero/templates/item/parts/weapon-sidebar.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/armor-sidebar.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/consumable-sidebar.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/tool-sidebar.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/ability-sidebar.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/item-sidebar.hbs",
+      // Item type-specific content parts
+      "systems/how-to-be-a-hero/templates/item/parts/weapon-content.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/armor-content.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/consumable-content.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/tool-content.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/ability-content.hbs",
+      "systems/how-to-be-a-hero/templates/item/parts/item-content.hbs"
     ],
 
     // Dialog templates (for AppV2 dialogs)

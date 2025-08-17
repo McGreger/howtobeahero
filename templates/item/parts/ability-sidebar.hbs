@@ -1,0 +1,22 @@
+{{!-- Ability Details Card --}}
+<div class="sidebar-card">
+  <h3>Item Details</h3>
+  <div class="value-field">
+    <label class="resource-label">{{localize 'Skillset'}}</label>
+    <select name="system.skillSet">
+      {{#each config.skillSets as |set key|}}
+        <option value="{{key}}" {{#if (eq ../system.skillSet key)}}selected{{/if}}>
+          {{localize set.label}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="value-field">
+    <label for="item-value">Value:</label>
+    <input id="item-value" name="system.value" type="number" value="{{document.system.value}}" placeholder="Enter value" />
+  </div>
+  <div class="calculated-value-field">
+    <label for="item-calculated-value">Calculated Value:</label>
+    <input id="item-calculated-value" type="text" value="{{document.system.calculatedValue}}" disabled />
+  </div>
+</div>

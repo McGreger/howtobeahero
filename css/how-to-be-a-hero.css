@@ -3732,7 +3732,7 @@ a {
 /* Sheet Body */
 .how-to-be-a-hero.sheet.item .sheet-body {
   display: flex;
-  padding: 15px;
+  padding-left: 15px;
   background-color: var(--htbah-color-card);
   overflow: hidden;
   flex: 1;
@@ -3756,8 +3756,41 @@ a {
   height: 100%;
 }
 
-.how-to-be-a-hero.sheet.item .sheet-body .sidebar input {
-  color:var(--htbah-color-black);
+.how-to-be-a-hero.sheet.item .sheet-body .sidebar input,
+.how-to-be-a-hero.sheet.item .sheet-body .sidebar select {
+  color: var(--htbah-color-black);
+  background: var(--htbah-color-beige);
+  border: 1.5px solid var(--htbah-color-tan);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* General input styling for enabled fields */
+.how-to-be-a-hero.sheet.item input:not(:disabled),
+.how-to-be-a-hero.sheet.item select:not(:disabled),
+.how-to-be-a-hero.sheet.item textarea:not(:disabled) {
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: var(--htbah-color-tan);
+}
+
+/* Disabled field styling */
+.how-to-be-a-hero.sheet.item input:disabled,
+.how-to-be-a-hero.sheet.item select:disabled,
+.how-to-be-a-hero.sheet.item textarea:disabled {
+  background: color-mix(in srgb, var(--htbah-color-beige) 80%, white 20%) !important;
+  color: color-mix(in srgb, var(--htbah-color-black) 80%, white 20%) !important;
+  border: none !important;
+}
+
+/* Header elements styling */
+.how-to-be-a-hero.sheet.item h1,
+.how-to-be-a-hero.sheet.item h2,
+.how-to-be-a-hero.sheet.item h3,
+.how-to-be-a-hero.sheet.item h4,
+.how-to-be-a-hero.sheet.item h5,
+.how-to-be-a-hero.sheet.item h6 {
+  color: var(--htbah-color-dark-gray);
 }
 
 /* Main Content Area */
@@ -3887,8 +3920,8 @@ a {
 .how-to-be-a-hero.sheet.item .details input[type="number"],
 .how-to-be-a-hero.sheet.item .details select {
   height: 24px;
-  border: 1px solid var(--htbah-color-tan);
-  background: rgba(0, 0, 0, 0.05);
+  border: 1.5px solid var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
 }
 
 .how-to-be-a-hero.sheet.item .details h3.form-header .config-button {
