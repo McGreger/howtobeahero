@@ -1329,13 +1329,36 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
   }
 
   /**
-   * Handle portrait display
+   * Handle portrait display or editing
    */
   _onShowPortrait(event, target) {
-    const showTokenPortrait = this.document.getFlag("howtobeahero", "showTokenPortrait") === true;
+    const showTokenPortrait = this.document.getFlag("how-to-be-a-hero", "showTokenPortrait") === true;
     const token = this.document.isToken ? this.document.token : this.document.prototypeToken;
     const img = showTokenPortrait ? token.texture.src : this.document.img;
-    new ImagePopout(img, { title: this.document.name, uuid: this.document.uuid }).render(true);
+    
+    // If in edit mode, open file picker to change the image
+    if (this._mode === this.constructor.MODES.EDIT) {
+      const fp = new FilePicker({
+        type: "image",
+        current: img,
+        callback: (path) => {
+          if (showTokenPortrait) {
+            // Update token image
+            const updateData = this.document.isToken 
+              ? { "texture.src": path }
+              : { "prototypeToken.texture.src": path };
+            this.document.update(updateData);
+          } else {
+            // Update actor image
+            this.document.update({ img: path });
+          }
+        }
+      });
+      fp.render(true);
+    } else {
+      // In play mode, show the image popup
+      new ImagePopout(img, { title: this.document.name, uuid: this.document.uuid }).render(true);
+    }
   }
 
   /**
