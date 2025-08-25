@@ -17,8 +17,6 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
       resizable: true
     },
     actions: {
-      incrementBonus: this.prototype._onIncrementBonus,
-      decrementBonus: this.prototype._onDecrementBonus,
       effectControl: this.prototype._onEffectControl,
       editDescription: this.prototype._onEditDescription,
       updateValue: this.prototype._onUpdateValue,
@@ -144,7 +142,7 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     // Handle roll field changes for all item types that have roll fields
     const itemTypesWithRolls = ['weapon', 'item', 'consumable', 'tool'];
     if (itemTypesWithRolls.includes(this.document.type)) {
-      this.element.querySelectorAll('input[name="system.roll.diceNum"], select[name="system.roll.diceSize"], input[name="system.roll.diceBonus"]').forEach(input => {
+      this.element.querySelectorAll('input[name="system.roll.diceNum"], select[name="system.roll.diceSize"]').forEach(input => {
         input.addEventListener('change', this._onUpdateRollFields.bind(this));
       });
     }
@@ -231,18 +229,12 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     // Get current values from form inputs (they may have changed but not saved yet)
     const diceNumInput = this.element.querySelector('input[name="system.roll.diceNum"]');
     const diceSizeInput = this.element.querySelector('select[name="system.roll.diceSize"]');
-    const diceBonusInput = this.element.querySelector('input[name="system.roll.diceBonus"]');
     
     const diceNum = diceNumInput ? parseInt(diceNumInput.value) || 1 : this.document.system.roll.diceNum || 1;
     const diceSize = diceSizeInput ? diceSizeInput.value || 'd10' : this.document.system.roll.diceSize || 'd10';
-    const diceBonus = diceBonusInput ? parseInt(diceBonusInput.value) || 0 : this.document.system.roll.diceBonus || 0;
-  
-    // Format bonus string
-    const bonusStr = diceBonus > 0 ? `+${diceBonus}` : 
-                    diceBonus < 0 ? diceBonus.toString() : '';
                     
-    // Create new formula
-    const formula = `${diceNum}${diceSize}${bonusStr}`;
+    // Create new formula without bonus (bonus will be added at roll time)
+    const formula = `${diceNum}${diceSize}`;
     
     console.log(`HowToBeAHero | Updating formula to: ${formula}`);
   
@@ -260,39 +252,6 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     }
   }
 
-  async _onIncrementBonus(event, target) {
-    event.preventDefault();
-    
-    // Check if roll object exists
-    if (!this.document.system.roll) {
-      console.warn(`HowToBeAHero | No roll data found for item ${this.document.name}`);
-      return;
-    }
-    
-    const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
-    const newBonus = currentBonus + 1;
-    await this.document.update({"system.roll.diceBonus": newBonus});
-    
-    // Update formula after bonus change
-    this._onUpdateRollFields(event);
-  }
-
-  async _onDecrementBonus(event, target) {
-    event.preventDefault();
-    
-    // Check if roll object exists
-    if (!this.document.system.roll) {
-      console.warn(`HowToBeAHero | No roll data found for item ${this.document.name}`);
-      return;
-    }
-    
-    const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
-    const newBonus = currentBonus - 1;
-    await this.document.update({"system.roll.diceBonus": newBonus});
-    
-    // Update formula after bonus change
-    this._onUpdateRollFields(event);
-  }
 
   /**
    * Handle active effect actions
@@ -396,8 +355,7 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     if (!this.document.system.roll) {
       updateData["system.roll"] = {
         diceNum: 1,
-        diceSize: "d10",
-        diceBonus: 0
+        diceSize: "d10"
       };
       console.log(`HowToBeAHero | Initializing roll data for item ${this.document.name}`);
     }

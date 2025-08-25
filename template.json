@@ -62,8 +62,7 @@
         "rollable": false,
         "roll": {
           "diceNum": 1,
-          "diceSize": "d10",
-          "diceBonus": 0
+          "diceSize": "d10"
         }
       },
       "ability": {
@@ -73,8 +72,7 @@
         "rollable": true,
         "roll": {
           "diceNum": 1,
-          "diceSize": "d100",
-          "diceBonus": 0
+          "diceSize": "d100"
         },
         "formula": ""
       }
@@ -95,8 +93,7 @@
       "rollable": true,
       "roll": {
         "diceNum": 1,
-        "diceSize": "d10",
-        "diceBonus": 0
+        "diceSize": "d10"
       },
       "equipped": false
     },

@@ -7,6 +7,8 @@ import { HowToBeAHeroActiveEffect } from './documents/active-effect.mjs';
 // Import sheet classes.
 import { HowToBeAHeroActorSheet } from './sheets/actor-sheet.mjs'
 import { HowToBeAHeroItemSheet } from './sheets/item-sheet.mjs';
+// Import application classes.
+import { HowToBeAHeroRollDialog } from './apps/roll-dialog.mjs';
 // Import manager classes
 import { conditionManager } from './managers/condition-manager.mjs';
 import { effectsManager } from './managers/effects-manager.mjs';

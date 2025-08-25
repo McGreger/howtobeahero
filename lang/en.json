@@ -254,6 +254,15 @@
 
   "HTBAH.WarnNameRequired": "Name is required",
   "HTBAH.WarningOnlyAbilitiesInSkillSets": "Only abilities can be moved between skill sets",
+
+  "HTBAH.RollDialog": {
+    "Title": "Roll",
+    "BaseRoll": "Base Roll",
+    "Bonus": "Bonus",
+    "BonusHint": "Additional bonus to add to this roll",
+    "FinalRoll": "Final Roll",
+    "Roll": "Roll"
+  },
     
   "TYPES": {
     "Actor": {

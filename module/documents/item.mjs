@@ -1,4 +1,5 @@
 import { d100Roll } from "../dice/dice.mjs";
+import { HowToBeAHeroRollDialog } from "../apps/roll-dialog.mjs";
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -136,8 +137,10 @@ async roll() {
   const rollMode = game.settings.get('core', 'rollMode');
   const label = `[${item.type}] ${item.name}`;
 
-  // Handle non-rollable items
-  if (!this.system.formula) {
+  // Handle non-rollable items (with defensive check for undefined rollable)
+  const isRollable = this.system.rollable ?? (this.type === 'weapon' || this.type === 'ability');
+  
+  if (!isRollable) {
     ChatMessage.create({
       speaker: speaker,
       rollMode: rollMode,
@@ -147,88 +150,42 @@ async roll() {
     return;
   }
 
-  const rollData = this.getRollData();
+  // If rollable was undefined, update the item to have the proper default
+  if (this.system.rollable === undefined) {
+    const defaultRollable = this.type === 'weapon' || this.type === 'ability';
+    await this.update({"system.rollable": defaultRollable});
+    console.log(`HowToBeAHero | Updated legacy item ${item.name} with rollable: ${defaultRollable}`);
+  }
+
+  // Get the base formula from the item (generate if missing)
+  let baseFormula = this.system.formula;
+  
+  // If formula is empty, generate it from roll data
+  if (!baseFormula && this.system.roll) {
+    const diceNum = this.system.roll.diceNum || 1;
+    const diceSize = this.system.roll.diceSize || "d10";
+    baseFormula = `${diceNum}${diceSize}`;
+    
+    // Update the item with the generated formula
+    await this.update({"system.formula": baseFormula});
+    console.log(`HowToBeAHero | Generated formula for ${item.name}: ${baseFormula}`);
+  }
+  
+  // If still no formula, fall back to default
+  if (!baseFormula) {
+    baseFormula = "1d100"; // Default for abilities
+  }
+  
   const rollType = this.system.rollType || "check";
 
-  if (rollType === "damage") {
-    // Build the damage formula from the weapon's roll configuration
-    const roll = this.system.roll || {};
-    const diceNum = roll.diceNum || 1;
-    const diceSize = roll.diceSize || "d10";
-    const diceBonus = roll.diceBonus || 0;
-    
-    // Construct the formula: e.g., "2d8+3" or "1d10"
-    let formula = `${diceNum}${diceSize}`;
-    if (diceBonus > 0) {
-      formula += `+${diceBonus}`;
-    } else if (diceBonus < 0) {
-      formula += `${diceBonus}`;
-    }
+  // Show the roll dialog to get bonus input from user
+  const dialog = await HowToBeAHeroRollDialog.show({
+    item: this,
+    baseFormula: baseFormula,
+    rollType: rollType
+  });
 
-    console.log(`HowToBeAHero | Item ${item.name} damage formula: ${formula} (${diceNum}${diceSize}${diceBonus > 0 ? '+' + diceBonus : diceBonus < 0 ? diceBonus : ''})`);
-
-    const damageData = {
-      label: item.name,
-      formula: formula,
-      critical: false,
-      bonus: diceBonus,
-      target: null
-    };
-
-    return actor.rollDamage(damageData, {
-      speaker: speaker,
-      rollMode: rollMode,
-      flavor: label
-    });
-  } else {
-    // Regular ability check using d100
-    const targetValue = rollData.item.total;
-    const baseValue = rollData.item.value;
-    const bonusValue = rollData.item.roll.diceBonus;
-    
-    // Get localized ability name
-    const abilityName = rollData.item.name;
-    const flavor = game.i18n.format("HTBAH.ItemRollPrompt", {
-      itemName: item.name,
-      ability: abilityName
-    });
-
-    // Determine the category type for the icon
-    let category;
-    if (item.type == "ability") {
-      category = item.system.skillSet;
-    } else {
-      category = "item";
-    }
-
-    const itemRollData = {
-      formula: rollData.item.formula,
-      data: rollData,
-      title: `${flavor}: ${actor.name}`,
-      flavor,
-      targetValue,
-      baseValue,
-      bonusValue,
-      messageData: {
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-        flags: {
-          howtobeahero: {
-            roll: {
-              type: category,
-              itemId: this.id,
-              abilityName: abilityName
-            }
-          }
-        }
-      }
-    };
-
-    const roll = await d100Roll(itemRollData);
-    Hooks.callAll("howToBeAHeroItemRolled", this, roll);
-    return roll;
-  }
+  return dialog;
 }
 
 getRollData() {

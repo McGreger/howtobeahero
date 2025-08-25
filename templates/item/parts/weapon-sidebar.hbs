@@ -22,9 +22,6 @@
     <select id="roll-dice-size" name="system.roll.diceSize">
       {{selectOptions diceTypes selected=document.system.roll.diceSize}}
     </select>
-    
-    <label for="roll-dice-bonus">Bonus:</label>
-    <input id="roll-dice-bonus" name="system.roll.diceBonus" type="number" value="{{system.roll.diceBonus}}" />
   </div>
   <div class="formula-field" style="{{#unless system.rollable}}display: none;{{/unless}}">
     <label for="item-formula">Damage Formula:</label>
