@@ -228,10 +228,14 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
       return;
     }
     
-    // Get current roll values with defaults
-    const diceNum = this.document.system.roll.diceNum || 1;
-    const diceSize = this.document.system.roll.diceSize || 'd10';
-    const diceBonus = this.document.system.roll.diceBonus || 0;
+    // Get current values from form inputs (they may have changed but not saved yet)
+    const diceNumInput = this.element.querySelector('input[name="system.roll.diceNum"]');
+    const diceSizeInput = this.element.querySelector('select[name="system.roll.diceSize"]');
+    const diceBonusInput = this.element.querySelector('input[name="system.roll.diceBonus"]');
+    
+    const diceNum = diceNumInput ? parseInt(diceNumInput.value) || 1 : this.document.system.roll.diceNum || 1;
+    const diceSize = diceSizeInput ? diceSizeInput.value || 'd10' : this.document.system.roll.diceSize || 'd10';
+    const diceBonus = diceBonusInput ? parseInt(diceBonusInput.value) || 0 : this.document.system.roll.diceBonus || 0;
   
     // Format bonus string
     const bonusStr = diceBonus > 0 ? `+${diceBonus}` : 
@@ -239,11 +243,20 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
                     
     // Create new formula
     const formula = `${diceNum}${diceSize}${bonusStr}`;
+    
+    console.log(`HowToBeAHero | Updating formula to: ${formula}`);
   
     // Update the formula display
     const formulaInput = this.element.querySelector('input[name="system.formula"]');
     if (formulaInput) {
       formulaInput.value = formula;
+    }
+    
+    // Save the formula to the document
+    try {
+      await this.document.update({"system.formula": formula});
+    } catch (error) {
+      console.error("HowToBeAHero | Error updating formula:", error);
     }
   }
 
@@ -259,6 +272,9 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
     const newBonus = currentBonus + 1;
     await this.document.update({"system.roll.diceBonus": newBonus});
+    
+    // Update formula after bonus change
+    this._onUpdateRollFields(event);
   }
 
   async _onDecrementBonus(event, target) {
@@ -273,6 +289,9 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     const currentBonus = Number(this.document.system.roll.diceBonus) || 0;
     const newBonus = currentBonus - 1;
     await this.document.update({"system.roll.diceBonus": newBonus});
+    
+    // Update formula after bonus change
+    this._onUpdateRollFields(event);
   }
 
   /**
@@ -389,18 +408,11 @@ export class HowToBeAHeroItemSheet extends HandlebarsApplicationMixin(foundry.ap
     }
     
     try {
-      // Check if rollable property exists in the data model
-      if (this.document.system.rollable !== undefined) {
-        // Best practice: Direct property assignment for defined properties
-        this.document.system.rollable = isRollable;
-        console.log(`HowToBeAHero | Direct assignment - rollable set to: ${this.document.system.rollable}`);
-      } else {
-        // Legacy item: Use document.update() to add the property
-        console.log(`HowToBeAHero | Legacy item - using document.update() to add rollable property`);
-        
-        await this.document.update(updateData);
-        console.log(`HowToBeAHero | Legacy item updated - rollable: ${this.document.system.rollable}`);
-      }
+      // Always use document.update() for proper persistence across all item types
+      console.log(`HowToBeAHero | Updating item rollable property via document.update()`);
+      
+      await this.document.update(updateData);
+      console.log(`HowToBeAHero | Item updated - rollable: ${this.document.system.rollable}`);
     } catch (error) {
       console.error(`HowToBeAHero | Error updating rollable state:`, error);
       // Revert UI changes if update failed
