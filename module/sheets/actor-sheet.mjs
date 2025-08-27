@@ -1006,6 +1006,37 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     
     console.log(`HowToBeAHero | Form input changed: ${name} = ${value}`);
     
+    // Check if this is an item input (has data-item-id)
+    const itemId = target.dataset.itemId;
+    if (itemId) {
+      // This is an item input, update the embedded item
+      const item = this.document.items.get(itemId);
+      if (!item) {
+        console.warn(`HowToBeAHero | Item ${itemId} not found`);
+        return;
+      }
+      
+      // Handle different data types for item updates
+      let processedValue = value;
+      if (target.dataset.dtype === "Number" || target.type === "number") {
+        processedValue = Number(value) || 0;
+      } else if (target.dataset.dtype === "Boolean" || target.type === "checkbox") {
+        processedValue = target.checked;
+      }
+      
+      const updateData = { [name]: processedValue };
+      
+      try {
+        console.log(`HowToBeAHero | Updating item ${item.name} with:`, updateData);
+        await item.update(updateData);
+      } catch (error) {
+        console.error("HowToBeAHero | Error updating item:", error);
+        ui.notifications.error("Failed to save item changes.");
+      }
+      return;
+    }
+    
+    // Actor input handling
     if (!name || !(name.startsWith('system.') || name === 'name')) return;
     
     // Create update data
@@ -1013,9 +1044,9 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     
     // Handle different data types
     let processedValue = value;
-    if (target.dataset.dtype === "Number") {
+    if (target.dataset.dtype === "Number" || target.type === "number") {
       processedValue = Number(value) || 0;
-    } else if (target.dataset.dtype === "Boolean") {
+    } else if (target.dataset.dtype === "Boolean" || target.type === "checkbox") {
       processedValue = target.checked;
     }
     
