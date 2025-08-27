@@ -1,5 +1,5 @@
 {{!-- templates/dialogs/roll-dialog.hbs --}}
-<div class="htbah-roll-dialog">
+<form class="htbah-roll-dialog" data-action="submit">
   <div class="roll-info">
     <div class="base-roll">
       <label>{{localize "HTBAH.RollDialog.BaseRoll"}}:</label>
@@ -12,159 +12,27 @@
     <input type="number" 
            id="dice-bonus"
            name="bonus" 
-           value="0" 
+           value="{{bonus}}" 
            placeholder="0"
-           step="1">
+           step="1"
+           data-action="updateBonus"
+           data-tooltip="{{localize 'HTBAH.RollDialog.BonusHint'}}">
     <small class="hint">{{localize "HTBAH.RollDialog.BonusHint"}}</small>
   </div>
   
   <div class="final-formula">
     <label>{{localize "HTBAH.RollDialog.FinalRoll"}}:</label>
-    <span class="result-formula">{{baseFormula}}</span>
+    <span class="result-formula">{{finalFormula}}</span>
   </div>
-</div>
 
-<style>
-  .window-app .window-content .dialog .htbah-roll-dialog,
-  .window-app .window-content .htbah-roll-dialog {
-    color: #000 !important;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog h2,
-  .window-app .window-content .htbah-roll-dialog h2 {
-    color: #000 !important;
-    margin-bottom: 1em;
-    font-size: 1.2em;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog label,
-  .window-app .window-content .htbah-roll-dialog label {
-    color: #000 !important;
-    font-weight: bold;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog .roll-info,
-  .window-app .window-content .htbah-roll-dialog .roll-info {
-    margin-bottom: 1em;
-    padding: 0.5em;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog .form-group,
-  .window-app .window-content .htbah-roll-dialog .form-group {
-    margin-bottom: 1em;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog .form-group input,
-  .window-app .window-content .htbah-roll-dialog .form-group input {
-    width: 100px;
-    margin-left: 0.5em;
-    color: #000 !important;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog .hint,
-  .window-app .window-content .htbah-roll-dialog .hint {
-    display: block;
-    color: #666 !important;
-    font-size: 0.9em;
-    margin-top: 0.25em;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog .final-formula,
-  .window-app .window-content .htbah-roll-dialog .final-formula {
-    margin-top: 1em;
-    padding: 0.5em;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
-    font-weight: bold;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog .result-formula,
-  .window-app .window-content .htbah-roll-dialog .result-formula {
-    font-family: monospace;
-    font-size: 1.1em;
-    color: #c9302c !important;
-    font-weight: bold;
-  }
-  
-  .window-app .window-content .dialog .htbah-roll-dialog .formula,
-  .window-app .window-content .htbah-roll-dialog .formula {
-    font-family: monospace;
-    color: #333 !important;
-    font-weight: bold;
-  }
-
-  /* HTBAH Color Variables */
-  :root {
-    --htbah-color-faint: #c9c7b8;
-    --htbah-color-beige: #b5b3a4;
-    --htbah-color-tan: #7a7971;
-  }
-
-  /* Window header styling - specific to roll dialog */
-  .window-app.how-to-be-a-hero.roll-dialog .window-header {
-    background: var(--htbah-color-faint) !important;
-    border-bottom: 1px solid var(--htbah-color-beige) !important;
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .window-header h4.window-title {
-    color: #000 !important;
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .window-header .header-button.close {
-    color: #000 !important;
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .window-header .header-button.close:hover {
-    color: var(--htbah-color-tan) !important;
-    background: rgba(122, 121, 113, 0.1) !important;
-  }
-
-  /* Fix dialog button styling - ONLY for roll dialog */
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button {
-    background: var(--htbah-color-faint);
-    color: #000;
-    border: 1px solid var(--htbah-color-beige);
-    padding: 6px 12px;
-    margin: 0 4px;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button:hover,
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button:focus {
-    background: var(--htbah-color-beige);
-    border-color: var(--htbah-color-tan);
-    box-shadow: 0 0 3px rgba(122, 121, 113, 0.3);
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default,
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll {
-    background: var(--htbah-color-tan);
-    color: #fff;
-    border-color: var(--htbah-color-tan);
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default:hover,
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default:focus,
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll:hover,
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll:focus {
-    background: var(--htbah-color-beige);
-    border-color: var(--htbah-color-tan);
-    box-shadow: 0 0 5px rgba(122, 121, 113, 0.4);
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel {
-    background: var(--htbah-color-faint);
-    color: #000;
-    border-color: var(--htbah-color-beige);
-  }
-
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel:hover,
-  .window-app.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel:focus {
-    background: var(--htbah-color-beige);
-    border-color: var(--htbah-color-tan);
-    box-shadow: 0 0 3px rgba(122, 121, 113, 0.3);
-  }
-</style>
+  <footer class="dialog-buttons">
+    <button type="submit" class="dialog-button roll default" data-action="roll">
+      <i class="fas fa-dice-d20"></i>
+      {{localize "HTBAH.RollDialog.Roll"}}
+    </button>
+    <button type="button" class="dialog-button cancel" data-action="cancel">
+      <i class="fas fa-times"></i>
+      {{localize "Cancel"}}
+    </button>
+  </footer>
+</form>

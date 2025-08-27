@@ -724,7 +724,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero .tab.biography .bottom p {
   width: 100%;
   min-height: 140px;
-  max-height: calc(100vh - var(--htbah-sheet-header-height) - 300px); /* Limit resize to available space */
+  max-height: 400px; /* Fixed height to prevent viewport interference */
   background: var(--htbah-color-blue-gray-2);
   border: 1px solid var(--htbah-color-blue-gray-3);
   border-radius: 4px;
@@ -1297,7 +1297,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero .pips .pip:not(:disabled):is(:hover, :focus) {
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
-.how-to-be-a-hero.sidebar-heading {
+.how-to-be-a-hero.sheet .sidebar-heading {
   margin: 6px 0;
   padding: 3px 8px;
   border-top: 1px solid var(--color-border-dark-4);
@@ -1306,7 +1306,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   display: flex;
   align-items: center;
 }
-.how-to-be-a-hero.sidebar-heading h2 {
+.how-to-be-a-hero.sheet .sidebar-heading h2 {
   font-size: var(--font-size-16);
   background: none;
   border: none;
@@ -1315,7 +1315,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-family: var(--font-primary);
   font-weight: normal;
 }
-.how-to-be-a-hero.sidebar-heading ul.links {
+.how-to-be-a-hero.sheet .sidebar-heading ul.links {
   flex: 1;
   list-style: none;
   margin: 0;
@@ -1389,8 +1389,12 @@ item-list-controls search .filter-control[data-action="sort"] {
   position: relative;
 }
 
+/* ================================== */
+/*  DIALOG SYSTEM                     */
+/* ================================== */
+
 /* ---------------------------------- */
-/*  Dialogs                           */
+/*  Base Legacy Dialog Support       */
 /* ---------------------------------- */
 .how-to-be-a-hero.dialog {
   background: url("../ui/texture-gray1.webp") no-repeat top left, url("../ui/texture-gray2.webp") no-repeat bottom right, var(--htbah-color-parchment);
@@ -1412,9 +1416,14 @@ item-list-controls search .filter-control[data-action="sort"] {
   text-align: center;
   margin-bottom: 0.75rem;
 }
+/* Legacy dialog buttons - specifically scoped to avoid conflicts */
 .how-to-be-a-hero.dialog .dialog-buttons {
   padding: 0.5rem;
   gap: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  /* Note: This is scoped to .how-to-be-a-hero.dialog only - 
+     does not affect .how-to-be-a-hero.sheet.actor tabs */
 }
 .how-to-be-a-hero.dialog .dialog-buttons button {
   background: var(--htbah-color-card);
@@ -1485,6 +1494,266 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 .how-to-be-a-hero.create-document .dialog-buttons button {
   flex: 1 0 50%;
+}
+
+/* ---------------------------------- */
+/*  AppV2 Dialog Classes              */
+/* ---------------------------------- */
+
+/* ============================================================= */
+/* CRITICAL: ROLL-DIALOG CSS ISOLATION                          */
+/* ============================================================= */
+/* These styles are EXCLUSIVELY for the roll-dialog.hbs template */
+/* They target: .how-to-be-a-hero.roll-dialog                   */
+/* This class combination is ONLY used by HowToBeAHeroRollDialog */
+/* NO other FoundryVTT dialogs or components should be affected  */
+/* ============================================================= */
+
+/* Base AppV2 roll-dialog window - ONLY for roll-dialog.hbs template */
+/* This selector ensures ONLY dialogs with roll-dialog content get these styles */
+.how-to-be-a-hero.roll-dialog:has(.htbah-roll-dialog) {
+  font-family: var(--htbah-font-roboto);
+  color: var(--htbah-color-dark);
+  background: var(--htbah-color-tan);
+  border: 1px solid var(--htbah-color-tan);
+  box-shadow: 0 4px 8px rgba(25, 24, 19, 0.3);
+  border-radius: 5px;
+}
+
+/* Roll-dialog content container - ONLY for roll-dialog.hbs template */
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog {
+  color: var(--htbah-color-dark);
+}
+
+/* ============================================ */
+/* ROLL DIALOG WINDOW STYLES                   */
+/* These only apply when .htbah-roll-dialog    */
+/* content is present (roll-dialog.hbs)        */
+/* ============================================ */
+
+/* Window header styling - ONLY for roll-dialog.hbs template */
+.how-to-be-a-hero.roll-dialog .window-header {
+  background: var(--htbah-color-dark);
+  border-bottom: 1px solid var(--htbah-color-tan);
+  padding: 8px 12px;
+  border-radius: 5px 5px 0 0;
+}
+
+.how-to-be-a-hero.roll-dialog .window-header h4.window-title {
+  color: var(--htbah-color-dark);
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+  font-size: var(--font-size-16);
+  margin: 0;
+}
+
+.how-to-be-a-hero.roll-dialog .window-header .header-button.close {
+  color: var(--htbah-color-dark);
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-14);
+  padding: 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.how-to-be-a-hero.roll-dialog .window-header .header-button.close:hover {
+  color: var(--htbah-color-tan);
+  background: var(--htbah-color-faint);
+}
+
+/* Window content styling - ONLY for roll-dialog.hbs template */
+.how-to-be-a-hero.roll-dialog .window-content {
+  padding: 16px;
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+}
+
+/* Base dialog buttons container - ONLY for roll-dialog.hbs template */
+.how-to-be-a-hero.roll-dialog .dialog-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  border-top: 1px solid var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
+  border-radius: 0 0 5px 5px;
+  margin: 16px -16px -16px -16px; /* Negative margins to extend to dialog edges */
+}
+
+/* Base dialog button styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button {
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+  border: 1px solid var(--htbah-color-tan);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-13);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 2px 4px rgba(25, 24, 19, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Primary/default button styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.primary {
+  background: var(--htbah-color-tan);
+  color: var(--htbah-color-faint);
+  border-color: var(--htbah-color-tan);
+  font-weight: 600;
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default:focus,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.primary:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.primary:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 3px 6px rgba(25, 24, 19, 0.4);
+}
+
+/* Secondary/cancel button styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.secondary,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel {
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.secondary:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.secondary:focus,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 2px 4px rgba(25, 24, 19, 0.3);
+}
+
+/* ---------------------------------- */
+/*  Roll Dialog Specific              */
+/* ---------------------------------- */
+
+/* Roll dialog content styling */
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog {
+  color: var(--htbah-color-dark);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog h2 {
+  color: var(--htbah-color-dark);
+  margin-bottom: 1em;
+  font-size: var(--font-size-18);
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog label {
+  color: var(--htbah-color-dark);
+  font-weight: 600;
+  font-size: var(--font-size-14);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .roll-info {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--htbah-color-beige);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 4px;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .form-group {
+  margin-bottom: 16px;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .form-group input {
+  width: 100px;
+  margin-left: 8px;
+  padding: 6px 10px;
+  color: var(--htbah-color-dark);
+  background: var(--htbah-color-faint);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 3px;
+  font-family: var(--htbah-font-roboto);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .form-group input:focus {
+  outline: none;
+  border-color: var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
+  box-shadow: 0 0 3px rgba(25, 24, 19, 0.3);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .hint {
+  display: block;
+  color: var(--htbah-color-tan);
+  font-size: var(--font-size-12);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .final-formula {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--htbah-color-beige);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--htbah-color-dark);
+}
+
+/* Final result formula - RED for emphasis */
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .result-formula {
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-15);
+  color: #c9302c;
+  font-weight: bold;
+  background: rgba(201, 48, 44, 0.1);
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(201, 48, 44, 0.2);
+}
+
+/* Base roll formula - BLACK text on light background */
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .formula {
+  font-family: var(--font-family-monospace);
+  color: var(--htbah-color-dark);
+  font-weight: 600;
+  background: var(--htbah-color-faint);
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--htbah-color-tan);
+}
+
+/* Roll button specific styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll {
+  background: var(--htbah-color-tan);
+  color: var(--htbah-color-faint);
+  border-color: var(--htbah-color-tan);
+  font-weight: 600;
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 3px 6px rgba(25, 24, 19, 0.4);
 }
 
 /* ---------------------------------- */
@@ -2122,12 +2391,18 @@ item-list-controls search .filter-control[data-action="sort"] {
   --icon-fill: var(--htbah-color-gold);
 }
 
-a {
+/* IMPORTANT: Scope these selectors to prevent interference with FoundryVTT UI */
+.how-to-be-a-hero a {
   cursor: pointer;
 }
-* {
+/* Apply user-select: none only to sheet elements, not all elements */
+.how-to-be-a-hero.sheet * {
   box-sizing: border-box;
   user-select: none;
+}
+/* Allow box-sizing for all how-to-be-a-hero elements but keep user-select limited */
+.how-to-be-a-hero * {
+  box-sizing: border-box;
 }
 
 /* ----------------------------------------- */
@@ -2357,7 +2632,7 @@ a {
   font-family: var(--font-awesome);
   font-size: var(--font-size-11);
 }
-.how-to-be-a-hero .sidebar .card .stats .ac { 
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac { 
   width: 68px;
   height: 68px;
   text-align: center;
@@ -2370,12 +2645,12 @@ a {
   margin-top: -21px;
   filter: drop-shadow(0 0 6px var(--color-shadow-dark));
 }
-.how-to-be-a-hero .sidebar .card .stats .ac .config-button {
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac .config-button {
   color: inherit;
   font-size: inherit;
 }
 /* Styling for the armor display */
-.how-to-be-a-hero .sidebar .card .stats .ac input {
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac input {
   border: none;
   background: transparent;
   color: inherit;
@@ -2389,8 +2664,8 @@ a {
   margin: 0;
   outline: none;
 }
-.how-to-be-a-hero .sidebar .card .stats .ac input:hover,
-.how-to-be-a-hero .sidebar .card .stats .ac input:focus {
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac input:hover,
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac input:focus {
   outline: none;
   box-shadow: none;
 }

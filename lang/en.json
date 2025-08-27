@@ -261,8 +261,12 @@
     "Bonus": "Bonus",
     "BonusHint": "Additional bonus to add to this roll",
     "FinalRoll": "Final Roll",
-    "Roll": "Roll"
+    "Roll": "Roll",
+    "RollItem": "Roll {item}",
+    "ErrorRolling": "Failed to execute roll"
   },
+  
+  "HTBAH.Unknown": "Unknown",
     
   "TYPES": {
     "Actor": {

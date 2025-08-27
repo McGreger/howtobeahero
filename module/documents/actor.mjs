@@ -1,4 +1,5 @@
 import { d100Roll, d10Roll } from "../dice/dice.mjs";
+import { HowToBeAHeroRollDialog } from "../apps/roll-dialog.mjs";
 
 
 export class HowToBeAHeroActor extends Actor {
@@ -182,36 +183,28 @@ export class HowToBeAHeroActor extends Actor {
     }
 
     const label = game.i18n.localize(CONFIG.HTBAH.skillSets[skillSetId]?.label) ?? "";
-    const data = this.getRollData();
-    
     const targetValue = this.skillSetTotalValues[skillSetId] ?? 0;
     const baseValue = this.skillSetTotalValues[skillSetId] ?? 0; 
-    const bonusValue = this.system.attributes.skillSets[skillSetId]?.bonus ?? 0;
     
-    const flavor = game.i18n.localize("HTBAH.SkillSetCheckPromptTitle");
-    
-    const rollData = {
-      formula: "1d100",
-      data: {
-        actor: data,
-        item: null
-      },
-      title: `${flavor}: ${label}`,
-      flavor,
-      targetValue: targetValue + bonusValue, 
-      baseValue,
-      bonusValue,
-      messageData: {
-        speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
-        flags: {
-          howtobeahero: {
-            roll: { type: skillSetId, skillSetId }
-          }
-        }
+    // Create a fake ability item for the dialog to work with
+    const fakeAbilityItem = {
+      name: label,
+      type: "ability",
+      system: {
+        value: targetValue,
+        skillSet: skillSetId
       }
     };
     
-    const roll = await d100Roll(rollData);
+    // Show the roll dialog
+    const roll = await HowToBeAHeroRollDialog.show({
+      item: fakeAbilityItem,
+      baseFormula: "1d100",
+      rollType: "skillSet"
+    });
+    
+    if (!roll) return null; // User cancelled
+    
     Hooks.callAll("HowToBeAHeroAbilitySetRolled", this, skillSetId, roll);
     return roll;
   }
