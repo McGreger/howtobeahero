@@ -24,7 +24,7 @@
   "compatibility": {
     "minimum": "12.331",
     "verified": "12.331",
-    "maximum": "12"
+    "maximum": "13"
   },
   "esmodules": [
     "module/how-to-be-a-hero.mjs",
