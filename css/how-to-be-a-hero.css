@@ -1497,20 +1497,9 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 /* ---------------------------------- */
-/*  AppV2 Dialog Classes              */
+/* Dialog Classes                     */
 /* ---------------------------------- */
 
-/* ============================================================= */
-/* CRITICAL: ROLL-DIALOG CSS ISOLATION                          */
-/* ============================================================= */
-/* These styles are EXCLUSIVELY for the roll-dialog.hbs template */
-/* They target: .how-to-be-a-hero.roll-dialog                   */
-/* This class combination is ONLY used by HowToBeAHeroRollDialog */
-/* NO other FoundryVTT dialogs or components should be affected  */
-/* ============================================================= */
-
-/* Base AppV2 roll-dialog window - ONLY for roll-dialog.hbs template */
-/* This selector ensures ONLY dialogs with roll-dialog content get these styles */
 .how-to-be-a-hero.roll-dialog:has(.htbah-roll-dialog) {
   font-family: var(--htbah-font-roboto);
   color: var(--htbah-color-dark);
@@ -1520,18 +1509,14 @@ item-list-controls search .filter-control[data-action="sort"] {
   border-radius: 5px;
 }
 
-/* Roll-dialog content container - ONLY for roll-dialog.hbs template */
 .how-to-be-a-hero.roll-dialog .htbah-roll-dialog {
   color: var(--htbah-color-dark);
 }
 
 /* ============================================ */
-/* ROLL DIALOG WINDOW STYLES                   */
-/* These only apply when .htbah-roll-dialog    */
-/* content is present (roll-dialog.hbs)        */
+/* ROLL DIALOG                                  */
 /* ============================================ */
 
-/* Window header styling - ONLY for roll-dialog.hbs template */
 .how-to-be-a-hero.roll-dialog .window-header {
   background: var(--htbah-color-dark);
   border-bottom: 1px solid var(--htbah-color-tan);
@@ -1562,14 +1547,12 @@ item-list-controls search .filter-control[data-action="sort"] {
   background: var(--htbah-color-faint);
 }
 
-/* Window content styling - ONLY for roll-dialog.hbs template */
 .how-to-be-a-hero.roll-dialog .window-content {
   padding: 16px;
   background: var(--htbah-color-faint);
   color: var(--htbah-color-dark);
 }
 
-/* Base dialog buttons container - ONLY for roll-dialog.hbs template */
 .how-to-be-a-hero.roll-dialog .dialog-buttons {
   display: flex;
   gap: 8px;
@@ -1717,7 +1700,6 @@ item-list-controls search .filter-control[data-action="sort"] {
   color: var(--htbah-color-dark);
 }
 
-/* Final result formula - RED for emphasis */
 .how-to-be-a-hero.roll-dialog .htbah-roll-dialog .result-formula {
   font-family: var(--font-family-monospace);
   font-size: var(--font-size-15);
@@ -1729,7 +1711,6 @@ item-list-controls search .filter-control[data-action="sort"] {
   border: 1px solid rgba(201, 48, 44, 0.2);
 }
 
-/* Base roll formula - BLACK text on light background */
 .how-to-be-a-hero.roll-dialog .htbah-roll-dialog .formula {
   font-family: var(--font-family-monospace);
   color: var(--htbah-color-dark);
