@@ -208,4 +208,78 @@ export class HowToBeAHeroActor extends Actor {
     Hooks.callAll("HowToBeAHeroAbilitySetRolled", this, skillSetId, roll);
     return roll;
   }
+
+  /**
+   * Roll initiative for this Actor
+   * @param {Object} options - Options for rolling initiative
+   * @returns {Promise<Combat>} The combat instance
+   */
+  async rollInitiative(options = {}) {
+    // Ensure skill sets are prepared
+    if (!this.skillSetTotalValues) {
+      this._prepareSkillSets();
+    }
+
+    // Get the action skill set modifier for initiative
+    const actionMod = this.skillSetMods?.action ?? 0;
+    
+    // Create the initiative formula: 1d10 + action modifier
+    const formula = `1d10 + ${actionMod}`;
+    
+    console.log(`HowToBeAHero | Rolling initiative for ${this.name} with formula: ${formula}`);
+    
+    // Roll the initiative
+    const roll = new Roll(formula);
+    await roll.evaluate();
+    
+    // Create or update combat
+    const combat = game.combat;
+    if (!combat) {
+      ui.notifications.warn("No active combat to roll initiative for.");
+      return null;
+    }
+    
+    // Add combatant if requested and not already present
+    if (options.createCombatants && !combat.getCombatantByActor(this.id)) {
+      await combat.createEmbeddedDocuments("Combatant", [{
+        actorId: this.id,
+        tokenId: this.token?.id
+      }]);
+    }
+    
+    // Find the combatant
+    const combatant = combat.getCombatantByActor(this.id);
+    if (combatant) {
+      // Update the combatant's initiative
+      await combat.setInitiative(combatant.id, roll.total);
+      
+      // Send chat message showing the initiative roll
+      const messageContent = `
+        <div class="htbah-initiative-roll">
+          <div class="roll-header">
+            <h3><i class="fas fa-dice-d20" style="color: #8B0000;"></i> ${this.name} - Initiative</h3>
+          </div>
+          <div class="roll-result">
+            <h2 style="color: #8B0000; font-weight: bold;">Initiative: ${roll.total}</h2>
+          </div>
+          <div class="roll-breakdown">
+            <p>Roll: ${await roll.render()}</p>
+            <p>Action Modifier: +${actionMod}</p>
+            <p><strong>Total: ${roll.total}</strong></p>
+          </div>
+        </div>
+      `;
+      
+      const messageData = {
+        user: game.user.id,
+        speaker: ChatMessage.getSpeaker({actor: this}),
+        content: messageContent,
+        sound: CONFIG.sounds.dice
+      };
+      
+      await ChatMessage.create(messageData);
+    }
+    
+    return combat;
+  }
 }
