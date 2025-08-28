@@ -4,7 +4,7 @@ import { setTheme } from "./settings.mjs";
  * A specialized subclass of ContextMenu that places the menu in a fixed position.
  * @extends {ContextMenu}
  */
-export default class ContextMenuHTBAH extends ContextMenu {
+export default class ContextMenuHTBAH extends foundry.applications.ux.ContextMenu.implementation {
   /** @override */
   _setPosition([html], [target]) {
     document.body.appendChild(html);

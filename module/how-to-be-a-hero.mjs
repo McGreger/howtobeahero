@@ -182,13 +182,13 @@ Hooks.once('init', function () {
   Tooltips.activateListeners();
 
   // Register sheet application classes
-  Actors.unregisterSheet('core', ActorSheet);
-  Actors.registerSheet('how-to-be-a-hero', HowToBeAHeroActorSheet, {
+  foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
+  foundry.documents.collections.Actors.registerSheet('how-to-be-a-hero', HowToBeAHeroActorSheet, {
     makeDefault: true,
     label: 'HOW_TO_BE_A_HERO.SheetLabels.Actor',
   });
-  Items.unregisterSheet('core', ItemSheet);
-  Items.registerSheet('how-to-be-a-hero', HowToBeAHeroItemSheet, {
+  foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
+  foundry.documents.collections.Items.registerSheet('how-to-be-a-hero', HowToBeAHeroItemSheet, {
     makeDefault: true,
     label: 'HOW_TO_BE_A_HERO.SheetLabels.Item',
   });

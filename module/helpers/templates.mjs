@@ -109,7 +109,7 @@ export const preloadHandlebarsTemplates = async function () {
 
     // STEP 3: Load templates using Foundry's loadTemplates
     console.log("HowToBeAHero | Loading templates via loadTemplates...");
-    await loadTemplates(paths);
+    await foundry.applications.handlebars.loadTemplates(paths);
 
     // STEP 4: Verify critical templates for AppV2
     const criticalTemplates = [
@@ -315,6 +315,6 @@ export const loadDevelopmentTemplates = async function() {
   }
 
   if (Object.keys(paths).length > 0) {
-    await loadTemplates(paths);
+    await foundry.applications.handlebars.loadTemplates(paths);
   }
 };
