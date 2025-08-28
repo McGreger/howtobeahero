@@ -220,7 +220,24 @@ Handlebars.registerHelper('filterJoin', function(array, separator) {
 });
 
 Handlebars.registerHelper('localize', function(key) {
-  return game.i18n.localize(key);
+  // Handle different key formats
+  let localizationKey;
+  
+  if (typeof key === 'string') {
+    localizationKey = key;
+  } else if (key && typeof key === 'object' && key.string) {
+    // Handle Foundry v13 localization objects
+    localizationKey = key.string;
+  } else {
+    console.warn('HowToBeAHero | Invalid localization key:', key);
+    return key || '';
+  }
+  
+  if (!localizationKey) {
+    return '';
+  }
+  
+  return game.i18n.localize(localizationKey);
 });
 
 Handlebars.registerHelper('numberFormat', function(number, options = {}) {
