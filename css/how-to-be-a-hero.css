@@ -230,7 +230,7 @@ item-list-controls search > input[type="text"]:hover,
   content: "\f002";
   font-family: var(--font-awesome);
   font-weight: bold;
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
   position: absolute;
   left: 0.75rem;
 }
@@ -311,7 +311,7 @@ item-list-controls search .filter-list .filter-item:hover,
 }
 .how-to-be-a-hero item-list-controls search .filter-control {
   height: 100%;
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
   font-size: var(--font-size-16);
   padding: 0 0.375rem;
 }
@@ -365,8 +365,8 @@ item-list-controls search .filter-control:hover:not(.disabled),
   /*  Pause                             */
   /* ---------------------------------- */
   --color-text-dark-primary: var(--htbah-color-blue-white);
-  --color-text-dark-secondary: var(--color-text-light-6);
-  --color-text-dark-5: var(--color-text-light-6);
+  --color-text-dark-secondary: var(--htbah-color-gold);
+  --color-text-dark-5: var(--htbah-color-gold);
   --htbah-border-dotted: 1px dotted var(--htbah-color-blue-gray-3);
   --color-border-light-1: var(--htbah-color-blue-gray-1);
   --color-border-light-tertiary: var(--color-border-light-2);
@@ -514,7 +514,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body .pills-group.empty > h3 > a {
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
 }
 
 /* ---------------------------------- */
@@ -774,7 +774,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 .how-to-be-a-hero .items-section .item .item-name .tags {
-  --icon-fill: var(--color-text-light-6);
+  --icon-fill: var(--htbah-color-gold);
   opacity: unset;
 }
 
@@ -783,7 +783,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 .how-to-be-a-hero .items-section .item .item-controls .item-control[data-context-menu] {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 
 .how-to-be-a-hero .items-section .item .item-controls .item-control.active {
@@ -795,7 +795,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 .how-to-be-a-hero .editable .items-section .item-controls .item-control {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 
 /* High Contrast */
@@ -889,7 +889,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   font-size: var(--font-size-16);
 }
 .how-to-be-a-hero .card .info > div .sign {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .unlist {
   list-style: none;
@@ -930,7 +930,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 .how-to-be-a-hero h3.icon > a {
   margin-left: auto;
   font-size: var(--font-size-12);
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero proficiency-cycle {
   width: 15px;
@@ -997,7 +997,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 .how-to-be-a-hero .pills .pill.green,
 .how-to-be-a-hero .pills .pill.maroon {
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .pills .pill.green {
   background-color: var(--htbah-color-green);
@@ -1011,7 +1011,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   background-color: transparent;
 }
 .how-to-be-a-hero .pills .pill > .separator {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .gold-button {
   position: absolute; /* Changed to absolute */
@@ -1117,17 +1117,15 @@ item-list-controls search .filter-control:hover:not(.disabled),
   position: relative;
   padding-inline-start: 0.5rem;
   padding-inline-end: 0.75rem;
-  color: var(--color-text-light-0);
+  color: var(--color-text-dark-primary);
 }
+
 .how-to-be-a-hero .meter .label[hidden] {
   display: none;
 }
-.how-to-be-a-hero .meter .label .value,
-.how-to-be-a-hero .meter .label .max {
-  text-shadow: 0 0 4px var(--htbah-color-gold);
-}
+
 .how-to-be-a-hero .meter .label .separator {
-  color: var(--htbah-color-gold);
+  color: var(--color-text-dark-primary);
 }
 .how-to-be-a-hero .meter .label .bonus {
   margin-inline-start: auto;
@@ -1247,7 +1245,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
 .how-to-be-a-hero .form-grid input::placeholder {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .form-grid input[type="number"] {
   font-weight: bold;
@@ -1264,7 +1262,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 .how-to-be-a-hero label.input-stack input {
   text-align: center;
 }
-.how-to-be-a-hero label..how-to-be-a-hero slide-toggle {
+.how-to-be-a-hero label.how-to-be-a-hero slide-toggle {
   display: block;
 }
 .how-to-be-a-hero label.slide-toggle > input {
@@ -1353,7 +1351,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   opacity: 0.75;
 }
 .how-to-be-a-hero#pause figcaption {
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   font-size: var(--font-size-46);
   text-shadow: 2px 2px 2px var(--color-shadow-dark);
   font-family: var(--htbah-font-modesto);
@@ -1948,7 +1946,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-left .document-name {
-  color: var(--color-text-light-0);
+  color: var(--color-text-dark-primary);
   font-size: var(--font-size-46);
   text-shadow: 2px 2px 2px var(--color-shadow-dark);
   font-family: var(--htbah-font-modesto);
@@ -1985,7 +1983,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   border: 1px solid var(--htbah-color-gold);
   box-shadow: 0 0 10px var(--color-shadow-dark);
 }
@@ -2078,7 +2076,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   flex: 1;
   margin-right: 8px;
   font-size: var(--font-size-13);
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   text-shadow: 1px 1px 1px var(--color-shadow-dark);
   white-space: nowrap;
   overflow: hidden;
@@ -2576,7 +2574,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   border: 2px solid var(--htbah-color-gold);
   pointer-events: none;
 }
-.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .portrait > label..how-to-be-a-hero slide-toggle {
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .portrait > label.how-to-be-a-hero slide-toggle {
   position: absolute;
   z-index: 1;
   padding: 1rem 0;
@@ -2619,7 +2617,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   text-align: center;
   line-height: 62px;
   background: transparent url(../ui/ac-badge.webp) no-repeat center / contain;
-  color: var(--color-text-light-0);
+  color: var(--color-text-dark-primary);
   font-size: var(--font-size-23);
   font-family: var(--htbah-font-roboto);
   font-weight: bold;
@@ -2670,7 +2668,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   font-family: var(--htbah-font-roboto);
   font-size: 20px;
   font-weight: bold;
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   height: 100%;
   line-height: 30px;
   text-shadow: 0 0 4px var(--htbah-highlight-45);
@@ -2759,7 +2757,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   border: none;
   font-weight: bold;
   background: none;
-  color: var(--color-text-light-0);
+  padding: 5px;
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.sectioned input:hover,
@@ -2793,7 +2791,6 @@ item-list-controls search .filter-control:hover:not(.disabled),
   position: relative;
   padding-inline-start: 0.5rem;
   padding-inline-end: 0.75rem;
-  color: var(--color-text-light-0);
 }
 
 /* Hidden state handling */
@@ -2884,7 +2881,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   text-shadow: 0 0 8px var(--color-shadow-primary);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul li.effect.suppressed {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .drop {
   border: 2px dashed var(--htbah-color-gold);
@@ -2946,7 +2943,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.uses .separator,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.uses .max {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.uses input {
   background: none;
@@ -2968,7 +2965,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.disabled i,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary .sign,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary .passive {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary .passive {
   font-size: var(--font-size-13);
@@ -3054,7 +3051,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   order: -1;
 }
 .how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .sign {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .label {
   text-transform: uppercase;
@@ -3248,7 +3245,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 
 /* Modified eureka-column to display items horizontally */
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-value {
-  flex: 0 0 10%;
+  flex: 0 0 20%;
   margin: 5px 0;
   display: flex;
   flex-direction: row; /* Changed from column to row */
@@ -3696,7 +3693,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 .how-to-be-a-hero .tab.inventory .items-section .item-uses .no-uses {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 /* Item Controls Styles */
 .how-to-be-a-hero .tab.inventory .items-section .item-controls {
@@ -3705,7 +3702,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   justify-content: flex-end;
   align-items: center;
   /*gap: 0.2rem;  Increased from 0.375rem for more space between icons */
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 
 .how-to-be-a-hero .tab.inventory .items-section .item-controls .item-control {
@@ -4348,8 +4345,8 @@ item-list-controls search .filter-control:hover:not(.disabled),
   cursor: pointer;
   border-bottom: var(--border-style);
   border-right: var(--border-style);
-  color: var(--color-text-light-6);
-  --icon-fill: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
+  --icon-fill: var(--htbah-color-gold);
   --icon-stroke: var(--htbah-color-card);
 }
 
