@@ -3912,6 +3912,15 @@ item-list-controls search .filter-control:hover:not(.disabled),
   border: 2px solid #000;
 }
 
+.how-to-be-a-hero.sheet.item .sheet-header img.profile-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 0;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 2px solid #000;
+}
+
 .how-to-be-a-hero.sheet.item .sheet-header .header-fields input {
   font-size: var(--font-size-30);
   font-weight: bold;
@@ -4172,6 +4181,26 @@ item-list-controls search .filter-control:hover:not(.disabled),
 .how-to-be-a-hero.sheet.item .editor .editor-content {
   height: 100%;
   overflow-y: auto;
+}
+
+/* Description field styles */
+.how-to-be-a-hero.sheet.item .description-field {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.how-to-be-a-hero.sheet.item .description-field label {
+  display: none;
+}
+
+.how-to-be-a-hero.sheet.item .description-field textarea {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  resize: none;
+  box-sizing: border-box;
 }
 
 /* Item Properties */

@@ -51,6 +51,8 @@ class AppV2ItemListControlsElement extends ItemListControlsElement {
 class AppV2InventoryElement extends InventoryElement {
   connectedCallback() {
     try {
+      console.log("AppV2InventoryElement connectedCallback called");
+      
       // Initialize _filters if it doesn't exist
       if (!this._filters) {
         this._filters = {};
@@ -62,10 +64,12 @@ class AppV2InventoryElement extends InventoryElement {
         if (sheetElement && sheetElement._sheet) {
           this.sheet = sheetElement._sheet;
         }
+        console.log("AppV2InventoryElement sheet set to:", this.sheet);
       }
       
       // Call parent with error handling
       if (super.connectedCallback) {
+        console.log("Calling super.connectedCallback");
         super.connectedCallback();
       }
       
@@ -73,6 +77,15 @@ class AppV2InventoryElement extends InventoryElement {
       if (this._initializeFilterLists) {
         this._initializeFilterLists();
       }
+      
+      // Ensure context menu is set up
+      setTimeout(() => {
+        console.log("Setting up context menu in AppV2 wrapper");
+        if (this.setupContextMenu) {
+          this.setupContextMenu();
+        }
+      }, 100);
+      
     } catch (error) {
       console.warn("HowToBeAHero | InventoryElement connectedCallback error:", error);
       this._initializeFallback();

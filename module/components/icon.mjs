@@ -74,10 +74,8 @@ export default class IconElement extends AdoptedStyleSheetMixin(HTMLElement) {
 
   /** @inheritDoc */
   connectedCallback() {
-    console.log(`HowToBeAHero | IconElement connecting with src: ${this.src}`);
     this._adoptStyleSheet(this._getStyleSheet());
     const insertElement = element => {
-      console.log(`HowToBeAHero | IconElement inserting element:`, element);
       if ( !element ) {
         console.warn(`HowToBeAHero | IconElement: No element to insert for src: ${this.src}`);
         return;
@@ -98,18 +96,15 @@ export default class IconElement extends AdoptedStyleSheetMixin(HTMLElement) {
       }
       this.#shadowRoot.replaceChildren(clone);
       this.classList.add('initialized');
-      console.log(`HowToBeAHero | IconElement successfully inserted SVG for src: ${this.src}`);
     };
 
     // Insert element immediately if already available, otherwise wait for fetch
     const element = this.constructor.fetch(this.src);
     if ( element instanceof Promise ) {
-      console.log(`HowToBeAHero | IconElement fetching async for src: ${this.src}`);
       element.then(insertElement).catch(err => {
         console.error(`HowToBeAHero | IconElement fetch failed for src: ${this.src}`, err);
       });
     } else {
-      console.log(`HowToBeAHero | IconElement using cached element for src: ${this.src}`);
       insertElement(element);
     }
   }
@@ -123,7 +118,6 @@ export default class IconElement extends AdoptedStyleSheetMixin(HTMLElement) {
    */
   static fetch(src) {
     if ( !this.#svgCache.has(src) ) {
-      console.log(`HowToBeAHero | IconElement fetching SVG from: ${src}`);
       this.#svgCache.set(src, fetch(src)
         .then(response => {
           if (!response.ok) {
@@ -132,14 +126,12 @@ export default class IconElement extends AdoptedStyleSheetMixin(HTMLElement) {
           return response.text();
         })
         .then(text => {
-          console.log(`HowToBeAHero | IconElement received SVG text for: ${src}`, text.substring(0, 200) + '...');
           const temp = document.createElement("div");
           temp.innerHTML = text;
           const svg = temp.querySelector("svg");
           if (!svg) {
             throw new Error(`No SVG element found in fetched content for: ${src}`);
           }
-          console.log(`HowToBeAHero | IconElement parsed SVG element for: ${src}`, svg);
           this.#svgCache.set(src, svg);
           return svg;
         })

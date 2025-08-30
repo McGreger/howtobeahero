@@ -185,6 +185,10 @@
   "HTBAH.EffectUnavailable": "Unavailable Effects",
   "HTBAH.EffectUnavailableInfo": "Source item must be equipped or attuned to activate these",
 
+  "HTBAH.Newaction": "New Action",
+  "HTBAH.Newknowledge": "New Knowledge", 
+  "HTBAH.Newsocial": "New Social",
+
   "EFFECT.HTBAH": {
     "StatusBleeding": "Bleeding",
     "StatusBurrowing": "Burrowing",

@@ -40,7 +40,7 @@ export default class HowToBeAHeroActiveEffectData extends AbstractHowToBeAHeroDa
 
   /** @override */
   async richTooltip() {
-    const content = await renderTemplate("systems/how-to-be-a-hero/templates/effects/effect-tooltip.hbs", {
+    const content = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/effects/effect-tooltip.hbs", {
       name: this.label,
       isCondition: this.isCondition,
       duration: this.duration,

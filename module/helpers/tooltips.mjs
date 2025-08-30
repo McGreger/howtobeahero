@@ -164,8 +164,8 @@ export class Tooltips {
       }
   
       this.tooltip.classList.add("dnd5e-tooltip", "passive-tooltip");
-      this.tooltip.innerHTML = await renderTemplate("systems/dnd5e/templates/journal/passive-tooltip.hbs", context);
-      game.tooltip._setAnchor(TooltipManager.TOOLTIP_DIRECTIONS.DOWN);
+      this.tooltip.innerHTML = await foundry.applications.handlebars.renderTemplate("systems/dnd5e/templates/journal/passive-tooltip.hbs", context);
+      game.tooltip._setAnchor(foundry.helpers.interaction.TooltipManager.implementation.TOOLTIP_DIRECTIONS.DOWN);
     }
   
     /* -------------------------------------------- */
@@ -175,7 +175,7 @@ export class Tooltips {
      * @param {string} [direction="LEFT"]  The direction to position the tooltip.
      * @protected
      */
-    _positionItemTooltip(direction=TooltipManager.TOOLTIP_DIRECTIONS.LEFT) {
+    _positionItemTooltip(direction=foundry.helpers.interaction.TooltipManager.implementation.TOOLTIP_DIRECTIONS.LEFT) {
       const tooltip = this.tooltip;
       const { clientWidth, clientHeight } = document.documentElement;
       const tooltipBox = tooltip.getBoundingClientRect();
@@ -184,7 +184,7 @@ export class Tooltips {
       const top = Math.min(maxTop, targetBox.bottom - ((targetBox.height + tooltipBox.height) / 2));
       const left = targetBox.left - tooltipBox.width - game.tooltip.constructor.TOOLTIP_MARGIN_PX;
       const right = targetBox.right + game.tooltip.constructor.TOOLTIP_MARGIN_PX;
-      const { RIGHT, LEFT } = TooltipManager.TOOLTIP_DIRECTIONS;
+      const { RIGHT, LEFT } = foundry.helpers.interaction.TooltipManager.implementation.TOOLTIP_DIRECTIONS;
       if ( (direction === LEFT) && (left < 0) ) direction = RIGHT;
       else if ( (direction === RIGHT) && (right + targetBox.width > clientWidth) ) direction = LEFT;
       tooltip.style.top = `${Math.max(0, top)}px`;

@@ -378,6 +378,14 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Set up contexts for custom elements that expect certain properties
    */
   _setupCustomElementContexts() {
+    console.log("Setting up custom element contexts");
+    
+    // Set the _sheet property on the main form element so custom elements can find it
+    if (this.element) {
+      this.element._sheet = this;
+      console.log("Set _sheet property on element:", this.element);
+    }
+    
     // Find and set up item-list-controls elements
     this.element.querySelectorAll('item-list-controls').forEach(element => {
       // Provide the form context that the element expects
@@ -395,6 +403,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
 
     // Find and set up inventory elements
     this.element.querySelectorAll('htbah-inventory').forEach(element => {
+      console.log("Setting up inventory element:", element);
+      
       // Provide any expected properties
       if (!element._filters) {
         element._filters = {};
@@ -405,6 +415,9 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
         get: () => this,
         configurable: true
       });
+      
+      // Also set _sheet property directly
+      element._sheet = this;
     });
 
     // Find and set up effects elements
