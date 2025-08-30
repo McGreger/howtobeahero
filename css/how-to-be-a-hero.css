@@ -1741,22 +1741,26 @@ item-list-controls search .filter-control:hover:not(.disabled),
 #context-menu.how-to-be-a-hero {
   position: fixed;
   z-index: var(--z-index-tooltip);
-  background: var(--htbah-background-card);
   border-radius: 3px;
   box-shadow: 0 3px 6px var(--htbah-shadow-45);
   font-family: var(--htbah-font-roboto);
   font-size: var(--font-size-13);
-  border: none;
+  font-weight: bold;
   color: var(--color-text-dark-primary);
   width: max-content;
   min-width: 145px;
 }
 #context-menu.how-to-be-a-hero .context-item {
-  padding: 0 0.75rem;
+  padding: 8px 0.75rem;
   cursor: pointer;
   display: flex;
   align-items: baseline;
   gap: 5px;
+  border-bottom: 1px solid var(--color-border-light-1);
+}
+
+#context-menu.how-to-be-a-hero .context-item:last-child {
+  border-bottom: none;
 }
 #context-menu.how-to-be-a-hero .context-item:hover {
   color: var(--color-text-dark-primary);
@@ -2895,6 +2899,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul figure {
   position: relative;
   margin: 0;
+  flex: 0 0 30%;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul img {
   width: 32px;
@@ -2905,7 +2910,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
   inset: auto auto 2px 2px;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked {
-  flex: 1;
+  flex: 0 0 50%;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked .title {
   font-size: var(--font-size-13);
@@ -2914,11 +2919,16 @@ item-list-controls search .filter-control:hover:not(.disabled),
   cursor: pointer;
   color: var(--color-text-dark-primary);
 }
+
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked:not(.rollable) {
+  cursor: default;
+  color: var(--color-text-dark-primary);
+}
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked.rollable:hover .title {
   text-shadow: 0 0 8px var(--color-shadow-primary);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info {
-  flex: 0 0 60px;
+  flex: 0 0 20%;
   display: flex;
   flex-direction: column;
 }

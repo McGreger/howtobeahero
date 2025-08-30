@@ -886,6 +886,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     const favoritePromises = this.document.system.favorites.map(async f => {
       const { id, type, sort } = f;
       const favorite = await fromUuid(id);
+      console.log(`Processing favorite: id=${id}, type=${type}, favorite=${favorite}`);
       if (!favorite && ((type === "item") || (type === "effect"))) return null;
 
       let data;
@@ -911,11 +912,18 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       }
 
       const rollableClass = [];
-      if (this.isEditable && (type !== "slots")) rollableClass.push("rollable");
+      // Abilities are always rollable when editable, items only if they have rollable property set to true
+      if (this.isEditable && (type === "ability" || (type === "item" && favorite.system?.rollable === true) || (type === "tool"))) {
+        rollableClass.push("rollable");
+      }
+      console.log(`Favorite ${title} (type: ${type}): rollableClass = [${rollableClass.join(", ")}], isEditable = ${this.isEditable}, favorite.system?.rollable = ${favorite?.system?.rollable}`);
       if (type === "ability") rollableClass.push("ability-name");
       else if (type === "tool") rollableClass.push("tool-name");
 
       if (suppressed) subtitle = game.i18n.localize("DND5E.Suppressed");
+      
+      const finalRollableClass = rollableClass.filterJoin(" ");
+      console.log(`Final rollableClass for ${title}: "${finalRollableClass}" (original array: [${rollableClass.join(", ")}])`);
       
       return {
         id, img, type, title, value, uses, sort, save, modifier, passive, range, reference, suppressed, level,
@@ -926,7 +934,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
         key: (type === "ability") || (type === "tool") ? id : null,
         toggle: toggle === undefined ? null : { applicable: true, value: toggle },
         quantity: quantity > 1 ? quantity : "",
-        rollableClass: rollableClass.filterJoin(" "),
+        rollableClass: finalRollableClass,
         css: css.filterJoin(" "),
         bareName: type === "slots",
         subtitle: Array.isArray(subtitle) ? subtitle.filterJoin(" &bull; ") : subtitle
@@ -1456,7 +1464,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     // For favorites, store the reference
     event.preventDefault();
     const itemId = data.uuid.split('.').pop();
-    return this._onDropFavorite(event, { type: "item", id: itemId });
+    const item = this.document.items.get(itemId);
+    return this._onDropFavorite(event, { type: item?.type || "item", id: itemId });
   }
 
   /**
@@ -1472,8 +1481,9 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     }
 
     // Add as favorite using the item ID
+    const item = this.document.items.get(favorite.id);
     return this.document.system.addFavorite({
-      type: "item",
+      type: item?.type || "item",
       id: `Actor.${this.document.id}.Item.${favorite.id}`
     });
   }

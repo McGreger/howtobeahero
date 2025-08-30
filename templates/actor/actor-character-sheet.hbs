@@ -218,8 +218,8 @@
               </figure>
 
               {{!-- Name --}}
-              <div class="name-stacked {{ rollableClass }}"
-                   role="button" data-action="useFavorite">
+              <div class="name-stacked {{ rollableClass }}"{{#if rollableClass}}
+                   role="button" data-action="useFavorite"{{/if}}>
                 <span class="title">{{ title }}</span>
                 {{#if subtitle}}
                 <span class="subtitle">{{{ subtitle }}}</span>

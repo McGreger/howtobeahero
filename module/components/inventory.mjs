@@ -268,25 +268,25 @@ export default class InventoryElement extends HTMLElement {
         name: "HTBAH.ContextMenuActionEdit",
         icon: "<i class='fas fa-edit fa-fw'></i>",
         condition: () => item.isOwner,
-        callback: li => this._onAction(li[0], "edit")
+        callback: li => this._onAction(li, "edit")
       },
       {
         name: "HTBAH.ItemView",
         icon: '<i class="fas fa-eye"></i>',
         condition: () => !item.isOwner,
-        callback: li => this._onAction(li[0], "view")
+        callback: li => this._onAction(li, "view")
       },
       {
         name: "HTBAH.ContextMenuActionDuplicate",
         icon: "<i class='fas fa-copy fa-fw'></i>",
         condition: () => !item.system.metadata?.singleton && !["class", "subclass"].includes(item.type) && item.isOwner,
-        callback: li => this._onAction(li[0], "duplicate")
+        callback: li => this._onAction(li, "duplicate")
       },
       {
         name: "HTBAH.ContextMenuActionDelete",
         icon: "<i class='fas fa-trash fa-fw'></i>",
         condition: () => item.isOwner,
-        callback: li => this._onAction(li[0], "delete")
+        callback: li => this._onAction(li, "delete")
       }
     ];
 
@@ -297,7 +297,7 @@ export default class InventoryElement extends HTMLElement {
       name: item.system.equipped ? "HTBAH.ContextMenuActionUnequip" : "HTBAH.ContextMenuActionEquip",
       icon: "<i class='fas fa-shield-alt fa-fw'></i>",
       condition: () => item.isOwner,
-      callback: li => this._onAction(li[0], "equip"),
+      callback: li => this._onAction(li, "equip"),
       group: "state"
     });
     
@@ -309,7 +309,7 @@ export default class InventoryElement extends HTMLElement {
         name: isFavorited ? "HTBAH.FavoriteRemove" : "HTBAH.Favorite",
         icon: "<i class='fas fa-star fa-fw'></i>",
         condition: () => item.isOwner,
-        callback: li => this._onAction(li[0], isFavorited ? "unfavorite" : "favorite"),
+        callback: li => this._onAction(li, isFavorited ? "unfavorite" : "favorite"),
         group: "state"
       });
     }
@@ -416,7 +416,7 @@ export default class InventoryElement extends HTMLElement {
         return this._onExpand(target, item);
       case "favorite":
         return this.actor.system.addFavorite({
-          type: "item",
+          type: item.type,
           id: `Actor.${this.actor.id}.Item.${item.id}` // Use the full UUID
         });
       case "unfavorite":

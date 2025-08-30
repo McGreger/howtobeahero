@@ -11,22 +11,42 @@ export default class ContextMenuHTBAH extends foundry.applications.ux.ContextMen
   }
 
   /** @override */
-  _setPosition([html], [target]) {
+  render(target, event) {
+    // Store the event for later use in positioning
+    this.event = event;
+    return super.render(target, event);
+  }
+
+  /** @override */
+  _setPosition(html, target) {
     console.log("ContextMenuHTBAH _setPosition called");
     document.body.appendChild(html);
     const { clientWidth, clientHeight } = document.documentElement;
     const { width, height } = html.getBoundingClientRect();
 
-    // TODO: Improve core ContextMenu class to provide this event rather than using the global event.
-    const { clientX, clientY } = window.event;
+    // Get mouse coordinates from the stored event or fallback to target position
+    let clientX = 0, clientY = 0;
+    if (this.event && typeof this.event.clientX === 'number') {
+      clientX = this.event.clientX;
+      clientY = this.event.clientY;
+    } else if (window.event && typeof window.event.clientX === 'number') {
+      clientX = window.event.clientX;
+      clientY = window.event.clientY;
+    } else {
+      // Fallback to target element position
+      const rect = target.getBoundingClientRect();
+      clientX = rect.left + rect.width / 2;
+      clientY = rect.top + rect.height / 2;
+    }
+
     const left = Math.min(clientX, clientWidth - width);
-    this._expandUp = clientY + height > clientHeight;
+    const expandUp = clientY + height > clientHeight;
     html.classList.add("how-to-be-a-hero");
-    html.classList.toggle("expand-up", this._expandUp);
-    html.classList.toggle("expand-down", !this._expandUp);
+    html.classList.toggle("expand-up", expandUp);
+    html.classList.toggle("expand-down", !expandUp);
     html.style.visibility = "";
     html.style.left = `${left}px`;
-    if ( this._expandUp ) html.style.bottom = `${clientHeight - clientY}px`;
+    if ( expandUp ) html.style.bottom = `${clientHeight - clientY}px`;
     else html.style.top = `${clientY}px`;
     target.classList.add("context");
     const theme = target.closest("[data-theme]")?.dataset.theme ?? "";
