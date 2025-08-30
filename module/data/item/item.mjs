@@ -12,7 +12,7 @@ export default class HowToBeAHeroItem extends HowToBeAHeroPhysical {
 
   async richTooltip() {
     const baseTooltip = await super.richTooltip();
-    const itemContent = await renderTemplate("systems/how-to-be-a-hero/templates/item/parts/item-tooltip.hbs", {
+    const itemContent = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/item/parts/item-tooltip.hbs", {
       type: this.type,
       formula: this.formula,
       quantity: this.quantity

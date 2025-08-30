@@ -403,7 +403,7 @@ getRollData() {
     const name = data.name || game.i18n.format("DOCUMENT.New", { type: label });
     let type = data.type || CONFIG[this.documentName]?.defaultType;
     if ( !types.includes(type) ) type = types[0];
-    const content = await renderTemplate("systems/how-to-be-a-hero/templates/apps/document-create.hbs", {
+    const content = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/apps/document-create.hbs", {
       folders, name, type,
       folder: data.folder,
       hasFolders: folders.length > 0,

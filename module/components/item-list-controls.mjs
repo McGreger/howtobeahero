@@ -5,7 +5,11 @@ export default class ItemListControlsElement extends HTMLElement {
   /** @override */
   connectedCallback() {
     this.#app = ui.windows[this.closest(".app")?.dataset.appid];
-    this.#list = this.#app.form.querySelector(`[data-item-list="${this.getAttribute("for")}"]`);
+    const form = this.closest(".app");
+    if (!this.#app || !form) {
+      return;
+    }
+    this.#list = form.querySelector(`[data-item-list="${this.getAttribute("for")}"]`);
     this.#state = this.#initState();
     this.#tab = this.closest(".tab")?.dataset.tab;
     this.#buildHTML();
