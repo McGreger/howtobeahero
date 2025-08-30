@@ -508,44 +508,38 @@ export class HowToBeAHeroDragDropHandler {
      * @private
      */
     async _showConversionConfirmation(itemName, sourceType, targetType, dataLossWarnings) {
-      return new Promise((resolve) => {
-        let content = `<div style="color: black;">
-          <p>Convert <strong>"${itemName}"</strong> from <strong>${sourceType}</strong> to <strong>${targetType}</strong>?</p>`;
-        
-        if (dataLossWarnings.length > 0) {
-          content += `<div style="margin: 1rem 0;">
-            <p><strong>Warning: The following data will be lost:</strong></p>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-              ${dataLossWarnings.map(warning => `<li>${warning}</li>`).join('')}
-            </ul>
-          </div>`;
-        }
-
-        content += `<p>This action cannot be undone.</p>
+      let content = `<div style="color: black;">
+        <p>Convert <strong>"${itemName}"</strong> from <strong>${sourceType}</strong> to <strong>${targetType}</strong>?</p>`;
+      
+      if (dataLossWarnings.length > 0) {
+        content += `<div style="margin: 1rem 0;">
+          <p><strong>Warning: The following data will be lost:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            ${dataLossWarnings.map(warning => `<li>${warning}</li>`).join('')}
+          </ul>
         </div>`;
+      }
 
-        const dialog = new Dialog({
-          title: "Confirm Item Type Conversion",
-          content: content,
-          buttons: {
-            yes: {
-              icon: '<i class="fas fa-check"></i>',
-              label: "Convert",
-              callback: () => resolve(true)
-            },
-            no: {
-              icon: '<i class="fas fa-times"></i>',
-              label: "Cancel",
-              callback: () => resolve(false)
-            }
-          },
-          default: "no",
-          close: () => resolve(false)
-        }, {
-          classes: ["how-to-be-a-hero", "dialog"]
-        });
+      content += `<p>This action cannot be undone.</p>
+      </div>`;
 
-        dialog.render(true);
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { 
+          title: "Confirm Item Type Conversion"
+        },
+        content: content,
+        yes: { 
+          icon: "fas fa-check",
+          label: "Convert"
+        },
+        no: { 
+          icon: "fas fa-times",
+          label: "Cancel"
+        },
+        defaultButton: "no",
+        classes: ["how-to-be-a-hero", "dialog"]
       });
+
+      return confirmed;
     }
   }
