@@ -16,13 +16,8 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
     window: {
       title: "HTBAH.RollDialog.Title",
       resizable: false,
-      controls: [
-        {
-          icon: "fas fa-times",
-          label: "Close",
-          action: "close"
-        }
-      ]
+      minimizable: false,
+      controls: []
     },
     actions: {
       roll: HowToBeAHeroRollDialog.prototype._onRoll,
