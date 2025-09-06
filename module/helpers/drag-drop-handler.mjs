@@ -19,7 +19,7 @@ export class HowToBeAHeroDragDropHandler {
       if (headerSlot) {
         const slotType = headerSlot.dataset.slot;
         // Only treat as header slot if it has a valid slot type
-        if (slotType && (slotType === "ability" || slotType === "weapon")) {
+        if (slotType && (slotType === "ability" || slotType === "weapon" || slotType === "parry")) {
           return { action: "headerSlot", type: slotType };
         }
       }
@@ -206,6 +206,11 @@ export class HowToBeAHeroDragDropHandler {
           
           if (actionConfig.type === "weapon" && droppedItem.type !== "weapon") {
             ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyWeaponsAllowed"));
+            return false;
+          }
+
+          if (actionConfig.type === "parry" && droppedItem.type !== "ability") {
+            ui.notifications.warn(game.i18n.localize("HTBAH.WarningOnlyAbilitiesAllowed"));
             return false;
           }
     
