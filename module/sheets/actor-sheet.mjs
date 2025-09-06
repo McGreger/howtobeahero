@@ -216,7 +216,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       rollInitiative: this.prototype._onRollInitiative,
       rollHeaderAbility: this.prototype._onRollHeaderAbility,
       rollHeaderWeapon: this.prototype._onRollHeaderWeapon,
-      toggleEditHP: this.prototype._onToggleEditHP
+      toggleEditHP: this.prototype._onToggleEditHP,
+      toggleEditMana: this.prototype._onToggleEditMana
     }
   };
 
@@ -280,6 +281,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     await Promise.all([
       this._preparePortraitData(context),
       this._prepareHealthData(context),
+      this._prepareManaData(context),
       this._prepareHeaderItems().then(items => context.headerItems = items),
       this._prepareItems(context),
       this._prepareEffects(context)
@@ -709,6 +711,14 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
   _prepareHealthData(context) {
     const health = this.document.system.attributes.health;
     context.healthPercentage = health.max ? (health.value / health.max) * 100 : 0;
+  }
+
+  /**
+   * Prepare mana data
+   */
+  _prepareManaData(context) {
+    const mana = this.document.system.attributes.mana;
+    context.manaPercentage = mana.max ? (mana.value / mana.max) * 100 : 0;
   }
 
   /**
@@ -1190,6 +1200,45 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
             parseInt(input.value) || 0,
             0,
             this.document.system.attributes.health.max
+          )
+        });
+      }
+    }
+  }
+
+  /**
+   * Handle Mana editing toggle
+   */
+  async _onToggleEditMana(event, target) {
+    const isEditMode = this._mode === this.constructor.MODES.EDIT;
+    if (isEditMode) return;
+    
+    const hasPermission = this.document.isOwner || game.user.isGM;
+    if (!hasPermission) return;
+
+    const container = target.closest(".mana-points");
+    const input = container.querySelector("input[name='system.attributes.mana.value']");
+    const value = container.querySelector(".value");
+
+    const shouldEdit = target.dataset.edit === "true";
+    
+    if (shouldEdit) {
+      value.style.display = "none";
+      input.style.display = "inline";
+      input.focus();
+      input.select();
+      target.dataset.edit = "false";
+    } else {
+      value.style.display = "inline";
+      input.style.display = "none";
+      target.dataset.edit = "true";
+
+      if (input.value !== value.textContent) {
+        await this.document.update({
+          "system.attributes.mana.value": Math.clamped(
+            parseInt(input.value) || 0,
+            0,
+            this.document.system.attributes.mana.max
           )
         });
       }
