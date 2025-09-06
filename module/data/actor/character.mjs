@@ -31,7 +31,7 @@ export default class HowToBeAHeroCharacter extends HowToBeAHeroActorBase {
   // Override richTooltip if you need character-specific tooltip content
   async richTooltip() {
     const baseTooltip = await super.richTooltip();
-    const characterContent = await renderTemplate("systems/how-to-be-a-hero/templates/actor/parts/character-tooltip.hbs", {
+    const characterContent = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/actor/parts/character-tooltip.hbs", {
       name: this.parent.name
     });
 

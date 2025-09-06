@@ -7,9 +7,82 @@ import ContextMenuHTBAH from "../helpers/context-menu.mjs";
  */
 export default class InventoryElement extends HTMLElement {
   connectedCallback() {
-    this.#app = ui.windows[this.closest(".app")?.dataset.appid];
+    console.log("InventoryElement connectedCallback called");
+    
+    // Try different ways to find the app element for AppV2 compatibility
+    let appElement = this.closest(".app") || 
+                     this.closest(".how-to-be-a-hero") || 
+                     this.closest('[data-appid]') ||
+                     this.closest('form')?.closest('.window-app');
+    
+    console.log("App element found:", appElement);
+    console.log("App element dataset:", appElement?.dataset);
+    
+    // Try to get the app reference in different ways
+    let app = null;
+    if (appElement?.dataset?.appid) {
+      app = ui.windows[appElement.dataset.appid];
+      console.log("Found app via appid:", app);
+    }
+    
+    // If that fails, try to get it from the _sheet property set by the actor sheet
+    if (!app && appElement?._sheet) {
+      app = appElement._sheet;
+      console.log("Found app via _sheet property:", app);
+    }
+    
+    // If that fails, try to find it via the closest how-to-be-a-hero element
+    if (!app) {
+      const sheetElement = this.closest('.how-to-be-a-hero');
+      if (sheetElement?._sheet) {
+        app = sheetElement._sheet;
+        console.log("Found app via how-to-be-a-hero _sheet:", app);
+      }
+    }
+    
+    // If still no app, try to use the sheet property that should be provided by AppV2 setup
+    if (!app && this.sheet) {
+      app = this.sheet;
+      console.log("Found app via this.sheet property:", app);
+    }
+    
+    // Last resort: if we still don't have an app, try again after a delay
+    if (!app) {
+      console.warn("InventoryElement: No app found initially, retrying after delay...");
+      // Try again after the sheet has finished setting up
+      setTimeout(() => {
+        console.log("Retrying app detection...");
+        let retryApp = null;
+        
+        // Try all the same methods again
+        const retryAppElement = this.closest(".how-to-be-a-hero");
+        if (retryAppElement?._sheet) {
+          retryApp = retryAppElement._sheet;
+          console.log("Found app on retry via _sheet:", retryApp);
+        } else if (this.sheet) {
+          retryApp = this.sheet;
+          console.log("Found app on retry via this.sheet:", retryApp);
+        }
+        
+        if (retryApp) {
+          this.#app = retryApp;
+          console.log("Successfully found app on retry:", this.#app);
+          // Re-setup context menu now that we have the app
+          this.setupContextMenu();
+        } else {
+          console.warn("Still no app found on retry");
+        }
+      }, 100);
+    }
+    
+    this.#app = app;
+    console.log("Set app to:", this.#app);
 
     this._initializeFilterLists();
+    
+    console.log("canUse:", this.canUse);
+    console.log("actor:", this.actor);
+    console.log("document:", this.document);
 
     if ( !this.canUse ) {
       for ( const element of this.querySelectorAll('[data-action="use"]') ) {
@@ -47,8 +120,20 @@ export default class InventoryElement extends HTMLElement {
       });
     }
 
-    const MenuCls = ContextMenuHTBAH;
-    new MenuCls(this, "[data-item-id]", [], {onOpen: this._onOpenContextMenu.bind(this)});
+    this.setupContextMenu();
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Set up the context menu for items.
+   */
+  setupContextMenu() {
+    console.log("Setting up context menu for inventory");
+    new ContextMenuHTBAH(this, "[data-item-id]", [], {
+      onOpen: this._onOpenContextMenu.bind(this),
+      jQuery: false
+    });
   }
 
   /* -------------------------------------------- */
@@ -59,7 +144,7 @@ export default class InventoryElement extends HTMLElement {
    */
   _initializeFilterLists() {
     const filterLists = this.querySelectorAll(".filter-list");
-    if ( !this._app._filters || !filterLists.length ) return;
+    if ( !this._app || !this._app._filters || !filterLists.length ) return;
 
     // Activate the set of filters which are currently applied
     for ( const list of filterLists ) {
@@ -137,6 +222,7 @@ export default class InventoryElement extends HTMLElement {
    * @type {Actor|null}
    */
   get actor() {
+    if ( !this.document ) return null;
     if ( this.document instanceof Actor ) return this.document;
     return this.document.actor ?? null;
   }
@@ -148,7 +234,7 @@ export default class InventoryElement extends HTMLElement {
    * @type {Actor|Item}
    */
   get document() {
-    return this._app.document;
+    return this._app?.document || null;
   }
 
   /* -------------------------------------------- */
@@ -182,25 +268,25 @@ export default class InventoryElement extends HTMLElement {
         name: "HTBAH.ContextMenuActionEdit",
         icon: "<i class='fas fa-edit fa-fw'></i>",
         condition: () => item.isOwner,
-        callback: li => this._onAction(li[0], "edit")
+        callback: li => this._onAction(li, "edit")
       },
       {
         name: "HTBAH.ItemView",
         icon: '<i class="fas fa-eye"></i>',
         condition: () => !item.isOwner,
-        callback: li => this._onAction(li[0], "view")
+        callback: li => this._onAction(li, "view")
       },
       {
         name: "HTBAH.ContextMenuActionDuplicate",
         icon: "<i class='fas fa-copy fa-fw'></i>",
         condition: () => !item.system.metadata?.singleton && !["class", "subclass"].includes(item.type) && item.isOwner,
-        callback: li => this._onAction(li[0], "duplicate")
+        callback: li => this._onAction(li, "duplicate")
       },
       {
         name: "HTBAH.ContextMenuActionDelete",
         icon: "<i class='fas fa-trash fa-fw'></i>",
         condition: () => item.isOwner,
-        callback: li => this._onAction(li[0], "delete")
+        callback: li => this._onAction(li, "delete")
       }
     ];
 
@@ -211,7 +297,7 @@ export default class InventoryElement extends HTMLElement {
       name: item.system.equipped ? "HTBAH.ContextMenuActionUnequip" : "HTBAH.ContextMenuActionEquip",
       icon: "<i class='fas fa-shield-alt fa-fw'></i>",
       condition: () => item.isOwner,
-      callback: li => this._onAction(li[0], "equip"),
+      callback: li => this._onAction(li, "equip"),
       group: "state"
     });
     
@@ -223,7 +309,7 @@ export default class InventoryElement extends HTMLElement {
         name: isFavorited ? "HTBAH.FavoriteRemove" : "HTBAH.Favorite",
         icon: "<i class='fas fa-star fa-fw'></i>",
         condition: () => item.isOwner,
-        callback: li => this._onAction(li[0], isFavorited ? "unfavorite" : "favorite"),
+        callback: li => this._onAction(li, isFavorited ? "unfavorite" : "favorite"),
         group: "state"
       });
     }
@@ -330,7 +416,7 @@ export default class InventoryElement extends HTMLElement {
         return this._onExpand(target, item);
       case "favorite":
         return this.actor.system.addFavorite({
-          type: "item",
+          type: item.type,
           id: `Actor.${this.actor.id}.Item.${item.id}` // Use the full UUID
         });
       case "unfavorite":
@@ -377,7 +463,7 @@ export default class InventoryElement extends HTMLElement {
     } else {
       const enrichment = {secrets: this.document.isOwner};
       const chatData = item.system.getCardData ? item.system.getCardData(enrichment) : item.getChatData(enrichment);
-      const summary = $(await renderTemplate("systems/how-to-be-a-hero/templates/items/parts/item-summary.hbs", await chatData));
+      const summary = $(await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/items/parts/item-summary.hbs", await chatData));
       $(li).append(summary.hide());
       summary.slideDown(200);
       this._app._expanded.add(item.id);

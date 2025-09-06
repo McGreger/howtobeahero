@@ -16,7 +16,7 @@ export default class HowToBeAHeroArmor extends HowToBeAHeroPhysical {
 
   async richTooltip() {
     const baseTooltip = await super.richTooltip();
-    const armorContent = await renderTemplate("systems/how-to-be-a-hero/templates/item/parts/armor-tooltip.hbs", {
+    const armorContent = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/item/parts/armor-tooltip.hbs", {
       armor: this.armor,
       quantity: this.quantity
     });

@@ -27,6 +27,7 @@
   --htbah-color-crimson: #44191A;
   --htbah-color-groove: #eeede0;
   --htbah-color-gold: #9f9275;
+  --htbah-color-gold-rgb: 159, 146, 117;
   --htbah-color-red: #ed1c24;
   --htbah-color-blue: cornflowerblue;
   --htbah-color-green: #205b15;
@@ -97,45 +98,45 @@
 /* ----------------------------------------- */
 /*  Flexbox                                  */
 /* ----------------------------------------- */
-.flexrow {
+.how-to-be-a-hero .flexrow {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
-.flexrow > * {
+.how-to-be-a-hero .flexrow > * {
   flex: 1;
 }
-.flexrow .flex1 {
+.how-to-be-a-hero .flexrow .flex1 {
   flex: 1;
 }
-.flexrow .flex2 {
+.how-to-be-a-hero .flexrow .flex2 {
   flex: 2;
 }
-.flexrow .flex3 {
+.how-to-be-a-hero .flexrow .flex3 {
   flex: 3;
 }
-.flexrow .flex4 {
+.how-to-be-a-hero .flexrow .flex4 {
   flex: 4;
 }
-.flexcol {
+.how-to-be-a-hero .flexcol {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
 }
-.flexcol > * {
+.how-to-be-a-hero .flexcol > * {
   flex: 1;
 }
-.flexcol .flex1 {
+.how-to-be-a-hero .flexcol .flex1 {
   flex: 1;
 }
-.flexcol .flex2 {
+.how-to-be-a-hero .flexcol .flex2 {
   flex: 2;
 }
-.flexcol .flex3 {
+.how-to-be-a-hero .flexcol .flex3 {
   flex: 3;
 }
-.flexcol .flex4 {
+.how-to-be-a-hero .flexcol .flex4 {
   flex: 4;
 }
 #context-menu [data-group-id]:has(li) {
@@ -152,7 +153,7 @@
 /* ---------------------------------- */
 /*  Slide Toggles                     */
 /* ---------------------------------- */
-slide-toggle {
+.how-to-be-a-hero slide-toggle {
   --slide-toggle-height: 20px;
   --slide-toggle-width: 36px;
   --slide-toggle-padding: 3px;
@@ -168,7 +169,7 @@ slide-toggle {
   cursor: pointer;
   /* Checked state */
 }
-slide-toggle .slide-toggle-track {
+.how-to-be-a-hero slide-toggle .slide-toggle-track {
   width: 100%;
   height: 100%;
   background: var(--slide-toggle-track-color-unchecked);
@@ -179,7 +180,7 @@ slide-toggle .slide-toggle-track {
   justify-content: start;
   padding: var(--slide-toggle-padding);
 }
-slide-toggle .slide-toggle-thumb {
+.how-to-be-a-hero slide-toggle .slide-toggle-thumb {
   width: var(--slide-toggle-thumb-width);
   height: var(--slide-toggle-thumb-height);
   border-radius: 100%;
@@ -188,22 +189,22 @@ slide-toggle .slide-toggle-thumb {
   text-align: center;
   transition: margin-left var(--slide-toggle-transition-time) ease;
 }
-slide-toggle[checked] .slide-toggle-track {
+.how-to-be-a-hero slide-toggle[checked] .slide-toggle-track {
   background: var(--slide-toggle-track-color-checked);
 }
-slide-toggle[checked] .slide-toggle-thumb {
+.how-to-be-a-hero slide-toggle[checked] .slide-toggle-thumb {
   margin-left: calc(100% - var(--slide-toggle-thumb-width));
 }
 /* ---------------------------------- */
 /*  Icon                              */
 /* ---------------------------------- */
-htbah-icon.fa-fw {
+.how-to-be-a-hero htbah-icon.fa-fw {
   --icon-width: 1.25em;
 }
 /* ---------------------------------- */
 /*  Item List Controls                */
 /* ---------------------------------- */
-item-list-controls search {
+.how-to-be-a-hero item-list-controls search {
   display: flex;
   align-items: center;
   border-radius: 4px;
@@ -213,7 +214,7 @@ item-list-controls search {
   padding-right: 0.25rem;
   position: relative;
 }
-item-list-controls search > input[type="text"] {
+.how-to-be-a-hero item-list-controls search > input[type="text"] {
   flex: 1;
   background: none;
   border: none;
@@ -222,18 +223,18 @@ item-list-controls search > input[type="text"] {
   height: unset;
 }
 item-list-controls search > input[type="text"]:hover,
-item-list-controls search > input[type="text"]:focus-visible {
+.how-to-be-a-hero item-list-controls search > input[type="text"]:focus-visible {
   box-shadow: 0 0 12px var(--htbah-color-gold);
 }
-item-list-controls search::before {
+.how-to-be-a-hero item-list-controls search::before {
   content: "\f002";
   font-family: var(--font-awesome);
   font-weight: bold;
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
   position: absolute;
   left: 0.75rem;
 }
-item-list-controls search .filter-list {
+.how-to-be-a-hero item-list-controls search .filter-list {
   display: none;
   position: absolute;
   flex-direction: column;
@@ -244,22 +245,22 @@ item-list-controls search .filter-list {
   min-width: 145px;
   z-index: 1;
 }
-item-list-controls search .filter-list > li {
+.how-to-be-a-hero item-list-controls search .filter-list > li {
   padding: 0 0.75rem;
 }
-item-list-controls search .filter-list > li:hover {
+.how-to-be-a-hero item-list-controls search .filter-list > li:hover {
   background: var(--htbah-background-parchment);
 }
-item-list-controls search .filter-list > li:first-child {
+.how-to-be-a-hero item-list-controls search .filter-list > li:first-child {
   border-radius: 3px 3px 0 0;
 }
-item-list-controls search .filter-list > li:last-child {
+.how-to-be-a-hero item-list-controls search .filter-list > li:last-child {
   border-radius: 0 0 3px 3px;
 }
-item-list-controls search .filter-list > li:last-child .filter-item {
+.how-to-be-a-hero item-list-controls search .filter-list > li:last-child .filter-item {
   border: none;
 }
-item-list-controls search .filter-list .filter-item {
+.how-to-be-a-hero item-list-controls search .filter-list .filter-item {
   font-weight: normal;
   padding: 0.5rem 1.75rem 0.5rem 0;
   justify-content: start;
@@ -275,63 +276,63 @@ item-list-controls search .filter-list .filter-item {
   text-transform: unset;
 }
 item-list-controls search .filter-list .filter-item:hover,
-item-list-controls search .filter-list .filter-item:focus {
+.how-to-be-a-hero item-list-controls search .filter-list .filter-item:focus {
   box-shadow: none;
 }
-item-list-controls search .filter-list .filter-item.active {
+.how-to-be-a-hero item-list-controls search .filter-list .filter-item.active {
   font-weight: bold;
   position: relative;
 }
-item-list-controls search .filter-list .filter-item.active::after {
+.how-to-be-a-hero item-list-controls search .filter-list .filter-item.active::after {
   content: "\f00c";
   font-family: var(--font-awesome);
   position: absolute;
   right: 0.5rem;
   color: var(--htbah-color-gold);
 }
-item-list-controls search .dropdown {
+.how-to-be-a-hero item-list-controls search .dropdown {
   position: relative;
 }
-item-list-controls search .dropdown:focus-within .filter {
+.how-to-be-a-hero item-list-controls search .dropdown:focus-within .filter {
   color: var(--htbah-color-gold);
   border-right: 1px solid var(--color-border-light-1);
 }
-item-list-controls search .dropdown:focus-within .filter-list {
+.how-to-be-a-hero item-list-controls search .dropdown:focus-within .filter-list {
   display: flex;
 }
-item-list-controls search .dropdown:has(.filter-item.active) .filter {
+.how-to-be-a-hero item-list-controls search .dropdown:has(.filter-item.active) .filter {
   color: var(--htbah-color-red);
 }
-item-list-controls search .controls {
+.how-to-be-a-hero item-list-controls search .controls {
   display: flex;
   padding: 0.5rem 0;
   align-self: stretch;
   align-items: stretch;
 }
-item-list-controls search .filter-control {
+.how-to-be-a-hero item-list-controls search .filter-control {
   height: 100%;
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
   font-size: var(--font-size-16);
   padding: 0 0.375rem;
 }
-item-list-controls search .filter-control.active {
+.how-to-be-a-hero item-list-controls search .filter-control.active {
   color: var(--color-text-dark-primary);
 }
-item-list-controls search .filter-control:hover:not(.disabled) {
+.how-to-be-a-hero item-list-controls search .filter-control:hover:not(.disabled) {
   text-shadow: 0 0 8px var(--color-shadow-primary);
 }
 item-list-controls search .filter-control:hover:not(.disabled),
-item-list-controls search .filter-control:focus {
+.how-to-be-a-hero item-list-controls search .filter-control:focus {
   box-shadow: none;
 }
-item-list-controls search .filter-control.filter {
+.how-to-be-a-hero item-list-controls search .filter-control.filter {
   border-right: 1px solid var(--color-border-light-1);
   padding-right: 0.625rem;
 }
-item-list-controls search .filter-control.filter:hover {
+.how-to-be-a-hero item-list-controls search .filter-control.filter:hover {
   border-right: 1px solid var(--color-border-light-1);
 }
-item-list-controls search .filter-control[data-action="sort"] {
+.how-to-be-a-hero item-list-controls search .filter-control[data-action="sort"] {
   padding-left: 0.625rem;
 }
 
@@ -364,8 +365,8 @@ item-list-controls search .filter-control[data-action="sort"] {
   /*  Pause                             */
   /* ---------------------------------- */
   --color-text-dark-primary: var(--htbah-color-blue-white);
-  --color-text-dark-secondary: var(--color-text-light-6);
-  --color-text-dark-5: var(--color-text-light-6);
+  --color-text-dark-secondary: var(--htbah-color-gold);
+  --color-text-dark-5: var(--htbah-color-gold);
   --htbah-border-dotted: 1px dotted var(--htbah-color-blue-gray-3);
   --color-border-light-1: var(--htbah-color-blue-gray-1);
   --color-border-light-tertiary: var(--color-border-light-2);
@@ -397,6 +398,55 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero.sheet.actor .window-header .header-button > i {
   margin: 0;
 }
+
+/* Ensure FontAwesome icons display properly on header controls */
+.how-to-be-a-hero .window-header .header-control[class*="fa-"]:before {
+  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", "FontAwesome" !important;
+  font-weight: 900 !important;
+  font-size: 12px !important;
+  display: inline-block !important;
+  width: auto !important;
+  text-align: center !important;
+}
+
+/* Force solid style for FontAwesome 6 */
+.how-to-be-a-hero .window-header .header-control.fa-solid:before {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+/* Unicode fallbacks for when FontAwesome completely fails to load */
+.how-to-be-a-hero .window-header .header-control.fa-times:before {
+  content: "✕" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-xmark:before {
+  content: "✕" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-cog:before,
+.how-to-be-a-hero .window-header .header-control.fa-gear:before {
+  content: "⚙" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-ellipsis-vertical:before {
+  content: "⋮" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-download:before {
+  content: "⬇" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.how-to-be-a-hero .window-header .header-control.fa-passport:before {
+  content: "📋︎" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
 .how-to-be-a-hero.sheet.actor .window-header .header-button,
 .how-to-be-a-hero.sheet.actor .window-header .document-id-link {
   margin-top: 0.25rem;
@@ -464,7 +514,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body .pills-group.empty > h3 > a {
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
 }
 
 /* ---------------------------------- */
@@ -674,6 +724,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero .tab.biography .bottom p {
   width: 100%;
   min-height: 140px;
+  max-height: 400px; /* Fixed height to prevent viewport interference */
   background: var(--htbah-color-blue-gray-2);
   border: 1px solid var(--htbah-color-blue-gray-3);
   border-radius: 4px;
@@ -684,6 +735,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-size: var(--font-size-13);
   line-height: 1.5;
   resize: vertical;
+  box-sizing: border-box;
 }
 
 /* Common textarea styles */
@@ -722,7 +774,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 .how-to-be-a-hero .items-section .item .item-name .tags {
-  --icon-fill: var(--color-text-light-6);
+  --icon-fill: var(--htbah-color-gold);
   opacity: unset;
 }
 
@@ -731,7 +783,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 .how-to-be-a-hero .items-section .item .item-controls .item-control[data-context-menu] {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 
 .how-to-be-a-hero .items-section .item .item-controls .item-control.active {
@@ -743,7 +795,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 .how-to-be-a-hero .editable .items-section .item-controls .item-control {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 
 /* High Contrast */
@@ -837,7 +889,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-size: var(--font-size-16);
 }
 .how-to-be-a-hero .card .info > div .sign {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .unlist {
   list-style: none;
@@ -878,7 +930,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero h3.icon > a {
   margin-left: auto;
   font-size: var(--font-size-12);
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero proficiency-cycle {
   width: 15px;
@@ -945,7 +997,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 .how-to-be-a-hero .pills .pill.green,
 .how-to-be-a-hero .pills .pill.maroon {
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .pills .pill.green {
   background-color: var(--htbah-color-green);
@@ -959,7 +1011,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   background-color: transparent;
 }
 .how-to-be-a-hero .pills .pill > .separator {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .gold-button {
   position: absolute; /* Changed to absolute */
@@ -1065,17 +1117,15 @@ item-list-controls search .filter-control[data-action="sort"] {
   position: relative;
   padding-inline-start: 0.5rem;
   padding-inline-end: 0.75rem;
-  color: var(--color-text-light-0);
+  color: var(--color-text-dark-primary);
 }
+
 .how-to-be-a-hero .meter .label[hidden] {
   display: none;
 }
-.how-to-be-a-hero .meter .label .value,
-.how-to-be-a-hero .meter .label .max {
-  text-shadow: 0 0 4px var(--htbah-color-gold);
-}
+
 .how-to-be-a-hero .meter .label .separator {
-  color: var(--htbah-color-gold);
+  color: var(--color-text-dark-primary);
 }
 .how-to-be-a-hero .meter .label .bonus {
   margin-inline-start: auto;
@@ -1195,7 +1245,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
 .how-to-be-a-hero .form-grid input::placeholder {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero .form-grid input[type="number"] {
   font-weight: bold;
@@ -1212,7 +1262,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero label.input-stack input {
   text-align: center;
 }
-.how-to-be-a-hero label.slide-toggle {
+.how-to-be-a-hero label.how-to-be-a-hero slide-toggle {
   display: block;
 }
 .how-to-be-a-hero label.slide-toggle > input {
@@ -1245,7 +1295,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero .pips .pip:not(:disabled):is(:hover, :focus) {
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
-.how-to-be-a-hero.sidebar-heading {
+.how-to-be-a-hero.sheet .sidebar-heading {
   margin: 6px 0;
   padding: 3px 8px;
   border-top: 1px solid var(--color-border-dark-4);
@@ -1254,7 +1304,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   display: flex;
   align-items: center;
 }
-.how-to-be-a-hero.sidebar-heading h2 {
+.how-to-be-a-hero.sheet .sidebar-heading h2 {
   font-size: var(--font-size-16);
   background: none;
   border: none;
@@ -1263,7 +1313,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-family: var(--font-primary);
   font-weight: normal;
 }
-.how-to-be-a-hero.sidebar-heading ul.links {
+.how-to-be-a-hero.sheet .sidebar-heading ul.links {
   flex: 1;
   list-style: none;
   margin: 0;
@@ -1301,7 +1351,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   opacity: 0.75;
 }
 .how-to-be-a-hero#pause figcaption {
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   font-size: var(--font-size-46);
   text-shadow: 2px 2px 2px var(--color-shadow-dark);
   font-family: var(--htbah-font-modesto);
@@ -1337,8 +1387,12 @@ item-list-controls search .filter-control[data-action="sort"] {
   position: relative;
 }
 
+/* ================================== */
+/*  DIALOG SYSTEM                     */
+/* ================================== */
+
 /* ---------------------------------- */
-/*  Dialogs                           */
+/*  Base Legacy Dialog Support       */
 /* ---------------------------------- */
 .how-to-be-a-hero.dialog {
   background: url("../ui/texture-gray1.webp") no-repeat top left, url("../ui/texture-gray2.webp") no-repeat bottom right, var(--htbah-color-parchment);
@@ -1360,9 +1414,14 @@ item-list-controls search .filter-control[data-action="sort"] {
   text-align: center;
   margin-bottom: 0.75rem;
 }
+/* Legacy dialog buttons - specifically scoped to avoid conflicts */
 .how-to-be-a-hero.dialog .dialog-buttons {
   padding: 0.5rem;
   gap: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  /* Note: This is scoped to .how-to-be-a-hero.dialog only - 
+     does not affect .how-to-be-a-hero.sheet.actor tabs */
 }
 .how-to-be-a-hero.dialog .dialog-buttons button {
   background: var(--htbah-color-card);
@@ -1436,27 +1495,272 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 /* ---------------------------------- */
+/* Dialog Classes                     */
+/* ---------------------------------- */
+
+.how-to-be-a-hero.roll-dialog:has(.htbah-roll-dialog) {
+  font-family: var(--htbah-font-roboto);
+  color: var(--htbah-color-dark);
+  background: var(--htbah-color-tan);
+  border: 1px solid var(--htbah-color-tan);
+  box-shadow: 0 4px 8px rgba(25, 24, 19, 0.3);
+  border-radius: 5px;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog {
+  color: var(--htbah-color-dark);
+}
+
+/* ============================================ */
+/* ROLL DIALOG                                  */
+/* ============================================ */
+
+.how-to-be-a-hero.roll-dialog .window-header {
+  background: var(--htbah-color-dark);
+  border-bottom: 1px solid var(--htbah-color-tan);
+  padding: 8px 12px;
+  border-radius: 5px 5px 0 0;
+}
+
+.how-to-be-a-hero.roll-dialog .window-header h4.window-title {
+  color: var(--htbah-color-dark);
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+  font-size: var(--font-size-16);
+  margin: 0;
+}
+
+.how-to-be-a-hero.roll-dialog .window-header .header-button.close {
+  color: var(--htbah-color-dark);
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-14);
+  padding: 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.how-to-be-a-hero.roll-dialog .window-header .header-button.close:hover {
+  color: var(--htbah-color-tan);
+  background: var(--htbah-color-faint);
+}
+
+.how-to-be-a-hero.roll-dialog .window-content {
+  padding: 16px;
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  border-top: 1px solid var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
+  border-radius: 0 0 5px 5px;
+  margin: 16px -16px -16px -16px; /* Negative margins to extend to dialog edges */
+}
+
+/* Base dialog button styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button {
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+  border: 1px solid var(--htbah-color-tan);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-13);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 2px 4px rgba(25, 24, 19, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Primary/default button styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.primary {
+  background: var(--htbah-color-tan);
+  color: var(--htbah-color-faint);
+  border-color: var(--htbah-color-tan);
+  font-weight: 600;
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.default:focus,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.primary:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.primary:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 3px 6px rgba(25, 24, 19, 0.4);
+}
+
+/* Secondary/cancel button styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.secondary,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel {
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.secondary:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.secondary:focus,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.cancel:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 2px 4px rgba(25, 24, 19, 0.3);
+}
+
+/* ---------------------------------- */
+/*  Roll Dialog Specific              */
+/* ---------------------------------- */
+
+/* Roll dialog content styling */
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog {
+  color: var(--htbah-color-dark);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog h2 {
+  color: var(--htbah-color-dark);
+  margin-bottom: 1em;
+  font-size: var(--font-size-18);
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog label {
+  color: var(--htbah-color-dark);
+  font-weight: 600;
+  font-size: var(--font-size-14);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .roll-info {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--htbah-color-beige);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 4px;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .form-group {
+  margin-bottom: 16px;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .form-group input {
+  width: 100px;
+  margin-left: 8px;
+  padding: 6px 10px;
+  color: var(--htbah-color-dark);
+  background: var(--htbah-color-faint);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 3px;
+  font-family: var(--htbah-font-roboto);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .form-group input:focus {
+  outline: none;
+  border-color: var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
+  box-shadow: 0 0 3px rgba(25, 24, 19, 0.3);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .hint {
+  display: block;
+  color: var(--htbah-color-tan);
+  font-size: var(--font-size-12);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .final-formula {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--htbah-color-beige);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--htbah-color-dark);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .result-formula {
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-15);
+  color: #c9302c;
+  font-weight: bold;
+  background: rgba(201, 48, 44, 0.1);
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(201, 48, 44, 0.2);
+}
+
+.how-to-be-a-hero.roll-dialog .htbah-roll-dialog .formula {
+  font-family: var(--font-family-monospace);
+  color: var(--htbah-color-dark);
+  font-weight: 600;
+  background: var(--htbah-color-faint);
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--htbah-color-tan);
+}
+
+/* Roll button specific styling */
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll {
+  background: var(--htbah-color-tan);
+  color: var(--htbah-color-faint);
+  border-color: var(--htbah-color-tan);
+  font-weight: 600;
+}
+
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll:hover,
+.how-to-be-a-hero.roll-dialog .dialog-buttons .dialog-button.roll:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 3px 6px rgba(25, 24, 19, 0.4);
+}
+
+/* ---------------------------------- */
 /*  Context Menus                     */
 /* ---------------------------------- */
 #context-menu.how-to-be-a-hero {
   position: fixed;
   z-index: var(--z-index-tooltip);
-  background: var(--htbah-background-card);
   border-radius: 3px;
   box-shadow: 0 3px 6px var(--htbah-shadow-45);
   font-family: var(--htbah-font-roboto);
   font-size: var(--font-size-13);
-  border: none;
+  font-weight: bold;
   color: var(--color-text-dark-primary);
   width: max-content;
   min-width: 145px;
 }
 #context-menu.how-to-be-a-hero .context-item {
-  padding: 0 0.75rem;
+  padding: 8px 0.75rem;
   cursor: pointer;
   display: flex;
   align-items: baseline;
   gap: 5px;
+  border-bottom: 1px solid var(--color-border-light-1);
+}
+
+#context-menu.how-to-be-a-hero .context-item:last-child {
+  border-bottom: none;
 }
 #context-menu.how-to-be-a-hero .context-item:hover {
   color: var(--color-text-dark-primary);
@@ -1584,12 +1888,12 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero.sheet.actor.character > header .window-title {
   visibility: hidden;
 }
-.how-to-be-a-hero.sheet.actor.character > header > slide-toggle {
+.how-to-be-a-hero.sheet.actor.character > header > .how-to-be-a-hero slide-toggle {
   --slide-toggle-track-color-checked: var(--htbah-color-gold);
   --slide-toggle-track-color-unchecked: var(--htbah-color-light-gray);
   flex: none;
 }
-.how-to-be-a-hero.sheet.actor.character > header > slide-toggle .slide-toggle-thumb {
+.how-to-be-a-hero.sheet.actor.character > header > .how-to-be-a-hero slide-toggle .slide-toggle-thumb {
   line-height: 12px;
 }
 .how-to-be-a-hero.sheet.actor.character > header > slide-toggle .slide-toggle-thumb::before {
@@ -1603,7 +1907,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .window-content {
-  margin-top: -30px;
+  margin-top: -35px;
 }
 .how-to-be-a-hero.sheet.actor.character.minimized {
   background: url("../ui/denim075.png");
@@ -1646,7 +1950,7 @@ item-list-controls search .filter-control[data-action="sort"] {
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-left .document-name {
-  color: var(--color-text-light-0);
+  color: var(--color-text-dark-primary);
   font-size: var(--font-size-46);
   text-shadow: 2px 2px 2px var(--color-shadow-dark);
   font-family: var(--htbah-font-modesto);
@@ -1670,6 +1974,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  padding-right: 2rem;
   margin-left: auto;  /* Push content to the right */
 }
 
@@ -1682,7 +1987,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   border: 1px solid var(--htbah-color-gold);
   box-shadow: 0 0 10px var(--color-shadow-dark);
 }
@@ -1775,7 +2080,7 @@ item-list-controls search .filter-control[data-action="sort"] {
   flex: 1;
   margin-right: 8px;
   font-size: var(--font-size-13);
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   text-shadow: 1px 1px 1px var(--color-shadow-dark);
   white-space: nowrap;
   overflow: hidden;
@@ -1826,6 +2131,22 @@ item-list-controls search .filter-control[data-action="sort"] {
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-stat-column .stat-content.dragover {
   background: rgba(var(--htbah-color-gold-rgb), 0.1);
   box-shadow: inset 0 0 8px var(--htbah-color-gold);
+}
+
+/* Skillset Category Drag Over State */
+.how-to-be-a-hero.sheet.actor.character .skillSet-category.dragover {
+  background: rgba(var(--htbah-color-gold-rgb), 0.1);
+  box-shadow: inset 0 0 8px var(--htbah-color-gold);
+  border-radius: 4px;
+}
+
+/* Inventory Section Drag Over State */
+.how-to-be-a-hero.sheet.actor.character .items-section.dragover {
+  background: rgba(var(--htbah-color-gold-rgb), 0.1);
+  box-shadow: inset 0 0 8px var(--htbah-color-gold);
+  border-radius: 4px;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
 }
 
 /* Input Styles */
@@ -1951,6 +2272,22 @@ item-list-controls search .filter-control[data-action="sort"] {
 /* ----------------------------------------- */
 /*  Navigation for Charactersheets           */
 /* ----------------------------------------- */
+
+/* Allow tabs to hang outside the window */
+.how-to-be-a-hero.sheet.actor.character {
+  overflow: visible;
+}
+
+.how-to-be-a-hero.sheet.actor.character .window-content {
+  overflow: visible;
+}
+
+/* Form container needs relative positioning for absolute nav tabs */
+.how-to-be-a-hero.sheet.actor.character form.interactable {
+  position: relative;
+  height: 100%; /* This should reference the character sheet's min-height */
+}
+
 .how-to-be-a-hero.sheet.actor.character nav.tabs {
   --tab-full-width: 44px;
   --tab-inactive-width: 34px;
@@ -1960,12 +2297,14 @@ item-list-controls search .filter-control[data-action="sort"] {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  z-index: -1;
+  z-index: 10;
 }
 
 .how-to-be-a-hero.sheet.actor.character nav.tabs > .item {
   width: var(--tab-full-width);
   height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   position: relative;
   display: flex;
   justify-content: end;
@@ -1979,11 +2318,16 @@ item-list-controls search .filter-control[data-action="sort"] {
   font-size: var(--font-size-14);
   margin-left: calc((var(--tab-full-width) - var(--tab-inactive-width))* -1);
   transition: all 250ms ease;
+  box-sizing: border-box;
+  line-height: 1;
 }
 
 .how-to-be-a-hero.sheet.actor.character nav.tabs > .item.active, .how-to-be-a-hero.sheet.actor.character nav.tabs > .item:hover {
   text-shadow: none;
   margin: 0;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   border-color: var(--htbah-color-gold);
   box-shadow: 0 0 6px var(--htbah-color-gold);
 }
@@ -2001,12 +2345,47 @@ item-list-controls search .filter-control[data-action="sort"] {
 .tabs .item {
   text-align: center;
 }
-a {
+
+/* Navigation tab icons */
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item htbah-icon {
+  --icon-size: 20px;
+  --icon-fill: currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Ensure SVG icons within htbah-icon elements are properly sized */
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item htbah-icon svg {
+  width: 20px;
+  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+}
+
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item.active htbah-icon {
+  --icon-fill: var(--htbah-color-gold);
+}
+
+.how-to-be-a-hero.sheet.actor.character nav.tabs > .item:hover htbah-icon {
+  --icon-fill: var(--htbah-color-gold);
+}
+
+/* IMPORTANT: Scope these selectors to prevent interference with FoundryVTT UI */
+.how-to-be-a-hero a {
   cursor: pointer;
 }
-* {
+/* Apply user-select: none only to sheet elements, not all elements */
+.how-to-be-a-hero.sheet * {
   box-sizing: border-box;
   user-select: none;
+}
+/* Allow box-sizing for all how-to-be-a-hero elements but keep user-select limited */
+.how-to-be-a-hero * {
+  box-sizing: border-box;
 }
 
 /* ----------------------------------------- */
@@ -2015,10 +2394,25 @@ a {
 
 .how-to-be-a-hero .tab-body .tab {
   display: none;
+  overflow-wrap: break-word; /* Allow long words to break */
+  word-wrap: break-word; /* Legacy support */
 }
 
 .how-to-be-a-hero .tab-body .tab.active {
   display: block;
+}
+
+/* Ensure tab content respects boundaries */
+.how-to-be-a-hero .tab-body .tab textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.how-to-be-a-hero .tab-body .tab table,
+.how-to-be-a-hero .tab-body .tab .form-grid {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed; /* For tables to respect width constraints */
 }
 
 /* ----------------------------------------- */
@@ -2031,7 +2425,7 @@ a {
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body {
   border-radius: 5px;
-  position: relative;
+  height: calc(100% - var(--htbah-sheet-header-height)); /* Available height minus header */
   /*
   background: url("../ui/texture1.webp") no-repeat top center / auto 770px, url("../ui/texture2.webp") no-repeat bottom center / auto 704px;
   */
@@ -2047,13 +2441,46 @@ a {
   grid-template-columns: var(--htbah-sheet-sidebar-width) 1fr;
   gap: 12px;
   position: absolute;
-  inset: 0;
   padding: 25px;
   overflow: hidden auto;
   scrollbar-width: thin;
   scrollbar-color: var(--htbah-color-scrollbar) transparent;
   transition: all 450ms ease;
   padding-bottom: 30px;
+  width: 100%;
+  top: var(--htbah-sheet-header-height);
+  bottom: 0; /* Connect to bottom of the form */
+  box-sizing: border-box; /* Ensures padding is included in width calculation */
+  min-width: 0; /* Prevents grid container from expanding beyond bounds */
+}
+
+/* Ensure grid items don't overflow */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content > * {
+  min-width: 0; /* Prevents grid items from expanding beyond their column */
+  min-height: 0; /* Prevents grid items from expanding beyond their row */
+  overflow: hidden; /* Prevents content from escaping grid items */
+}
+
+/* Specific constraint for tab-body as the second grid item */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content .tab-body {
+  overflow: hidden auto; /* Allow vertical scrolling but prevent horizontal overflow */
+  max-width: 100%; /* Ensure it doesn't expand beyond allocated grid space */
+  height: 100%; /* Fill available grid cell height */
+}
+
+/* For any nested content that might have tables, forms, or other wide content */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Specific handling for common overflow culprits */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content table,
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content pre,
+.how-to-be-a-hero.sheet.actor.character .sheet-body .main-content code {
+  max-width: 100%;
+  overflow-x: auto;
+  word-wrap: break-word;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .main-content::-webkit-scrollbar-track {
   box-shadow: none;
@@ -2151,7 +2578,7 @@ a {
   border: 2px solid var(--htbah-color-gold);
   pointer-events: none;
 }
-.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .portrait > label.slide-toggle {
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .portrait > label.how-to-be-a-hero slide-toggle {
   position: absolute;
   z-index: 1;
   padding: 1rem 0;
@@ -2188,25 +2615,25 @@ a {
   font-family: var(--font-awesome);
   font-size: var(--font-size-11);
 }
-.how-to-be-a-hero .sidebar .card .stats .ac { 
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac { 
   width: 68px;
   height: 68px;
   text-align: center;
   line-height: 62px;
   background: transparent url(../ui/ac-badge.webp) no-repeat center / contain;
-  color: var(--color-text-light-0);
+  color: var(--color-text-dark-primary);
   font-size: var(--font-size-23);
   font-family: var(--htbah-font-roboto);
   font-weight: bold;
   margin-top: -21px;
   filter: drop-shadow(0 0 6px var(--color-shadow-dark));
 }
-.how-to-be-a-hero .sidebar .card .stats .ac .config-button {
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac .config-button {
   color: inherit;
   font-size: inherit;
 }
 /* Styling for the armor display */
-.how-to-be-a-hero .sidebar .card .stats .ac input {
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac input {
   border: none;
   background: transparent;
   color: inherit;
@@ -2220,8 +2647,8 @@ a {
   margin: 0;
   outline: none;
 }
-.how-to-be-a-hero .sidebar .card .stats .ac input:hover,
-.how-to-be-a-hero .sidebar .card .stats .ac input:focus {
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac input:hover,
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac input:focus {
   outline: none;
   box-shadow: none;
 }
@@ -2245,7 +2672,7 @@ a {
   font-family: var(--htbah-font-roboto);
   font-size: 20px;
   font-weight: bold;
-  color: var(--color-text-light-0);
+  color: var(--htbah-color-gold);
   height: 100%;
   line-height: 30px;
   text-shadow: 0 0 4px var(--htbah-highlight-45);
@@ -2334,7 +2761,7 @@ a {
   border: none;
   font-weight: bold;
   background: none;
-  color: var(--color-text-light-0);
+  padding: 5px;
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.sectioned input:hover,
@@ -2368,7 +2795,6 @@ a {
   position: relative;
   padding-inline-start: 0.5rem;
   padding-inline-end: 0.75rem;
-  color: var(--color-text-light-0);
 }
 
 /* Hidden state handling */
@@ -2459,7 +2885,7 @@ a {
   text-shadow: 0 0 8px var(--color-shadow-primary);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul li.effect.suppressed {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .drop {
   border: 2px dashed var(--htbah-color-gold);
@@ -2473,6 +2899,7 @@ a {
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul figure {
   position: relative;
   margin: 0;
+  flex: 0 0 30%;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul img {
   width: 32px;
@@ -2483,19 +2910,25 @@ a {
   inset: auto auto 2px 2px;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked {
-  flex: 1;
+  flex: 0 0 50%;
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked .title {
   font-size: var(--font-size-13);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked.rollable {
   cursor: pointer;
+  color: var(--color-text-dark-primary);
+}
+
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked:not(.rollable) {
+  cursor: default;
+  color: var(--color-text-dark-primary);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .name-stacked.rollable:hover .title {
   text-shadow: 0 0 8px var(--color-shadow-primary);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info {
-  flex: 0 0 60px;
+  flex: 0 0 20%;
   display: flex;
   flex-direction: column;
 }
@@ -2520,7 +2953,7 @@ a {
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.uses .separator,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.uses .max {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.uses input {
   background: none;
@@ -2542,7 +2975,7 @@ a {
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary.disabled i,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary .sign,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary .passive {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .favorites > ul .info .primary .passive {
   font-size: var(--font-size-13);
@@ -2628,7 +3061,7 @@ a {
   order: -1;
 }
 .how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .sign {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .skillSet-scores .skillSet-score .label {
   text-transform: uppercase;
@@ -2800,6 +3233,7 @@ a {
   flex-direction: column;
   align-items: center;
   font-weight: bold;
+  color: var(--color-text-dark-primary);
   border-right: 1px solid var(--htbah-color-faint);
 }
 
@@ -2821,7 +3255,7 @@ a {
 
 /* Modified eureka-column to display items horizontally */
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-value {
-  flex: 0 0 10%;
+  flex: 0 0 20%;
   margin: 5px 0;
   display: flex;
   flex-direction: row; /* Changed from column to row */
@@ -3269,7 +3703,7 @@ a {
 }
 
 .how-to-be-a-hero .tab.inventory .items-section .item-uses .no-uses {
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 /* Item Controls Styles */
 .how-to-be-a-hero .tab.inventory .items-section .item-controls {
@@ -3278,7 +3712,7 @@ a {
   justify-content: flex-end;
   align-items: center;
   /*gap: 0.2rem;  Increased from 0.375rem for more space between icons */
-  color: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
 }
 
 .how-to-be-a-hero .tab.inventory .items-section .item-controls .item-control {
@@ -3461,6 +3895,13 @@ a {
   max-width: 570px;
   display: flex;
   flex-direction: column;
+  transition: min-height 0.3s ease, max-height 0.3s ease;
+}
+
+/* Expanded height when rollable is enabled */
+.how-to-be-a-hero.how-to-be-a-hero.sheet.item.rollable-expanded {
+  min-height: 650px;
+  max-height: 650px;
 }
 
 /* Sheet Header */
@@ -3476,6 +3917,15 @@ a {
   width: 64px;
   height: 64px;
   border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 2px solid #000;
+}
+
+.how-to-be-a-hero.sheet.item .sheet-header img.profile-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 0;
   object-fit: cover;
   margin-right: 15px;
   border: 2px solid #000;
@@ -3561,7 +4011,7 @@ a {
 /* Sheet Body */
 .how-to-be-a-hero.sheet.item .sheet-body {
   display: flex;
-  padding: 15px;
+  padding-left: 15px;
   background-color: var(--htbah-color-card);
   overflow: hidden;
   flex: 1;
@@ -3585,8 +4035,105 @@ a {
   height: 100%;
 }
 
-.how-to-be-a-hero.sheet.item .sheet-body .sidebar input {
-  color:var(--htbah-color-black);
+.how-to-be-a-hero.sheet.item .sheet-body .sidebar input,
+.how-to-be-a-hero.sheet.item .sheet-body .sidebar select {
+  color: var(--htbah-color-black);
+  background: var(--htbah-color-beige);
+  border: 1.5px solid var(--htbah-color-tan);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* General input styling for enabled fields */
+.how-to-be-a-hero.sheet.item input:not(:disabled),
+.how-to-be-a-hero.sheet.item select:not(:disabled),
+.how-to-be-a-hero.sheet.item textarea:not(:disabled) {
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: var(--htbah-color-tan);
+}
+
+/* Disabled field styling */
+.how-to-be-a-hero.sheet.item input:disabled,
+.how-to-be-a-hero.sheet.item select:disabled,
+.how-to-be-a-hero.sheet.item textarea:disabled {
+  background: color-mix(in srgb, var(--htbah-color-beige) 80%, white 20%) !important;
+  color: color-mix(in srgb, var(--htbah-color-black) 80%, white 20%) !important;
+  border: none !important;
+}
+
+/* Header elements styling */
+.how-to-be-a-hero.sheet.item h1,
+.how-to-be-a-hero.sheet.item h2,
+.how-to-be-a-hero.sheet.item h3,
+.how-to-be-a-hero.sheet.item h4,
+.how-to-be-a-hero.sheet.item h5,
+.how-to-be-a-hero.sheet.item h6 {
+  color: var(--htbah-color-dark-gray);
+  text-shadow: none;
+}
+
+/* Item roll icon styling */
+.how-to-be-a-hero.sheet.item .roll-button {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.how-to-be-a-hero.sheet.item .roll-button i[data-action="rollItem"] {
+  font-size: var(--font-size-20);
+  color: var(--htbah-color-gold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 3px;
+}
+
+.how-to-be-a-hero.sheet.item .roll-button i[data-action="rollItem"]:hover {
+  color: var(--htbah-color-dark);
+  background-color: var(--htbah-color-gold);
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.how-to-be-a-hero.sheet.item .roll-button i[data-action="rollItem"]:active {
+  transform: scale(1.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Rollable checkbox styling */
+.how-to-be-a-hero.sheet.item .rollable-field {
+  margin: 8px 0;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--htbah-color-tan);
+}
+
+.how-to-be-a-hero.sheet.item .rollable-field label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-12);
+  font-weight: bold;
+  color: var(--htbah-color-dark);
+  cursor: pointer;
+}
+
+.how-to-be-a-hero.sheet.item .rollable-field input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #000000; /* Modern browsers - makes checkmark black */
+  color: #000000; /* Fallback for older browsers */
+}
+
+/* Additional styling to ensure black checkmark in all browsers */
+.how-to-be-a-hero.sheet.item .rollable-field input[type="checkbox"]:checked {
+  color: #000000;
+}
+
+/* Custom checkbox styling for maximum compatibility */
+.how-to-be-a-hero.sheet.item .rollable-field input[type="checkbox"]:checked::after {
+  color: #000000 !important;
 }
 
 /* Main Content Area */
@@ -3644,6 +4191,26 @@ a {
 .how-to-be-a-hero.sheet.item .editor .editor-content {
   height: 100%;
   overflow-y: auto;
+}
+
+/* Description field styles */
+.how-to-be-a-hero.sheet.item .description-field {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.how-to-be-a-hero.sheet.item .description-field label {
+  display: none;
+}
+
+.how-to-be-a-hero.sheet.item .description-field textarea {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  resize: none;
+  box-sizing: border-box;
 }
 
 /* Item Properties */
@@ -3716,8 +4283,8 @@ a {
 .how-to-be-a-hero.sheet.item .details input[type="number"],
 .how-to-be-a-hero.sheet.item .details select {
   height: 24px;
-  border: 1px solid var(--htbah-color-tan);
-  background: rgba(0, 0, 0, 0.05);
+  border: 1.5px solid var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
 }
 
 .how-to-be-a-hero.sheet.item .details h3.form-header .config-button {
@@ -3817,8 +4384,8 @@ a {
   cursor: pointer;
   border-bottom: var(--border-style);
   border-right: var(--border-style);
-  color: var(--color-text-light-6);
-  --icon-fill: var(--color-text-light-6);
+  color: var(--htbah-color-gold);
+  --icon-fill: var(--htbah-color-gold);
   --icon-stroke: var(--htbah-color-card);
 }
 

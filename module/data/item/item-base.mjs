@@ -31,7 +31,7 @@ export default class HowToBeAHeroItemBase extends AbstractHowToBeAHeroItemDataMo
       description: this.description
     };
 
-    const content = await renderTemplate(templatePath, tooltipData);
+    const content = await foundry.applications.handlebars.renderTemplate(templatePath, tooltipData);
     
     return {
       content,

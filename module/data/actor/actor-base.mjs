@@ -66,7 +66,7 @@ static defineSchema() {
 }
   // Override the richTooltip method if you need specific behavior for HowToBeAHeroActorBase
   async richTooltip() {
-    const content = await renderTemplate("systems/how-to-be-a-hero/templates/actor/parts/actor-tooltip.hbs", {
+    const content = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/actor/parts/actor-tooltip.hbs", {
       name: this.parent.name,
       health: this.attributes.health,
       armor: this.attributes.armor,

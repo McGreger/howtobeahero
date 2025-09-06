@@ -34,7 +34,8 @@ export default class EffectsElement extends HTMLElement {
         if (!effect) return;
         ui.context.menuItems = this._getContextOptions(effect);
         Hooks.call("HTBAH.getActiveEffectContextOptions", effect, ui.context.menuItems);
-      }
+      },
+      jQuery: false
     });
   }
 

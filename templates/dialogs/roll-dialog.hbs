@@ -1,0 +1,38 @@
+{{!-- templates/dialogs/roll-dialog.hbs --}}
+<form class="htbah-roll-dialog" data-action="submit">
+  <div class="roll-info">
+    <div class="base-roll">
+      <label>{{localize "HTBAH.RollDialog.BaseRoll"}}:</label>
+      <span class="formula">{{baseFormula}}</span>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="dice-bonus">{{localize "HTBAH.RollDialog.Bonus"}}</label>
+    <input type="number" 
+           id="dice-bonus"
+           name="bonus" 
+           value="{{bonus}}" 
+           placeholder="0"
+           step="1"
+           data-action="updateBonus"
+           data-tooltip="{{localize 'HTBAH.RollDialog.BonusHint'}}">
+    <small class="hint">{{localize "HTBAH.RollDialog.BonusHint"}}</small>
+  </div>
+  
+  <div class="final-formula">
+    <label>{{localize "HTBAH.RollDialog.FinalRoll"}}:</label>
+    <span class="result-formula">{{finalFormula}}</span>
+  </div>
+
+  <footer class="dialog-buttons">
+    <button type="submit" class="dialog-button roll default" data-action="roll">
+      <i class="fas fa-dice-d20"></i>
+      {{localize "HTBAH.RollDialog.Roll"}}
+    </button>
+    <button type="button" class="dialog-button cancel" data-action="cancel">
+      <i class="fas fa-times"></i>
+      {{localize "Cancel"}}
+    </button>
+  </footer>
+</form>

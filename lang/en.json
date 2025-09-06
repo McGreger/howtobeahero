@@ -104,6 +104,8 @@
 
   "HTBAH.Equipped": "Equipped",
   "HTBAH.Unequipped": "Unequipped",
+  "HTBAH.Equip": "Equip",
+  "HTBAH.Unequip": "Unequip",
   
   "HTBAH.Quantity": "Quantity",
   "HTBAH.Uses": "Uses",
@@ -183,6 +185,10 @@
   "HTBAH.EffectUnavailable": "Unavailable Effects",
   "HTBAH.EffectUnavailableInfo": "Source item must be equipped or attuned to activate these",
 
+  "HTBAH.Newaction": "New Action",
+  "HTBAH.Newknowledge": "New Knowledge", 
+  "HTBAH.Newsocial": "New Social",
+
   "EFFECT.HTBAH": {
     "StatusBleeding": "Bleeding",
     "StatusBurrowing": "Burrowing",
@@ -249,6 +255,22 @@
   "HTBAH.ConStunned": "Stunned",
 
   "HTBAH.Biography": "Biography",
+
+  "HTBAH.WarnNameRequired": "Name is required",
+  "HTBAH.WarningOnlyAbilitiesInSkillSets": "Only abilities can be moved between skill sets",
+
+  "HTBAH.RollDialog": {
+    "Title": "Roll",
+    "BaseRoll": "Base Roll",
+    "Bonus": "Bonus",
+    "BonusHint": "Additional bonus to add to this roll",
+    "FinalRoll": "Final Roll",
+    "Roll": "Roll",
+    "RollItem": "Roll {item}",
+    "ErrorRolling": "Failed to execute roll"
+  },
+  
+  "HTBAH.Unknown": "Unknown",
     
   "TYPES": {
     "Actor": {

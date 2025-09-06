@@ -337,7 +337,7 @@ export class AbstractHowToBeAHeroActorDataModel extends AbstractHowToBeAHeroData
 
   /** @override */
   async richTooltip() {
-    const content = await renderTemplate("systems/how-to-be-a-hero/templates/actor/parts/actor-tooltip.hbs", this);
+    const content = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/actor/parts/actor-tooltip.hbs", this);
     return {
       content,
       classes: ['htbah-tooltip', 'htbah-actor-tooltip']
@@ -359,7 +359,7 @@ export class AbstractHowToBeAHeroItemDataModel extends AbstractHowToBeAHeroDataM
 
   /** @override */
   async richTooltip() {
-    const content = await renderTemplate("systems/how-to-be-a-hero/templates/item/parts/item-tooltip.hbs", this);
+    const content = await foundry.applications.handlebars.renderTemplate("systems/how-to-be-a-hero/templates/item/parts/item-tooltip.hbs", this);
     return {
       content,
       classes: ['htbah-tooltip', 'htbah-item-tooltip']
