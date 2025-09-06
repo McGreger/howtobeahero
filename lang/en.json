@@ -92,7 +92,8 @@
 
   "HTBAH.Names": "Names",
 
-  "HTBAH.HitPoints": "Hitpoints",
+  "HTBAH.HitPoints": "Hit Points",
+  "HTBAH.ManaPoints": "Mana Points",
 
   "HTBAH.Inventory": "Inventory",  
 

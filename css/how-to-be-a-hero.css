@@ -2787,6 +2787,11 @@ item-list-controls search .filter-control:hover:not(.disabled),
   justify-content: flex-start;
 }
 
+/* Mana bar cursor */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .progress {
+  cursor: pointer;
+}
+
 /* Mana bar input vertical alignment */
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .label input.uninput.value,
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .label input.uninput.max {
