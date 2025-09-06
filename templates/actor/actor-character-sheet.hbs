@@ -187,6 +187,66 @@
                 {{/with}}
               {{/if}}
             </div>
+
+            {{!-- Mana Points --}}
+            <div class="meter-group">
+              <div class="label roboto-condensed-upper">
+                <span>{{ localize "HTBAH.ManaPoints" }}</span>
+              </div>
+              {{#if (and editable (or actor.isOwner @root.user.isGM))}}
+                {{!-- Edit Mode: Show direct input fields --}}
+                {{#with system.attributes.mana}}
+                  <div class="meter sectioned mana-points">
+                    <div class="progress mana-points" 
+                         role="meter" 
+                         aria-valuemin="0"
+                         aria-valuenow="{{ value }}" 
+                         aria-valuemax="{{ max }}" 
+                         style="--bar-percentage: {{ ../manaPercentage }}%">
+                      <div class="label">
+                        <input type="text" 
+                               name="system.attributes.mana.value" 
+                               class="uninput value" 
+                               data-dtype="Number" 
+                               value="{{ value }}" 
+                               placeholder="0">
+                        <span class="separator">&sol;</span>
+                        <input type="text" 
+                               name="system.attributes.mana.max" 
+                               class="uninput max" 
+                               data-dtype="Number" 
+                               value="{{ max }}" 
+                               placeholder="0">
+                      </div>
+                    </div>
+                  </div>
+                {{/with}}
+              {{else}}
+                {{!-- Play Mode: Click to edit Mana --}}
+                {{#with system.attributes.mana}}
+                  <div class="meter sectioned mana-points">
+                    <div class="progress mana-points" 
+                         role="meter" 
+                         aria-valuemin="0"
+                         aria-valuenow="{{ value }}" 
+                         aria-valuemax="{{ max }}" 
+                         style="--bar-percentage: {{ ../manaPercentage }}%"
+                         data-action="toggleEditMana" data-edit="true">
+                      <div class="label">
+                        <span class="value">{{ value }}</span>
+                        <input type="text" 
+                               name="system.attributes.mana.value" 
+                               data-dtype="Number" 
+                               value="{{ value }}" 
+                               style="display: none">
+                        <span class="separator">&sol;</span>
+                        <span class="max">{{ max }}</span>
+                      </div>
+                    </div>
+                  </div>
+                {{/with}}
+              {{/if}}
+            </div>
           </div>
         </div>
 

@@ -179,6 +179,35 @@
                 </div>
                 {{/with}}
             </div>
+
+            {{!-- Mana Points --}}
+            <div class="meter-group">
+              <div class="label roboto-condensed-upper">
+                <span>{{ localize "HTBAH.ManaPoints" }}</span>
+              </div>
+              {{#with system.attributes.mana}}
+                <div class="meter sectioned mana-points">
+                  <div class="progress mana-points" 
+                       role="meter" 
+                       aria-valuemin="0"
+                       aria-valuenow="{{ value }}" 
+                       aria-valuemax="{{ max }}" 
+                       style="--bar-percentage: {{ ../manaPercentage }}%">
+                    <div class="label">
+                      <span class="value">{{ value }}</span>
+                      <span class="separator">&sol;</span>
+                      <span class="max">{{ max }}</span>
+                    </div>
+                    <input type="text" name="system.attributes.mana.value" data-dtype="Number" placeholder="0"
+                      value="{{ value }}" hidden>
+                  </div>
+                  <div class="tmp">
+                    <input type="text" name="system.attributes.mana.temp" data-dtype="Number" placeholder="{{ localize "HTBAH.TMP" }}"
+                      value="{{ temp }}">
+                  </div>
+                </div>
+              {{/with}}
+            </div>
           </div>
 
         </div>

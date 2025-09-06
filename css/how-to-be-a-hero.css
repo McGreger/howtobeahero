@@ -29,7 +29,7 @@
   --htbah-color-gold: #9f9275;
   --htbah-color-gold-rgb: 159, 146, 117;
   --htbah-color-red: #ed1c24;
-  --htbah-color-blue: cornflowerblue;
+  --htbah-color-blue: #4682b4;
   --htbah-color-green: #205b15;
   --htbah-color-maroon: #741b2b;
   --htbah-color-parchment: #f1ebe8;
@@ -41,6 +41,9 @@
   --htbah-color-hd-1: #401f25;
   --htbah-color-hd-2: var(--htbah-color-maroon);
   --htbah-color-hd-3: #500000;
+  --htbah-color-mp-1: #1e3a5f;
+  --htbah-color-mp-2: #4682b4;
+  --htbah-color-mp-3: #2c5282;
   --htbah-color-sc-1: #433754;
   --htbah-color-sc-2: #776493;
   --htbah-color-blue-white: #cfd2da;
@@ -2751,6 +2754,48 @@ item-list-controls search .filter-control:hover:not(.disabled),
 .how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.hit-dice.progress::before {
   background: linear-gradient(to right, var(--htbah-color-hd-1) 0%, var(--htbah-color-hd-2) 100%);
   border-right: var(--border-width) solid var(--htbah-color-hd-3);
+}
+
+/* ----------------------------------------- */
+/*  Mana points                              */
+/* ----------------------------------------- */
+/* Base mana points meter */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points {
+  height: 32px;
+  font-size: var(--font-size-16);
+}
+
+/* Progress bar background */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .progress::before {
+  background: linear-gradient(to right, var(--htbah-color-mp-1) 0%, var(--htbah-color-mp-2) 100%);
+  border-right: var(--border-width) solid var(--htbah-color-mp-3);
+  border-radius: 4px 0 0 4px;
+}
+
+/* Mana bar span vertical alignment */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .label span.value,
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .label span.max {
+  line-height: 32px;
+  vertical-align: middle;
+}
+
+/* Mana bar label container alignment */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .label {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Mana bar cursor */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .progress {
+  cursor: pointer;
+}
+
+/* Mana bar input vertical alignment */
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .label input.uninput.value,
+.how-to-be-a-hero.sheet.actor.character .sheet-body .sidebar .card .meter.mana-points .label input.uninput.max {
+  line-height: normal;
 }
 
 /* Sectioned meter common styles */
