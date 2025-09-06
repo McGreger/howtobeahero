@@ -40,6 +40,10 @@ static defineSchema() {
       temp: new fields.NumberField({...requiredInteger, initial: 0, min: 0, label: "HOW_TO_BE_A_HERO.Attributes.HitPointsTemp"}),
       tempmax: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.Attributes.HitPointsTempMax"})
     }),
+    mana: new fields.SchemaField({
+      value: new fields.NumberField({...requiredInteger, initial: 100, min: 0, label: "HOW_TO_BE_A_HERO.Attributes.HitPointsCurrent"}),
+      max: new fields.NumberField({...requiredInteger, initial: 100, label: "HOW_TO_BE_A_HERO.Attributes.HitPointsMaximum"}),
+    }),
     skillSets: new fields.SchemaField({
       knowledge: new fields.SchemaField({
         value: new fields.NumberField({...requiredInteger, initial: 0, label: "HOW_TO_BE_A_HERO.SkillSets.Knowledge.long"}),
