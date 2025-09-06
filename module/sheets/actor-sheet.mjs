@@ -213,9 +213,11 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       useFavorite: this.prototype._onUseFavorite,
       removeSkill: this.prototype._onRemoveHeaderItem,
       removeWeapon: this.prototype._onRemoveHeaderItem,
+      removeParry: this.prototype._onRemoveHeaderItem,
       rollInitiative: this.prototype._onRollInitiative,
       rollHeaderAbility: this.prototype._onRollHeaderAbility,
       rollHeaderWeapon: this.prototype._onRollHeaderWeapon,
+      rollHeaderParry: this.prototype._onRollHeaderParry,
       toggleEditHP: this.prototype._onToggleEditHP,
       toggleEditMana: this.prototype._onToggleEditMana
     }
@@ -725,10 +727,11 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Prepare header items
    */
   async _prepareHeaderItems() {
-    const headerItems = { ability: null, weapon: null };
+    const headerItems = { ability: null, weapon: null, parry: null };
 
     const abilityId = this.document.getFlag("how-to-be-a-hero", "headerAbility");
     const weaponId = this.document.getFlag("how-to-be-a-hero", "headerWeapon");
+    const parryId = this.document.getFlag("how-to-be-a-hero", "headerParry");
 
     if (abilityId) {
       const item = this.document.items.get(abilityId);
@@ -746,6 +749,18 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       const item = this.document.items.get(weaponId);
       if (item) {
         headerItems.weapon = {
+          id: item.id,
+          name: item.name,
+          img: item.img,
+          type: item.type
+        };
+      }
+    }
+
+    if (parryId) {
+      const item = this.document.items.get(parryId);
+      if (item) {
+        headerItems.parry = {
           id: item.id,
           name: item.name,
           img: item.img,
@@ -1168,6 +1183,19 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
   }
 
   /**
+   * Handle header parry rolls
+   */
+  async _onRollHeaderParry(event, target) {
+    const parryId = this.document.getFlag("how-to-be-a-hero", "headerParry");
+    if (!parryId) return;
+    
+    const item = this.document.items.get(parryId);
+    if (!item) return;
+    
+    return item.roll();
+  }
+
+  /**
    * Handle HP editing toggle
    */
   async _onToggleEditHP(event, target) {
@@ -1351,14 +1379,25 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    */
   async _onRemoveHeaderItem(event, target) {
     const action = target.dataset.action;
-    const slot = action === "removeSkill" ? "ability" : "weapon";
-    const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
+    let slot, flagKey;
+    
+    if (action === "removeSkill") {
+      slot = "ability";
+      flagKey = "headerAbility";
+    } else if (action === "removeWeapon") {
+      slot = "weapon"; 
+      flagKey = "headerWeapon";
+    } else if (action === "removeParry") {
+      slot = "parry";
+      flagKey = "headerParry";
+    }
+    
     return this.document.unsetFlag("how-to-be-a-hero", flagKey);
   }
 
   /**
    * Set header item for a specific slot
-   * @param {string} slot - The slot type ("ability" or "weapon")
+   * @param {string} slot - The slot type ("ability", "weapon", or "parry")
    * @param {string} itemId - The ID of the item to set
    */
   async _setHeaderItem(slot, itemId) {
@@ -1384,9 +1423,19 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       ui.notifications.warn("Only weapons can be placed in the weapon slot.");
       return false;
     }
+
+    if (slot === "parry" && item.type !== "ability") {
+      console.warn(`Cannot set ${item.type} item in parry slot`);
+      ui.notifications.warn("Only abilities can be placed in the parry slot.");
+      return false;
+    }
     
     // Set the appropriate flag
-    const flagKey = slot === "ability" ? "headerAbility" : "headerWeapon";
+    let flagKey;
+    if (slot === "ability") flagKey = "headerAbility";
+    else if (slot === "weapon") flagKey = "headerWeapon";
+    else if (slot === "parry") flagKey = "headerParry";
+    
     return this.document.setFlag("how-to-be-a-hero", flagKey, itemId);
   }
 

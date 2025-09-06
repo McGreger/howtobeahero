@@ -1944,7 +1944,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 
 /* Left Column - Name */
 .how-to-be-a-hero.sheet.actor.character .sheet-header .header-left {
-  flex: 1.8;  /* Increased from 1 to 2 to take more space */
+  flex: 1;  /* Increased from 1 to 2 to take more space */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1985,7 +1985,6 @@ item-list-controls search .filter-control:hover:not(.disabled),
   background: linear-gradient(to right, var(--htbah-color-hd-1), var(--htbah-color-hd-2));
   border-radius: 8px;
   padding: 0.5rem;
-  width: 350px;
   height: 135px;
   display: flex;
   align-items: stretch;
