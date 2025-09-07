@@ -54,6 +54,12 @@ export class HowToBeAHeroDragDropHandler {
           return { action: "itemType", type: sectionDataset.type };
         }
       }
+
+      // Check if this is a drop on another character sheet for item exchange
+      const sheetElement = dropTarget.closest('.how-to-be-a-hero.sheet.actor.character');
+      if (sheetElement) {
+        return { action: "itemExchange", type: "item" };
+      }
   
       return { action: "default", type: "item" };
     }
@@ -70,9 +76,12 @@ export class HowToBeAHeroDragDropHandler {
       const dropTarget = event.currentTarget;
       const actionConfig = this._getDragActionType(dropTarget);
       
-      // Clear any existing dragover classes
-      this.sheet.element.querySelectorAll('.dragover').forEach(el => {
+      // Clear any existing dragover classes from all sheets
+      document.querySelectorAll('.dragover').forEach(el => {
         el.classList.remove('dragover');
+      });
+      document.querySelectorAll('.item-exchange-dragover').forEach(el => {
+        el.classList.remove('item-exchange-dragover');
       });
 
       // Add dragover class to the appropriate element
@@ -92,6 +101,11 @@ export class HowToBeAHeroDragDropHandler {
         const inventorySection = dropTarget.closest('.items-section');
         if (inventorySection) {
           inventorySection.classList.add('dragover');
+        }
+      } else if (actionConfig.action === "itemExchange") {
+        const sheetElement = dropTarget.closest('.how-to-be-a-hero.sheet.actor.character');
+        if (sheetElement) {
+          sheetElement.classList.add('item-exchange-dragover');
         }
       }
     }
@@ -132,8 +146,11 @@ export class HowToBeAHeroDragDropHandler {
       
       // Only remove if we're actually leaving the drop zone (not moving to a child)
       if (!currentTarget.contains(relatedTarget)) {
-        this.sheet.element.querySelectorAll('.dragover').forEach(el => {
+        document.querySelectorAll('.dragover').forEach(el => {
           el.classList.remove('dragover');
+        });
+        document.querySelectorAll('.item-exchange-dragover').forEach(el => {
+          el.classList.remove('item-exchange-dragover');
         });
       }
     }
@@ -146,9 +163,12 @@ export class HowToBeAHeroDragDropHandler {
       event.preventDefault();
       event.stopPropagation();
       
-      // Clean up dragover classes
-      this.sheet.element.querySelectorAll('.dragover').forEach(el => {
+      // Clean up dragover classes from all character sheets
+      document.querySelectorAll('.dragover').forEach(el => {
         el.classList.remove('dragover');
+      });
+      document.querySelectorAll('.item-exchange-dragover').forEach(el => {
+        el.classList.remove('item-exchange-dragover');
       });
       
       let data;
@@ -167,6 +187,12 @@ export class HowToBeAHeroDragDropHandler {
     
       const actionConfig = this._getDragActionType(event.target);
     
+      // First check if this is an item exchange with another character
+      const targetActor = this._getTargetActor(event.target);
+      if (targetActor && targetActor !== this.actor) {
+        return this._handleItemExchange(event, data, targetActor);
+      }
+
       switch(actionConfig.action) {
         case "favorite":
           // Handle favorite drops
@@ -546,5 +572,102 @@ export class HowToBeAHeroDragDropHandler {
       });
 
       return confirmed;
+    }
+
+    /**
+     * Get the target actor from a drop event
+     * @param {HTMLElement} dropTarget - The element where the item was dropped
+     * @returns {Actor|null} The target actor or null if not dropping on another character
+     * @private
+     */
+    _getTargetActor(dropTarget) {
+      // Look for an actor sheet element that contains this drop target
+      const sheetElement = dropTarget.closest('.how-to-be-a-hero.sheet.actor.character');
+      if (!sheetElement) return null;
+
+      // Get the sheet instance from the element
+      const sheetId = sheetElement.id;
+      if (!sheetId) return null;
+
+      // Find the application with this ID in the app registry
+      for (const app of Object.values(ui.windows)) {
+        if (app.element && app.element.id === sheetId && app.document instanceof Actor) {
+          return app.document;
+        }
+      }
+
+      return null;
+    }
+
+    /**
+     * Handle item exchange between actors
+     * @param {DragEvent} event - The drag event
+     * @param {Object} data - The drag data containing item information
+     * @param {Actor} targetActor - The actor receiving the item
+     * @returns {Promise<boolean>} Whether the exchange was successful
+     * @private
+     */
+    async _handleItemExchange(event, data, targetActor) {
+      console.log("Item exchange - data:", data, "target actor:", targetActor.name);
+      
+      if (data.type !== "Item") {
+        console.log("Item exchange - not an item, rejecting");
+        return false;
+      }
+
+      let sourceItem;
+      try {
+        sourceItem = await Item.implementation.fromDropData(data);
+      } catch (error) {
+        console.error("Item exchange - error getting item from drop data:", error);
+        ui.notifications.error(`Failed to get item: ${error.message}`);
+        return false;
+      }
+      
+      if (!sourceItem) {
+        console.log("Item exchange - sourceItem is null/undefined");
+        return false;
+      }
+
+      // Check if this item belongs to the current actor (drag source)
+      const actorItem = this.actor.items.get(sourceItem.id);
+      if (!actorItem) {
+        console.warn(`Item exchange - Item ${sourceItem.id} does not belong to source actor ${this.actor.name}`);
+        ui.notifications.warn("This item does not belong to the source character.");
+        return false;
+      }
+
+      // Validate that the item type is transferable
+      const transferableTypes = ["item", "consumable", "weapon", "armor", "tool"];
+      if (!transferableTypes.includes(sourceItem.type)) {
+        console.log(`Item exchange - item type ${sourceItem.type} is not transferable`);
+        ui.notifications.warn("This item type cannot be transferred between characters.");
+        return false;
+      }
+
+      console.log(`Transferring item "${sourceItem.name}" from "${this.actor.name}" to "${targetActor.name}"`);
+
+      // Create a copy of the item data for the target actor
+      const itemData = sourceItem.toObject();
+      delete itemData._id; // Remove the ID so a new one is generated
+
+      try {
+        // Add the item to the target actor
+        const [newItem] = await targetActor.createEmbeddedDocuments("Item", [itemData]);
+        console.log("Item exchange - created new item:", newItem);
+
+        // Remove the item from the source actor
+        await actorItem.delete();
+        console.log("Item exchange - deleted source item");
+
+        ui.notifications.info(`Transferred "${sourceItem.name}" from ${this.actor.name} to ${targetActor.name}`);
+        
+        return true;
+
+      } catch (error) {
+        console.error("Item exchange - error during transfer:", error);
+        ui.notifications.error(`Failed to transfer item: ${error.message}`);
+        return false;
+      }
     }
   }

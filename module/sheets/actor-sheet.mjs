@@ -644,21 +644,36 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Setup the edit mode toggle in the header
    */
   _setupModeToggle() {
-    if (!this.isEditable) return;
+    // Only show mode toggles to GM users
+    if (!this.isEditable || !game.user.isGM) return;
 
     const header = this.element.querySelector(".window-header");
     if (!header || header.querySelector(".mode-slider")) return; // Avoid duplicates
 
-    // Create mode toggle
-    const toggle = document.createElement("slide-toggle");
-    toggle.checked = this._mode === this.constructor.MODES.EDIT;
-    toggle.classList.add("mode-slider");
-    toggle.dataset.tooltip = "HTBAH.SheetModeEdit";
-    toggle.setAttribute("aria-label", game.i18n.localize("HTBAH.SheetModeEdit"));
-    toggle.addEventListener("change", (event) => this._onChangeSheetMode(event, toggle));
-    toggle.addEventListener("dblclick", event => event.stopPropagation());
+    // Create edit mode toggle (left side)
+    const editToggle = document.createElement("slide-toggle");
+    editToggle.checked = this._mode === this.constructor.MODES.EDIT;
+    editToggle.classList.add("mode-slider");
+    editToggle.dataset.tooltip = "HTBAH.SheetModeEdit";
+    editToggle.setAttribute("aria-label", game.i18n.localize("HTBAH.SheetModeEdit"));
+    editToggle.addEventListener("change", (event) => this._onChangeSheetMode(event, editToggle));
+    editToggle.addEventListener("dblclick", event => event.stopPropagation());
     
-    header.insertAdjacentElement("afterbegin", toggle);
+    header.insertAdjacentElement("afterbegin", editToggle);
+
+    // Add canReceiveItems toggle for NPCs (right side of edit toggle)
+    if (this.document.type === "npc") {
+      const receiveToggle = document.createElement("slide-toggle");
+      receiveToggle.checked = this.document.system.canReceiveItems || false;
+      receiveToggle.classList.add("receive-items-slider");
+      receiveToggle.dataset.tooltip = "HTBAH.CanReceiveItems";
+      receiveToggle.setAttribute("aria-label", game.i18n.localize("HTBAH.CanReceiveItems"));
+      receiveToggle.addEventListener("change", (event) => this._onChangeReceiveItems(event, receiveToggle));
+      receiveToggle.addEventListener("dblclick", event => event.stopPropagation());
+      
+      // Insert after the edit toggle
+      editToggle.insertAdjacentElement("afterend", receiveToggle);
+    }
 
     // Update header buttons
     header.querySelectorAll(".header-button").forEach(btn => {
@@ -1123,6 +1138,11 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       zone.addEventListener('dragleave', this.dragDropHandler.onDragLeave.bind(this.dragDropHandler));
       zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
     });
+
+    // Add the entire sheet as a drop zone for item exchanges with other characters
+    this.element.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
+    this.element.addEventListener('dragleave', this.dragDropHandler.onDragLeave.bind(this.dragDropHandler));
+    this.element.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
   }
 
   /**
@@ -1147,6 +1167,20 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     
     await this.submit();
     this.render();
+  }
+
+  /**
+   * Handle canReceiveItems toggle changes
+   */
+  async _onChangeReceiveItems(event, target) {
+    const toggle = target;
+    const canReceive = toggle.checked;
+    const label = game.i18n.localize(canReceive ? "HTBAH.CanReceiveItemsEnabled" : "HTBAH.CanReceiveItemsDisabled");
+    toggle.dataset.tooltip = label;
+    toggle.setAttribute("aria-label", label);
+    
+    // Update the actor's canReceiveItems property
+    await this.document.update({ "system.canReceiveItems": canReceive });
   }
 
   /**
