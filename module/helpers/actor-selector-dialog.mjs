@@ -48,22 +48,45 @@ export class ActorSelectorDialog extends HandlebarsApplicationMixin(foundry.appl
     // Get all valid actors, excluding the current item's owner
     const currentActor = this.item.actor;
     this.actors = game.actors.filter(actor => {
-      // Include characters (all characters are valid targets)
-      if (actor.type === "character" && actor.id !== currentActor?.id) {
-        return true;
+      // Exclude current item's owner
+      if (actor.id === currentActor?.id) {
+        return false;
       }
-      // Include NPCs that have canReceiveItems set to true
-      if (actor.type === "npc" && actor.system.canReceiveItems && actor.id !== currentActor?.id) {
-        return true;
+      
+      // For player-characters, check if the actual owner is online first
+      // (GM can always give items to any actor regardless of online status)
+      if (actor.type === "character" && actor.hasPlayerOwner && !game.user.isGM) {
+        // Check if I am the primary owner of this character
+        const isMyCharacter = game.users.filter(user => user.character?.id === actor.id)
+          .some(user => user.id === game.user.id);
+        
+        if (!isMyCharacter) {
+          // Not my character, check if the primary owner is online
+          const primaryOwners = game.users.filter(user => user.character?.id === actor.id);
+          const hasOnlineOwner = primaryOwners.some(user => user.active);
+          
+          if (!hasOnlineOwner) {
+            return false;
+          }
+        }
       }
-      return false;
+      
+      // After online check, verify user has ownership rights (needed to create embedded items)
+      if (!actor.isOwner) {
+        return false;
+      }
+      
+      return true;
     }).map(actor => ({
       id: actor.id,
       name: actor.name,
       img: actor.img,
       isOwner: actor.isOwner,
       type: actor.type,
-      isNPC: actor.type === "npc"
+      isNPC: actor.type === "npc",
+      // Find the actual primary owner of this character
+      primaryOwner: actor.type === "character" ? 
+        game.users.find(user => user.character?.id === actor.id)?.name || null : null
     }));
 
     // Apply search filter if any

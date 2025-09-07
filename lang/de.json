@@ -115,9 +115,6 @@
   "HTBAH.GiveItemActorNotFound": "Ausgewählter Charakter nicht gefunden.",
   "HTBAH.GiveItemSuccess": "\"{item}\" an {actor} gegeben",
   "HTBAH.GiveItemError": "Fehler beim Übergeben des Gegenstands: {error}",
-  "HTBAH.CanReceiveItems": "Kann Gegenstände erhalten",
-  "HTBAH.CanReceiveItemsEnabled": "Kann Gegenstände erhalten (aktiviert)",
-  "HTBAH.CanReceiveItemsDisabled": "Kann Gegenstände erhalten (deaktiviert)",
 
   "HTBAH.ItemEdit": "Bearbeiten",
   "HTBAH.ItemDelete": "Löschen",

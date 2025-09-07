@@ -20,8 +20,8 @@
                     <span class="item-extras">
                       {{#if isNPC}}
                         <span class="item-extra npc-indicator">{{localize "HTBAH.GiveItemNPC"}}</span>
-                      {{else if isOwner}}
-                        <span class="item-extra">{{localize "HTBAH.GiveItemOwner"}}</span>
+                      {{else if primaryOwner}}
+                        <span class="item-extra character-indicator">Owner: {{primaryOwner}}</span>
                       {{/if}}
                     </span>
                   </span>

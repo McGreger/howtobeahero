@@ -2264,6 +2264,15 @@ item-list-controls search .filter-control:hover:not(.disabled),
   text-transform: uppercase;
 }
 
+.how-to-be-a-hero.actor-selector .item-extra.character-indicator {
+  background: var(--htbah-color-green);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
 .how-to-be-a-hero.actor-selector .no-actors-message {
   text-align: center;
   padding: 2rem;
@@ -2310,37 +2319,8 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 /* Actor Sheet Mode Toggles */
-.how-to-be-a-hero.sheet.actor .window-header .mode-slider,
-.how-to-be-a-hero.sheet.actor .window-header .receive-items-slider {
+.how-to-be-a-hero.sheet.actor .window-header .mode-slider {
   margin-right: 0.5rem;
-}
-
-.how-to-be-a-hero.sheet.actor .window-header .receive-items-slider {
-  /* Style the receive items toggle slightly different to distinguish it */
-  opacity: 0.9;
-  /* Add extra margin to create clear separation from edit toggle */
-  margin-left: 0.5rem;
-}
-
-.how-to-be-a-hero.sheet.actor .window-header .receive-items-slider:hover {
-  opacity: 1;
-}
-
-/* Custom icon for receive-items toggle */
-.how-to-be-a-hero.sheet.actor .window-header .receive-items-slider .slide-toggle-thumb {
-  line-height: 12px;
-}
-
-.how-to-be-a-hero.sheet.actor .window-header .receive-items-slider .slide-toggle-thumb::before {
-  content: "\f06b"; /* fa-gift icon */
-  font-family: var(--font-awesome);
-  color: var(--htbah-color-light-gray);
-  font-weight: bold;
-  font-size: var(--font-size-9);
-}
-
-.how-to-be-a-hero.sheet.actor .window-header .receive-items-slider[checked] .slide-toggle-thumb::before {
-  color: var(--htbah-color-gold);
 }
 
 /* Input Styles */

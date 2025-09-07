@@ -126,9 +126,6 @@
   "HTBAH.GiveItemActorNotFound": "Selected actor not found.",
   "HTBAH.GiveItemSuccess": "Gave \"{item}\" to {actor}",
   "HTBAH.GiveItemError": "Failed to give item: {error}",
-  "HTBAH.CanReceiveItems": "Can receive items",
-  "HTBAH.CanReceiveItemsEnabled": "Can receive items (enabled)",
-  "HTBAH.CanReceiveItemsDisabled": "Can receive items (disabled)",
 
   "HTBAH.ItemEdit": "Edit",
   "HTBAH.ItemDelete": "Delete",

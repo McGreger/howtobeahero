@@ -51,8 +51,7 @@
       }
     },
     "npc": {
-      "templates": ["base"],
-      "canReceiveItems": false
+      "templates": ["base"]
     }
   },
   "Item": {

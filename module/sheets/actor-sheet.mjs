@@ -650,7 +650,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     const header = this.element.querySelector(".window-header");
     if (!header || header.querySelector(".mode-slider")) return; // Avoid duplicates
 
-    // Create edit mode toggle (left side)
+    // Create edit mode toggle
     const editToggle = document.createElement("slide-toggle");
     editToggle.checked = this._mode === this.constructor.MODES.EDIT;
     editToggle.classList.add("mode-slider");
@@ -660,20 +660,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     editToggle.addEventListener("dblclick", event => event.stopPropagation());
     
     header.insertAdjacentElement("afterbegin", editToggle);
-
-    // Add canReceiveItems toggle for NPCs (right side of edit toggle)
-    if (this.document.type === "npc") {
-      const receiveToggle = document.createElement("slide-toggle");
-      receiveToggle.checked = this.document.system.canReceiveItems || false;
-      receiveToggle.classList.add("receive-items-slider");
-      receiveToggle.dataset.tooltip = "HTBAH.CanReceiveItems";
-      receiveToggle.setAttribute("aria-label", game.i18n.localize("HTBAH.CanReceiveItems"));
-      receiveToggle.addEventListener("change", (event) => this._onChangeReceiveItems(event, receiveToggle));
-      receiveToggle.addEventListener("dblclick", event => event.stopPropagation());
-      
-      // Insert after the edit toggle
-      editToggle.insertAdjacentElement("afterend", receiveToggle);
-    }
 
     // Update header buttons
     header.querySelectorAll(".header-button").forEach(btn => {
@@ -1169,19 +1155,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     this.render();
   }
 
-  /**
-   * Handle canReceiveItems toggle changes
-   */
-  async _onChangeReceiveItems(event, target) {
-    const toggle = target;
-    const canReceive = toggle.checked;
-    const label = game.i18n.localize(canReceive ? "HTBAH.CanReceiveItemsEnabled" : "HTBAH.CanReceiveItemsDisabled");
-    toggle.dataset.tooltip = label;
-    toggle.setAttribute("aria-label", label);
-    
-    // Update the actor's canReceiveItems property
-    await this.document.update({ "system.canReceiveItems": canReceive });
-  }
 
   /**
    * Handle initiative rolls
