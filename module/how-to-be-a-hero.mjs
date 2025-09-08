@@ -193,6 +193,16 @@ Hooks.once('init', function () {
     label: 'HOW_TO_BE_A_HERO.SheetLabels.Item',
   });
 
+  // Register system settings
+  game.settings.register("how-to-be-a-hero", "showManaBar", {
+    name: "HTBAH.Settings.ShowManaBar.Name",
+    hint: "HTBAH.Settings.ShowManaBar.Hint", 
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
   // Preload Handlebars helpers & partials
   preloadHandlebarsTemplates();
   registerHandlebarsHelpers();

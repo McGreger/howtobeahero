@@ -253,6 +253,13 @@
 
   "HTBAH.Biography": "Biographie",
 
+  "HTBAH.Settings": {
+    "ShowManaBar": {
+      "Name": "Mana-Balken anzeigen",
+      "Hint": "Ob der Mana-Balken auf Charakterbögen angezeigt wird. Wenn deaktiviert, wird der Mana-Balken für alle Charaktere ausgeblendet."
+    }
+  },
+
   "TYPES": {
     "Actor": {
       "character": "Charakter",

@@ -283,6 +283,13 @@
   },
   
   "HTBAH.Unknown": "Unknown",
+  
+  "HTBAH.Settings": {
+    "ShowManaBar": {
+      "Name": "Show Mana Bar",
+      "Hint": "Whether to display the mana bar on character sheets. When disabled, the mana bar will be hidden for all characters."
+    }
+  },
     
   "TYPES": {
     "Actor": {

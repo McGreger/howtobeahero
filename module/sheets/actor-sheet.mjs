@@ -273,7 +273,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       rollableClass: this.isEditable ? 'rollable' : '',
       rollData: this.document.getRollData(),
       tabs: this.constructor.TABS,
-      activeTab: this._activeTab
+      activeTab: this._activeTab,
+      showManaBar: game.settings.get("how-to-be-a-hero", "showManaBar")
     });
 
     console.log("HowToBeAHero | Context prepared with tabs:", context.tabs);
