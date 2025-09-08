@@ -38,6 +38,7 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
     this.item = options.item;
     this.baseFormula = options.baseFormula || "1d10";
     this.rollType = options.rollType || "check";
+    this.isParry = options.isParry || false;
     this.bonus = 0;
     this.#resolve = null;
     this.#reject = null;
@@ -159,7 +160,7 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
       await roll.evaluate();
       
       // Create customized chat message based on item type
-      const messageContent = await HowToBeAHeroRollDialog._createChatMessage(this.item, roll, finalFormula, this.bonus);
+      const messageContent = await HowToBeAHeroRollDialog._createChatMessage(this.item, roll, finalFormula, this.bonus, this.isParry);
       
       const messageData = {
         user: game.user.id,
@@ -213,8 +214,13 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
   /**
    * Create customized chat message based on item type
    */
-  static async _createChatMessage(item, roll, finalFormula, bonus) {
+  static async _createChatMessage(item, roll, finalFormula, bonus, isParry = false) {
     const rollTotal = roll.total;
+    
+    // Handle parry rolls specifically
+    if (isParry && item.type === "ability") {
+      return this._createParryChatMessage(item, roll, rollTotal, bonus);
+    }
     
     switch (item.type) {
       case "ability":
@@ -328,6 +334,81 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
           ${renderedRoll}
         </div>
         ${bonus ? `<p>Applied Bonus: +${bonus}</p>` : ''}
+      </div>
+    `;
+  }
+
+  /**
+   * Create parry-specific chat message
+   */
+  static _createParryChatMessage(item, roll, rollTotal, bonus) {
+    // Get ability data (same as ability chat message)
+    const targetValue = item.system.value || 50;
+    const baseValue = item.system.value || 50;
+    
+    // Calculate thresholds
+    const criticalThreshold = Math.floor(targetValue * 0.1);
+    const fumbleThreshold = Math.ceil(100 - (100 - targetValue) * 0.1);
+    
+    // Determine success/failure
+    const isSuccess = rollTotal <= targetValue;
+    const isCriticalSuccess = rollTotal <= criticalThreshold;
+    const isCriticalFailure = rollTotal >= fumbleThreshold;
+    
+    // Parry-specific styling
+    const parryIcon = '<i class="fas fa-shield-alt" style="color: #4169E1;"></i>';
+    const parryTitle = game.i18n.localize("HTBAH.ParryAttempt");
+    
+    // Determine result styling and text
+    let resultClass, resultText, resultIcon;
+    if (isCriticalSuccess) {
+      resultClass = 'critical-success';
+      resultText = game.i18n.localize("HTBAH.ParryExceptional");
+      resultIcon = '<i class="fas fa-star" style="color: gold;"></i>';
+    } else if (isSuccess) {
+      resultClass = 'success';
+      resultText = game.i18n.localize("HTBAH.ParrySuccessful");
+      resultIcon = '<i class="fas fa-check-circle" style="color: green;"></i>';
+    } else if (isCriticalFailure) {
+      resultClass = 'critical-failure';
+      resultText = game.i18n.localize("HTBAH.ParryDisastrous");
+      resultIcon = '<i class="fas fa-exclamation-triangle" style="color: red;"></i>';
+    } else {
+      resultClass = 'failure';
+      resultText = game.i18n.localize("HTBAH.ParryFailed");
+      resultIcon = '<i class="fas fa-times-circle" style="color: red;"></i>';
+    }
+
+    return `
+      <div class="htbah-parry-roll">
+        <div class="parry-header">
+          <h3 class="roll-title">
+            ${parryIcon}
+            ${parryTitle}: ${item.name}
+          </h3>
+        </div>
+        
+        <div class="parry-details">
+          <div class="target-info">
+            <strong>${game.i18n.localize("HTBAH.Target")}:</strong> ${targetValue}
+            ${bonus !== 0 ? `<span class="bonus-info">(${game.i18n.localize("HTBAH.Bonus")}: ${bonus > 0 ? '+' : ''}${bonus})</span>` : ''}
+          </div>
+        </div>
+        
+        <div class="parry-result ${resultClass}">
+          <div class="result-header">
+            ${resultIcon}
+            <strong>${resultText}</strong>
+          </div>
+          <div class="roll-details">
+            <div class="roll-value">
+              <strong>${game.i18n.localize("HTBAH.Rolled")}:</strong> ${rollTotal}
+            </div>
+            <div class="formula-breakdown">
+              <em>${item.system.formula || '1d100'}${bonus !== 0 ? (bonus > 0 ? '+' : '') + bonus : ''}</em>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }

@@ -1626,4 +1626,78 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
 
     return this.document.update({ "system.favorites": Array.from(favoritesMap.values()) });
   }
+
+  /**
+   * Roll header ability item
+   */
+  async _onRollHeaderAbility(event, target) {
+    const item = this.document.items.get(this.document.getFlag("how-to-be-a-hero", "headerAbility"));
+    if (!item) return;
+    return item.roll();
+  }
+
+  /**
+   * Roll header weapon item
+   */
+  async _onRollHeaderWeapon(event, target) {
+    const item = this.document.items.get(this.document.getFlag("how-to-be-a-hero", "headerWeapon"));
+    if (!item) return;
+    return item.roll();
+  }
+
+  /**
+   * Roll header parry item with parry context
+   */
+  async _onRollHeaderParry(event, target) {
+    const item = this.document.items.get(this.document.getFlag("how-to-be-a-hero", "headerParry"));
+    if (!item) return;
+    return item.roll({ isParry: true });
+  }
+
+  /**
+   * Roll initiative for this actor
+   */
+  async _onRollInitiative(event, target) {
+    return this.document.rollInitiative({ createCombatants: true });
+  }
+
+  /**
+   * Toggle hit points edit mode
+   */
+  _onToggleEditHP(event, target) {
+    const isEditing = target.dataset.edit === "true";
+    const input = target.querySelector('input[name="system.attributes.health.value"]');
+    const span = target.querySelector('.value');
+    
+    if (isEditing) {
+      span.style.display = 'none';
+      input.style.display = 'inline';
+      input.focus();
+      target.dataset.edit = "false";
+    } else {
+      span.style.display = 'inline';
+      input.style.display = 'none';
+      target.dataset.edit = "true";
+    }
+  }
+
+  /**
+   * Toggle mana points edit mode
+   */
+  _onToggleEditMana(event, target) {
+    const isEditing = target.dataset.edit === "true";
+    const input = target.querySelector('input[name="system.attributes.mana.value"]');
+    const span = target.querySelector('.value');
+    
+    if (isEditing) {
+      span.style.display = 'none';
+      input.style.display = 'inline';
+      input.focus();
+      target.dataset.edit = "false";
+    } else {
+      span.style.display = 'inline';
+      input.style.display = 'none';
+      target.dataset.edit = "true";
+    }
+  }
 }

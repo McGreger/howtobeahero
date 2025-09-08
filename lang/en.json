@@ -267,6 +267,15 @@
   "HTBAH.ConStunned": "Stunned",
 
   "HTBAH.Biography": "Biography",
+  
+  "HTBAH.ParryAttempt": "Parry Attempt",
+  "HTBAH.ParrySuccessful": "Parry Successful",
+  "HTBAH.ParryFailed": "Parry Failed", 
+  "HTBAH.ParryExceptional": "Exceptional Parry",
+  "HTBAH.ParryDisastrous": "Disastrous Parry",
+  "HTBAH.Target": "Target",
+  "HTBAH.Bonus": "Bonus",
+  "HTBAH.Rolled": "Rolled",
 
   "HTBAH.WarnNameRequired": "Name is required",
   "HTBAH.WarningOnlyAbilitiesInSkillSets": "Only abilities can be moved between skill sets",

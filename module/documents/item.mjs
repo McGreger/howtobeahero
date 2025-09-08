@@ -128,14 +128,15 @@ export class HowToBeAHeroItem extends Item {
  * Prepare a data object which defines the data schema used by dice roll commands against this Item
  * @override
  */
-async roll() {
+async roll(options = {}) {
   const item = this;
   const actor = this.actor;
   if (!actor) return;
 
   const speaker = ChatMessage.getSpeaker({ actor: actor });
   const rollMode = game.settings.get('core', 'rollMode');
-  const label = `[${item.type}] ${item.name}`;
+  const isParry = options.isParry || false;
+  const label = isParry ? `[${game.i18n.localize("HTBAH.Parry")}] ${item.name}` : `[${item.type}] ${item.name}`;
 
   // Handle non-rollable items (with defensive check for undefined rollable)
   const isRollable = this.system.rollable ?? (this.type === 'weapon' || this.type === 'ability');
@@ -182,7 +183,8 @@ async roll() {
   const dialog = await HowToBeAHeroRollDialog.show({
     item: this,
     baseFormula: baseFormula,
-    rollType: rollType
+    rollType: rollType,
+    isParry: isParry
   });
 
   return dialog;

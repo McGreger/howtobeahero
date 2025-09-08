@@ -253,6 +253,15 @@
 
   "HTBAH.Biography": "Biographie",
 
+  "HTBAH.ParryAttempt": "Parierversuch",
+  "HTBAH.ParrySuccessful": "Erfolgreich pariert",
+  "HTBAH.ParryFailed": "Parieren fehlgeschlagen",
+  "HTBAH.ParryExceptional": "Außergewöhnliches Parieren",
+  "HTBAH.ParryDisastrous": "Katastrophales Parieren",
+  "HTBAH.Target": "Zielwert",
+  "HTBAH.Bonus": "Bonus",
+  "HTBAH.Rolled": "Gewürfelt",
+
   "HTBAH.Settings": {
     "ShowManaBar": {
       "Name": "Mana-Balken anzeigen",
