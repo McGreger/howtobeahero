@@ -1,3 +1,6 @@
+// Global drag state tracking
+let currentDragSource = null;
+
 export class HowToBeAHeroDragDropHandler {
     constructor(sheet) {
       this.sheet = sheet;
@@ -80,9 +83,6 @@ export class HowToBeAHeroDragDropHandler {
       document.querySelectorAll('.dragover').forEach(el => {
         el.classList.remove('dragover');
       });
-      document.querySelectorAll('.item-exchange-dragover').forEach(el => {
-        el.classList.remove('item-exchange-dragover');
-      });
 
       // Add dragover class to the appropriate element
       if (actionConfig.action === "skillSet") {
@@ -102,12 +102,8 @@ export class HowToBeAHeroDragDropHandler {
         if (inventorySection) {
           inventorySection.classList.add('dragover');
         }
-      } else if (actionConfig.action === "itemExchange") {
-        const sheetElement = dropTarget.closest('.how-to-be-a-hero.sheet.actor.character');
-        if (sheetElement) {
-          sheetElement.classList.add('item-exchange-dragover');
-        }
       }
+      // Note: No dragover effects for itemExchange - keep it simple
     }
   
     /**
@@ -126,6 +122,12 @@ export class HowToBeAHeroDragDropHandler {
       const item = this.actor.items.get(li.dataset.itemId);
       
       if (item) {
+        // Store the source actor ID globally for drag tracking
+        currentDragSource = {
+          actorId: this.actor.id,
+          itemId: item.id
+        };
+        
         const dragData = {
           type: "Item",
           uuid: item.uuid,
@@ -149,10 +151,21 @@ export class HowToBeAHeroDragDropHandler {
         document.querySelectorAll('.dragover').forEach(el => {
           el.classList.remove('dragover');
         });
-        document.querySelectorAll('.item-exchange-dragover').forEach(el => {
-          el.classList.remove('item-exchange-dragover');
-        });
       }
+    }
+
+    /**
+     * Handle dragend event to clean up drag state
+     * @param {DragEvent} event - The drag event
+     */
+    onDragEnd(event) {
+      // Reset global drag tracking when drag operation ends
+      currentDragSource = null;
+      
+      // Clean up any remaining visual feedback
+      document.querySelectorAll('.dragover').forEach(el => {
+        el.classList.remove('dragover');
+      });
     }
 
     /**
@@ -167,9 +180,9 @@ export class HowToBeAHeroDragDropHandler {
       document.querySelectorAll('.dragover').forEach(el => {
         el.classList.remove('dragover');
       });
-      document.querySelectorAll('.item-exchange-dragover').forEach(el => {
-        el.classList.remove('item-exchange-dragover');
-      });
+      
+      // Reset global drag tracking
+      currentDragSource = null;
       
       let data;
       try {
