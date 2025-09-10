@@ -106,6 +106,13 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
    * @returns {string} The final roll formula display
    */
   _calculateFinalFormula(bonus) {
+    // For weapon damage rolls, show the bonus in the roll formula itself
+    if (this.item && this.item.type === "weapon") {
+      const bonusStr = bonus === 0 ? '' : (bonus > 0 ? `+${bonus}` : `${bonus}`);
+      return `${this.baseFormula}${bonusStr}`;
+    }
+    
+    // For ability rolls, show vs target value
     const difficulty = this._getDifficultyLevel();
     const bonusStr = bonus === 0 ? '' : (bonus > 0 ? ` +${bonus}` : ` ${bonus}`);
     return `${this.baseFormula} vs [${difficulty}${bonusStr}]`;
@@ -116,6 +123,11 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
    * @returns {string} The dice formula
    */
   _getRollFormula() {
+    // For weapon damage rolls, include bonus directly in the formula
+    if (this.item && this.item.type === "weapon") {
+      const bonusStr = this.bonus === 0 ? '' : (this.bonus > 0 ? `+${this.bonus}` : `${this.bonus}`);
+      return `${this.baseFormula}${bonusStr}`;
+    }
     return this.baseFormula;
   }
 
@@ -361,9 +373,7 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
             <h2 style="color: #8B0000; font-weight: bold;">${rollTotal} Damage</h2>
           </div>
           <div class="damage-breakdown">
-            <p>Base Roll: ${renderedRoll}</p>
-            ${bonus ? `<p>Bonus: +${bonus}</p>` : ''}
-            <p><strong>Total Damage: ${rollTotal}</strong></p>
+            <p>Roll: ${renderedRoll}</p>
           </div>
         </div>
       </div>

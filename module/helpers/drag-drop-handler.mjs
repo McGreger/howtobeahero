@@ -131,7 +131,8 @@ export class HowToBeAHeroDragDropHandler {
         const dragData = {
           type: "Item",
           uuid: item.uuid,
-          data: item.toObject()
+          data: item.toObject(),
+          sourceActorId: this.actor.id  // Add source actor ID to drag data
         };
         event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
       }
@@ -176,10 +177,15 @@ export class HowToBeAHeroDragDropHandler {
       event.preventDefault();
       event.stopPropagation();
       
+      console.log("onDrop called - currentDragSource:", currentDragSource, "target actor:", this.actor.id);
+      
       // Clean up dragover classes from all character sheets
       document.querySelectorAll('.dragover').forEach(el => {
         el.classList.remove('dragover');
       });
+      
+      // Store drag source before resetting for same-actor check
+      const dragSource = currentDragSource;
       
       // Reset global drag tracking
       currentDragSource = null;
@@ -362,6 +368,14 @@ export class HowToBeAHeroDragDropHandler {
           return this._convertItemType(actorItemForType, actionConfig.type);
     
         default:
+          // Check if this is a same-actor drop using drag data source actor ID
+          if (data.type === "Item" && data.sourceActorId === this.actor.id) {
+            // Item is being dropped back on its original owner - prevent duplication
+            console.log("Preventing same-actor item duplication - sourceActorId:", data.sourceActorId, "matches target:", this.actor.id);
+            event.stopImmediatePropagation(); // Stop all other event handlers
+            return true; // Return true to indicate the drop was handled (prevent default)
+          }
+          console.log("Default drop - sourceActorId:", data.sourceActorId, "target:", this.actor.id, "allowing normal behavior");
           return false;
       }
     }
@@ -429,6 +443,7 @@ export class HowToBeAHeroDragDropHandler {
           case "weapon":
             coreData.system.weaponType = sourceItem.system.weaponType || "";
             coreData.system.rollType = "damage"; // Override for weapons
+            coreData.system.rollable = true; // Weapons should be rollable
             coreData.system.roll = sourceItem.system.roll || {
               diceNum: 1,
               diceSize: "d10",

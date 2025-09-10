@@ -1554,7 +1554,13 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Handle drop events for favorites and header items
    */
   async _onDropItem(event, data) {
+    console.log("_onDropItem called with data:", data);
     if (!event.target.closest(".favorites")) {
+      // Check if this is a same-actor drop to prevent duplication
+      if (data.type === "Item" && data.sourceActorId === this.document.id) {
+        console.log("Preventing same-actor item duplication in _onDropItem - sourceActorId:", data.sourceActorId, "matches target:", this.document.id);
+        return false; // Prevent the default behavior
+      }
       return super._onDropItem(event, data);
     }
     
