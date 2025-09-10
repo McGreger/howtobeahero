@@ -99,7 +99,7 @@ export class HowToBeAHeroItem extends Item {
    * @protected
    */
   _prepareArmor() {
-    //this.labels.armor = this.system.armor.value ? `${this.system.armor.value} ${game.i18n.localize("DND5E.AC")}` : "";
+    // Armor labels handled by system templates
   }
 
   /* -------------------------------------------- */  

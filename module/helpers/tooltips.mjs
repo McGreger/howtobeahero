@@ -86,7 +86,7 @@ export class Tooltips {
   
     /**
      * Handle hovering some part of an actor's sheet.
-     * @param {Actor5e} actor  The actor.
+     * @param {HowToBeAHeroActor} actor  The actor.
      * @protected
      */
     async _onHoverActor(actor) {
@@ -122,50 +122,19 @@ export class Tooltips {
      * @protected
      */
     async _onHoverPassive(skill, ability, dc) {
-      const skillConfig = CONFIG.DND5E.skills[skill];
-      const abilityConfig = CONFIG.DND5E.abilities[ability ?? skillConfig.ability];
+      // How To Be A Hero system doesn't use D&D5e passive skills
+      // This method is kept for compatibility but simplified
+      let label = skill || ability || "Unknown";
   
-      let label;
-      if ( skillConfig ) {
-        label = game.i18n.format("DND5E.SkillPassiveSpecificHint", { skill: skillConfig.label, ability: abilityConfig.label });
-      } else {
-        // If no skill was provided, we're doing a passive ability check.
-        // This isn't technically a thing in the rules, but we can support it anyway if people want to use it.
-        label = game.i18n.format("DND5E.SkillPassiveHint", { skill: abilityConfig.label });
-      }
-  
-      const party = game.settings.get("dnd5e", "primaryParty")?.actor;
+      // No party system in How To Be A Hero
+      const party = null;
       if ( !party ) {
         this.tooltip.innerHTML = label;
         return;
       }
   
-      const context = { label, party: [] };
-      for ( const member of party.system.members ) {
-        const systemData = member.actor?.system;
-        let passive;
-        if ( skill && (!ability || (ability === skillConfig.ability)) ) {
-          // Default passive skill check
-          passive = systemData?.skills?.[skill]?.passive;
-        } else if ( skill ) {
-          // Passive ability check with custom ability
-          const customSkillData = member.actor?._prepareSkill(skill, { ability });
-          passive = customSkillData.passive;
-        } else {
-          // Passive ability check
-          const abilityMod = systemData?.abilities?.[ability]?.mod;
-          if ( abilityMod !== undefined ) passive = 10 + abilityMod;
-        }
-  
-        if ( !passive ) continue;
-        const data = { name: member.actor.name, img: member.actor.img, passive };
-        if ( dc !== undefined ) data.status = passive >= dc ? "success" : "failure";
-        context.party.push(data);
-      }
-  
-      this.tooltip.classList.add("dnd5e-tooltip", "passive-tooltip");
-      this.tooltip.innerHTML = await foundry.applications.handlebars.renderTemplate("systems/dnd5e/templates/journal/passive-tooltip.hbs", context);
-      game.tooltip._setAnchor(foundry.helpers.interaction.TooltipManager.implementation.TOOLTIP_DIRECTIONS.DOWN);
+      // Simplified tooltip for How To Be A Hero system
+      this.tooltip.innerHTML = label;
     }
   
     /* -------------------------------------------- */

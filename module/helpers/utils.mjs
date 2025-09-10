@@ -212,7 +212,7 @@
 
 /**
  * Get currently selected tokens in the scene or user's character's tokens.
- * @returns {Token5e[]}
+ * @returns {Token[]}
  */
 export function getSceneTargets() {
     let targets = canvas.tokens.controlled.filter(t => t.actor);
@@ -382,7 +382,7 @@ const _preLocalizationRegistrations = {};
 
 /**
  * Mark the provided config key to be pre-localized during the init stage.
- * @param {string} configKeyPath          Key path within `CONFIG.DND5E` to localize.
+ * @param {string} configKeyPath          Key path within `CONFIG.HOW_TO_BE_A_HERO` to localize.
  * @param {object} [options={}]
  * @param {string} [options.key]          If each entry in the config enum is an object,
  *                                        localize and sort using this property.
@@ -399,7 +399,7 @@ export function preLocalize(configKeyPath, { key, keys=[], sort=false }={}) {
 
 /**
  * Execute previously defined pre-localization tasks on the provided config object.
- * @param {object} config  The `CONFIG.DND5E` object to localize and sort. *Will be mutated.*
+ * @param {object} config  The `CONFIG.HOW_TO_BE_A_HERO` object to localize and sort. *Will be mutated.*
  */
 export function performPreLocalization(config) {
   for ( const [keyPath, settings] of Object.entries(_preLocalizationRegistrations) ) {
@@ -480,7 +480,7 @@ const _attributeLabelCache = new Map();
  * Convert an attribute path to a human-readable label.
  * @param {string} attr              The attribute path.
  * @param {object} [options]
- * @param {Actor5e} [options.actor]  An optional reference actor.
+ * @param {HowToBeAHeroActor} [options.actor]  An optional reference actor.
  * @returns {string|void}
 export function getHumanReadableAttributeLabel(attr, { actor }={}) {
   // Check any actor-specific names first.
@@ -489,8 +489,9 @@ export function getHumanReadableAttributeLabel(attr, { actor }={}) {
     if ( resource.label ) return resource.label;
   }
 
-  if ( (attr === "details.xp.value") && (actor?.type === "npc") ) {
-    return game.i18n.localize("DND5E.ExperiencePointsValue");
+  // Generic XP handling for How To Be A Hero
+  if ( attr === "details.xp.value" ) {
+    return game.i18n.localize("HTBAH.ExperiencePoints");
   }
 
   if ( attr.startsWith(".") && actor ) {
@@ -502,45 +503,8 @@ export function getHumanReadableAttributeLabel(attr, { actor }={}) {
   let label = _attributeLabelCache.get(attr);
   if ( label ) return label;
 
-  // Derived fields.
-  if ( attr === "attributes.init.total" ) label = "DND5E.InitiativeBonus";
-  else if ( attr === "attributes.ac.value" ) label = "DND5E.ArmorClass";
-  else if ( attr === "attributes.spelldc" ) label = "DND5E.SpellDC";
-
-  // Abilities.
-  else if ( attr.startsWith("abilities.") ) {
-    const [, key] = attr.split(".");
-    label = game.i18n.format("DND5E.AbilityScoreL", { ability: CONFIG.DND5E.abilities[key].label });
-  }
-
-  // Abilities.
-  else if ( attr.startsWith("abilities.") ) {
-    const [, key] = attr.split(".");
-    label = game.i18n.format("DND5E.SkillPassiveScore", { ability: CONFIG.DND5E.abilities[key].label });
-  }
-
-  // Spell slots.
-  else if ( attr.startsWith("spells.") ) {
-    const [, key] = attr.split(".");
-    if ( key === "pact" ) label = "DND5E.SpellSlotsPact";
-    else {
-      const plurals = new Intl.PluralRules(game.i18n.lang, {type: "ordinal"});
-      const level = Number(key.slice(5));
-      label = game.i18n.format(`DND5E.SpellSlotsN.${plurals.select(level)}`, { n: level });
-    }
-  }
-
-  // Attempt to find the attribute in a data model.
-  if ( !label ) {
-    const { CharacterData, NPCData, VehicleData, GroupData } = dnd5e.dataModels.actor;
-    for ( const model of [CharacterData, NPCData, VehicleData, GroupData] ) {
-      const field = model.schema.getField(attr);
-      if ( field ) {
-        label = field.label;
-        break;
-      }
-    }
-  }
+  // Generic attribute handling for How To Be A Hero
+  // Most attributes will be handled by generic fallback below
 
   if ( label ) {
     label = game.i18n.localize(label);

@@ -185,6 +185,9 @@
   "HTBAH.EffectNew": "Neuer Effekt",
   "HTBAH.EffectUnavailable": "Nicht verfügbare Effekte",
   "HTBAH.EffectUnavailableInfo": "Quellgegenstand muss ausgerüstet oder eingestimmt sein, um diese zu aktivieren",
+  
+  "HTBAH.Suppressed": "Unterdrückt",
+  "HTBAH.ExperiencePoints": "Erfahrungspunkte",
 
   "EFFECT.HTBAH": {
     "StatusBleeding": "Blutend",

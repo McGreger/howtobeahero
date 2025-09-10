@@ -196,6 +196,9 @@
   "HTBAH.EffectNew": "New Effect",
   "HTBAH.EffectUnavailable": "Unavailable Effects",
   "HTBAH.EffectUnavailableInfo": "Source item must be equipped or attuned to activate these",
+  
+  "HTBAH.Suppressed": "Suppressed",
+  "HTBAH.ExperiencePoints": "Experience Points",
 
   "HTBAH.Newaction": "New Action",
   "HTBAH.Newknowledge": "New Knowledge", 

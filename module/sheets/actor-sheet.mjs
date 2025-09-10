@@ -938,7 +938,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       if (type === "ability") rollableClass.push("ability-name");
       else if (type === "tool") rollableClass.push("tool-name");
 
-      if (suppressed) subtitle = game.i18n.localize("DND5E.Suppressed");
+      if (suppressed) subtitle = game.i18n.localize("HTBAH.Suppressed");
       
       const finalRollableClass = rollableClass.filterJoin(" ");
       console.log(`Final rollableClass for ${title}: "${finalRollableClass}" (original array: [${rollableClass.join(", ")}])`);
