@@ -262,6 +262,24 @@
   "HTBAH.Bonus": "Bonus",
   "HTBAH.Rolled": "Gewürfelt",
 
+  "HTBAH.WarnNameRequired": "Name ist erforderlich",
+  "HTBAH.WarningOnlyAbilitiesInSkillSets": "Nur Fähigkeiten können zwischen Fertigkeitsgruppen verschoben werden",
+
+  "HTBAH.RollDialog": {
+    "Title": "Würfeln",
+    "BaseRoll": "Grundwurf",
+    "Bonus": "Bonus",
+    "BonusHint": "Zusätzlicher Bonus für diesen Wurf",
+    "Malus": "Malus",
+    "MalusHint": "Abzug von diesem Wurf",
+    "FinalRoll": "Finaler Wurf",
+    "Roll": "Würfeln",
+    "RollItem": "{item} würfeln",
+    "ErrorRolling": "Fehler beim Würfeln"
+  },
+  
+  "HTBAH.Unknown": "Unbekannt",
+
   "HTBAH.Settings": {
     "ShowManaBar": {
       "Name": "Mana-Balken anzeigen",

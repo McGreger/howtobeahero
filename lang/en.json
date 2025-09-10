@@ -285,6 +285,8 @@
     "BaseRoll": "Base Roll",
     "Bonus": "Bonus",
     "BonusHint": "Additional bonus to add to this roll",
+    "Malus": "Malus",
+    "MalusHint": "Penalty to subtract from this roll",
     "FinalRoll": "Final Roll",
     "Roll": "Roll",
     "RollItem": "Roll {item}",

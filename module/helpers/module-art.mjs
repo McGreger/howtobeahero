@@ -55,7 +55,7 @@ export class ModuleArt {
      * @returns {Promise<void>}
      */
     async #parseArtMapping(moduleId, mapping, credit) {
-      let settings = game.settings.get("dnd5e", "moduleArtConfiguration")?.[moduleId];
+      let settings = game.settings.get("how-to-be-a-hero", "moduleArtConfiguration")?.[moduleId];
       settings ??= {portraits: true, tokens: true};
       for ( const [packName, actors] of Object.entries(mapping) ) {
         const pack = game.packs.get(packName);
@@ -83,7 +83,7 @@ export class ModuleArt {
      */
     static getModuleArtPath(module) {
       const flags = module.flags?.[module.id];
-      const artPath = flags?.["dnd5e-art"];
+      const artPath = flags?.["htbah-art"];
       if ( !artPath || !module.active ) return null;
       return artPath;
     }
@@ -104,13 +104,13 @@ export class ModuleArt {
      * @returns {ModuleArtDescriptor[]}
      */
     static getArtModules() {
-      const settings = game.settings.get("dnd5e", "moduleArtConfiguration");
+      const settings = game.settings.get("how-to-be-a-hero", "moduleArtConfiguration");
       const unsorted = [];
       const configs = [{
         id: game.system.id,
         label: game.system.title,
-        mapping: "systems/dnd5e/json/fa-token-mapping.json",
-        priority: settings.dnd5e?.priority ?? CONST.SORT_INTEGER_DENSITY,
+        mapping: "systems/how-to-be-a-hero/json/htbah-token-mapping.json",
+        priority: settings["how-to-be-a-hero"]?.priority ?? CONST.SORT_INTEGER_DENSITY,
         credit: `
           <em>
             Token artwork by
@@ -123,7 +123,7 @@ export class ModuleArt {
         const flags = module.flags?.[module.id];
         const mapping = this.getModuleArtPath(module);
         if ( !mapping ) continue;
-        const config = { id: module.id, label: module.title, credit: flags?.["dnd5e-art-credit"], mapping };
+        const config = { id: module.id, label: module.title, credit: flags?.["htbah-art-credit"], mapping };
         configs.push(config);
         const priority = settings[module.id]?.priority;
         if ( priority === undefined ) unsorted.push(config);
@@ -137,91 +137,4 @@ export class ModuleArt {
     }
   }
   
-  /**
-   * A class responsible for allowing GMs to configure art provided by installed modules.
-   */
-  export class ModuleArtConfig extends FormApplication {
-    /** @inheritdoc */
-    constructor(object={}, options={}) {
-      object = foundry.utils.mergeObject(game.settings.get("dnd5e", "moduleArtConfiguration"), object, {inplace: false});
-      super(object, options);
-    }
-  
-    /* -------------------------------------------- */
-  
-    /** @inheritdoc */
-    static get defaultOptions() {
-      return foundry.utils.mergeObject(super.defaultOptions, {
-        title: game.i18n.localize("DND5E.ModuleArtConfigL"),
-        id: "module-art-config",
-        template: "systems/dnd5e/templates/apps/module-art-config.hbs",
-        popOut: true,
-        width: 600,
-        height: "auto"
-      });
-    }
-  
-    /* -------------------------------------------- */
-  
-    /** @inheritdoc */
-    getData(options={}) {
-      const context = super.getData(options);
-      context.config = [];
-      for ( const config of ModuleArt.getArtModules() ) {
-        const settings = this.object[config.id] ?? { portraits: true, tokens: true };
-        context.config.push({ ...config, ...settings });
-      }
-      return context;
-    }
-  
-    /* -------------------------------------------- */
-  
-    /** @inheritDoc */
-    activateListeners(html) {
-      super.activateListeners(html);
-      html.find("[data-action]").on("click", this._onAction.bind(this));
-    }
-  
-    /* -------------------------------------------- */
-  
-    /**
-     * Handle priority increase or decrease actions.
-     * @param {PointerEvent} event  The triggering event.
-     * @protected
-     */
-    _onAction(event) {
-      const action = event.currentTarget.dataset.action;
-      const item = event.currentTarget.closest("[data-id]");
-      const id = item.dataset.id;
-      const configs = [];
-      for ( const element of this.form.elements ) {
-        const [id, key] = element.name.split(".");
-        if ( key === "priority" ) configs.push({ id, priority: Number(element.value) });
-      }
-      const idx = configs.findIndex(config => config.id === id);
-      if ( idx < 0 ) return;
-      if ( (action === "increase") && (idx === 0) ) return;
-      if ( (action === "decrease") && (idx === configs.length - 1) ) return;
-      const sortBefore = action === "increase";
-      const config = configs[idx];
-      const target = configs[sortBefore ? idx - 1 : idx + 1];
-      configs.splice(idx, 1);
-      const updates = SortingHelpers.performIntegerSort(config, {
-        target, sortBefore,
-        siblings: configs,
-        sortKey: "priority"
-      });
-      updates.forEach(({ target, update }) => this.form.elements[`${target.id}.priority`].value = update.priority);
-      if ( action === "increase" ) item.previousElementSibling.insertAdjacentElement("beforebegin", item);
-      else item.nextElementSibling.insertAdjacentElement("afterend", item);
-    }
-  
-    /* -------------------------------------------- */
-  
-    /** @inheritdoc */
-    async _updateObject(event, formData) {
-      await game.settings.set("dnd5e", "moduleArtConfiguration", foundry.utils.expandObject(formData));
-      return SettingsConfig.reloadConfirm({world: true});
-    }
-  }
   

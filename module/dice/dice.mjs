@@ -9,7 +9,7 @@ export async function d100Roll({
   fumble = 100,
   targetValue,
   baseValue,
-  bonusValue,
+  bonusValue = 0,
   chatMessage = true,
   messageData = {},
   flavor,
@@ -24,7 +24,8 @@ export async function d100Roll({
 
   await roll.evaluate();
 
-  const totalTargetValue = targetValue;
+  // Apply bonus/malus to target value (bonus increases target, malus decreases)
+  const totalTargetValue = targetValue + bonusValue;
   const criticalThreshold = Math.floor(totalTargetValue * 0.1);
   const fumbleThreshold = Math.ceil(100 - (100 - totalTargetValue) * 0.1);
 
@@ -66,23 +67,32 @@ export async function d100Roll({
     // Get header configuration for this roll type
     const header = headerConfig[rollType] || headerConfig.default;
 
-    const rollDetails = `
-      <div class="roll-details">
-        <h3 class="roll-header">${header.title} ${header.icon}</h3>
-        <p>Roll: ${total}</p>
-        <p>Target: ${totalTargetValue}</p> 
-        <p>(Base: ${baseValue}, Bonus: ${bonusValue})</p>
-        <p>Critical Success: ≤ ${criticalThreshold}</p>
-        <p>Critical Failure: ≥ ${fumbleThreshold}</p>
-      </div>
-    `;
-
+    const bonusDisplay = bonusValue === 0 ? '' : (bonusValue > 0 ? ` +${bonusValue}` : ` ${bonusValue}`);
+    
     let resultMessage = roll.isCriticalSuccess ? '<span style="color: #00ff00;"><strong>Critical Success!</strong></span>'
       : roll.isCriticalFailure ? '<span style="color: #ff0000;"><strong>Critical Failure!</strong></span>'
       : roll.isSuccess ? '<span style="color: #0000ff;"><strong>Success</strong></span>'
       : '<span style="color: #ff8800;"><strong>Failure</strong></span>';
 
-    messageData.content = (messageData.content || "") + `${rollDetails}<br>${resultMessage}`;
+    const totalTargetValue = targetValue + bonusValue;
+    
+    // Create a target value display with Foundry tooltip
+    let targetDisplay = totalTargetValue.toString();
+    if (bonusValue !== 0) {
+      targetDisplay = `<span class="dice-total" data-tooltip="${targetValue}${bonusDisplay}">${totalTargetValue}</span>`;
+    }
+    
+    const rollDetails = `
+      <div class="htbah-skill-roll" style="text-align: center;">
+        <div class="roll-header">${header.title} ${header.icon}</div>
+        <h3 class="roll-result">
+          <i class="fas fa-dice-d20"></i> ${total} vs. ${targetDisplay}
+        </h3>
+        <div>${resultMessage}</div>
+      </div>
+    `;
+
+    messageData.content = (messageData.content || "") + rollDetails;
     await roll.toMessage(messageData);
   }
 

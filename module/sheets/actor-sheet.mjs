@@ -99,8 +99,8 @@ class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixi
     },
     classes: ["dialog", "how-to-be-a-hero"],
     actions: {
-      confirm: this.prototype._onConfirm,
-      cancel: this.prototype._onCancel
+      cancel: this.prototype._onCancel,
+      submit: this.prototype._onSubmit
     }
   };
 
@@ -137,25 +137,16 @@ class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixi
     }
   }
 
-  _attachFrameListeners() {
-    super._attachFrameListeners();
-    
-    this.element.querySelector('input[name="name"]')?.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        this._submit();
-      }
-    });
-  }
-
-  _onConfirm(event, target) {
-    console.log("_onConfirm called");
-    this._submit();
-  }
 
   _onCancel(event, target) {
     console.log("_onCancel called");
     this.close();
+  }
+
+  _onSubmit(event, target) {
+    console.log("_onSubmit called");
+    event.preventDefault();
+    this._submit();
   }
 
   _submit() {
