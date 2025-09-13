@@ -1,6 +1,7 @@
 import {parseInputDelta} from "../helpers/utils.mjs";
 //import CurrencyManager from "../currency-manager.mjs";
 import ContextMenuHTBAH from "../helpers/context-menu.mjs";
+import { ActorSelectorDialog } from "../helpers/actor-selector-dialog.mjs";
 
 /**
  * Custom element that handles displaying actor & container inventories.
@@ -262,12 +263,15 @@ export default class InventoryElement extends HTMLElement {
    * @protected
    */
   _getContextOptions(item) {
+    // Check if the sheet is in edit mode
+    const isEditMode = this._app && this._app._mode === this._app.constructor.MODES.EDIT;
+    
     // Standard Options
     const options = [
       {
         name: "HTBAH.ContextMenuActionEdit",
         icon: "<i class='fas fa-edit fa-fw'></i>",
-        condition: () => item.isOwner,
+        condition: () => item.isOwner && !isEditMode,
         callback: li => this._onAction(li, "edit")
       },
       {
@@ -285,18 +289,27 @@ export default class InventoryElement extends HTMLElement {
       {
         name: "HTBAH.ContextMenuActionDelete",
         icon: "<i class='fas fa-trash fa-fw'></i>",
-        condition: () => item.isOwner,
+        condition: () => item.isOwner && !isEditMode,
         callback: li => this._onAction(li, "delete")
+      },
+      {
+        name: "HTBAH.ContextMenuActionGiveItem",
+        icon: "<i class='fas fa-handshake fa-fw'></i>",
+        condition: () => {
+          const transferableTypes = ["item", "consumable", "weapon", "armor", "tool"];
+          return item.isOwner && transferableTypes.includes(item.type);
+        },
+        callback: li => this._onAction(li, "giveItem")
       }
     ];
 
     if ( !this.actor || (this.actor.type === "group") ) return options;
 
-    // Toggle Equipped State
+    // Toggle Equipped State - only show in edit mode (in play mode it's shown as a button)
     if ( "equipped" in item.system ) options.push({
-      name: item.system.equipped ? "HTBAH.ContextMenuActionUnequip" : "HTBAH.ContextMenuActionEquip",
+      name: item.system.equipped ? "HTBAH.Unequip" : "HTBAH.Equip",
       icon: "<i class='fas fa-shield-alt fa-fw'></i>",
-      condition: () => item.isOwner,
+      condition: () => item.isOwner && isEditMode,
       callback: li => this._onAction(li, "equip"),
       group: "state"
     });
@@ -423,6 +436,8 @@ export default class InventoryElement extends HTMLElement {
         return this.actor.system.removeFavorite(`Actor.${this.actor.id}.Item.${item.id}`); // Use the full UUID
       case "use":
         return item.use({}, { event });
+      case "giveItem":
+        return this._onGiveItem(item);
     }
   }
 
@@ -468,6 +483,18 @@ export default class InventoryElement extends HTMLElement {
       summary.slideDown(200);
       this._app._expanded.add(item.id);
     }
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Handle giving an item to another actor.
+   * @param {Item} item  Item to give away.
+   * @returns {Promise}
+   * @protected
+   */
+  async _onGiveItem(item) {
+    return ActorSelectorDialog.show(item);
   }
 
   /* -------------------------------------------- */

@@ -86,6 +86,11 @@
 
   "HTBAH.SkillDrop": "Drop Skill",
   "HTBAH.WeaponDrop": "Drop Weapon",
+  "HTBAH.ItemDrop": "Drop to Convert to Item",
+  "HTBAH.ConsumableDrop": "Drop to Convert to Consumable",
+  "HTBAH.WeaponDropConvert": "Drop to Convert to Weapon", 
+  "HTBAH.ArmorDrop": "Drop to Convert to Armor",
+  "HTBAH.ToolDrop": "Drop to Convert to Tool",
   "HTBAH.Skill": "Skill",
   "HTBAH.Weapon": "Weapon",
   "HTBAH.Parry": "Parry",
@@ -116,6 +121,16 @@
   "HTBAH.ContextMenuActionDuplicate": "Duplicate",
   "HTBAH.ContextMenuActionEquip": "Equip",
   "HTBAH.ContextMenuActionDelete": "Delete",
+  "HTBAH.ContextMenuActionGiveItem": "Give item",
+  "HTBAH.GiveItemDialogTitle": "Give item",
+  "HTBAH.GiveItemSearchPlaceholder": "Search...",
+  "HTBAH.GiveItemSelectButton": "Select",
+  "HTBAH.GiveItemNoActorsFound": "No actors found",
+  "HTBAH.GiveItemOwner": "Owner: You",
+  "HTBAH.GiveItemNPC": "NPC",
+  "HTBAH.GiveItemActorNotFound": "Selected actor not found.",
+  "HTBAH.GiveItemSuccess": "Gave \"{item}\" to {actor}",
+  "HTBAH.GiveItemError": "Failed to give item: {error}",
 
   "HTBAH.ItemEdit": "Edit",
   "HTBAH.ItemDelete": "Delete",
@@ -186,6 +201,9 @@
   "HTBAH.EffectNew": "New Effect",
   "HTBAH.EffectUnavailable": "Unavailable Effects",
   "HTBAH.EffectUnavailableInfo": "Source item must be equipped or attuned to activate these",
+  
+  "HTBAH.Suppressed": "Suppressed",
+  "HTBAH.ExperiencePoints": "Experience Points",
 
   "HTBAH.Newaction": "New Action",
   "HTBAH.Newknowledge": "New Knowledge", 
@@ -257,6 +275,15 @@
   "HTBAH.ConStunned": "Stunned",
 
   "HTBAH.Biography": "Biography",
+  
+  "HTBAH.ParryAttempt": "Parry Attempt",
+  "HTBAH.ParrySuccessful": "Parry Successful",
+  "HTBAH.ParryFailed": "Parry Failed", 
+  "HTBAH.ParryExceptional": "Exceptional Parry",
+  "HTBAH.ParryDisastrous": "Disastrous Parry",
+  "HTBAH.Target": "Target",
+  "HTBAH.Bonus": "Bonus",
+  "HTBAH.Rolled": "Rolled",
 
   "HTBAH.WarnNameRequired": "Name is required",
   "HTBAH.WarningOnlyAbilitiesInSkillSets": "Only abilities can be moved between skill sets",
@@ -266,6 +293,8 @@
     "BaseRoll": "Base Roll",
     "Bonus": "Bonus",
     "BonusHint": "Additional bonus to add to this roll",
+    "Malus": "Malus",
+    "MalusHint": "Penalty to subtract from this roll",
     "FinalRoll": "Final Roll",
     "Roll": "Roll",
     "RollItem": "Roll {item}",
@@ -273,6 +302,13 @@
   },
   
   "HTBAH.Unknown": "Unknown",
+  
+  "HTBAH.Settings": {
+    "ShowManaBar": {
+      "Name": "Show Mana Bar",
+      "Hint": "Whether to display the mana bar on character sheets. When disabled, the mana bar will be hidden for all characters."
+    }
+  },
     
   "TYPES": {
     "Actor": {
@@ -288,5 +324,17 @@
       "armor": "Armor",
       "base": "Base"
     }
-  }
+  },
+
+  "HTBAH.Settings.Debug.Name": "Debug Mode",
+  "HTBAH.Settings.Debug.Hint": "Enable debug logging for the How to be a Hero system.",
+  
+  "HTBAH.Settings.CollapseCards.Name": "Auto-collapse Item Cards",
+  "HTBAH.Settings.CollapseCards.Hint": "Automatically collapse item cards in chat messages.",
+  
+  "HTBAH.Settings.Initiative.Name": "Initiative Formula",
+  "HTBAH.Settings.Initiative.Hint": "Configure the default dice formula used for initiative rolls.",
+  
+  "HTBAH.Settings.ForceDarkMode.Name": "Force Dark Mode",
+  "HTBAH.Settings.ForceDarkMode.Hint": "Forces dark mode for all users when using How to be a Hero sheets. Light mode is not yet fully supported."
 }

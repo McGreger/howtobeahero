@@ -80,6 +80,11 @@
 
   "HTBAH.SkillDrop": "Fähigkeit ablegen",
   "HTBAH.WeaponDrop": "Waffe ablegen",
+  "HTBAH.ItemDrop": "Ablegen um zu Gegenstand zu konvertieren",
+  "HTBAH.ConsumableDrop": "Ablegen um zu Verbrauchsgegenstand zu konvertieren",
+  "HTBAH.WeaponDropConvert": "Ablegen um zu Waffe zu konvertieren",
+  "HTBAH.ArmorDrop": "Ablegen um zu Rüstung zu konvertieren",
+  "HTBAH.ToolDrop": "Ablegen um zu Werkzeug zu konvertieren",
   "HTBAH.Skill": "Fähigkeit",
   "HTBAH.Weapon": "Waffe",
   "HTBAH.Parry": "Parade",
@@ -105,6 +110,16 @@
   "HTBAH.ContextMenuActionEdit": "Bearbeiten",
   "HTBAH.ContextMenuActionDuplicate": "Dublizieren",
   "HTBAH.ContextMenuActionDelete": "Löschen",
+  "HTBAH.ContextMenuActionGiveItem": "Gegenstand geben",
+  "HTBAH.GiveItemDialogTitle": "Gegenstand übergeben",
+  "HTBAH.GiveItemSearchPlaceholder": "Suche…",
+  "HTBAH.GiveItemSelectButton": "Wähle",
+  "HTBAH.GiveItemNoActorsFound": "Keine Charaktere gefunden",
+  "HTBAH.GiveItemOwner": "Eigentümer: Du",
+  "HTBAH.GiveItemNPC": "NPC",
+  "HTBAH.GiveItemActorNotFound": "Ausgewählter Charakter nicht gefunden.",
+  "HTBAH.GiveItemSuccess": "\"{item}\" an {actor} gegeben",
+  "HTBAH.GiveItemError": "Fehler beim Übergeben des Gegenstands: {error}",
 
   "HTBAH.ItemEdit": "Bearbeiten",
   "HTBAH.ItemDelete": "Löschen",
@@ -175,6 +190,9 @@
   "HTBAH.EffectNew": "Neuer Effekt",
   "HTBAH.EffectUnavailable": "Nicht verfügbare Effekte",
   "HTBAH.EffectUnavailableInfo": "Quellgegenstand muss ausgerüstet oder eingestimmt sein, um diese zu aktivieren",
+  
+  "HTBAH.Suppressed": "Unterdrückt",
+  "HTBAH.ExperiencePoints": "Erfahrungspunkte",
 
   "EFFECT.HTBAH": {
     "StatusBleeding": "Blutend",
@@ -242,6 +260,48 @@
   "HTBAH.ConStunned": "Betäubt",
 
   "HTBAH.Biography": "Biographie",
+
+  "HTBAH.ParryAttempt": "Parierversuch",
+  "HTBAH.ParrySuccessful": "Erfolgreich pariert",
+  "HTBAH.ParryFailed": "Parieren fehlgeschlagen",
+  "HTBAH.ParryExceptional": "Außergewöhnliches Parieren",
+  "HTBAH.ParryDisastrous": "Katastrophales Parieren",
+  "HTBAH.Target": "Zielwert",
+  "HTBAH.Bonus": "Bonus",
+  "HTBAH.Rolled": "Gewürfelt",
+
+  "HTBAH.WarnNameRequired": "Name ist erforderlich",
+  "HTBAH.WarningOnlyAbilitiesInSkillSets": "Nur Fähigkeiten können zwischen Fertigkeitsgruppen verschoben werden",
+
+  "HTBAH.RollDialog": {
+    "Title": "Würfeln",
+    "BaseRoll": "Grundwurf",
+    "Bonus": "Bonus",
+    "BonusHint": "Zusätzlicher Bonus für diesen Wurf",
+    "Malus": "Malus",
+    "MalusHint": "Abzug von diesem Wurf",
+    "FinalRoll": "Finaler Wurf",
+    "Roll": "Würfeln",
+    "RollItem": "{item} würfeln",
+    "ErrorRolling": "Fehler beim Würfeln"
+  },
+  
+  "HTBAH.Unknown": "Unbekannt",
+
+  "HTBAH.Settings.ShowManaBar.Name": "Mana-Balken anzeigen",
+  "HTBAH.Settings.ShowManaBar.Hint": "Ob der Mana-Balken auf Charakterbögen angezeigt wird. Wenn deaktiviert, wird der Mana-Balken für alle Charaktere ausgeblendet.",
+  
+  "HTBAH.Settings.Debug.Name": "Debug-Modus",
+  "HTBAH.Settings.Debug.Hint": "Aktiviert Debug-Protokollierung für das How to be a Hero System.",
+  
+  "HTBAH.Settings.CollapseCards.Name": "Gegenstandskarten automatisch einklappen",
+  "HTBAH.Settings.CollapseCards.Hint": "Klappt Gegenstandskarten in Chat-Nachrichten automatisch ein.",
+  
+  "HTBAH.Settings.Initiative.Name": "Initiative-Formel",
+  "HTBAH.Settings.Initiative.Hint": "Konfiguriert die Standard-Würfelformel für Initiative-Würfe.",
+  
+  "HTBAH.Settings.ForceDarkMode.Name": "Dunklen Modus erzwingen",
+  "HTBAH.Settings.ForceDarkMode.Hint": "Erzwingt den dunklen Modus für alle Benutzer bei der Verwendung von How to be a Hero Bögen. Der helle Modus wird noch nicht vollständig unterstützt.",
 
   "TYPES": {
     "Actor": {

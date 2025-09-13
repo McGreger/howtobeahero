@@ -99,8 +99,8 @@ class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixi
     },
     classes: ["dialog", "how-to-be-a-hero"],
     actions: {
-      confirm: this.prototype._onConfirm,
-      cancel: this.prototype._onCancel
+      cancel: this.prototype._onCancel,
+      submit: this.prototype._onSubmit
     }
   };
 
@@ -137,25 +137,16 @@ class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixi
     }
   }
 
-  _attachFrameListeners() {
-    super._attachFrameListeners();
-    
-    this.element.querySelector('input[name="name"]')?.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        this._submit();
-      }
-    });
-  }
-
-  _onConfirm(event, target) {
-    console.log("_onConfirm called");
-    this._submit();
-  }
 
   _onCancel(event, target) {
     console.log("_onCancel called");
     this.close();
+  }
+
+  _onSubmit(event, target) {
+    console.log("_onSubmit called");
+    event.preventDefault();
+    this._submit();
   }
 
   _submit() {
@@ -273,7 +264,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       rollableClass: this.isEditable ? 'rollable' : '',
       rollData: this.document.getRollData(),
       tabs: this.constructor.TABS,
-      activeTab: this._activeTab
+      activeTab: this._activeTab,
+      showManaBar: game.settings.get("how-to-be-a-hero", "showManaBar")
     });
 
     console.log("HowToBeAHero | Context prepared with tabs:", context.tabs);
@@ -644,21 +636,22 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Setup the edit mode toggle in the header
    */
   _setupModeToggle() {
-    if (!this.isEditable) return;
+    // Only show mode toggles to GM users
+    if (!this.isEditable || !game.user.isGM) return;
 
     const header = this.element.querySelector(".window-header");
     if (!header || header.querySelector(".mode-slider")) return; // Avoid duplicates
 
-    // Create mode toggle
-    const toggle = document.createElement("slide-toggle");
-    toggle.checked = this._mode === this.constructor.MODES.EDIT;
-    toggle.classList.add("mode-slider");
-    toggle.dataset.tooltip = "HTBAH.SheetModeEdit";
-    toggle.setAttribute("aria-label", game.i18n.localize("HTBAH.SheetModeEdit"));
-    toggle.addEventListener("change", (event) => this._onChangeSheetMode(event, toggle));
-    toggle.addEventListener("dblclick", event => event.stopPropagation());
+    // Create edit mode toggle
+    const editToggle = document.createElement("slide-toggle");
+    editToggle.checked = this._mode === this.constructor.MODES.EDIT;
+    editToggle.classList.add("mode-slider");
+    editToggle.dataset.tooltip = "HTBAH.SheetModeEdit";
+    editToggle.setAttribute("aria-label", game.i18n.localize("HTBAH.SheetModeEdit"));
+    editToggle.addEventListener("change", (event) => this._onChangeSheetMode(event, editToggle));
+    editToggle.addEventListener("dblclick", event => event.stopPropagation());
     
-    header.insertAdjacentElement("afterbegin", toggle);
+    header.insertAdjacentElement("afterbegin", editToggle);
 
     // Update header buttons
     header.querySelectorAll(".header-button").forEach(btn => {
@@ -945,7 +938,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       if (type === "ability") rollableClass.push("ability-name");
       else if (type === "tool") rollableClass.push("tool-name");
 
-      if (suppressed) subtitle = game.i18n.localize("DND5E.Suppressed");
+      if (suppressed) subtitle = game.i18n.localize("HTBAH.Suppressed");
       
       const finalRollableClass = rollableClass.filterJoin(" ");
       console.log(`Final rollableClass for ${title}: "${finalRollableClass}" (original array: [${rollableClass.join(", ")}])`);
@@ -1123,6 +1116,11 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       zone.addEventListener('dragleave', this.dragDropHandler.onDragLeave.bind(this.dragDropHandler));
       zone.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
     });
+
+    // Add the entire sheet as a drop zone for item exchanges with other characters
+    this.element.addEventListener('dragover', this.dragDropHandler.onDragOver.bind(this.dragDropHandler));
+    this.element.addEventListener('dragleave', this.dragDropHandler.onDragLeave.bind(this.dragDropHandler));
+    this.element.addEventListener('drop', this.dragDropHandler.onDrop.bind(this.dragDropHandler));
   }
 
   /**
@@ -1148,6 +1146,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     await this.submit();
     this.render();
   }
+
 
   /**
    * Handle initiative rolls
@@ -1555,7 +1554,13 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Handle drop events for favorites and header items
    */
   async _onDropItem(event, data) {
+    console.log("_onDropItem called with data:", data);
     if (!event.target.closest(".favorites")) {
+      // Check if this is a same-actor drop to prevent duplication
+      if (data.type === "Item" && data.sourceActorId === this.document.id) {
+        console.log("Preventing same-actor item duplication in _onDropItem - sourceActorId:", data.sourceActorId, "matches target:", this.document.id);
+        return false; // Prevent the default behavior
+      }
       return super._onDropItem(event, data);
     }
     
@@ -1617,5 +1622,79 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     }
 
     return this.document.update({ "system.favorites": Array.from(favoritesMap.values()) });
+  }
+
+  /**
+   * Roll header ability item
+   */
+  async _onRollHeaderAbility(event, target) {
+    const item = this.document.items.get(this.document.getFlag("how-to-be-a-hero", "headerAbility"));
+    if (!item) return;
+    return item.roll();
+  }
+
+  /**
+   * Roll header weapon item
+   */
+  async _onRollHeaderWeapon(event, target) {
+    const item = this.document.items.get(this.document.getFlag("how-to-be-a-hero", "headerWeapon"));
+    if (!item) return;
+    return item.roll();
+  }
+
+  /**
+   * Roll header parry item with parry context
+   */
+  async _onRollHeaderParry(event, target) {
+    const item = this.document.items.get(this.document.getFlag("how-to-be-a-hero", "headerParry"));
+    if (!item) return;
+    return item.roll({ isParry: true });
+  }
+
+  /**
+   * Roll initiative for this actor
+   */
+  async _onRollInitiative(event, target) {
+    return this.document.rollInitiative({ createCombatants: true });
+  }
+
+  /**
+   * Toggle hit points edit mode
+   */
+  _onToggleEditHP(event, target) {
+    const isEditing = target.dataset.edit === "true";
+    const input = target.querySelector('input[name="system.attributes.health.value"]');
+    const span = target.querySelector('.value');
+    
+    if (isEditing) {
+      span.style.display = 'none';
+      input.style.display = 'inline';
+      input.focus();
+      target.dataset.edit = "false";
+    } else {
+      span.style.display = 'inline';
+      input.style.display = 'none';
+      target.dataset.edit = "true";
+    }
+  }
+
+  /**
+   * Toggle mana points edit mode
+   */
+  _onToggleEditMana(event, target) {
+    const isEditing = target.dataset.edit === "true";
+    const input = target.querySelector('input[name="system.attributes.mana.value"]');
+    const span = target.querySelector('.value');
+    
+    if (isEditing) {
+      span.style.display = 'none';
+      input.style.display = 'inline';
+      input.focus();
+      target.dataset.edit = "false";
+    } else {
+      span.style.display = 'inline';
+      input.style.display = 'none';
+      target.dataset.edit = "true";
+    }
   }
 }

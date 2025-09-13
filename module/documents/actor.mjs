@@ -183,8 +183,9 @@ export class HowToBeAHeroActor extends Actor {
     }
 
     const label = game.i18n.localize(CONFIG.HTBAH.skillSets[skillSetId]?.label) ?? "";
-    const targetValue = this.skillSetTotalValues[skillSetId] ?? 0;
-    const baseValue = this.skillSetTotalValues[skillSetId] ?? 0; 
+    // Category rolls use the 10% modifier value, not the total value
+    const targetValue = this.skillSetMods[skillSetId] ?? 0;
+    const baseValue = this.skillSetMods[skillSetId] ?? 0; 
     
     // Create a fake ability item for the dialog to work with
     const fakeAbilityItem = {

@@ -38,6 +38,7 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
     this.item = options.item;
     this.baseFormula = options.baseFormula || "1d10";
     this.rollType = options.rollType || "check";
+    this.isParry = options.isParry || false;
     this.bonus = 0;
     this.#resolve = null;
     this.#reject = null;
@@ -59,9 +60,19 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
     context.itemName = this.item?.name || game.i18n.localize("HTBAH.Unknown");
     context.baseFormula = this.baseFormula;
     context.bonus = this.bonus;
+    context.difficulty = this._getDifficultyLevel();
     context.finalFormula = this._calculateFinalFormula(this.bonus);
     
     return context;
+  }
+
+  /**
+   * Get the difficulty level for the item
+   * @returns {number} The difficulty level
+   */
+  _getDifficultyLevel() {
+    if (!this.item) return 0;
+    return this.item.system?.total || this.item.system?.value || 0;
   }
 
   /** @override */
@@ -84,17 +95,40 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
         this._handleBonusInput(event);
       });
     }
+    
+    // Set initial label based on current bonus value
+    this._updateBonusLabel(this.bonus);
   }
 
   /**
    * Calculate the final formula based on bonus input
    * @param {number} bonus - The bonus to apply
-   * @returns {string} The final roll formula
+   * @returns {string} The final roll formula display
    */
   _calculateFinalFormula(bonus) {
-    if (bonus === 0) return this.baseFormula;
-    const bonusStr = bonus > 0 ? `+${bonus}` : bonus.toString();
-    return `${this.baseFormula}${bonusStr}`;
+    // For weapon damage rolls, show the bonus in the roll formula itself
+    if (this.item && this.item.type === "weapon") {
+      const bonusStr = bonus === 0 ? '' : (bonus > 0 ? `+${bonus}` : `${bonus}`);
+      return `${this.baseFormula}${bonusStr}`;
+    }
+    
+    // For ability rolls, show vs target value
+    const difficulty = this._getDifficultyLevel();
+    const bonusStr = bonus === 0 ? '' : (bonus > 0 ? ` +${bonus}` : ` ${bonus}`);
+    return `${this.baseFormula} vs [${difficulty}${bonusStr}]`;
+  }
+
+  /**
+   * Get the actual dice formula for rolling
+   * @returns {string} The dice formula
+   */
+  _getRollFormula() {
+    // For weapon damage rolls, include bonus directly in the formula
+    if (this.item && this.item.type === "weapon") {
+      const bonusStr = this.bonus === 0 ? '' : (this.bonus > 0 ? `+${this.bonus}` : `${this.bonus}`);
+      return `${this.baseFormula}${bonusStr}`;
+    }
+    return this.baseFormula;
   }
 
   /**
@@ -110,6 +144,29 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
       const resultFormula = this.element.querySelector('.result-formula');
       if (resultFormula) {
         resultFormula.textContent = this._calculateFinalFormula(this.bonus);
+      }
+      
+      // Update the label based on bonus/malus
+      this._updateBonusLabel(newBonus);
+    }
+  }
+
+  /**
+   * Update the bonus/malus label based on the value
+   * @param {number} value - The bonus/malus value
+   */
+  _updateBonusLabel(value) {
+    const label = this.element.querySelector('label[for="dice-bonus"]');
+    const hint = this.element.querySelector('.hint');
+    
+    if (label && hint) {
+      if (value < 0) {
+        label.textContent = game.i18n.localize("HTBAH.RollDialog.Malus");
+        hint.textContent = game.i18n.localize("HTBAH.RollDialog.MalusHint");
+      } else {
+        // Default to "Bonus" for zero and positive values
+        label.textContent = game.i18n.localize("HTBAH.RollDialog.Bonus");
+        hint.textContent = game.i18n.localize("HTBAH.RollDialog.BonusHint");
       }
     }
   }
@@ -151,15 +208,16 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
       this.bonus = parseInt(bonusInput.value) || 0;
     }
     
-    const finalFormula = this._calculateFinalFormula(this.bonus);
-    console.log(`HowToBeAHero | Rolling with formula: ${finalFormula}`);
+    const rollFormula = this._getRollFormula();
+    const displayFormula = this._calculateFinalFormula(this.bonus);
+    console.log(`HowToBeAHero | Rolling with formula: ${rollFormula}, Display: ${displayFormula}`);
     
     try {
-      const roll = new Roll(finalFormula);
+      const roll = new Roll(rollFormula);
       await roll.evaluate();
       
       // Create customized chat message based on item type
-      const messageContent = await HowToBeAHeroRollDialog._createChatMessage(this.item, roll, finalFormula, this.bonus);
+      const messageContent = await HowToBeAHeroRollDialog._createChatMessage(this.item, roll, rollFormula, this.bonus, this.isParry);
       
       const messageData = {
         user: game.user.id,
@@ -213,12 +271,17 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
   /**
    * Create customized chat message based on item type
    */
-  static async _createChatMessage(item, roll, finalFormula, bonus) {
+  static async _createChatMessage(item, roll, finalFormula, bonus, isParry = false) {
     const rollTotal = roll.total;
+    
+    // Handle parry rolls specifically
+    if (isParry && item.type === "ability") {
+      return await this._createParryChatMessage(item, roll, rollTotal, bonus);
+    }
     
     switch (item.type) {
       case "ability":
-        return this._createAbilityChatMessage(item, roll, rollTotal, bonus);
+        return await this._createAbilityChatMessage(item, roll, rollTotal, bonus);
       
       case "weapon":
         return await this._createWeaponChatMessage(item, roll, rollTotal, bonus);
@@ -231,10 +294,11 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
   /**
    * Create ability-specific chat message (like old dice.mjs formatting)
    */
-  static _createAbilityChatMessage(item, roll, rollTotal, bonus) {
-    // Get ability data
-    const targetValue = item.system.value || 50;
-    const baseValue = item.system.value || 50;
+  static async _createAbilityChatMessage(item, roll, rollTotal, bonus) {
+    // Get ability data - use system.total which includes category modifier
+    const baseTargetValue = item.system.total || item.system.value || 100;
+    const targetValue = baseTargetValue + bonus;
+    const baseValue = item.system.value || 0;
     const skillSet = item.system.skillSet || "action";
     
     // Calculate thresholds (like in dice.mjs)
@@ -274,17 +338,21 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
       : isSuccess ? '<span style="color: #0000ff;"><strong>Success</strong></span>'
       : '<span style="color: #ff8800;"><strong>Failure</strong></span>';
 
+    const bonusDisplay = bonus === 0 ? '' : (bonus > 0 ? ` +${bonus}` : ` ${bonus}`);
+    
+    // Create a target value display with Foundry tooltip
+    let targetDisplay = targetValue.toString();
+    if (bonus !== 0) {
+      targetDisplay = `<span class="dice-total" data-tooltip="${baseTargetValue}${bonusDisplay}">${targetValue}</span>`;
+    }
+    
     return `
-      <div class="htbah-ability-roll">
-        <div class="roll-details">
-          <h3 class="roll-header">${item.name} (${header.title}) ${header.icon}</h3>
-          <p>Roll: ${rollTotal}</p>
-          <p>Target: ${targetValue}</p> 
-          <p>(Base: ${baseValue}${bonus ? `, Bonus: ${bonus}` : ''})</p>
-          <p>Critical Success: ≤ ${criticalThreshold}</p>
-          <p>Critical Failure: ≥ ${fumbleThreshold}</p>
-        </div>
-        <br>${resultMessage}
+      <div class="htbah-ability-roll" style="text-align: center;">
+        <div class="roll-header">${item.name} (${header.title}) ${header.icon}</div>
+        <h3 class="roll-result">
+          <i class="fas fa-dice-d20"></i> ${rollTotal} vs. ${targetDisplay}
+        </h3>
+        <div>${resultMessage}</div>
       </div>
     `;
   }
@@ -305,9 +373,7 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
             <h2 style="color: #8B0000; font-weight: bold;">${rollTotal} Damage</h2>
           </div>
           <div class="damage-breakdown">
-            <p>Base Roll: ${renderedRoll}</p>
-            ${bonus ? `<p>Bonus: +${bonus}</p>` : ''}
-            <p><strong>Total Damage: ${rollTotal}</strong></p>
+            <p>Roll: ${renderedRoll}</p>
           </div>
         </div>
       </div>
@@ -328,6 +394,54 @@ export class HowToBeAHeroRollDialog extends HandlebarsApplicationMixin(foundry.a
           ${renderedRoll}
         </div>
         ${bonus ? `<p>Applied Bonus: +${bonus}</p>` : ''}
+      </div>
+    `;
+  }
+
+  /**
+   * Create parry-specific chat message
+   */
+  static async _createParryChatMessage(item, roll, rollTotal, bonus) {
+    // Get ability data (same as ability chat message) - use system.total which includes category modifier
+    const baseTargetValue = item.system.total || item.system.value || 50;
+    const targetValue = baseTargetValue + bonus;
+    const baseValue = item.system.value || 50;
+    
+    // Calculate thresholds
+    const criticalThreshold = Math.floor(targetValue * 0.1);
+    const fumbleThreshold = Math.ceil(100 - (100 - targetValue) * 0.1);
+    
+    // Determine success/failure
+    const isSuccess = rollTotal <= targetValue;
+    const isCriticalSuccess = rollTotal <= criticalThreshold;
+    const isCriticalFailure = rollTotal >= fumbleThreshold;
+    
+    // Parry-specific styling
+    const parryIcon = '<i class="fas fa-shield-alt" style="color: #4169E1;"></i>';
+    const parryTitle = game.i18n.localize("HTBAH.ParryAttempt");
+    
+    const bonusDisplay = bonus === 0 ? '' : (bonus > 0 ? ` +${bonus}` : ` ${bonus}`);
+    const resultText = isCriticalSuccess ? '<span style="color: #00ff00;"><strong>Critical Success!</strong></span>'
+      : isCriticalFailure ? '<span style="color: #ff0000;"><strong>Critical Failure!</strong></span>'
+      : isSuccess ? '<span style="color: #0000ff;"><strong>Success</strong></span>'
+      : '<span style="color: #ff8800;"><strong>Failure</strong></span>';
+    
+    // Create a target value display with Foundry tooltip
+    let targetDisplay = targetValue.toString();
+    if (bonus !== 0) {
+      targetDisplay = `<span class="dice-total" data-tooltip="${baseTargetValue}${bonusDisplay}">${targetValue}</span>`;
+    }
+    
+    return `
+      <div class="htbah-parry-roll" style="text-align: center;">
+        <div class="roll-title">
+          ${parryIcon}
+          ${parryTitle}: ${item.name}
+        </div>
+        <h3 class="roll-result">
+          <i class="fas fa-dice-d20"></i> ${rollTotal} vs. ${targetDisplay}
+        </h3>
+        <div>${resultText}</div>
       </div>
     `;
   }

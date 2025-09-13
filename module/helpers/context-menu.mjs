@@ -1,5 +1,3 @@
-import { setTheme } from "./settings.mjs";
-
 /**
  * A specialized subclass of ContextMenu that places the menu in a fixed position.
  * @extends {foundry.applications.ux.ContextMenu.implementation}
@@ -49,7 +47,5 @@ export default class ContextMenuHTBAH extends foundry.applications.ux.ContextMen
     if ( expandUp ) html.style.bottom = `${clientHeight - clientY}px`;
     else html.style.top = `${clientY}px`;
     target.classList.add("context");
-    const theme = target.closest("[data-theme]")?.dataset.theme ?? "";
-    setTheme(html, theme);
   }
 }

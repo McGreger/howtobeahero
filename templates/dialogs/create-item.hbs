@@ -1,5 +1,5 @@
 {{!-- templates/dialogs/create-item.hbs --}}
-<form class="htbah-create-item">
+<form class="htbah-create-item" data-action="submit">
   <div class="form-group">
     <label for="item-name">{{localize "Name"}}</label>
     <input type="text" 
@@ -11,7 +11,7 @@
   </div>
   
   <footer class="form-footer flexrow">
-    <button type="button" data-action="confirm" class="default">
+    <button type="submit" class="default">
       <i class="fas fa-check"></i>
       {{localize "Confirm"}}
     </button>

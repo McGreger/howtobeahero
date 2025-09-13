@@ -1,0 +1,51 @@
+<form class="actor-selector-dialog">
+  <div class="dialog-content">
+    <div class="document-list-search">
+      <input class="search-input" type="search" placeholder="{{localize 'HTBAH.GiveItemSearchPlaceholder'}}" value="{{searchTerm}}">
+    </div>
+
+    <div class="document-section-wrapper">
+      <div class="documents-section">
+        {{#if hasActors}}
+          <ul class="document-sections-list">
+            {{#each actors}}
+              <li class="document-item">
+                <label>
+                  <input type="radio" name="selected" value="{{id}}">
+                  
+                  <img class="image" src="{{img}}" alt="{{name}}" height="64" loading="lazy">
+                  
+                  <span class="item-details">
+                    <span class="item-name">{{name}}</span>
+                    <span class="item-extras">
+                      {{#if isNPC}}
+                        <span class="item-extra npc-indicator">{{localize "HTBAH.GiveItemNPC"}}</span>
+                      {{else if primaryOwner}}
+                        <span class="item-extra character-indicator">Owner: {{primaryOwner}}</span>
+                      {{/if}}
+                    </span>
+                  </span>
+                </label>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <div class="no-actors-message">
+            <p>{{localize "HTBAH.GiveItemNoActorsFound"}}</p>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <footer class="dialog-buttons">
+    <button type="submit" class="dialog-button default" {{#unless hasActors}}disabled{{/unless}} data-action="submit">
+      <i class="fas fa-handshake"></i>
+      <span>{{localize "HTBAH.GiveItemSelectButton"}}</span>
+    </button>
+    <button type="button" class="dialog-button cancel" data-action="cancel">
+      <i class="fas fa-times"></i>
+      <span>{{localize "Cancel"}}</span>
+    </button>
+  </footer>
+</form>

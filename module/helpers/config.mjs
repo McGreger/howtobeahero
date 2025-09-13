@@ -421,7 +421,7 @@ export const tokenHPColors = {
 /**
  * Extra status effects not specified in `conditionTypes`. If the ID matches a core-provided effect, then this
  * data will be merged into the core data.
- * @enum {Omit<StatusEffectConfig5e, "img"> & {icon: string}}
+ * @enum {StatusEffectConfig}
  */
 HOW_TO_BE_A_HERO.statusEffects = {
   burrowing: {
