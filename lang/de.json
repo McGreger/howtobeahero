@@ -288,12 +288,20 @@
   
   "HTBAH.Unknown": "Unbekannt",
 
-  "HTBAH.Settings": {
-    "ShowManaBar": {
-      "Name": "Mana-Balken anzeigen",
-      "Hint": "Ob der Mana-Balken auf Charakterbögen angezeigt wird. Wenn deaktiviert, wird der Mana-Balken für alle Charaktere ausgeblendet."
-    }
-  },
+  "HTBAH.Settings.ShowManaBar.Name": "Mana-Balken anzeigen",
+  "HTBAH.Settings.ShowManaBar.Hint": "Ob der Mana-Balken auf Charakterbögen angezeigt wird. Wenn deaktiviert, wird der Mana-Balken für alle Charaktere ausgeblendet.",
+  
+  "HTBAH.Settings.Debug.Name": "Debug-Modus",
+  "HTBAH.Settings.Debug.Hint": "Aktiviert Debug-Protokollierung für das How to be a Hero System.",
+  
+  "HTBAH.Settings.CollapseCards.Name": "Gegenstandskarten automatisch einklappen",
+  "HTBAH.Settings.CollapseCards.Hint": "Klappt Gegenstandskarten in Chat-Nachrichten automatisch ein.",
+  
+  "HTBAH.Settings.Initiative.Name": "Initiative-Formel",
+  "HTBAH.Settings.Initiative.Hint": "Konfiguriert die Standard-Würfelformel für Initiative-Würfe.",
+  
+  "HTBAH.Settings.ForceDarkMode.Name": "Dunklen Modus erzwingen",
+  "HTBAH.Settings.ForceDarkMode.Hint": "Erzwingt den dunklen Modus für alle Benutzer bei der Verwendung von How to be a Hero Bögen. Der helle Modus wird noch nicht vollständig unterstützt.",
 
   "TYPES": {
     "Actor": {

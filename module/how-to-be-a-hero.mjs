@@ -17,6 +17,7 @@ import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { registerHandlebarsHelpers } from './helpers/utils.mjs';
 import { Tooltips } from './helpers/tooltips.mjs';
 import { HOW_TO_BE_A_HERO } from './helpers/config.mjs';
+import { registerSystemSettings, enforceDarkMode } from './helpers/settings.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 // Import Dice class
@@ -203,6 +204,9 @@ Hooks.once('init', function () {
     default: false
   });
 
+  // Register additional system settings
+  registerSystemSettings();
+
   // Preload Handlebars helpers & partials
   preloadHandlebarsTemplates();
   registerHandlebarsHelpers();
@@ -299,6 +303,40 @@ Handlebars.registerHelper('debug', function(obj) {
 
 Hooks.once('ready', function () {
   console.log("HowToBeAHero | System ready - setting up final configurations");
+
+  // Enforce dark mode if the setting is enabled
+  if (game.settings.get("how-to-be-a-hero", "forceDarkMode")) {
+    enforceDarkMode();
+    
+    // Set up continuous monitoring to prevent light mode
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes') {
+          const target = mutation.target;
+          const forceDarkMode = game.settings.get("how-to-be-a-hero", "forceDarkMode");
+          
+          if (forceDarkMode) {
+            // Check if light mode was set and revert it
+            if (target.getAttribute('data-color-scheme') === 'light' || 
+                target.classList.contains('light')) {
+              console.log("HowToBeAHero | Light mode detected - reverting to dark mode");
+              enforceDarkMode();
+            }
+          }
+        }
+      });
+    });
+    
+    // Observe document changes
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['data-color-scheme', 'class'] 
+    });
+    observer.observe(document.body, { 
+      attributes: true, 
+      attributeFilter: ['data-color-scheme', 'class'] 
+    });
+  }
 
   // Enhanced hotbar handling
   Hooks.on('hotbarDrop', (bar, data, slot) => {

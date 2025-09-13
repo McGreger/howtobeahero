@@ -324,5 +324,17 @@
       "armor": "Armor",
       "base": "Base"
     }
-  }
+  },
+
+  "HTBAH.Settings.Debug.Name": "Debug Mode",
+  "HTBAH.Settings.Debug.Hint": "Enable debug logging for the How to be a Hero system.",
+  
+  "HTBAH.Settings.CollapseCards.Name": "Auto-collapse Item Cards",
+  "HTBAH.Settings.CollapseCards.Hint": "Automatically collapse item cards in chat messages.",
+  
+  "HTBAH.Settings.Initiative.Name": "Initiative Formula",
+  "HTBAH.Settings.Initiative.Hint": "Configure the default dice formula used for initiative rolls.",
+  
+  "HTBAH.Settings.ForceDarkMode.Name": "Force Dark Mode",
+  "HTBAH.Settings.ForceDarkMode.Hint": "Forces dark mode for all users when using How to be a Hero sheets. Light mode is not yet fully supported."
 }

@@ -57,5 +57,38 @@ export function registerSystemSettings() {
       }
     }
   });
+
+  // Force dark mode for the system
+  game.settings.register("how-to-be-a-hero", "forceDarkMode", {
+    name: "HTBAH.Settings.ForceDarkMode.Name",
+    hint: "HTBAH.Settings.ForceDarkMode.Hint",
+    scope: "world",
+    config: true,
+    default: true,
+    type: Boolean,
+    onChange: (value) => {
+      if (value) {
+        // Immediately enforce dark mode when enabled
+        enforceDarkMode();
+      }
+    }
+  });
+}
+
+/**
+ * Enforce dark mode by setting appropriate CSS classes/attributes
+ */
+export function enforceDarkMode() {
+  // Remove light mode indicators
+  document.documentElement.removeAttribute('data-color-scheme');
+  document.body.removeAttribute('data-color-scheme');
+  document.documentElement.classList.remove('light');
+  document.body.classList.remove('light');
+  
+  // Set dark mode indicators
+  document.documentElement.setAttribute('data-color-scheme', 'dark');
+  document.documentElement.classList.add('dark');
+  
+  console.log("HowToBeAHero | Dark mode enforced");
 }
 
