@@ -3797,6 +3797,53 @@ item-list-controls search .filter-control:hover:not(.disabled),
   border: none;
 }
 
+/* Dropzone Indicator */
+.how-to-be-a-hero .tab.inventory .items-section .items-header .dropzone-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(var(--htbah-color-gold-rgb), 0.1);
+  border: 1px dashed var(--htbah-color-gold);
+  border-radius: 4px;
+  font-size: 0.8em;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.how-to-be-a-hero .tab.inventory .items-section .items-header .dropzone-indicator i {
+  color: var(--htbah-color-gold);
+  animation: bounce 1.5s infinite;
+}
+
+.how-to-be-a-hero .tab.inventory .items-section .items-header .dropzone-text {
+  color: var(--htbah-color-gold);
+  font-weight: normal;
+  text-transform: none;
+  font-size: 1.5em;
+}
+
+/* Enhanced styling during dragover */
+.how-to-be-a-hero .tab.inventory .items-section.dragover .items-header .dropzone-indicator {
+  background: rgba(var(--htbah-color-gold-rgb), 0.2);
+  opacity: 1;
+  border-style: solid;
+  box-shadow: 0 0 8px var(--htbah-color-gold);
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
 /* Item */
 .how-to-be-a-hero .tab.inventory .items-section .item {
   display: flex;

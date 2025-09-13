@@ -86,6 +86,11 @@
 
   "HTBAH.SkillDrop": "Drop Skill",
   "HTBAH.WeaponDrop": "Drop Weapon",
+  "HTBAH.ItemDrop": "Drop to Convert to Item",
+  "HTBAH.ConsumableDrop": "Drop to Convert to Consumable",
+  "HTBAH.WeaponDropConvert": "Drop to Convert to Weapon", 
+  "HTBAH.ArmorDrop": "Drop to Convert to Armor",
+  "HTBAH.ToolDrop": "Drop to Convert to Tool",
   "HTBAH.Skill": "Skill",
   "HTBAH.Weapon": "Weapon",
   "HTBAH.Parry": "Parry",

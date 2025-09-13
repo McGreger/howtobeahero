@@ -80,6 +80,11 @@
 
   "HTBAH.SkillDrop": "Fähigkeit ablegen",
   "HTBAH.WeaponDrop": "Waffe ablegen",
+  "HTBAH.ItemDrop": "Ablegen um zu Gegenstand zu konvertieren",
+  "HTBAH.ConsumableDrop": "Ablegen um zu Verbrauchsgegenstand zu konvertieren",
+  "HTBAH.WeaponDropConvert": "Ablegen um zu Waffe zu konvertieren",
+  "HTBAH.ArmorDrop": "Ablegen um zu Rüstung zu konvertieren",
+  "HTBAH.ToolDrop": "Ablegen um zu Werkzeug zu konvertieren",
   "HTBAH.Skill": "Fähigkeit",
   "HTBAH.Weapon": "Waffe",
   "HTBAH.Parry": "Parade",

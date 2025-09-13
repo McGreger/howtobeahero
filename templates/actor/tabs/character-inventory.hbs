@@ -12,7 +12,19 @@
             {{#each sections}}
             <div class="items-section card" {{{ HTBAH-dataset dataset }}}>
                 <div class="items-header header">
-                    <div class="item-header item-name">{{ localize label }}</div>
+                    <div class="item-header item-name">
+                        {{ localize label }}
+                        <div class="dropzone-indicator">
+                            <i class="fas fa-arrow-down"></i>
+                            <span class="dropzone-text">
+                                {{#if (eq dataset.type "item")}}{{ localize "HTBAH.ItemDrop" }}{{/if}}
+                                {{#if (eq dataset.type "consumable")}}{{ localize "HTBAH.ConsumableDrop" }}{{/if}}
+                                {{#if (eq dataset.type "weapon")}}{{ localize "HTBAH.WeaponDropConvert" }}{{/if}}
+                                {{#if (eq dataset.type "armor")}}{{ localize "HTBAH.ArmorDrop" }}{{/if}}
+                                {{#if (eq dataset.type "tool")}}{{ localize "HTBAH.ToolDrop" }}{{/if}}
+                            </span>
+                        </div>
+                    </div>
                     <div class="item-header item-quantity">{{ localize "HTBAH.Quantity" }}</div>
                     <div class="item-header item-uses">{{ localize "HTBAH.Uses" }}</div>
                     <div class="item-header item-controls"></div>
