@@ -49,8 +49,6 @@
   "manifest": "https://raw.githubusercontent.com/GrafSchwarz/howtobeahero/refs/heads/main/system.json",
   "download": "https://github.com/GrafSchwarz/howtobeahero/archive/refs/heads/main.zip",
   "background": "systems/how-to-be-a-hero/assets/htbah.webp",
-  "grid.distance": 5,
-  "grid.units": "ft",
   "primaryTokenAttribute": "health",
   "flags": {
     "hotReload": {
