@@ -487,14 +487,12 @@ HOW_TO_BE_A_HERO.hitDieTypes = ["d4", "d6", "d8", "d10", "d12"];
  */
 HOW_TO_BE_A_HERO.defaultArtwork = {
   Item: {
-    item: "systems/how-to-be-a-hero/ui/icons/svg/items/tool.svg",
-    consumable: "systems/how-to-be-a-hero/ui/icons/svg/items/consumable.svg",
-    weapon: "systems/how-to-be-a-hero/ui/icons/svg/items/weapon.svg",
-    armor: "systems/how-to-be-a-hero/ui/icons/svg/items/equipment.svg",
-    tool: "systems/how-to-be-a-hero/ui/icons/svg/items/tool.svg",
-    knowledge: "systems/how-to-be-a-hero/ui/icons/svg/items/knowledge.svg",
-    action: "systems/how-to-be-a-hero/ui/icons/svg/items/action.svg",
-    social: "systems/how-to-be-a-hero/ui/icons/svg/items/social.svg",
+    item: "systems/how-to-be-a-hero/ui/icons/svg/items/swap-bag.svg",
+    consumable: "systems/how-to-be-a-hero/ui/icons/svg/items/potion-ball.svg",
+    weapon: "systems/how-to-be-a-hero/ui/icons/svg/items/sharp-axe.svg",
+    armor: "systems/how-to-be-a-hero/ui/icons/svg/items/armor-vest.svg",
+    tool: "systems/how-to-be-a-hero/ui/icons/svg/items/3d-hammer.svg",
+    ability: "systems/how-to-be-a-hero/ui/icons/svg/items/skills.svg",
   }
 };
 

@@ -86,25 +86,17 @@ export class HowToBeAHeroActor extends Actor {
    * @private
    */
   _prepareArmorClass() {
-    console.log(`HowToBeAHero | Calculating armor for actor: ${this.name}`);
     
     // Get all equipped armor items
     const equippedArmor = this.items.filter(item => 
       item.type === 'armor' && item.system.equipped === true
     );
     
-    console.log(`HowToBeAHero | Found ${equippedArmor.length} equipped armor items:`, 
-      equippedArmor.map(armor => `${armor.name} (${armor.system.armor || 0})`)
-    );
-    
     // Calculate total armor value from equipped items only
     const totalArmorClass = equippedArmor.reduce((total, armor) => {
       const armorValue = armor.system.armor || 0;
-      console.log(`HowToBeAHero | Adding armor: ${armor.name} = ${armorValue}`);
       return total + armorValue;
     }, 0);
-    
-    console.log(`HowToBeAHero | Total armor class calculated: ${totalArmorClass}`);
     
     // Store the calculated values for easy access
     this.armorData = {
@@ -116,8 +108,6 @@ export class HowToBeAHeroActor extends Actor {
         armorValue: armor.system.armor || 0
       }))
     };
-    
-    console.log(`HowToBeAHero | Stored armor data:`, this.armorData);
   }
 
   getRollData() {
@@ -152,8 +142,6 @@ export class HowToBeAHeroActor extends Actor {
     
     // Use the formula from damageData if provided, otherwise default to 1d10
     const formula = damageData.formula || "1d10";
-    
-    console.log(`HowToBeAHero | Rolling damage with formula: ${formula}`);
 
     const rollData = {
       formula: formula,
@@ -226,8 +214,6 @@ export class HowToBeAHeroActor extends Actor {
     
     // Create the initiative formula: 1d10 + action modifier
     const formula = `1d10 + ${actionMod}`;
-    
-    console.log(`HowToBeAHero | Rolling initiative for ${this.name} with formula: ${formula}`);
     
     // Roll the initiative
     const roll = new Roll(formula);

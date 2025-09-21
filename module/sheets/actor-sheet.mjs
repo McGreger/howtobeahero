@@ -79,7 +79,6 @@ class TabsHtbah {
  */
 class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
   constructor({ defaultName = "", onSubmit } = {}) {
-    console.log("NameInputDialog constructor called");
     super();
     this.defaultName = defaultName;
     this.onSubmit = onSubmit;
@@ -118,19 +117,13 @@ class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixi
 
 
   _onRender(context, options) {
-    console.log("NameInputDialog _onRender called");
-    console.log("Dialog element:", this.element);
-    console.log("Dialog visible:", this.element?.style.display);
-    console.log("Dialog in DOM:", document.contains(this.element));
     
     // Ensure the dialog is opened (HTML dialog element needs open attribute)
     if (this.element && !this.element.open) {
       this.element.showModal();
-      console.log("Dialog opened with showModal()");
     }
     
     const input = this.element.querySelector('input[name="name"]');
-    console.log("Input found:", input);
     if (input) {
       input.focus();
       input.select();
@@ -139,26 +132,20 @@ class NameInputDialog extends foundry.applications.api.HandlebarsApplicationMixi
 
 
   _onCancel(event, target) {
-    console.log("_onCancel called");
     this.close();
   }
 
   _onSubmit(event, target) {
-    console.log("_onSubmit called");
     event.preventDefault();
     this._submit();
   }
 
   _submit() {
-    console.log("_submit called");
     const name = this.element.querySelector('input[name="name"]')?.value?.trim();
-    console.log("Name entered:", name);
     if (!name) {
-      console.log("Warning: no name provided");
       ui.notifications.warn(game.i18n.localize("HTBAH.WarnNameRequired"));
       return;
     }
-    console.log("Closing dialog and calling onSubmit");
     this.close();
     this.onSubmit?.(name);
   }
@@ -226,7 +213,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
   
   static TABS = [
     { tab: "details", label: "HTBAH.Details", icon: "fas fa-cog" },
-    { tab: "inventory", label: "HTBAH.Inventory", svg: "backpack" },
+    { tab: "inventory", label: "HTBAH.Inventory", svg: "hand-bag" },
     { tab: "effects", label: "HTBAH.Effects", icon: "fas fa-bolt" },
     { tab: "biography", label: "HTBAH.Biography", icon: "fas fa-feather" }
   ];
@@ -243,7 +230,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Prepare context data for rendering
    */
   async _prepareContext(options) {
-    console.log("HowToBeAHero | Preparing context for actor:", this.document.name);
     
     const context = await super._prepareContext(options);
     
@@ -268,9 +254,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       showManaBar: game.settings.get("how-to-be-a-hero", "showManaBar")
     });
 
-    console.log("HowToBeAHero | Context prepared with tabs:", context.tabs);
-    console.log("HowToBeAHero | Active tab:", context.activeTab);
-
     // Prepare specialized data
     await Promise.all([
       this._preparePortraitData(context),
@@ -288,7 +271,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
 
     context.skillSets = this.document.skillSetData || {};
 
-    console.log("HowToBeAHero | Final context prepared successfully");
     return context;
   }
 
@@ -296,9 +278,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
   _onRender(context, options) {
     try {
       super._onRender(context, options);
-      
-      console.log("HowToBeAHero | _onRender called - using main template");
-      console.log("HowToBeAHero | Element exists:", !!this.element);
       
       // Verify this.element exists and is an HTMLElement
       if (!this.element || !(this.element instanceof HTMLElement)) {
@@ -326,7 +305,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       // Setup form input handling for ApplicationV2
       this._setupFormHandling();
       
-      console.log("HowToBeAHero | Actor sheet rendered successfully with main template");
     } catch (error) {
       console.error("HowToBeAHero | Error in _onRender:", error);
     }
@@ -336,19 +314,16 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Initialize custom elements - moved from TabsHtbah to this class
    */
   _initializeCustomElements() {
-    console.log("HowToBeAHero | Initializing custom elements...");
     
     try {
       // Initialize custom elements from the module
       const elementStatus = initializeCustomElements();
-      console.log("HowToBeAHero | Custom element initialization status:", elementStatus);
       
       // Wait a tick and then initialize htbah-icon elements specifically
       setTimeout(() => {
         // Force upgrade of any htbah-icon elements that might not be initialized
         this.element.querySelectorAll('htbah-icon').forEach(element => {
           if (element.constructor === HTMLElement || element.constructor === HTMLUnknownElement) {
-            console.log("HowToBeAHero | Force upgrading htbah-icon element");
             customElements.upgrade(element);
           }
         });
@@ -362,9 +337,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       // Set up custom element contexts for AppV2
       this._setupCustomElementContexts();
       
-      console.log("HowToBeAHero | Custom elements initialization completed");
     } catch (error) {
-      console.error("HowToBeAHero | Error initializing custom elements:", error);
       // Provide fallbacks
       this._initializeFallbacks();
     }
@@ -374,12 +347,10 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Set up contexts for custom elements that expect certain properties
    */
   _setupCustomElementContexts() {
-    console.log("Setting up custom element contexts");
     
     // Set the _sheet property on the main form element so custom elements can find it
     if (this.element) {
       this.element._sheet = this;
-      console.log("Set _sheet property on element:", this.element);
     }
     
     // Find and set up item-list-controls elements
@@ -399,7 +370,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
 
     // Find and set up inventory elements
     this.element.querySelectorAll('htbah-inventory').forEach(element => {
-      console.log("Setting up inventory element:", element);
       
       // Provide any expected properties
       if (!element._filters) {
@@ -549,7 +519,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Initialize basic fallbacks when custom elements fail entirely
    */
   _initializeFallbacks() {
-    console.log("HowToBeAHero | Initializing fallbacks for failed custom elements");
     
     // Replace failed htbah-icon elements with img tags
     this.element.querySelectorAll('htbah-icon').forEach(element => {
@@ -594,8 +563,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
 
     // Activate the initial tab
     this._activateTab(this._activeTab);
-    
-    console.log("HowToBeAHero | Tab handling initialized with", tabNavigation.length, "tab elements");
   }
 
   /**
@@ -629,7 +596,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       }));
     }
     
-    console.log("HowToBeAHero | Activated tab:", tabName);
   }
 
   /**
@@ -904,7 +870,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     const favoritePromises = this.document.system.favorites.map(async f => {
       const { id, type, sort } = f;
       const favorite = await fromUuid(id);
-      console.log(`Processing favorite: id=${id}, type=${type}, favorite=${favorite}`);
       if (!favorite && ((type === "item") || (type === "effect"))) return null;
 
       let data;
@@ -934,14 +899,12 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       if (this.isEditable && (type === "ability" || (type === "item" && favorite.system?.rollable === true) || (type === "tool"))) {
         rollableClass.push("rollable");
       }
-      console.log(`Favorite ${title} (type: ${type}): rollableClass = [${rollableClass.join(", ")}], isEditable = ${this.isEditable}, favorite.system?.rollable = ${favorite?.system?.rollable}`);
       if (type === "ability") rollableClass.push("ability-name");
       else if (type === "tool") rollableClass.push("tool-name");
 
       if (suppressed) subtitle = game.i18n.localize("HTBAH.Suppressed");
       
       const finalRollableClass = rollableClass.filterJoin(" ");
-      console.log(`Final rollableClass for ${title}: "${finalRollableClass}" (original array: [${rollableClass.join(", ")}])`);
       
       return {
         id, img, type, title, value, uses, sort, save, modifier, passive, range, reference, suppressed, level,
@@ -1023,7 +986,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Setup form input handling for ApplicationV2
    */
   _setupFormHandling() {
-    console.log("HowToBeAHero | Setting up form handling");
     
     // Handle all input changes for automatic saving
     this.element.querySelectorAll('input[type="text"], input[type="number"], textarea, select').forEach(input => {
@@ -1042,8 +1004,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     const target = event.target;
     const name = target.name;
     const value = target.value;
-    
-    console.log(`HowToBeAHero | Form input changed: ${name} = ${value}`);
     
     // Check if this is an item input (has data-item-id)
     const itemId = target.dataset.itemId;
@@ -1066,7 +1026,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       const updateData = { [name]: processedValue };
       
       try {
-        console.log(`HowToBeAHero | Updating item ${item.name} with:`, updateData);
         await item.update(updateData);
       } catch (error) {
         console.error("HowToBeAHero | Error updating item:", error);
@@ -1092,7 +1051,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     updateData[name] = processedValue;
     
     try {
-      console.log("HowToBeAHero | Updating actor with:", updateData);
       await this.document.update(updateData);
     } catch (error) {
       console.error("HowToBeAHero | Error updating actor:", error);
@@ -1400,7 +1358,6 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * @param {string} itemId - The ID of the item to set
    */
   async _setHeaderItem(slot, itemId) {
-    console.log(`Setting header ${slot} to item ${itemId}`);
     
     // Validate the item exists and belongs to this actor
     const item = this.document.items.get(itemId);
@@ -1463,16 +1420,13 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     }
 
     return new Promise(resolve => {
-      console.log("Creating NameInputDialog with type:", type);
       const dialog = new NameInputDialog({
         defaultName: "",
         onSubmit: name => {
-          console.log("Dialog submitted with name:", name);
           const data = { name, type, system: systemData };
           resolve(this.document.createEmbeddedDocuments(documentClass, [data]));
         }
       });
-      console.log("Attempting to render dialog");
       dialog.render(true);
     });
   }
@@ -1554,11 +1508,9 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
    * Handle drop events for favorites and header items
    */
   async _onDropItem(event, data) {
-    console.log("_onDropItem called with data:", data);
     if (!event.target.closest(".favorites")) {
       // Check if this is a same-actor drop to prevent duplication
       if (data.type === "Item" && data.sourceActorId === this.document.id) {
-        console.log("Preventing same-actor item duplication in _onDropItem - sourceActorId:", data.sourceActorId, "matches target:", this.document.id);
         return false; // Prevent the default behavior
       }
       return super._onDropItem(event, data);

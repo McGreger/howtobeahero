@@ -4,7 +4,6 @@
  */
 export default class ContextMenuHTBAH extends foundry.applications.ux.ContextMenu.implementation {
   constructor(...args) {
-    console.log("ContextMenuHTBAH constructor called with args:", args);
     super(...args);
   }
 
@@ -17,7 +16,6 @@ export default class ContextMenuHTBAH extends foundry.applications.ux.ContextMen
 
   /** @override */
   _setPosition(html, target) {
-    console.log("ContextMenuHTBAH _setPosition called");
     document.body.appendChild(html);
     const { clientWidth, clientHeight } = document.documentElement;
     const { width, height } = html.getBoundingClientRect();
