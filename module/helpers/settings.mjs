@@ -12,6 +12,7 @@ export function registerSystemSettings() {
   });
 
   // Debug Mode
+  /*
   game.settings.register("how-to-be-a-hero", "debugMode", {
     name: "HTBAH.Settings.Debug.Name",
     hint: "HTBAH.Settings.Debug.Hint",
@@ -33,7 +34,6 @@ export function registerSystemSettings() {
       ui.chat.render();
     }
   });
-
   // Initiative formula
   game.settings.register("how-to-be-a-hero", "initiativeFormula", {
     name: "HTBAH.Settings.Initiative.Name",
@@ -57,7 +57,8 @@ export function registerSystemSettings() {
       }
     }
   });
-
+  */
+ 
   // Force dark mode for the system
   game.settings.register("how-to-be-a-hero", "forceDarkMode", {
     name: "HTBAH.Settings.ForceDarkMode.Name",

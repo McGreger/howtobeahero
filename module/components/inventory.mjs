@@ -8,7 +8,6 @@ import { ActorSelectorDialog } from "../helpers/actor-selector-dialog.mjs";
  */
 export default class InventoryElement extends HTMLElement {
   connectedCallback() {
-    console.log("InventoryElement connectedCallback called");
     
     // Try different ways to find the app element for AppV2 compatibility
     let appElement = this.closest(".app") || 
@@ -16,20 +15,16 @@ export default class InventoryElement extends HTMLElement {
                      this.closest('[data-appid]') ||
                      this.closest('form')?.closest('.window-app');
     
-    console.log("App element found:", appElement);
-    console.log("App element dataset:", appElement?.dataset);
     
     // Try to get the app reference in different ways
     let app = null;
     if (appElement?.dataset?.appid) {
       app = ui.windows[appElement.dataset.appid];
-      console.log("Found app via appid:", app);
     }
     
     // If that fails, try to get it from the _sheet property set by the actor sheet
     if (!app && appElement?._sheet) {
       app = appElement._sheet;
-      console.log("Found app via _sheet property:", app);
     }
     
     // If that fails, try to find it via the closest how-to-be-a-hero element
@@ -37,37 +32,30 @@ export default class InventoryElement extends HTMLElement {
       const sheetElement = this.closest('.how-to-be-a-hero');
       if (sheetElement?._sheet) {
         app = sheetElement._sheet;
-        console.log("Found app via how-to-be-a-hero _sheet:", app);
       }
     }
     
     // If still no app, try to use the sheet property that should be provided by AppV2 setup
     if (!app && this.sheet) {
       app = this.sheet;
-      console.log("Found app via this.sheet property:", app);
     }
     
     // Last resort: if we still don't have an app, try again after a delay
     if (!app) {
-      console.warn("InventoryElement: No app found initially, retrying after delay...");
       // Try again after the sheet has finished setting up
       setTimeout(() => {
-        console.log("Retrying app detection...");
         let retryApp = null;
         
         // Try all the same methods again
         const retryAppElement = this.closest(".how-to-be-a-hero");
         if (retryAppElement?._sheet) {
           retryApp = retryAppElement._sheet;
-          console.log("Found app on retry via _sheet:", retryApp);
         } else if (this.sheet) {
           retryApp = this.sheet;
-          console.log("Found app on retry via this.sheet:", retryApp);
         }
         
         if (retryApp) {
           this.#app = retryApp;
-          console.log("Successfully found app on retry:", this.#app);
           // Re-setup context menu now that we have the app
           this.setupContextMenu();
         } else {
@@ -77,13 +65,8 @@ export default class InventoryElement extends HTMLElement {
     }
     
     this.#app = app;
-    console.log("Set app to:", this.#app);
 
     this._initializeFilterLists();
-    
-    console.log("canUse:", this.canUse);
-    console.log("actor:", this.actor);
-    console.log("document:", this.document);
 
     if ( !this.canUse ) {
       for ( const element of this.querySelectorAll('[data-action="use"]') ) {
@@ -130,7 +113,6 @@ export default class InventoryElement extends HTMLElement {
    * Set up the context menu for items.
    */
   setupContextMenu() {
-    console.log("Setting up context menu for inventory");
     new ContextMenuHTBAH(this, "[data-item-id]", [], {
       onOpen: this._onOpenContextMenu.bind(this),
       jQuery: false

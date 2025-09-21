@@ -72,7 +72,6 @@
   --htbah-font-roboto: Roboto, sans-serif;
   --htbah-font-roboto-condensed: "Roboto Condensed", sans-serif;
   --htbah-font-roboto-slab: "Roboto Slab", serif;
-  --htbah-sheet-background: url("../ui/parchment.jpg") repeat;
   --htbah-shadow-45: rgba(0, 0, 0, 0.45);
   --htbah-shadow-15: rgba(0, 0, 0, 0.15);
   --htbah-highlight-45: rgba(255, 255, 255, 0.45);
@@ -467,7 +466,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 .how-to-be-a-hero.sheet.actor.character .window-content {
-  background: var(--htbah-color-dark-gray) url("/ui/denim075.png");
+  background: var(--htbah-color-dark-gray);
 }
 
 .how-to-be-a-hero.sheet.actor.character .window-content::before {
@@ -480,6 +479,12 @@ item-list-controls search .filter-control:hover:not(.disabled),
   background: url("../ui/character-sheet-imgs/banner-character-whitetree.webp") no-repeat top center / cover;
   -webkit-mask-image: linear-gradient(to bottom, black, transparent);
   mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* Fix background image in compact mode */
+.how-to-be-a-hero.sheet.actor.character.compact .window-content::before {
+  height: var(--htbah-sheet-header-height);
+  border-radius: 5px;
 }
 
 .how-to-be-a-hero.sheet.actor.character .sheet-header {
@@ -1398,54 +1403,292 @@ item-list-controls search .filter-control:hover:not(.disabled),
 /*  Base Legacy Dialog Support       */
 /* ---------------------------------- */
 .how-to-be-a-hero.dialog {
-  background: url("../ui/texture-gray1.webp") no-repeat top left, url("../ui/texture-gray2.webp") no-repeat bottom right, var(--htbah-color-parchment);
-  border: 1px solid var(--htbah-color-gold);
+  font-family: var(--htbah-font-roboto);
+  color: var(--htbah-color-dark);
+  background: var(--htbah-color-tan);
+  border: 1px solid var(--htbah-color-tan);
+  box-shadow: 0 4px 8px rgba(25, 24, 19, 0.3);
+  border-radius: 5px;
+}
+.how-to-be-a-hero.dialog > .window-header {
+  background: var(--htbah-color-dark) !important;
+  border-bottom: 1px solid var(--htbah-color-tan);
+  padding: 8px 12px;
+  border-radius: 5px 5px 0 0;
+}
+.how-to-be-a-hero.dialog > .window-header h4.window-title {
+  color: var(--htbah-color-dark) !important;
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+  font-size: var(--font-size-16);
+  margin: 0;
+  visibility: visible;
+}
+.how-to-be-a-hero.dialog > .window-header .header-button.close {
+  color: var(--htbah-color-dark);
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-14);
+  padding: 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+.how-to-be-a-hero.dialog > .window-header .header-button.close:hover {
+  color: var(--htbah-color-tan);
+  background: var(--htbah-color-faint);
 }
 .how-to-be-a-hero.dialog > .window-content {
-  background: transparent;
-}
-.how-to-be-a-hero.dialog > .window-header .window-title {
-  visibility: hidden;
+  padding: 16px;
+  background: var(--htbah-color-faint) !important;
+  color: var(--htbah-color-dark) !important;
 }
 .how-to-be-a-hero.dialog form {
-  padding: 0 0.75rem 0.75rem;
+  padding: 0;
+  color: var(--htbah-color-dark);
 }
 .how-to-be-a-hero.dialog form > header {
   font-family: var(--htbah-font-roboto-slab);
   font-weight: bold;
-  font-size: var(--font-size-24);
+  font-size: var(--font-size-18);
   text-align: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1em;
+  color: var(--htbah-color-dark);
 }
-/* Legacy dialog buttons - specifically scoped to avoid conflicts */
+.how-to-be-a-hero.dialog label {
+  color: var(--htbah-color-dark) !important;
+  font-weight: 600;
+  font-size: var(--font-size-14);
+}
+.how-to-be-a-hero.dialog input[type="text"] {
+  color: var(--htbah-color-dark);
+  background: var(--htbah-color-faint);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+/* Override inline styles for dialog content */
+.how-to-be-a-hero.dialog .dialog-content {
+  color: var(--htbah-color-dark) !important;
+}
+
+.how-to-be-a-hero.dialog .dialog-content div {
+  color: var(--htbah-color-dark) !important;
+}
+
+.how-to-be-a-hero.dialog .dialog-content p {
+  color: var(--htbah-color-dark) !important;
+}
+
+.how-to-be-a-hero.dialog .dialog-content strong {
+  color: var(--htbah-color-dark) !important;
+  font-weight: bold;
+}
+
+/* Legacy dialog buttons - matching roll dialog styling */
 .how-to-be-a-hero.dialog .dialog-buttons {
-  padding: 0.5rem;
-  gap: 0.5rem;
   display: flex;
+  gap: 8px;
   justify-content: flex-end;
-  /* Note: This is scoped to .how-to-be-a-hero.dialog only - 
-     does not affect .how-to-be-a-hero.sheet.actor tabs */
+  padding: 12px 16px;
+  border-top: 1px solid var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
+  border-radius: 0 0 5px 5px;
+  margin: 16px -16px -16px -16px;
 }
+
+/* Base dialog button styling */
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button,
 .how-to-be-a-hero.dialog .dialog-buttons button {
-  background: var(--htbah-color-card);
-  border: 1px solid var(--color-border-light-2);
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+  border: 1px solid var(--htbah-color-tan);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-13);
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
-.how-to-be-a-hero.dialog .dialog-buttons button.default {
-  border-color: var(--htbah-color-gold);
+
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button:hover,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button:focus,
+.how-to-be-a-hero.dialog .dialog-buttons button:hover,
+.how-to-be-a-hero.dialog .dialog-buttons button:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 2px 4px rgba(25, 24, 19, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Primary/default button styling */
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.default,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.primary,
+.how-to-be-a-hero.dialog .dialog-buttons button.default,
+.how-to-be-a-hero.dialog .dialog-buttons button.primary {
+  background: var(--htbah-color-tan);
+  color: var(--htbah-color-faint);
+  border-color: var(--htbah-color-tan);
+  font-weight: 600;
+}
+
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.default:hover,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.default:focus,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.primary:hover,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.primary:focus,
+.how-to-be-a-hero.dialog .dialog-buttons button.default:hover,
+.how-to-be-a-hero.dialog .dialog-buttons button.default:focus,
+.how-to-be-a-hero.dialog .dialog-buttons button.primary:hover,
+.how-to-be-a-hero.dialog .dialog-buttons button.primary:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 3px 6px rgba(25, 24, 19, 0.4);
+}
+
+/* Secondary/cancel button styling */
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.secondary,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.cancel,
+.how-to-be-a-hero.dialog .dialog-buttons button.secondary,
+.how-to-be-a-hero.dialog .dialog-buttons button.cancel {
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+}
+
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.secondary:hover,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.secondary:focus,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.cancel:hover,
+.how-to-be-a-hero.dialog .dialog-buttons .dialog-button.cancel:focus,
+.how-to-be-a-hero.dialog .dialog-buttons button.secondary:hover,
+.how-to-be-a-hero.dialog .dialog-buttons button.secondary:focus,
+.how-to-be-a-hero.dialog .dialog-buttons button.cancel:hover,
+.how-to-be-a-hero.dialog .dialog-buttons button.cancel:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 2px 4px rgba(25, 24, 19, 0.3);
 }
 /* ---------------------------------- */
 /*  Create Document Dialog            */
 /* ---------------------------------- */
-.how-to-be-a-hero.create-document form header {
-  padding: 0 0.5rem;
+
+/* Match roll dialog styling exactly for create-document dialog */
+.how-to-be-a-hero.create-document.dialog {
+  font-family: var(--htbah-font-roboto);
+  color: var(--htbah-color-dark);
+  background: var(--htbah-color-tan);
+  border: 1px solid var(--htbah-color-tan);
+  box-shadow: 0 4px 8px rgba(25, 24, 19, 0.3);
+  border-radius: 5px;
 }
+
+.how-to-be-a-hero.create-document.dialog .window-header {
+  background: var(--htbah-color-dark) !important;
+  border-bottom: 1px solid var(--htbah-color-tan);
+  padding: 8px 12px;
+  border-radius: 5px 5px 0 0;
+}
+
+.how-to-be-a-hero.create-document.dialog .window-header h4.window-title {
+  color: var(--htbah-color-tan) !important;
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+  font-size: var(--font-size-16);
+  margin: 0;
+}
+
+.how-to-be-a-hero.create-document.dialog .window-header .header-button.close {
+  color: var(--htbah-color-tan);
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-14);
+  padding: 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.how-to-be-a-hero.create-document.dialog .window-header .header-button.close:hover {
+  color: var(--htbah-color-faint);
+  background: rgba(var(--htbah-color-tan-rgb), 0.2);
+}
+
+.how-to-be-a-hero.create-document.dialog .window-content {
+  padding: 16px;
+  background: var(--htbah-color-faint) !important;
+  color: var(--htbah-color-dark) !important;
+}
+
+.how-to-be-a-hero.create-document.dialog form {
+  color: var(--htbah-color-dark) !important;
+}
+
+.how-to-be-a-hero.create-document form header {
+  padding: 0;
+  margin-bottom: 1em;
+}
+
 .how-to-be-a-hero.create-document .document-name {
   font-family: var(--htbah-font-roboto-slab);
   font-weight: bold;
-  font-size: var(--font-size-24);
+  font-size: var(--font-size-18);
   text-align: center;
-  background: none;
-  color: var(--htbah-color-black);
+  background: var(--htbah-color-faint);
+  color: var(--htbah-color-dark) !important;
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 4px;
+  padding: 6px 10px;
+  width: 100%;
+}
+
+.how-to-be-a-hero.create-document ol {
+  background: var(--htbah-color-beige);
+  border: 1px solid var(--htbah-color-tan);
+  border-radius: 4px;
+}
+
+.how-to-be-a-hero.create-document ol label {
+  color: var(--htbah-color-dark) !important;
+  font-weight: 600;
+  font-size: var(--font-size-14);
+}
+
+.how-to-be-a-hero.create-document ol label span {
+  color: var(--htbah-color-dark) !important;
+}
+
+.how-to-be-a-hero.create-document.dialog .dialog-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  border-top: 1px solid var(--htbah-color-tan);
+  background: var(--htbah-color-beige);
+  border-radius: 0 0 5px 5px;
+  margin: 16px -16px -16px -16px;
+}
+
+.how-to-be-a-hero.create-document.dialog .dialog-buttons button {
+  background: var(--htbah-color-tan);
+  color: var(--htbah-color-faint);
+  border: 1px solid var(--htbah-color-tan);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--htbah-font-roboto);
+  font-size: var(--font-size-13);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.how-to-be-a-hero.create-document.dialog .dialog-buttons button:hover,
+.how-to-be-a-hero.create-document.dialog .dialog-buttons button:focus {
+  background: var(--htbah-color-beige);
+  color: var(--htbah-color-dark);
+  border-color: var(--htbah-color-tan);
+  box-shadow: 0 3px 6px rgba(25, 24, 19, 0.4);
 }
 .how-to-be-a-hero.create-document .document-name:hover,
 .how-to-be-a-hero.create-document .document-name:focus {
@@ -1886,35 +2129,43 @@ item-list-controls search .filter-control:hover:not(.disabled),
   background: transparent;
   position: relative;
   z-index: 1;
-  /* Edit Mode Toggle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* Space between toggles */
 }
 .how-to-be-a-hero.sheet.actor.character > header .window-title {
   visibility: hidden;
 }
-.how-to-be-a-hero.sheet.actor.character > header > .how-to-be-a-hero slide-toggle {
+
+/* Edit/Play Mode Toggle */
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider {
   --slide-toggle-track-color-checked: var(--htbah-color-gold);
   --slide-toggle-track-color-unchecked: var(--htbah-color-light-gray);
   flex: none;
 }
-.how-to-be-a-hero.sheet.actor.character > header > .how-to-be-a-hero slide-toggle .slide-toggle-thumb {
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider .slide-toggle-thumb {
   line-height: 12px;
 }
-.how-to-be-a-hero.sheet.actor.character > header > slide-toggle .slide-toggle-thumb::before {
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider .slide-toggle-thumb::before {
   content: "\f0ad";
   font-family: var(--font-awesome);
   color: var(--htbah-color-light-gray);
   font-weight: bold;
   font-size: var(--font-size-9);
 }
-.how-to-be-a-hero.sheet.actor.character > header > slide-toggle[checked] .slide-toggle-thumb::before {
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider[checked] .slide-toggle-thumb::before {
   color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .window-content {
   margin-top: -35px;
 }
 .how-to-be-a-hero.sheet.actor.character.minimized {
-  background: url("../ui/denim075.png");
   border: unset;
+  min-width: 500px !important;
+  min-height: unset !important;
+  width: auto !important;
+  height: auto !important;
 }
 .how-to-be-a-hero.sheet.actor.character.minimized > header {
   align-items: center;
@@ -1928,6 +2179,66 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 .how-to-be-a-hero.sheet.actor.character.minimized nav.tabs {
   display: none;
+}
+.how-to-be-a-hero.sheet.actor.character.minimized .window-content {
+  display: none;
+}
+
+/* When both compact and minimized, remove compact mode height constraints but keep min-width */
+.how-to-be-a-hero.sheet.actor.character.compact.minimized {
+  min-width: 500px !important;
+  min-height: unset !important;
+  height: auto !important;
+  max-height: unset !important;
+}
+
+/* Compact Mode - Hide sheet body but keep header visible */
+.how-to-be-a-hero.sheet.actor.character.compact {
+  min-height: var(--htbah-sheet-header-height) !important;
+  height: var(--htbah-sheet-header-height) !important;
+  max-height: var(--htbah-sheet-header-height) !important;
+  resize: none !important;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact .sheet-body {
+  display: none;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact nav.tabs {
+  display: none;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact .window-content {
+  height: 100% !important;
+  min-height: unset !important;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact form {
+  height: 100% !important;
+  min-height: unset !important;
+}
+
+/* Compact Mode Toggle */
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider {
+  --slide-toggle-track-color-checked: #8B0000;
+  --slide-toggle-track-color-unchecked: var(--htbah-color-light-gray);
+  flex: none;
+}
+
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider .slide-toggle-thumb {
+  line-height: 12px;
+}
+
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider .slide-toggle-thumb::before {
+  content: "\f71c"; /* fas fa-sword */
+  font-family: var(--font-awesome);
+  color: #8B0000;
+  font-weight: bold;
+  font-size: var(--font-size-9);
+}
+
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider[checked] .slide-toggle-thumb::before {
+  color: #8B0000;
 }
 
 /* Header Container */
@@ -2790,17 +3101,33 @@ item-list-controls search .filter-control:hover:not(.disabled),
   font-size: var(--font-size-11);
 }
 .how-to-be-a-hero.sheet .sidebar .card .stats .ac { 
-  width: 68px;
-  height: 68px;
+  width: 90px;
+  height: 90px;
   text-align: center;
   line-height: 62px;
-  background: transparent url(../ui/ac-badge.webp) no-repeat center / contain;
+  background-image: url(../ui/shield_foreground.svg), url(../ui/shield.svg);
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-size: calc(100% - 8px), contain;
   color: var(--color-text-dark-primary);
   font-size: var(--font-size-23);
   font-family: var(--htbah-font-roboto);
   font-weight: bold;
-  margin-top: -21px;
+  margin-top: -60px;
   filter: drop-shadow(0 0 6px var(--color-shadow-dark));
+  position: relative;
+}
+.how-to-be-a-hero.sheet .sidebar .card .stats .ac::after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 24px;
+  background: var(--htbah-color-gold);
+  clip-path: polygon(50% 100%, 15% 0%, 85% 0%);
+  border-radius: 50% 50% 0 0;
 }
 .how-to-be-a-hero.sheet .sidebar .card .stats .ac .config-button {
   color: inherit;
@@ -3494,6 +3821,37 @@ item-list-controls search .filter-control:hover:not(.disabled),
   box-shadow: none;
 }
 
+/* Eureka input background color in edit mode */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-value > input:not(:disabled) {
+  background-color: #3B3B3B;
+}
+
+/* Hidden eureka column - maintains layout width but hides content */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column.eureka-hidden {
+  visibility: hidden;
+  border-right: none !important;
+}
+
+/* Remove border from total column when eureka is hidden */
+.how-to-be-a-hero .tab.details filigree-box > .header-content:has(.eureka-column.eureka-hidden) > .total-column {
+  border-right: none !important;
+}
+
+/* Eureka icon styling */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-icon htbah-icon {
+  --icon-size: 16px;
+  --icon-fill: var(--htbah-color-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Style the delimiter */
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .delimiter {
   flex: 0 0 15%;
@@ -3506,7 +3864,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 
 /* Style the eureka max value */
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-max {
-  flex: 0 0 30%;
+  flex: 0 0 20%;
   font-weight: bold;
   font-size: var(--font-size-16);
   color: var(--color-text-dark-primary);
@@ -3678,6 +4036,11 @@ item-list-controls search .filter-control:hover:not(.disabled),
   justify-content: center;
 }
 
+/* Ability value input background color in edit mode */
+.ability-value-input-group input.ability-value:not(.play-mode):not(:disabled) {
+  background-color: #3B3B3B;
+}
+
 /* Ability value input - Play Mode (no border, disabled state) */
 .ability-value-input-group input.ability-value.play-mode,
 .ability-value-input-group input.ability-value:disabled {
@@ -3797,9 +4160,9 @@ item-list-controls search .filter-control:hover:not(.disabled),
   border: none;
 }
 
-/* Dropzone Indicator */
+/* Dropzone Indicator - hidden by default, shown during drag operations */
 .how-to-be-a-hero .tab.inventory .items-section .items-header .dropzone-indicator {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.5rem;
   margin-left: 1rem;
@@ -3808,6 +4171,11 @@ item-list-controls search .filter-control:hover:not(.disabled),
   border: 1px dashed var(--htbah-color-gold);
   border-radius: 4px;
   font-size: 0.8em;
+}
+
+/* Show dropzone indicator when actively dragging items */
+.how-to-be-a-hero.dragging-item .tab.inventory .items-section .items-header .dropzone-indicator {
+  display: flex;
   opacity: 0.7;
   transition: all 0.2s ease;
 }
@@ -4129,6 +4497,27 @@ item-list-controls search .filter-control:hover:not(.disabled),
   display: none;
 }
 
+
+/* Item Sheet Window Header - override application styles */
+.how-to-be-a-hero.sheet.item .window-header {
+  background: black !important;
+  border-bottom: 1px solid var(--htbah-color-gold);
+}
+
+.how-to-be-a-hero.sheet.item .window-header .window-title {
+  color: var(--htbah-color-gold) !important;
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+}
+
+.how-to-be-a-hero.sheet.item .window-header .header-button {
+  color: var(--htbah-color-gold) !important;
+}
+
+.how-to-be-a-hero.sheet.item .window-header .header-button:hover {
+  color: white !important;
+  background: rgba(159, 146, 117, 0.2) !important;
+}
 
 /* Main container */
 .how-to-be-a-hero.sheet.item .window-content {

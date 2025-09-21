@@ -317,5 +317,14 @@
       "armor": "Rüstung",
       "base": "Basis"
     }
-  }
+  },
+
+  "HTBAH.Settings.ShowEureka.Name": "Geistesblitz-Punkte anzeigen",
+  "HTBAH.Settings.ShowEureka.Hint": "Bestimmt ob Geistesblitz-Punkt-Felder auf Charakterbögen angezeigt werden. Wenn deaktiviert, werden Geistesblitz-Mechaniken für alle Charaktere ausgeblendet.",
+
+  "HTBAH.EurekaCurrentTooltip": "Aktuelle Geistesblitz-Punkte - spezielle Punkte für Würfelwiederholungen und Boni",
+  "HTBAH.EurekaMaxTooltip": "Maximale Geistesblitz-Punkte die angesammelt werden können",
+
+  "HTBAH.CompactModeOn": "Kompakt-Modus: An - Klicken zum Erweitern",
+  "HTBAH.CompactModeOff": "Kompakt-Modus: Aus - Klicken um nur Kopfzeile zu zeigen"
 }

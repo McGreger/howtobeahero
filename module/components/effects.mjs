@@ -44,7 +44,7 @@ export default class EffectsElement extends HTMLElement {
   get _app() { return this.#app; }
 
   get document() {
-    return this._app.document;
+    return this._app?.document;
   }
 
   static prepareCategories(effects) {
@@ -124,6 +124,10 @@ export default class EffectsElement extends HTMLElement {
       detail: action
     });
     if (target.dispatchEvent(event) === false) return;
+
+    if (!this.document) {
+      return;
+    }
 
     if (action === "toggleCondition") {
       const conditionId = target.closest("[data-condition-id]")?.dataset.conditionId;

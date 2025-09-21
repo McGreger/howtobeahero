@@ -42,7 +42,6 @@ var _module$c = /*#__PURE__*/Object.freeze({
 /* -------------------------------------------- */
 
 Hooks.once('init', function () {
-  console.log("HowToBeAHero | Initializing How To Be A Hero System with AppV2 support");
 
   // Add utility classes to the global game object so that they're more easily
   // accessible in global contexts.
@@ -75,7 +74,6 @@ Hooks.once('init', function () {
   game.howtobeahero.managers.effects.setConditionManager(game.howtobeahero.managers.conditions);
 
   // Initialize custom elements early with enhanced error handling
-  console.log("HowToBeAHero | Pre-initializing custom elements...");
   try {
     const customElementResults = initializeCustomElements();
     game.howtobeahero.customElements = {
@@ -165,9 +163,6 @@ Hooks.once('init', function () {
     if (!model) console.error(`Item data model for "${key}" is not defined.`);
   }
 
-  console.log("Actor data models:", CONFIG.Actor.dataModels);
-  console.log("Item data models:", CONFIG.Item.dataModels);
-
   CONFIG.Dice.D100Roll = D100Roll;
   CONFIG.Dice.D10Roll = D10Roll;
   
@@ -197,11 +192,20 @@ Hooks.once('init', function () {
   // Register system settings
   game.settings.register("how-to-be-a-hero", "showManaBar", {
     name: "HTBAH.Settings.ShowManaBar.Name",
-    hint: "HTBAH.Settings.ShowManaBar.Hint", 
+    hint: "HTBAH.Settings.ShowManaBar.Hint",
     scope: "world",
     config: true,
     type: Boolean,
     default: false
+  });
+
+  game.settings.register("how-to-be-a-hero", "showEureka", {
+    name: "HTBAH.Settings.ShowEureka.Name",
+    hint: "HTBAH.Settings.ShowEureka.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
   });
 
   // Register additional system settings

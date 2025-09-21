@@ -8,7 +8,6 @@
  * @returns {Promise}
  */
 export const preloadHandlebarsTemplates = async function () {
-  console.log("HowToBeAHero | Loading Handlebars templates for AppV2...");
 
   // Define all template paths
   const templates = {
@@ -68,7 +67,6 @@ export const preloadHandlebarsTemplates = async function () {
 
   try {
     // STEP 1: Check if templates exist
-    console.log("HowToBeAHero | Checking template availability...");
     const templateChecks = await Promise.allSettled(
       allTemplates.map(async (path) => {
         try {
@@ -92,8 +90,6 @@ export const preloadHandlebarsTemplates = async function () {
       console.warn("HowToBeAHero | Missing templates:", missingTemplates);
     }
 
-    console.log(`HowToBeAHero | Found ${existingTemplates.length}/${allTemplates.length} templates`);
-
     // STEP 2: Create paths object for loadTemplates (traditional approach)
     const paths = {};
     
@@ -108,7 +104,6 @@ export const preloadHandlebarsTemplates = async function () {
     }
 
     // STEP 3: Load templates using Foundry's loadTemplates
-    console.log("HowToBeAHero | Loading templates via loadTemplates...");
     await foundry.applications.handlebars.loadTemplates(paths);
 
     // STEP 4: Verify critical templates for AppV2
@@ -125,7 +120,6 @@ export const preloadHandlebarsTemplates = async function () {
     }
 
     // STEP 5: Verify partials are registered
-    console.log("HowToBeAHero | Verifying partial registration...");
     const expectedPartials = [
       'htbah.character-details',
       'htbah.character-inventory', 
@@ -141,8 +135,6 @@ export const preloadHandlebarsTemplates = async function () {
       return isRegistered;
     });
 
-    console.log(`HowToBeAHero | Registered partials: ${registeredPartials.length}/${expectedPartials.length}`);
-
     // STEP 6: Success summary
     const summary = {
       success: true,
@@ -153,8 +145,8 @@ export const preloadHandlebarsTemplates = async function () {
       criticalTemplatesMissing: criticalMissing.length
     };
 
-    console.log("HowToBeAHero | Template loading completed successfully");
-    console.log("HowToBeAHero | Summary:", summary);
+    //console.log("HowToBeAHero | Template loading completed successfully");
+    //console.log("HowToBeAHero | Summary:", summary);
 
     return summary;
 
@@ -170,7 +162,6 @@ export const preloadHandlebarsTemplates = async function () {
  * @returns {boolean} Whether AppV2 is properly configured
  */
 export const verifyAppV2Requirements = function() {
-  console.log("HowToBeAHero | Verifying AppV2 requirements...");
   
   const checks = {
     foundryVersion: game.version,
@@ -178,8 +169,6 @@ export const verifyAppV2Requirements = function() {
     hasActorSheetV2: !!foundry.applications?.sheets?.ActorSheetV2,
     hasApplicationV2: !!foundry.applications?.api?.ApplicationV2
   };
-
-  console.log("HowToBeAHero | AppV2 Environment Check:", checks);
 
   const isAppV2Ready = checks.hasHandlebarsApplicationMixin && 
                        checks.hasActorSheetV2 && 
@@ -204,7 +193,6 @@ export const verifyAppV2Requirements = function() {
  * @returns {Promise<Object>} Template configuration for PARTS
  */
 export const prepareAppV2Parts = async function() {
-  console.log("HowToBeAHero | Preparing AppV2 PARTS configuration...");
 
   // Define potential parts (you can enable these later)
   const partConfigs = {
@@ -277,8 +265,6 @@ export const prepareAppV2Parts = async function() {
 
   const multipartReady = Object.keys(availableMultiparts).length > 2; // Need at least a few parts
 
-  console.log(`HowToBeAHero | PARTS status: Single=${singlePartExists}, Multipart=${multipartReady}`);
-
   return {
     mode: multipartReady ? 'multipart-available' : 'single-only',
     single: partConfigs.single,
@@ -293,8 +279,6 @@ export const prepareAppV2Parts = async function() {
  */
 export const loadDevelopmentTemplates = async function() {
   if (!game.settings.get('core', 'noCanvas')) return; // Only in dev mode
-
-  console.log("HowToBeAHero | Loading development templates...");
   
   const devTemplates = [
     "systems/how-to-be-a-hero/templates/dev/test-character-sheet.hbs",

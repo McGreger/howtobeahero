@@ -51,7 +51,6 @@ class AppV2ItemListControlsElement extends ItemListControlsElement {
 class AppV2InventoryElement extends InventoryElement {
   connectedCallback() {
     try {
-      console.log("AppV2InventoryElement connectedCallback called");
       
       // Initialize _filters if it doesn't exist
       if (!this._filters) {
@@ -64,12 +63,11 @@ class AppV2InventoryElement extends InventoryElement {
         if (sheetElement && sheetElement._sheet) {
           this.sheet = sheetElement._sheet;
         }
-        console.log("AppV2InventoryElement sheet set to:", this.sheet);
+        
       }
       
       // Call parent with error handling
       if (super.connectedCallback) {
-        console.log("Calling super.connectedCallback");
         super.connectedCallback();
       }
       
@@ -80,7 +78,6 @@ class AppV2InventoryElement extends InventoryElement {
       
       // Ensure context menu is set up
       setTimeout(() => {
-        console.log("Setting up context menu in AppV2 wrapper");
         if (this.setupContextMenu) {
           this.setupContextMenu();
         }
@@ -155,10 +152,8 @@ function safeDefineElement(name, constructor, enhancedConstructor = null) {
       // Use enhanced version if provided, otherwise use original
       const elementConstructor = enhancedConstructor || constructor;
       customElements.define(name, elementConstructor);
-      console.log(`HowToBeAHero | Successfully defined custom element: ${name} (${enhancedConstructor ? 'Enhanced' : 'Original'})`);
       return { success: true, enhanced: !!enhancedConstructor };
     } else {
-      console.log(`HowToBeAHero | Custom element already defined: ${name}`);
       return { success: true, alreadyDefined: true };
     }
   } catch (error) {
@@ -169,7 +164,6 @@ function safeDefineElement(name, constructor, enhancedConstructor = null) {
       if (!customElements.get(name)) {
         const fallbackConstructor = createFallbackElement(name);
         customElements.define(name, fallbackConstructor);
-        console.log(`HowToBeAHero | Defined fallback custom element: ${name}`);
         return { success: true, fallback: true };
       }
     } catch (fallbackError) {
@@ -184,7 +178,6 @@ function safeDefineElement(name, constructor, enhancedConstructor = null) {
 function createFallbackElement(name) {
   return class extends HTMLElement {
     connectedCallback() {
-      console.log(`HowToBeAHero | Fallback element connected: ${name}`);
       this.classList.add(`fallback-${name}`);
       
       // Add basic structure based on element type
@@ -247,7 +240,6 @@ function createFallbackElement(name) {
 
 // Function to initialize all custom elements with enhanced versions for AppV2
 export function initializeCustomElements() {
-  console.log("HowToBeAHero | Initializing custom elements with AppV2 enhancements...");
  
   const results = {
     'slide-toggle': safeDefineElement("slide-toggle", HowToBeAHeroSlideToggle),
@@ -257,8 +249,6 @@ export function initializeCustomElements() {
     'filigree-box': safeDefineElement("filigree-box", FiligreeBoxElement),
     'item-list-controls': safeDefineElement("item-list-controls", ItemListControlsElement, AppV2ItemListControlsElement)
   };
- 
-  console.log("HowToBeAHero | Custom element initialization results:", results);
   
   // Check if any elements failed completely
   const failed = Object.entries(results).filter(([name, result]) => !result.success);
@@ -273,7 +263,6 @@ export function initializeCustomElements() {
 
 // Set up global fallbacks for completely failed elements
 function setupGlobalFallbacks() {
-  console.log("HowToBeAHero | Setting up global fallbacks...");
   
   // Add CSS fallbacks
   if (!document.querySelector('#htbah-fallback-styles')) {
@@ -336,7 +325,6 @@ function setupGlobalFallbacks() {
 
 // Enhanced upgrade function for existing elements in the DOM
 export function upgradeExistingElements(containerElement = document) {
-  console.log("HowToBeAHero | Upgrading existing custom elements...");
   
   const elementNames = [
     'htbah-icon',
@@ -352,7 +340,6 @@ export function upgradeExistingElements(containerElement = document) {
     elements.forEach(element => {
       try {
         if (element.constructor === HTMLElement || element.constructor === HTMLUnknownElement) {
-          console.log(`HowToBeAHero | Force upgrading element: ${name}`);
           customElements.upgrade(element);
         }
         

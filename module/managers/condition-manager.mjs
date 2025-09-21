@@ -105,7 +105,6 @@ export class conditionManager {
   
       // 5. Create the effect with debounce wrapper
       const [createdEffect] = await actor.createEmbeddedDocuments("ActiveEffect", [effectData], {
-        temporary: false,
         renderSheet: false
       });
   

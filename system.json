@@ -2,7 +2,7 @@
   "id": "how-to-be-a-hero",
   "title": "How to be a Hero",
   "description": "The How to be a Hero system for FoundryVTT! (Beta)",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "authors": [
     {
       "name": "GrafSchwarz",
@@ -23,7 +23,7 @@
   ],
   "compatibility": {
     "minimum": "13",
-    "verified": "13.347",
+    "verified": "13.348",
     "maximum": "13.999"
   },
   "esmodules": [
@@ -49,8 +49,6 @@
   "manifest": "https://raw.githubusercontent.com/GrafSchwarz/howtobeahero/refs/heads/main/system.json",
   "download": "https://github.com/GrafSchwarz/howtobeahero/archive/refs/heads/main.zip",
   "background": "systems/how-to-be-a-hero/assets/htbah.webp",
-  "gridDistance": 5,
-  "gridUnits": "ft",
   "primaryTokenAttribute": "health",
   "flags": {
     "hotReload": {
