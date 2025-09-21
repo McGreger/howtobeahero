@@ -4498,6 +4498,27 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 
 
+/* Item Sheet Window Header - override application styles */
+.how-to-be-a-hero.sheet.item .window-header {
+  background: black !important;
+  border-bottom: 1px solid var(--htbah-color-gold);
+}
+
+.how-to-be-a-hero.sheet.item .window-header .window-title {
+  color: var(--htbah-color-gold) !important;
+  font-family: var(--htbah-font-roboto-slab);
+  font-weight: bold;
+}
+
+.how-to-be-a-hero.sheet.item .window-header .header-button {
+  color: var(--htbah-color-gold) !important;
+}
+
+.how-to-be-a-hero.sheet.item .window-header .header-button:hover {
+  color: white !important;
+  background: rgba(159, 146, 117, 0.2) !important;
+}
+
 /* Main container */
 .how-to-be-a-hero.sheet.item .window-content {
   font-family: var(--htbah-font-roboto);
