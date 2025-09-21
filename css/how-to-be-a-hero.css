@@ -481,6 +481,12 @@ item-list-controls search .filter-control:hover:not(.disabled),
   mask-image: linear-gradient(to bottom, black, transparent);
 }
 
+/* Fix background image in compact mode */
+.how-to-be-a-hero.sheet.actor.character.compact .window-content::before {
+  height: var(--htbah-sheet-header-height);
+  border-radius: 5px;
+}
+
 .how-to-be-a-hero.sheet.actor.character .sheet-header {
   background: none;
   position: relative;
@@ -1885,27 +1891,32 @@ item-list-controls search .filter-control:hover:not(.disabled),
   background: transparent;
   position: relative;
   z-index: 1;
-  /* Edit Mode Toggle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* Space between toggles */
 }
 .how-to-be-a-hero.sheet.actor.character > header .window-title {
   visibility: hidden;
 }
-.how-to-be-a-hero.sheet.actor.character > header > .how-to-be-a-hero slide-toggle {
+
+/* Edit/Play Mode Toggle */
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider {
   --slide-toggle-track-color-checked: var(--htbah-color-gold);
   --slide-toggle-track-color-unchecked: var(--htbah-color-light-gray);
   flex: none;
 }
-.how-to-be-a-hero.sheet.actor.character > header > .how-to-be-a-hero slide-toggle .slide-toggle-thumb {
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider .slide-toggle-thumb {
   line-height: 12px;
 }
-.how-to-be-a-hero.sheet.actor.character > header > slide-toggle .slide-toggle-thumb::before {
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider .slide-toggle-thumb::before {
   content: "\f0ad";
   font-family: var(--font-awesome);
   color: var(--htbah-color-light-gray);
   font-weight: bold;
   font-size: var(--font-size-9);
 }
-.how-to-be-a-hero.sheet.actor.character > header > slide-toggle[checked] .slide-toggle-thumb::before {
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.mode-slider[checked] .slide-toggle-thumb::before {
   color: var(--htbah-color-gold);
 }
 .how-to-be-a-hero.sheet.actor.character .window-content {
@@ -1913,7 +1924,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 .how-to-be-a-hero.sheet.actor.character.minimized {
   border: unset;
-  min-width: unset !important;
+  min-width: 500px !important;
   min-height: unset !important;
   width: auto !important;
   height: auto !important;
@@ -1933,6 +1944,63 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 .how-to-be-a-hero.sheet.actor.character.minimized .window-content {
   display: none;
+}
+
+/* When both compact and minimized, remove compact mode height constraints but keep min-width */
+.how-to-be-a-hero.sheet.actor.character.compact.minimized {
+  min-width: 500px !important;
+  min-height: unset !important;
+  height: auto !important;
+  max-height: unset !important;
+}
+
+/* Compact Mode - Hide sheet body but keep header visible */
+.how-to-be-a-hero.sheet.actor.character.compact {
+  min-height: var(--htbah-sheet-header-height) !important;
+  height: var(--htbah-sheet-header-height) !important;
+  max-height: var(--htbah-sheet-header-height) !important;
+  resize: none !important;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact .sheet-body {
+  display: none;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact nav.tabs {
+  display: none;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact .window-content {
+  height: 100% !important;
+  min-height: unset !important;
+}
+
+.how-to-be-a-hero.sheet.actor.character.compact form {
+  height: 100% !important;
+  min-height: unset !important;
+}
+
+/* Compact Mode Toggle */
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider {
+  --slide-toggle-track-color-checked: #8B0000;
+  --slide-toggle-track-color-unchecked: var(--htbah-color-light-gray);
+  flex: none;
+}
+
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider .slide-toggle-thumb {
+  line-height: 12px;
+}
+
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider .slide-toggle-thumb::before {
+  content: "\f71c"; /* fas fa-sword */
+  font-family: var(--font-awesome);
+  color: #8B0000;
+  font-weight: bold;
+  font-size: var(--font-size-9);
+}
+
+.how-to-be-a-hero.sheet.actor.character > header > slide-toggle.compact-slider[checked] .slide-toggle-thumb::before {
+  color: #8B0000;
 }
 
 /* Header Container */

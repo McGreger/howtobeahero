@@ -167,6 +167,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     this.dragDropHandler = new HowToBeAHeroDragDropHandler(this);
     this._activeTab = "details";
     this._mode = this.constructor.MODES.PLAY;
+    this._compactMode = prefs.compactMode ?? false;
   }
 
   static DEFAULT_OPTIONS = {
@@ -197,7 +198,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       rollHeaderWeapon: this.prototype._onRollHeaderWeapon,
       rollHeaderParry: this.prototype._onRollHeaderParry,
       toggleEditHP: this.prototype._onToggleEditHP,
-      toggleEditMana: this.prototype._onToggleEditMana
+      toggleEditMana: this.prototype._onToggleEditMana,
+      toggleCompactMode: this.prototype._onToggleCompactMode
     }
   };
 
@@ -251,7 +253,8 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       rollData: this.document.getRollData(),
       tabs: this.constructor.TABS,
       activeTab: this._activeTab,
-      showManaBar: game.settings.get("how-to-be-a-hero", "showManaBar")
+      showManaBar: game.settings.get("how-to-be-a-hero", "showManaBar"),
+      compactMode: this._compactMode
     });
 
     // Prepare specialized data
@@ -301,7 +304,10 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
 
       // Setup edit mode toggle in header
       this._setupModeToggle();
-      
+
+      // Apply compact mode class if enabled
+      this.element.classList.toggle("compact", this._compactMode);
+
       // Setup form input handling for ApplicationV2
       this._setupFormHandling();
       
@@ -616,7 +622,19 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     editToggle.setAttribute("aria-label", game.i18n.localize("HTBAH.SheetModeEdit"));
     editToggle.addEventListener("change", (event) => this._onChangeSheetMode(event, editToggle));
     editToggle.addEventListener("dblclick", event => event.stopPropagation());
-    
+
+    // Create compact mode toggle
+    const compactToggle = document.createElement("slide-toggle");
+    compactToggle.checked = this._compactMode;
+    compactToggle.classList.add("compact-slider");
+    const compactLabel = game.i18n.localize(`HTBAH.CompactMode${this._compactMode ? "On" : "Off"}`);
+    compactToggle.dataset.tooltip = compactLabel;
+    compactToggle.setAttribute("aria-label", compactLabel);
+    compactToggle.addEventListener("change", (event) => this._onToggleCompactMode(event, compactToggle));
+    compactToggle.addEventListener("dblclick", event => event.stopPropagation());
+
+    // Add both toggles to header in correct order (edit/play first, then compact/combat)
+    header.insertAdjacentElement("afterbegin", compactToggle);
     header.insertAdjacentElement("afterbegin", editToggle);
 
     // Update header buttons
@@ -1105,6 +1123,27 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
     this.render();
   }
 
+  /**
+   * Handle compact mode toggle
+   */
+  async _onToggleCompactMode(event, target) {
+    this._compactMode = target.checked;
+
+    // Save preference
+    const key = `character${this.document.limited ? ":limited" : ""}`;
+    await game.user.setFlag("how-to-be-a-hero", `sheetPrefs.${key}.compactMode`, this._compactMode);
+
+    // Add/remove CSS class for styling
+    this.element.classList.toggle("compact", this._compactMode);
+
+    // Update tooltip
+    const label = game.i18n.localize(`HTBAH.CompactMode${this._compactMode ? "On" : "Off"}`);
+    target.dataset.tooltip = label;
+    target.setAttribute("aria-label", label);
+
+    // Re-render to update template
+    this.render();
+  }
 
   /**
    * Handle initiative rolls
