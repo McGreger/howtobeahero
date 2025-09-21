@@ -1403,7 +1403,7 @@ item-list-controls search .filter-control:hover:not(.disabled),
 /*  Base Legacy Dialog Support       */
 /* ---------------------------------- */
 .how-to-be-a-hero.dialog {
-  background: url("../ui/texture-gray1.webp") no-repeat top left, url("../ui/texture-gray2.webp") no-repeat bottom right, var(--htbah-color-parchment);
+  /* background: url("../ui/texture-gray1.webp") no-repeat top left, url("../ui/texture-gray2.webp") no-repeat bottom right, var(--htbah-color-parchment);*/
   border: 1px solid var(--htbah-color-gold);
 }
 .how-to-be-a-hero.dialog > .window-content {
