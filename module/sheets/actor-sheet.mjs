@@ -254,6 +254,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       tabs: this.constructor.TABS,
       activeTab: this._activeTab,
       showManaBar: game.settings.get("how-to-be-a-hero", "showManaBar"),
+      showEureka: game.settings.get("how-to-be-a-hero", "showEureka"),
       compactMode: this._compactMode
     });
 

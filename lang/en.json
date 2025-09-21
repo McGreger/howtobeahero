@@ -338,6 +338,9 @@
   "HTBAH.Settings.ForceDarkMode.Name": "Force Dark Mode",
   "HTBAH.Settings.ForceDarkMode.Hint": "Forces dark mode for all users when using How to be a Hero sheets. Light mode is not yet fully supported.",
 
+  "HTBAH.Settings.ShowEureka.Name": "Show Eureka Points",
+  "HTBAH.Settings.ShowEureka.Hint": "Whether to display Eureka point fields on character sheets. When disabled, Eureka mechanics will be hidden for all characters.",
+
   "HTBAH.EurekaCurrentTooltip": "Current Eureka points - special points that can be spent for rerolls and bonuses",
   "HTBAH.EurekaMaxTooltip": "Maximum Eureka points that can be accumulated",
 

@@ -3588,6 +3588,17 @@ item-list-controls search .filter-control:hover:not(.disabled),
   background-color: #3B3B3B;
 }
 
+/* Hidden eureka column - maintains layout width but hides content */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column.eureka-hidden {
+  visibility: hidden;
+  border-right: none !important;
+}
+
+/* Remove border from total column when eureka is hidden */
+.how-to-be-a-hero .tab.details filigree-box > .header-content:has(.eureka-column.eureka-hidden) > .total-column {
+  border-right: none !important;
+}
+
 /* Style the delimiter */
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .delimiter {
   flex: 0 0 15%;

@@ -44,7 +44,8 @@
                 </div>
                 <div class="spacer-column flex1">
                 </div>
-                <div class="eureka-column flex1">
+                <div class="eureka-column flex1 {{#unless @root.showEureka}}eureka-hidden{{/unless}}">
+                    {{#if @root.showEureka}}
                     {{#if (eq actor.type "character")}}
                     <div class="eureka-value flex1" title="{{localize "HTBAH.EurekaCurrentTooltip"}}">
                         <input
@@ -59,6 +60,7 @@
                     <div class="eureka-max flex1" title="{{localize "HTBAH.EurekaMaxTooltip"}}">
                         {{skillSet.eureka.max}}
                     </div>
+                    {{/if}}
                     {{/if}}
                 </div>
             </div>

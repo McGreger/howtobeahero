@@ -192,11 +192,20 @@ Hooks.once('init', function () {
   // Register system settings
   game.settings.register("how-to-be-a-hero", "showManaBar", {
     name: "HTBAH.Settings.ShowManaBar.Name",
-    hint: "HTBAH.Settings.ShowManaBar.Hint", 
+    hint: "HTBAH.Settings.ShowManaBar.Hint",
     scope: "world",
     config: true,
     type: Boolean,
     default: false
+  });
+
+  game.settings.register("how-to-be-a-hero", "showEureka", {
+    name: "HTBAH.Settings.ShowEureka.Name",
+    hint: "HTBAH.Settings.ShowEureka.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
   });
 
   // Register additional system settings
