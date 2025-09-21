@@ -336,5 +336,8 @@
   "HTBAH.Settings.Initiative.Hint": "Configure the default dice formula used for initiative rolls.",
   
   "HTBAH.Settings.ForceDarkMode.Name": "Force Dark Mode",
-  "HTBAH.Settings.ForceDarkMode.Hint": "Forces dark mode for all users when using How to be a Hero sheets. Light mode is not yet fully supported."
+  "HTBAH.Settings.ForceDarkMode.Hint": "Forces dark mode for all users when using How to be a Hero sheets. Light mode is not yet fully supported.",
+
+  "HTBAH.EurekaCurrentTooltip": "Current Eureka points - special points that can be spent for rerolls and bonuses",
+  "HTBAH.EurekaMaxTooltip": "Maximum Eureka points that can be accumulated"
 }

@@ -1913,6 +1913,10 @@ item-list-controls search .filter-control:hover:not(.disabled),
 }
 .how-to-be-a-hero.sheet.actor.character.minimized {
   border: unset;
+  min-width: unset !important;
+  min-height: unset !important;
+  width: auto !important;
+  height: auto !important;
 }
 .how-to-be-a-hero.sheet.actor.character.minimized > header {
   align-items: center;
@@ -1925,6 +1929,9 @@ item-list-controls search .filter-control:hover:not(.disabled),
   visibility: visible;
 }
 .how-to-be-a-hero.sheet.actor.character.minimized nav.tabs {
+  display: none;
+}
+.how-to-be-a-hero.sheet.actor.character.minimized .window-content {
   display: none;
 }
 
@@ -3508,6 +3515,11 @@ item-list-controls search .filter-control:hover:not(.disabled),
   box-shadow: none;
 }
 
+/* Eureka input background color in edit mode */
+.how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .eureka-value > input:not(:disabled) {
+  background-color: #3B3B3B;
+}
+
 /* Style the delimiter */
 .how-to-be-a-hero .tab.details filigree-box > .header-content > .eureka-column > .delimiter {
   flex: 0 0 15%;
@@ -3690,6 +3702,11 @@ item-list-controls search .filter-control:hover:not(.disabled),
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Ability value input background color in edit mode */
+.ability-value-input-group input.ability-value:not(.play-mode):not(:disabled) {
+  background-color: #3B3B3B;
 }
 
 /* Ability value input - Play Mode (no border, disabled state) */

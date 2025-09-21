@@ -46,17 +46,17 @@
                 </div>
                 <div class="eureka-column flex1">
                     {{#if (eq actor.type "character")}}
-                    <div class="eureka-value flex1">
-                        <input 
-                            type="number" 
-                            name="system.attributes.skillSets.{{skillSet.key}}.eureka" 
-                            value="{{skillSet.eureka.value}}" 
+                    <div class="eureka-value flex1" title="{{localize "HTBAH.EurekaCurrentTooltip"}}">
+                        <input
+                            type="number"
+                            name="system.attributes.skillSets.{{skillSet.key}}.eureka"
+                            value="{{skillSet.eureka.value}}"
                             data-dtype="Number">
                     </div>
                     <div class="delimiter flex1">
                         /
                     </div>
-                    <div class="eureka-max flex1">
+                    <div class="eureka-max flex1" title="{{localize "HTBAH.EurekaMaxTooltip"}}">
                         {{skillSet.eureka.max}}
                     </div>
                     {{/if}}

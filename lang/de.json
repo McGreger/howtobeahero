@@ -317,5 +317,8 @@
       "armor": "Rüstung",
       "base": "Basis"
     }
-  }
+  },
+
+  "HTBAH.EurekaCurrentTooltip": "Aktuelle Geistesblitz-Punkte - spezielle Punkte für Würfelwiederholungen und Boni",
+  "HTBAH.EurekaMaxTooltip": "Maximale Geistesblitz-Punkte die angesammelt werden können"
 }
