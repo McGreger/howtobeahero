@@ -14,16 +14,16 @@ People and credits are listed in no particular order.
 - [Armor](https://game-icons.net/1x1/lorc/armor-vest.html)
 - [Sprint](https://game-icons.net/1x1/lorc/sprint.html)
 - [Potion ball](https://game-icons.net/1x1/lorc/potion-ball.html)
-/svg/statuses/cursed.svg - "Ubisoft sun icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/diseased.svg - "Biohazard icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/ethereal.svg - "Ghost ally icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/falling.svg - "Falling boulder" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/flying.svg - "Feathered wing icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/hiding.svg - "Hidden icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/hovering.svg - "Wingfoot icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/burrowing.svg - "Spade icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/stable.svg - "Bandage roll icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/transformed.svg - "Flat paw print icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/cursed.svg - "Ubisoft sun icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/diseased.svg - "Biohazard icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/ethereal.svg - "Ghost ally icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/falling.svg - "Falling boulder" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/flying.svg - "Feathered wing icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/hiding.svg - "Hidden icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/hovering.svg - "Wingfoot icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/burrowing.svg - "Spade icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/stable.svg - "Bandage roll icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/transformed.svg - "Flat paw print icon" by Lorc under CC BY 3.0 - https://game-icons.net 
 
 ==============================================
 #### Delapouite's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
@@ -35,9 +35,9 @@ People and credits are listed in no particular order.
 - [Three friends](https://game-icons.net/1x1/delapouite/three-friends.html)
 - [Skills](https://game-icons.net/1x1/delapouite/skills.html)
 - [Hand bag](https://game-icons.net/1x1/delapouite/hand-bag.html)
-/svg/statuses/dehydration.svg - "Waterskin" by Delapouite under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/sleeping.svg - "Night sleep icon" by Delapouite under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/suffocation.svg - "Lungs" by Delapouite under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/dehydration.svg - "Waterskin" by Delapouite under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/sleeping.svg - "Night sleep icon" by Delapouite under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/suffocation.svg - "Lungs" by Delapouite under CC BY 3.0 - https://game-icons.net 
 
 ==============================================
 #### Willdabeast's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
@@ -56,8 +56,8 @@ People and credits are listed in no particular order.
 ==============================================
 
 - [Shield](https://game-icons.net/1x1/sbed/shield.html)
-/svg/statuses/burning.svg - "Flamer" by sbed under CC BY 3.0 - https://game-icons.net 
-/svg/statuses/cover-*.svg - "Shield Icon" by sbed under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/burning.svg - "Flamer" by sbed under CC BY 3.0 - https://game-icons.net 
+ui/icons/svg/statuses/cover-*.svg - "Shield Icon" by sbed under CC BY 3.0 - https://game-icons.net 
 
 ==============================================
 #### Caro Asercion's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
