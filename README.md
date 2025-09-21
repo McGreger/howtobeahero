@@ -24,7 +24,7 @@ To install "How to Be a Hero" in FoundryVTT, follow these steps:
 ---
 
 ## Important
-The system is in beta. It is ready for the latest stable version 12.331 of FoundryVTT!
+The system is in beta. It is ready for the latest stable version 13.348 of FoundryVTT!
 
 ---
 
