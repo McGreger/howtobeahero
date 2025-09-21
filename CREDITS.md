@@ -14,16 +14,17 @@ People and credits are listed in no particular order.
 - [Armor](https://game-icons.net/1x1/lorc/armor-vest.html)
 - [Sprint](https://game-icons.net/1x1/lorc/sprint.html)
 - [Potion ball](https://game-icons.net/1x1/lorc/potion-ball.html)
-ui/icons/svg/statuses/cursed.svg - "Ubisoft sun icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/diseased.svg - "Biohazard icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/ethereal.svg - "Ghost ally icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/falling.svg - "Falling boulder" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/flying.svg - "Feathered wing icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/hiding.svg - "Hidden icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/hovering.svg - "Wingfoot icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/burrowing.svg - "Spade icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/stable.svg - "Bandage roll icon" by Lorc under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/transformed.svg - "Flat paw print icon" by Lorc under CC BY 3.0 - https://game-icons.net 
+- [Brainstorm](https://game-icons.net/1x1/lorc/brainstorm.html)
+- [Cursed](https://game-icons.net/1x1/lorc/ubisoft-sun.html)
+- [Diseased](https://game-icons.net/1x1/lorc/biohazard.html)
+- [Ethereal](https://game-icons.net/1x1/lorc/ghost-ally.html)
+- [Falling](https://game-icons.net/1x1/sbed/falling.html)
+- [Flying](https://game-icons.net/1x1/lorc/feathered-wing.html)
+- [Hiding](https://game-icons.net/1x1/lorc/hidden.html)
+- [Hovering](https://game-icons.net/1x1/lorc/wingfoot.html)
+- [Burrowing](https://game-icons.net/1x1/lorc/spade.html)
+- [Stable](https://game-icons.net/1x1/lorc/bandage-roll.html)
+- [Transformed](https://game-icons.net/1x1/lorc/flat-paw-print.html)
 
 ==============================================
 #### Delapouite's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
@@ -35,9 +36,10 @@ ui/icons/svg/statuses/transformed.svg - "Flat paw print icon" by Lorc under CC B
 - [Three friends](https://game-icons.net/1x1/delapouite/three-friends.html)
 - [Skills](https://game-icons.net/1x1/delapouite/skills.html)
 - [Hand bag](https://game-icons.net/1x1/delapouite/hand-bag.html)
-ui/icons/svg/statuses/dehydration.svg - "Waterskin" by Delapouite under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/sleeping.svg - "Night sleep icon" by Delapouite under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/suffocation.svg - "Lungs" by Delapouite under CC BY 3.0 - https://game-icons.net 
+- [Dehydration](https://game-icons.net/1x1/delapouite/waterskin.html)
+- [Sleeping](https://game-icons.net/1x1/delapouite/night-sleep.html)
+- [Suffocation](https://game-icons.net/1x1/delapouite/lungs.html)
+- [Holy shield](https://game-icons.net/1x1/delapouite/templar-shield.html)
 
 ==============================================
 #### Willdabeast's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
@@ -49,21 +51,20 @@ ui/icons/svg/statuses/suffocation.svg - "Lungs" by Delapouite under CC BY 3.0 - 
 #### Skoll's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
 ==============================================
 
-/svg/statuses/bloodied.svg - "Blood icon" by Skoll under CC BY 3.0 - https://game-icons.net 
+- [Bloodied](https://game-icons.net/1x1/skoll/blood.html)
 
 ==============================================
 #### sbed's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
 ==============================================
 
 - [Shield](https://game-icons.net/1x1/sbed/shield.html)
-ui/icons/svg/statuses/burning.svg - "Flamer" by sbed under CC BY 3.0 - https://game-icons.net 
-ui/icons/svg/statuses/cover-*.svg - "Shield Icon" by sbed under CC BY 3.0 - https://game-icons.net 
+- [Burning](https://game-icons.net/1x1/sbed/flamer.html)
 
 ==============================================
 #### Caro Asercion's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
 ==============================================
 
-/svg/statuses/malnutrition.svg - "Bowl of rice" by Caro Asercion under CC BY 3.0 - https://game-icons.net 
+- [Malnutrition](https://game-icons.net/1x1/caro-asercion/bowl-of-rice.html)
 
 ==============================================
 #### Icons from [mikiko.art](https://mikiko.art/)
