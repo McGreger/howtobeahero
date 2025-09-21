@@ -70,8 +70,8 @@ People and credits are listed in no particular order.
 - [Burning](https://game-icons.net/1x1/sbed/flamer.html)
 - [Targeted](https://game-icons.net/1x1/sbed/targeted.html)
 - [Falling](https://game-icons.net/1x1/sbed/falling.html)
-- [Regenerating] (https://game-icons.net/1x1/sbed/health-increase.html)
-- [Degenerating] (https://game-icons.net/1x1/sbed/health-decrease.html)
+- [Regenerating](https://game-icons.net/1x1/sbed/health-increase.html)
+- [Degenerating](https://game-icons.net/1x1/sbed/health-decrease.html)
 
 ==============================================
 #### Caro Asercion's icons ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/))
