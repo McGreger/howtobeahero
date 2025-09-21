@@ -117,17 +117,22 @@ export class HowToBeAHeroDragDropHandler {
       });
       requestAnimationFrame(() => game.tooltip.deactivate());
       game.tooltip.deactivate();
-  
+
       const li = event.currentTarget;
       const item = this.actor.items.get(li.dataset.itemId);
-      
+
       if (item) {
         // Store the source actor ID globally for drag tracking
         currentDragSource = {
           actorId: this.actor.id,
           itemId: item.id
         };
-        
+
+        // Add dragging class to all actor sheets to show dropzone indicators
+        document.querySelectorAll('.how-to-be-a-hero.sheet.actor').forEach(sheet => {
+          sheet.classList.add('dragging-item');
+        });
+
         const dragData = {
           type: "Item",
           uuid: item.uuid,
@@ -162,7 +167,12 @@ export class HowToBeAHeroDragDropHandler {
     onDragEnd(event) {
       // Reset global drag tracking when drag operation ends
       currentDragSource = null;
-      
+
+      // Remove dragging class from all actor sheets to hide dropzone indicators
+      document.querySelectorAll('.how-to-be-a-hero.sheet.actor').forEach(sheet => {
+        sheet.classList.remove('dragging-item');
+      });
+
       // Clean up any remaining visual feedback
       document.querySelectorAll('.dragover').forEach(el => {
         el.classList.remove('dragover');
@@ -176,17 +186,22 @@ export class HowToBeAHeroDragDropHandler {
     async onDrop(event) {
       event.preventDefault();
       event.stopPropagation();
-      
+
       console.log("onDrop called - currentDragSource:", currentDragSource, "target actor:", this.actor.id);
-      
+
+      // Remove dragging class from all actor sheets to hide dropzone indicators
+      document.querySelectorAll('.how-to-be-a-hero.sheet.actor').forEach(sheet => {
+        sheet.classList.remove('dragging-item');
+      });
+
       // Clean up dragover classes from all character sheets
       document.querySelectorAll('.dragover').forEach(el => {
         el.classList.remove('dragover');
       });
-      
+
       // Store drag source before resetting for same-actor check
       const dragSource = currentDragSource;
-      
+
       // Reset global drag tracking
       currentDragSource = null;
       

@@ -1085,6 +1085,7 @@ export class HowToBeAHeroActorSheet extends HandlebarsApplicationMixin(foundry.a
       if (!li.classList.contains('inventory-header')) {
         li.setAttribute('draggable', true);
         li.addEventListener('dragstart', this.dragDropHandler.onDragStart.bind(this.dragDropHandler), false);
+        li.addEventListener('dragend', this.dragDropHandler.onDragEnd.bind(this.dragDropHandler), false);
       }
     });
 
