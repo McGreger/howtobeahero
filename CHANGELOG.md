@@ -10,3 +10,14 @@
 - Removed Homebrew Inspiration points, as this should be a module (#40)
 - Reanmed _skill_ to _ability_ in internal data structure
 - Refactor Action, Knowledge and Social into single Ability Item Type (#22)
+
+## 1.0.0
+- AppV2 migration completed
+- add credits for icons
+- update roll functionalities
+- v13+ ready
+- add optional mana-bar
+- extensive upgrade for drag&drop functionalities for items
+- add compact-combat mode
+- add parry functionality
+- extensive css updates for actor- and item-sheets
